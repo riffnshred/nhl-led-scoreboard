@@ -1,10 +1,7 @@
-import requests
+from nhlpy import game
+import json
 
-r = requests.get('https://statsapi.web.nhl.com/api/v1/schedule?date=2018-01-09')
+knights_vs_sharks = game.Game(2018030187)
+my_json = knights_vs_sharks.all_stats()
 
-
-data = r.json()
-dates = data['dates'][0]
-games = dates['totalGames']
-
-print(games)
+print(json.dumps(my_json, indent=4, sort_keys=True))
