@@ -6,6 +6,10 @@ NHL_API_URL_BASE = "http://statsapi.web.nhl.com"
 
 # TEST_URL = "https://statsapi.web.nhl.com/api/v1/schedule?startDate=2018-01-02&endDate=2018-01-02"
 
+class NHLgame(self):
+    __init__(self)
+
+
 def get_teams():
     """
         Function to get a list of all the teams information
@@ -93,7 +97,7 @@ def fetch_games():
             home_score = int(score['dates'][0]['games'][game]['teams']['home']['score'])
             away_team_id = int(score['dates'][0]['games'][game]['teams']['away']['team']['id'])
             away_score = int(score['dates'][0]['games'][game]['teams']['away']['score'])
-            game_status = score['dates'][0]['games'][game]['status']['abstractGameState']
+            game_status = score['dates'][0][' games'][game]['status']['abstractGameState']
 
             gameInfo = {"gameid":game_id, "full_stats_link":live_stats_link, "home_team_id":home_team_id, "home_score":home_score, "away_team_id":away_team_id, "away_score":away_score, 'game_status':game_status}
 
