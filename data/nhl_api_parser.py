@@ -6,10 +6,6 @@ NHL_API_URL_BASE = "http://statsapi.web.nhl.com"
 
 # TEST_URL = "https://statsapi.web.nhl.com/api/v1/schedule?startDate=2018-01-02&endDate=2018-01-02"
 
-class NHLgame(self):
-    __init__(self)
-
-
 def get_teams():
     """
         Function to get a list of all the teams information
@@ -58,7 +54,7 @@ def fetch_live_stats(link):
         print("Error encountered getting live stats")
 
 
-def fetch_games():
+def fetch_games(date = None):
     """
     Function to get a list of games
 
@@ -80,10 +76,10 @@ def fetch_games():
     game_list = list of all the games and the number of games.
     url = the location where we can find the list of games.
     """
-
-    now = datetime.datetime.now()
-
-    url = '{0}schedule?startDate=2018-01-02&endDate=2018-01-02'.format(NHL_API_URL)
+    if date is not None:
+        url = '{0}schedule?date={1}'.format(NHL_API_URL, date)
+    else:
+        url = '{0}schedule'.format(NHL_API_URL)
 
     game_list = []
     try:
@@ -97,7 +93,7 @@ def fetch_games():
             home_score = int(score['dates'][0]['games'][game]['teams']['home']['score'])
             away_team_id = int(score['dates'][0]['games'][game]['teams']['away']['team']['id'])
             away_score = int(score['dates'][0]['games'][game]['teams']['away']['score'])
-            game_status = score['dates'][0][' games'][game]['status']['abstractGameState']
+            game_status = score['dates'][0]['games'][game]['status']['abstractGameState']
 
             gameInfo = {"gameid":game_id, "full_stats_link":live_stats_link, "home_team_id":home_team_id, "home_score":home_score, "away_team_id":away_team_id, "away_score":away_score, 'game_status':game_status}
 
@@ -105,6 +101,9 @@ def fetch_games():
         return game_list
     except requests.exceptions.RequestException:
         print("Error encountered, returning 0 for score")
+    except IndexError:
+        print("No Game today")
+        return game_list
 
 
 def fetch_score(team_id):
@@ -143,15 +142,19 @@ def check_season():
         return True
 
 
-def check_if_game(team_id):
+def check_if_game(team_id,date):
     """ Function to check if there is a game now with chosen team. Returns True if game, False if NO game. """
-
     # Set URL depending on team selected
-    url = '{0}schedule?teamId={1}'.format(NHL_API_URL,
-                                          team_id)  # Only shows games after noon, so will sleep till 12:10 pm
+    if date is not None:
+        url = '{0}schedule?teamId={1}&startDate={2}&endDate={2}'.format(NHL_API_URL,team_id,Date)
+    else:
+        url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
+
     try:
         gameday_url = requests.get(url)
         if "gamePk" in gameday_url.text:
+
+            live_stats_link = score['dates'][0]['games'][game]['link']
             return True
         else:
             return False
