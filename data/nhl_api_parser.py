@@ -54,7 +54,7 @@ def fetch_live_stats(link):
         print("Error encountered getting live stats")
 
 
-def fetch_games(date = None):
+def fetch_games():
     """
     Function to get a list of games
 
@@ -76,10 +76,8 @@ def fetch_games(date = None):
     game_list = list of all the games and the number of games.
     url = the location where we can find the list of games.
     """
-    if date is not None:
-        url = '{0}schedule?date={1}'.format(NHL_API_URL, date)
-    else:
-        url = '{0}schedule'.format(NHL_API_URL)
+
+    url = '{0}schedule?teamId=30&startDate=2018-01-02&endDate=2018-01-02'.format(NHL_API_URL)
 
     game_list = []
     try:

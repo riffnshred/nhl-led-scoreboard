@@ -12,10 +12,11 @@ class Data:
         self.get_current_date()
 
         # Fetch the teams info
-        self.get_teams_info()
+        self.get_teams_info = nhlparser.get_teams()
 
         # Fetch the games for today
-        self.refresh_games()
+        self.refresh_games = nhlparser.fetch_games()
+
 
 
 
@@ -36,8 +37,3 @@ class Data:
     def get_current_date(self):
         self.year, self.month, self.day = self.__parse_today()
 
-    def get_teams_info(self):
-        return nhlparser.get_teams()
-
-    def refresh_games(self,start_date = None):
-        return nhlparser.fetch_games(start_date)

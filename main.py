@@ -12,18 +12,14 @@ debug.set_debug_status(config)
 
 data = Data(config)
 #todays_date = data.day
-todays_games = data.refresh_games()
-teams_info = data.get_teams_info()
-
-
-
-
+todays_games = data.refresh_games
+teams_info = data.get_teams_info
 
 #print(teams_info[2]['abbreviation'])
 
 print(data.set_date().date())
 
-#main.renderer(data)
+main.renderer(data)
 print(todays_games)
 #display_scoreboards(teams_info, todays_games)
 
