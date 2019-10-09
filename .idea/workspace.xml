@@ -2,27 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5a4a7a4-749f-46cf-9832-449c801eb53d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/_NHL_SCOREBOARD.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/_NHL_SCOREBOARD.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/renderer/64x32_config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/renderer/screen_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/nhl_api_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/nhl_api_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/scoreboard_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/scoreboard_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/ARI.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/ARI.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/BOS.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/BOS.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/CHI.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/CHI.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/DAL.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/DAL.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/LAK.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/LAK.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/NSH.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/NSH.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/PHI.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/PHI.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logos/VAN.png" beforeDir="false" afterPath="$PROJECT_DIR$/logos/VAN.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/renderer/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/renderer/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renderer/scoreboard_renderer.py" beforeDir="false" afterPath="$PROJECT_DIR$/renderer/scoreboard_renderer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renderers/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>date(</find>
-      <find>__parse_today(</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

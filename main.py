@@ -1,25 +1,32 @@
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
+from renderer.main import MainRenderer
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from utils import args, led_matrix_options
 from data.data import Data
-from renderer import main
 import debug
 
 SCRIPT_NAME = "NHL Scoreboard"
 SCRIPT_VERSION = "0.0"
 
+#sudo python main.py --led-gpio-mapping=adafruit-hat --led-rows=32 --led-cols=64 --led-brightness=70 --led-slowdown-gpio=2
+
+# Get supplied command line arguments
+args = args()
+
+# Check for led configuration arguments
+matrixOptions = led_matrix_options(args)
+
+# Initialize the matrix
+matrix = RGBMatrix(options = matrixOptions)
+
+# Print some basic info on startup
+debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
+
+# Read scoreboard options from config.json if it exists
 config = ScoreboardConfig("config")
 debug.set_debug_status(config)
 
 data = Data(config)
-#todays_date = data.day
-todays_games = data.refresh_games
-teams_info = data.get_teams_info
 
-#print(teams_info[2]['abbreviation'])
-
-print(data.set_date().date())
-
-main.renderer(data)
-print(todays_games)
-#display_scoreboards(teams_info, todays_games)
-
+MainRenderer(matrix, data).render()

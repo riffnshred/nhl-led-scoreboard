@@ -1,8 +1,11 @@
 import requests
 import datetime
+import time
+from utils import convert_time
 
 NHL_API_URL = "http://statsapi.web.nhl.com/api/v1/"
 NHL_API_URL_BASE = "http://statsapi.web.nhl.com"
+
 
 # TEST_URL = "https://statsapi.web.nhl.com/api/v1/schedule?startDate=2018-01-02&endDate=2018-01-02"
 
@@ -28,11 +31,14 @@ def get_teams():
     teams = {}
     try:
         for team in results['teams']:
-            info_dict = {'name': team['teamName'], 'location': team['locationName'], 'abbreviation': team['abbreviation'], 'conference': team['conference']['name'], 'division': team['division']['name']}
+            info_dict = {'name': team['teamName'], 'location': team['locationName'],
+                         'abbreviation': team['abbreviation'], 'conference': team['conference']['name'],
+                         'division': team['division']['name']}
             teams[team['id']] = info_dict
         return teams
     except requests.exceptions.RequestException:
-        print("Error encountered getting teams info")
+        print("Error encountered getting teams info, Can't reach the NHL API")
+
 
 def fetch_live_stats(link):
     """ Function to get the live stats of the current game """
@@ -51,7 +57,7 @@ def fetch_live_stats(link):
             time_remaining = "00:00"
         return current_period, home_sog, away_sog, home_powerplay, away_powerplay, time_remaining
     except requests.exceptions.RequestException:
-        print("Error encountered getting live stats")
+        print("Error encountered, Can't reach the NHL API")
 
 
 def fetch_games():
@@ -77,57 +83,70 @@ def fetch_games():
     url = the location where we can find the list of games.
     """
 
-    url = '{0}schedule?teamId=30&startDate=2018-01-02&endDate=2018-01-02'.format(NHL_API_URL)
+    url = '{0}schedule'.format(NHL_API_URL)
 
     game_list = []
     try:
-        score = requests.get(url)
-        score = score.json()
-        games = score['dates'][0]['games']
+        game_data = requests.get(url)
+        game_data = game_data.json()
+        games = game_data['dates'][0]['games']
         for game in range(len(games)):
-            live_stats_link = score['dates'][0]['games'][game]['link']
-            game_id = int(score['dates'][0]['games'][game]['gamePk'])
-            home_team_id = int(score['dates'][0]['games'][game]['teams']['home']['team']['id'])
-            home_score = int(score['dates'][0]['games'][game]['teams']['home']['score'])
-            away_team_id = int(score['dates'][0]['games'][game]['teams']['away']['team']['id'])
-            away_score = int(score['dates'][0]['games'][game]['teams']['away']['score'])
-            game_status = score['dates'][0]['games'][game]['status']['abstractGameState']
+            live_stats_link = game_data['dates'][0]['games'][game]['link']
+            game_id = int(game_data['dates'][0]['games'][game]['gamePk'])
+            home_team_id = int(game_data['dates'][0]['games'][game]['teams']['home']['team']['id'])
+            home_score = int(game_data['dates'][0]['games'][game]['teams']['home']['score'])
+            away_team_id = int(game_data['dates'][0]['games'][game]['teams']['away']['team']['id'])
+            away_score = int(game_data['dates'][0]['games'][game]['teams']['away']['score'])
+            game_status = game_data['dates'][0]['games'][game]['status']['abstractGameState']
+            game_time = convert_time(game_data["dates"][0]["games"][game]["gameDate"]).strftime("%H:%M")
 
-            gameInfo = {"gameid":game_id, "full_stats_link":live_stats_link, "home_team_id":home_team_id, "home_score":home_score, "away_team_id":away_team_id, "away_score":away_score, 'game_status':game_status}
+            gameInfo = {"gameid": game_id, "full_stats_link": live_stats_link, "home_team_id": home_team_id,
+                        "home_score": home_score, "away_team_id": away_team_id, "away_score": away_score,
+                        'game_status': game_status, 'game_time': game_time}
 
             game_list.append(gameInfo)
         return game_list
     except requests.exceptions.RequestException:
-        print("Error encountered, returning 0 for score")
+        print("Error encountered, Can't reach the NHL API")
     except IndexError:
         print("No Game today")
         return game_list
 
 
-def fetch_score(team_id):
+def fetch_overview(team_id):
     """ Function to get the score of the game depending on the chosen team.
     Inputs the team ID and returns the score found on web. """
-
+    print(team_id)
     # Get current time
     now = datetime.datetime.now()
 
     # Set URL depending on team selected
-    url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
-    # Avoid request errors (might still not catch errors)
-    try:
-        score = requests.get(url)
-        score = score.json()
-        if int(team_id) == int(score['dates'][0]['games'][0]['teams']['home']['team']['id']):
-            score = int(score['dates'][0]['games'][0]['teams']['home']['score'])
-        else:
-            score = int(score['dates'][0]['games'][0]['teams']['away']['score'])
+    url = '{0}schedule?expand=schedule.linescore&teamId={1}'.format(NHL_API_URL, team_id)
 
-        # Print score for test
-        # print("Score: {0} Time: {1}:{2}:{3}".format(score, now.hour, now.minute, now.second))
-        return score
+    try:
+        game_data = requests.get(url)
+        game_data = game_data.json()
+
+        period = game_data['dates'][0]['games'][0]['linescore']['currentPeriodOrdinal']
+        time = game_data['dates'][0]['games'][0]['linescore']['currentPeriodTimeRemaining']
+        home_team_id = int(game_data['dates'][0]['games'][0]['teams']['home']['team']['id'])
+        home_score = int(game_data['dates'][0]['games'][0]['teams']['home']['score'])
+        away_team_id = int(game_data['dates'][0]['games'][0]['teams']['away']['team']['id'])
+        away_score = int(game_data['dates'][0]['games'][0]['teams']['away']['score'])
+        game_status = game_data['dates'][0]['games'][0]['status']['abstractGameState']
+        game_time = convert_time(game_data["dates"][0]["games"][0]["gameDate"]).strftime("%H:%M")
+
+        current_game_overview = {'period': period, 'time': time, 'home_team_id': home_team_id, 'home_score': home_score,
+                                 'away_team_id': away_team_id, 'away_score': away_score, 'game_status': game_status,
+                                 'game_time': game_time}
+
+        print(current_game_overview)
+        return current_game_overview
     except requests.exceptions.RequestException:
-        print("Error encountered, returning 0 for score")
+        print("Error encountered, Can't reach the NHL API")
         return 0
+    except KeyError:
+        print("missing data from the game. Game has not begun or is not scheduled today.")
 
 
 def check_season():
@@ -140,30 +159,28 @@ def check_season():
         return True
 
 
-def check_if_game(team_id,date):
+def check_if_game(team_id):
     """ Function to check if there is a game now with chosen team. Returns True if game, False if NO game. """
-    # Set URL depending on team selected
-    if date is not None:
-        url = '{0}schedule?teamId={1}&startDate={2}&endDate={2}'.format(NHL_API_URL,team_id,Date)
-    else:
-        url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
-
+    # Set URL depending with team selected
+    url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
+    print("Check if game")
     try:
-        gameday_url = requests.get(url)
-        if "gamePk" in gameday_url.text:
-
-            live_stats_link = score['dates'][0]['games'][game]['link']
-            return True
+        game_data = requests.get(url)
+        game_data = game_data.json()
+        game = game_data["totalGames"]
+        if game != 0:
+            status = game_data["dates"][0]["games"][0]['status']['abstractGameState']
+            return status
         else:
             return False
     except requests.exceptions.RequestException:
         # Return True to allow for another pass for test
-        print("Error encountered, returning True for check_game")
-        return True
+        print("Error encountered, Can't reach the NHL API")
+        return False
 
 
 def check_game_end(team_id):
-    """ Function to check if the game ofchosen team is over. Returns True if game, False if NO game. """
+    """ Function to check if the game of chosen team is over. Returns True if game, False if NO game. """
 
     # Set URL depending on team selected
     url = '{0}schedule?teamId={1}'.format(NHL_API_URL, team_id)
