@@ -1,4 +1,4 @@
-import data.scoreboard_config
+#import data.scoreboard_config
 import time
 import sys
 

@@ -4,21 +4,18 @@ import argparse
 import os
 import debug
 import datetime
+from tzlocal import get_localzone
 import pytz
 
-local_tz = pytz.timezone('US/Eastern')
+# get local timezone
+local_tz = get_localzone()
 
 def get_file(path):
   dir = os.path.dirname(__file__)
   return os.path.join(dir, path)
 
-def get_font():
-  font = graphics.Font()
-  font.LoadFont(get_file('Assets/4x6.bdf'))
-  return font
-
-def center_text_position(text, center_pos, font_width):
-  return abs(center_pos - ((len(text) * font_width) / 2))
+def center_text(text_width,center_pos):
+  return abs(center_pos - (text_width / 2))
 
 def split_string(string, num_chars):
   return [(string[i:i + num_chars]).strip() for i in range(0, len(string), num_chars)]
@@ -28,7 +25,7 @@ def args():
 
   # Options for the rpi-rgb-led-matrix library
   parser.add_argument("--led-rows", action="store", help="Display rows. 16 for 16x32, 32 for 32x32. (Default: 32)", default=32, type=int)
-  parser.add_argument("--led-cols", action="store", help="Panel columns. Typically 32 or 64. (Default: 32)", default=32, type=int)
+  parser.add_argument("--led-cols", action="store", help="Panel columns. Typically 32 or 64. (Default: 64)", default=64, type=int)
   parser.add_argument("--led-chain", action="store", help="Daisy-chained boards. (Default: 1)", default=1, type=int)
   parser.add_argument("--led-parallel", action="store", help="For Plus-models or RPi2: parallel chains. 1..3. (Default: 1)", default=1, type=int)
   parser.add_argument("--led-pwm-bits", action="store", help="Bits used for PWM. Range 1..11. (Default: 11)", default=11, type=int)
@@ -44,7 +41,9 @@ def args():
   parser.add_argument("--led-row-addr-type", action="store", help="0 = default; 1 = AB-addressed panels. (Default: 0)", default=0, type=int, choices=[0,1])
   parser.add_argument("--led-multiplexing", action="store", help="Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)", default=0, type=int)
 
-  print('arguments parsed')
+  # User Options
+  parser.add_argument("--fav-team", action="store", help="ID of the team to fallow. (Default:8 (Montreal Canadien)) Change the default in the config.json", type=int)
+
   return parser.parse_args()
 
 def led_matrix_options(args):
@@ -92,9 +91,6 @@ def deep_update(source, overrides):
         else:
             source[key] = overrides[key]
     return source
-
-def center_text(m_width,m_height,txt_width,txt_height):
-    return (m_width-txt_width)/2, (m_height-txt_height)/2
 
 def convert_time(utc_dt):
 

@@ -7,7 +7,7 @@ from data.data import Data
 import debug
 
 SCRIPT_NAME = "NHL Scoreboard"
-SCRIPT_VERSION = "0.0"
+SCRIPT_VERSION = "0.1.0"
 
 #sudo python main.py --led-gpio-mapping=adafruit-hat --led-rows=32 --led-cols=64 --led-brightness=70 --led-slowdown-gpio=2
 
@@ -24,7 +24,7 @@ matrix = RGBMatrix(options = matrixOptions)
 debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
 
 # Read scoreboard options from config.json if it exists
-config = ScoreboardConfig("config")
+config = ScoreboardConfig("config", args)
 debug.set_debug_status(config)
 
 data = Data(config)

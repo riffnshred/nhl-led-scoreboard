@@ -1,19 +1,19 @@
 from utils import get_file
 import json
 import os
-import sys
-import debug
 
 
 class ScoreboardConfig:
-    def __init__(self, filename_base):
+    def __init__(self, filename_base, args):
         json = self.__get_config(filename_base)
 
         # Misc config options
-        self.fav_team_id = json['fav_team_id']
         self.end_of_day = json["end_of_day"]
         self.demo_date = json["demo_date"]
         self.debug = json["debug"]
+
+        # config options from arguments. If the argument was passed, use it's value, else use the one from config file.
+        self.fav_team_id = args.fav_team if True else json['fav_team_id']
 
     def read_json(self, filename):
         # Find and return a json file
