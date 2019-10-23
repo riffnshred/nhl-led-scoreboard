@@ -4,19 +4,6 @@
     <list default="true" id="c5a4a7a4-749f-46cf-9832-449c801eb53d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nhl_api_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/nhl_api_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/scoreboard.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/scoreboard_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/scoreboard_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.py" beforeDir="false" afterPath="$PROJECT_DIR$/debug.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug/games_over_preseason" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/install.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rdemo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/renderer/64x32_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/renderer/64x32_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renderer/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/renderer/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -49,3 +49,6 @@ sudo ./install.sh
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
 
 [pytz](http://pytz.sourceforge.net/), [tzlocal](https://github.com/regebro/tzlocal): Timezone libraries. These allow the scoreboard to convert times to your local timezone.
+
+## Disclaimer
+This project use NHL's logo for information purposes only. I DO NOT own these logos.
