@@ -51,4 +51,4 @@ sudo ./install.sh
 [pytz](http://pytz.sourceforge.net/), [tzlocal](https://github.com/regebro/tzlocal): Timezone libraries. These allow the scoreboard to convert times to your local timezone.
 
 ## Disclaimer
-This project use NHL's logo for information purposes only. I DO NOT own these logos.
+This project uses the NHL's team logos for information purposes only. I DO NOT own these logos.
