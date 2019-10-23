@@ -50,5 +50,73 @@ sudo ./install.sh
 
 [pytz](http://pytz.sourceforge.net/), [tzlocal](https://github.com/regebro/tzlocal): Timezone libraries. These allow the scoreboard to convert times to your local timezone.
 
-## Disclaimer
-This project uses the NHL's team logos for information purposes only. I DO NOT own these logos.
+
+## Testing & Optimization (IMPORTANT)
+If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
+
+If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
+
+Go on the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/) library and learn how to run your screen smoothly. 
+
+Check out the section that use the python bindings and run some of their exemples on your screen. For sure your will face some issues at first, but don't worry, more than likely there's a solution you can find in the issue section. Once you found out how to make it run smoothly, 
+come back here and do what's next.
+
+## Usage
+First thing first, find your fav team's id number.
+
+| Team                  | ID |   | Team                 | ID |
+|-----------------------|----|---|----------------------|----|
+| Anaheim Ducks         | 24 |   | Nashville Predators  | 18 |
+| Arizona Coyotes       | 53 |   | New Jersey Devils    | 1  |
+| Boston Bruins         | 6  |   | New York Islanders   | 2  |
+| Buffalo Sabres        | 7  |   | New York Rangers     | 3  |
+| Calgary Flames        | 20 |   | Ottawa Senators      | 9  |
+| Carolina Hurricanes   | 12 |   | Philadelphia Flyers  | 4  |
+| Chicago Blackhawks    | 16 |   | Pittsburgh Penguins  | 5  |
+| Colorado Avalanche    | 21 |   | San Jose Sharks      | 28 |
+| Columbus Blue Jackets | 29 |   | St Louis Blues       | 19 |
+| Dallas Stars          | 25 |   | Tampa Bay Lightning  | 14 |
+| Detroit Red Wings     | 17 |   | Toronto Maple Leafs  | 10 |
+| Edmonton Oilers       | 22 |   | Vancouver Canucks    | 23 |
+| Florida Panthers      | 13 |   | Vegas Golden Knights | 54 |
+| Los Angeles Kings     | 26 |   | Washington Capitals  | 15 |
+| Minnesota Wild        | 30 |   | Winnipeg Jets        | 52 |
+| Montreal Canadiens    | 8  |   |                      |    |
+
+
+Open the config.json file from the root folder and change the `"fav_team_id"` to your favorite team's id. This will make the scoreboard to fallow
+your team by default. Otherwise... GO HABS GO !!!!
+
+Now, in a terminal, cd to the nhl-led-scoreboard folder and run this command. 
+```
+sudo python main.py 
+```
+**If you run your screen on an Adafruit HAT or Bonnet, you need to supply a flag.**
+```
+sudo python main.py --led-gpio-mapping=adafruit-hat
+```
+
+### Flags
+Use the same flags used in the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/) library to configure your screen.
+```
+--led-rows                Display rows. 16 for 16x32, 32 for 32x32. (Default: 32)
+--led-cols                Panel columns. Typically 32 or 64. (Default: 32)
+--led-chain               Daisy-chained boards. (Default: 1)
+--led-parallel            For Plus-models or RPi2: parallel chains. 1..3. (Default: 1)
+--led-pwm-bits            Bits used for PWM. Range 1..11. (Default: 11)
+--led-brightness          Sets brightness level. Range: 1..100. (Default: 100)
+--led-gpio-mapping        Hardware Mapping: regular, adafruit-hat, adafruit-hat-pwm
+--led-scan-mode           Progressive or interlaced scan. 0 = Progressive, 1 = Interlaced. (Default: 1)
+--led-pwm-lsb-nanosecond  Base time-unit for the on-time in the lowest significant bit in nanoseconds. (Default: 130)
+--led-show-refresh        Shows the current refresh rate of the LED panel.
+--led-slowdown-gpio       Slow down writing to GPIO. Range: 0..4. (Default: 1)
+--led-no-hardware-pulse   Don't use hardware pin-pulse generation.
+--led-rgb-sequence        Switch if your matrix has led colors swapped. (Default: RGB)
+--led-pixel-mapper        Apply pixel mappers. e.g Rotate:90, U-mapper
+--led-row-addr-type       0 = default; 1 = AB-addressed panels. (Default: 0)
+--led-multiplexing        Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)
+```
+I also created a flag to change which team to fallow instead of the default team. 
+```
+--fav-team                Select a team to follow by using it's ID (Default: 8 "Montreal Canadiens") 
+```
