@@ -9,7 +9,6 @@ class ScoreboardConfig:
 
         # Misc config options
         self.end_of_day = json["end_of_day"]
-        self.demo_date = json["demo_date"]
         self.debug = json["debug"]
 
         # config options from arguments. If the argument was passed, use it's value, else use the one from config file.
