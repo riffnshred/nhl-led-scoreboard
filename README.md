@@ -22,6 +22,13 @@ screen of the game.
 ### Off day
 Display a message to announce the sad news.
 
+### Time and data accuracy
+Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV broadcast is different depending on where you are in relation to the game's location. I use the NHL API which will refresh and show scores before the TV broadcast. That means that most of the time, the scoreboard will show the goal before you see it happen on the TV.
+
+During a live game, the stats will refresh every minute. This is because generally, the API refresh at the same rate. Also, the API update to the new day at 4 PM UTC (At noon EST time). The scoreboard will fallow that update in the hour following this.
+
+If you see the scoreboard doesn't show the right state or stats, just quit and re-run it.
+
 ## Installation
 ### Hardware Assembly
 While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
@@ -56,10 +63,20 @@ If you have been using a Led matrix on a raspberry pi before and know how to run
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
 
-Go on the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/) library and learn how to run your screen smoothly. 
+Go on the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/), install it on your raspberry. Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
+Once you found out how to make it run smoothly, come back here and do what's next.
 
-Check out the section that use the python bindings and run some of their exemples on your screen. For sure your will face some issues at first, but don't worry, more than likely there's a solution you can find in the issue section. Once you found out how to make it run smoothly, 
-come back here and do what's next.
+### Adafruit HAT/bonnet
+If you are using any thing from raspberry pi 3+ to the newest versions with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+
+* Do the hardware mod found in the [Improving flicker section ](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
+* Disable the on-board sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
+* From the same section, run the command that remove the bluetooth firmware, Unless you use any bluetooth device with your Pi.
+
+Finally, here's the command I use. 
+```
+sudo python main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
+```
 
 ## Usage
 First thing first, find your fav team's id number.
@@ -120,3 +137,9 @@ I also created a flag to change which team to fallow instead of the default team
 ```
 --fav-team                Select a team to follow by using it's ID (Default: 8 "Montreal Canadiens") 
 ```
+
+## You want to help ?
+I will soon release the full set of features that I want to add to this project. I'm talking about standings, showing the score of the other games, showing future scheduled games, playoff related features and more. Just like the MLB led scoreboard project, I see a lot of potentials. If you want to help, or have an idea, open an issue and send the details.
+
+## Licensing
+This project use the GNU Public License. If you intend to sell these, the code must remain open source.

@@ -4,7 +4,6 @@ import nhl_api_parser as nhlparser
 class Data:
     def __init__(self, config):
 
-        print('hello')
         self.idex = 0
         # Save the parsed config
         self.config = config

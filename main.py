@@ -9,8 +9,6 @@ import debug
 SCRIPT_NAME = "NHL Scoreboard"
 SCRIPT_VERSION = "0.1.0"
 
-#sudo python main.py --led-gpio-mapping=adafruit-hat --led-brightness=40 --led-slowdown-gpio=2 --fav-team=8
-
 # Get supplied command line arguments
 args = args()
 
