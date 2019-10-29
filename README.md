@@ -5,7 +5,7 @@ Display NHL score of your favorite team's game on a Raspberry Pi driven RGB LED
 matrix. Currently supports 64x32 boards only.
 
 ### Shout-out (Credit)
-This project was inspired by the [mld-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
+This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
 ## Features (V 0.1.0)
