@@ -57,6 +57,7 @@ sudo ./install.sh
 
 [pytz](http://pytz.sourceforge.net/), [tzlocal](https://github.com/regebro/tzlocal): Timezone libraries. These allow the scoreboard to convert times to your local timezone.
 
+[requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 ## Testing & Optimization (IMPORTANT)
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
