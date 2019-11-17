@@ -26,6 +26,7 @@ class MainRenderer:
     def render(self):
         # loop through the different state.
         while True:
+            self.data.get_current_date()
             self.data.refresh_fav_team_status()
             # Fav team game day
             if self.data.fav_team_game_today:
