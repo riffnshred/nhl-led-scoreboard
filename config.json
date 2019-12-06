@@ -1,5 +1,10 @@
 {
     "end_of_day": "12:00",
     "debug": false,
-    "fav_team_id": 8
+    "rotate_preferred_teams_only": true,
+
+    "preferences": {
+        "teams": ["Blues", "Canadiens"],
+        "divisions": ["Atlantic"]
+    }
 }

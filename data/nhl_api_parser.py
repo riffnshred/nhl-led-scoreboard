@@ -27,14 +27,15 @@ def get_teams():
     url = '{0}/teams'.format(NHL_API_URL)
     response = requests.get(url)
     results = response.json()
-    teams = {}
+    teams_info = {}
     try:
         for team in results['teams']:
-            info_dict = {'name': team['teamName'], 'location': team['locationName'],
+            info_dict = {'id': team['id'], 'name': team['teamName'], 'fullname': team['name'], 'location': team['locationName'],
                          'abbreviation': team['abbreviation'], 'conference': team['conference']['name'],
                          'division': team['division']['name']}
-            teams[team['id']] = info_dict
-        return teams
+            teams_info[team['teamName']] = info_dict
+
+        return teams_info
     except requests.exceptions.RequestException:
         print("Error encountered getting teams info, Can't reach the NHL API")
 

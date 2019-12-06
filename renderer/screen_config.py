@@ -9,6 +9,7 @@ class screenConfig:
         json = self.__get_config(filename_base)
         self.team_logos_pos = json["team_logos"]
 
+
     def read_json(self, filename):
         # Find and return a json file
 
