@@ -139,8 +139,5 @@ I also created a flag to change which team to fallow instead of the default team
 --fav-team                Select a team to follow by using it's ID (Default: 8 "Montreal Canadiens") 
 ```
 
-## You want to help ?
-I will soon release the full set of features that I want to add to this project. I'm talking about standings, showing the score of the other games, showing future scheduled games, playoff related features and more. Just like the MLB led scoreboard project, I see a lot of potentials. If you want to help, or have an idea, open an issue and send the details.
-
 ## Licensing
 This project use the GNU Public License. If you intend to sell these, the code must remain open source.
