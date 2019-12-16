@@ -68,7 +68,7 @@ If you have been using a Led matrix on a raspberry pi before and know how to run
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
 
-Go on the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/), install it on your raspberry. Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
+Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 Once you found out how to make it run smoothly, come back here and do what's next.
 
 ### Adafruit HAT/bonnet
