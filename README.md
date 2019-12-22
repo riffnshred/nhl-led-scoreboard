@@ -8,6 +8,9 @@ matrix. Currently supports 64x32 boards only.
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
+## Contribution
+Until I release V 1.0.0, which I aim to complete by the end of January, I won't accept any major pullrequest as the application change completely.
+
 ## Features (V 0.1.0)
 
 ### Live game 
