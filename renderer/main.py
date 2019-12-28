@@ -16,9 +16,6 @@ class MainRenderer:
 
     def render(self):
         while True:
-            print("Rendering")
-            # Refresh State
-            self.data.check_state()
 
             print(self.state)
             # Offseason (Show offseason related stuff)
@@ -56,7 +53,8 @@ class MainRenderer:
             return
 
     def __render_pregame(self):
-        pass
+        sleep(5)
+        return
 
     def __render_postgame(self):
         while True:

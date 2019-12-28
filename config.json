@@ -1,10 +1,14 @@
 {
     "end_of_day": "12:00",
     "debug": false,
-    "rotate_preferred_teams_only": true,
+    "data_refresh_rate": 15,
 
     "preferences": {
-        "teams": ["Blues", "Canadiens"],
+        "teams": ["Canadiens", "Senators", "Flames", "Maple Leafs"],
         "divisions": ["Atlantic"]
+    },
+
+    "rotation": {
+        "preferred_teams_only": true
     }
 }

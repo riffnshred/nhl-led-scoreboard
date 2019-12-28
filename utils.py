@@ -81,8 +81,9 @@ def get_file(path):
 
 
 def deep_update(source, overrides):
-    """Update a nested dictionary or similar mapping.
-    Modify ``source`` in place.
+    """
+        Update a nested dictionary or similar mapping.
+        Modify ``source`` in place.
     """
     for key, value in list(overrides.items()):
         if isinstance(value, collections.Mapping) and value:
@@ -96,3 +97,4 @@ def convert_time(utc_dt):
 
   local_dt = datetime.datetime.strptime(utc_dt, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=pytz.utc).astimezone(local_tz)
   return local_tz.normalize(local_dt)  # .normalize might be unnecessary
+

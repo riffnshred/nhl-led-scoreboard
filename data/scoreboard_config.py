@@ -11,11 +11,14 @@ class ScoreboardConfig:
         # Misc config options
         self.end_of_day = json["end_of_day"]
         self.debug = json["debug"]
-        self.rotate_preferred_teams_only = json["rotate_preferred_teams_only"]
+
 
         # Preferences
         self.preferred_teams = json["preferences"]["teams"]
         self.preferred_divisions = json["preferences"]["divisions"]
+
+        # Rotation
+        self.preferred_teams_only = json["rotation"]["preferred_teams_only"]
 
         # config options from arguments. If the argument was passed, use it's value, else use the one from config file.
         # if args.fav_team:

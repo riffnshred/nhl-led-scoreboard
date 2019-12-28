@@ -35,11 +35,16 @@ While writing this README page, I realized that the mlb-led-scoreboard guys made
 [See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
 
 ### Software Installation
+#### Raspbian Distribution
+It is recommended you install the Lite version of Raspbian from the [Raspbian Downloads Page](https://www.raspberrypi.org/downloads/raspbian/). This version lacks a GUI, allowing your Pi to dedicate more system resources to drawing the screen.
+
 #### Time Zones
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
 #### Requirements
 You need Git for cloning this repo and PIP for installing the scoreboard software.
+
+Since version V 0.2.0 you need python 3.3 and up.
 ```
 sudo apt-get update
 sudo apt-get install git python-pip
@@ -51,6 +56,7 @@ This installation process might take some time because it will install all the d
 ```
 git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
+sudo chmod +x install.sh
 sudo ./install.sh
 ```
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
@@ -64,7 +70,7 @@ If you have been using a Led matrix on a raspberry pi before and know how to run
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
 
-Go on the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/), install it on your raspberry. Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
+Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 Once you found out how to make it run smoothly, come back here and do what's next.
 
 ### Adafruit HAT/bonnet
@@ -138,9 +144,6 @@ I also created a flag to change which team to fallow instead of the default team
 ```
 --fav-team                Select a team to follow by using it's ID (Default: 8 "Montreal Canadiens") 
 ```
-
-## You want to help ?
-I will soon release the full set of features that I want to add to this project. I'm talking about standings, showing the score of the other games, showing future scheduled games, playoff related features and more. Just like the MLB led scoreboard project, I see a lot of potentials. If you want to help, or have an idea, open an issue and send the details.
 
 ## Licensing
 This project use the GNU Public License. If you intend to sell these, the code must remain open source.

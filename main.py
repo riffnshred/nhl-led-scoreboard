@@ -7,7 +7,7 @@ from renderer.main import MainRenderer
 from data.data import Data
 import debug
 
-SCRIPT_NAME = "NHL Scoreboard"
+SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 SCRIPT_VERSION = "0.1.0"
 
 # Get supplied command line arguments
