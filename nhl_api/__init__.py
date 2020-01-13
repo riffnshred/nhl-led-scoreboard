@@ -7,6 +7,7 @@ def day(year, month, day):
     """
         Return a list of games for a certain day.
     """
+
     # get the days per month
     daysinmonth = calendar.monthrange(year, month)[1]
     # do not even try to get data if day is too high
@@ -30,5 +31,11 @@ def overview(game_id):
 def game_status_info():
     return nhl_api.info.status()
 
+
 def current_season_info():
     return nhl_api.info.current_season()
+
+
+def standings():
+    standings, wildcard = nhl_api.info.standings()
+    return nhl_api.info.Standings(standings, wildcard)

@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
-import time
-import collections
+from time import sleep
 import debug
 import nhl_api
 from data.status import Status
+from data.scoreboard import Scoreboard
+
+NETWORK_RETRY_SLEEP_TIME = 10
+
 
 class Data:
     def __init__(self, config):
@@ -12,34 +15,43 @@ class Data:
                 - Add Delay option to match the TV broadcast
                 - Add a network issues handler. (Show Red bar at bottom of screen)
                 - Add Playoff data info. (research required)
+                - Wrap the Overview for cleaner access to basic info.
+                - Add Matrix as submodule
+                - Add Powerplay info (research required)
+                - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
         # Save the parsed config
         self.config = config
+        self.refresh_data()
 
+    def refresh_data(self):
         # Flag to determine when to refresh data
         self.needs_refresh = True
+
+        # Flag for network issues
+        self.network_issues = False
 
         # get favorite team's id
         self.pref_teams = self.get_pref_teams_id()
 
         # Parse today's date and see if we should use today or yesterday
-        self.get_current_date()
+        self.refresh_current_date()
 
-        # Set the pointer to the first game in the list
+        # Set the pointer to the first game in the list of Pref Games
         self.current_game_index = 0
 
         # Fetch the games for today
         self.refresh_games()
 
+        # Today's date
+        self.today = self.date()
+
         # Get the status from the API
         self.get_status()
 
-        ## Test state TO DELETE
-        self.current_state = 'Pre-Game'
-
-        print(self.status.is_playoff('2019-04-05'))
-
+        # Get refresh standings
+        self.refresh_standings()
     #
     # Date
 
@@ -52,11 +64,20 @@ class Data:
 
         return today.year, today.month, today.day
 
-    def set_date(self):
-        return datetime(self.year, self.month, self.day)
+    def date(self):
+        return datetime(self.year, self.month, self.day).date()
 
-    def get_current_date(self):
+    def refresh_current_date(self):
         self.year, self.month, self.day = self.__parse_today()
+
+    def _is_new_day(self):
+        print(self.today == self.date())
+        self.refresh_current_date()
+        if self.today != self.date():
+            self.refresh_data()
+            return True
+        else:
+            return False
 
     #
     # Daily NHL Data
@@ -70,28 +91,38 @@ class Data:
 
             If the user want's to rotate only his preferred games between the periods and during the day, save those
             only. Lastly, If if not an Off day for the pref teams, reorder the list in order of preferred teams and load
-            the first game.
+            the first game as the main event.
         """
-        self.games = nhl_api.day(self.year, self.month, self.day)
-        self.pref_games = self.__filter_list_of_games(self.games, self.pref_teams)
-        if self.config.preferred_teams_only and self.pref_teams:
-            self.games = self.pref_games
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                self.games = nhl_api.day(self.year, self.month, self.day)
+                self.pref_games = self.__filter_list_of_games(self.games, self.pref_teams)
+                if self.config.preferred_teams_only and self.pref_teams:
+                    self.games = self.pref_games
 
-        if not self.is_pref_team_offday():
-            self.pref_games = self.__prioritize_pref_games(self.pref_games, self.pref_teams)
-            self.current_game_id = self.pref_games[self.current_game_index]
+                if not self.is_pref_team_offday():
+                    self.pref_games = self.__prioritize_pref_games(self.pref_games, self.pref_teams)
+                    self.current_game_index = self.pref_games[self.current_game_index].game_id
+
+                self.network_issues = False
+                break
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to refresh the list of games. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                sleep(NETWORK_RETRY_SLEEP_TIME)
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
         self.status = Status()
 
-
-
     def __filter_list_of_games(self, games, teams):
         """
         Filter the list 'games' and keep only the games which the teams in the list 'teams' are part of.
         """
-        return list(game for game in set(games) if set([game.away_team_id, game.home_team_id]).intersection(set(teams)))
+        return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
 
     def __prioritize_pref_games(self, games, teams):
         """
@@ -110,11 +141,26 @@ class Data:
         return cleaned_game_list
 
     #
-    # Games data
+    # Main game event data
 
     def refresh_overview(self):
-        self.overview = nhl_api.overview(self.current_game_id)
-        self.needs_refresh = False
+        """
+            Get a all the data of the main event.
+        :return:
+        """
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                self.overview = nhl_api.overview(self.current_game_index)
+                self.needs_refresh = False
+                self.network_issues = False
+                break
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to refresh the Overview. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                sleep(NETWORK_RETRY_SLEEP_TIME)
 
     def advance_to_next_game(self):
         """
@@ -132,8 +178,12 @@ class Data:
         if counter >= len(self.games):
             counter = 0
         return counter
+
     #
     # Standings
+
+    def refresh_standings(self):
+        self.standings = nhl_api.standings()
 
     #
     # Teams
@@ -170,7 +220,23 @@ class Data:
     # Offdays
 
     def is_pref_team_offday(self):
-        return not len(self.pref_games)
+        try:
+            return not len(self.pref_games)
+        except:
+            return True
 
-    def is_offday(self):
-        return not len(self.games)
+    def is_nhl_offday(self):
+        try:
+            return not len(self.games)
+        except:
+            return True
+
+    #
+    # Debugging
+    def debug_overview(self):
+        ## Test refresh Overview
+        self.refresh_overview()
+        ## Test scoreboard.py
+        debug.log("Off day for preferred team: {}".format(self.is_pref_team_offday()))
+        debug.log(self.status.is_offseason(self.date()))
+        debug.log(Scoreboard(self.overview))

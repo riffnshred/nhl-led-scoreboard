@@ -1,5 +1,6 @@
 from datetime import datetime
 from nhl_api import game_status_info, current_season_info
+import debug
 
 class Status:
     def __init__(self):
@@ -26,27 +27,26 @@ class Status:
     def is_live(self, status):
         return status in self.Live
 
+    def is_Final(self, status):
+        return status in self.Final
+
     def is_irregular(self, status):
         return status in self.Irregular
 
-    def is_offseason(self, now=False):
-        if not now:
-            now = datetime.today().date()
-        else:
-            now = datetime.strptime(now, "%Y-%m-%d").date()
+    def is_offseason(self, date):
+        try:
+            regular_season_startdate = datetime.strptime(self.season_info['regularSeasonStartDate'], "%Y-%m-%d").date()
+            end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
+            return date < regular_season_startdate or date > end_of_season
+        except:
+            debug.error('The Argument provided for status.is_offseason is missing or not right.')
+            return False
 
-        regular_season_startdate = datetime.strptime(self.season_info['regularSeasonStartDate'], "%Y-%m-%d").date()
-        end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
-
-        return now < regular_season_startdate or now > end_of_season
-
-    def is_playoff(self, now=False):
-        if not now:
-            now = datetime.today().date()
-        else:
-            now = datetime.strptime(now, "%Y-%m-%d").date()
-        print(now)
-        regular_season_enddate = datetime.strptime(self.season_info['regularSeasonEndDate'], "%Y-%m-%d").date()
-        end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
-        print(regular_season_enddate)
-        return regular_season_enddate < now <= end_of_season
+    def is_playoff(self, date):
+        try:
+            regular_season_enddate = datetime.strptime(self.season_info['regularSeasonEndDate'], "%Y-%m-%d").date()
+            end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
+            return regular_season_enddate < date <= end_of_season
+        except TypeError:
+            debug.error('The Argument provided for status.is_playoff is missing or not right.')
+            return False

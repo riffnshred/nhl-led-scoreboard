@@ -1,14 +1,16 @@
 {
     "end_of_day": "12:00",
-    "debug": false,
+    "debug": true,
     "data_refresh_rate": 15,
 
     "preferences": {
-        "teams": ["Canadiens", "Senators", "Flames", "Maple Leafs"],
-        "divisions": ["Atlantic"]
+        "teams": ["Stars"],
+        "standing_type": "conference",
+        "divisions": "Atlantic",
+        "conference": "Eastern"
     },
 
     "rotation": {
-        "preferred_teams_only": true
+        "preferred_teams_only": false
     }
 }

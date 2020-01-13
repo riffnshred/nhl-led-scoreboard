@@ -12,19 +12,14 @@ class ScoreboardConfig:
         self.end_of_day = json["end_of_day"]
         self.debug = json["debug"]
 
-
         # Preferences
         self.preferred_teams = json["preferences"]["teams"]
         self.preferred_divisions = json["preferences"]["divisions"]
+        self.standing_type = json["preferences"]["standing_type"]
 
         # Rotation
         self.preferred_teams_only = json["rotation"]["preferred_teams_only"]
 
-        # config options from arguments. If the argument was passed, use it's value, else use the one from config file.
-        # if args.fav_team:
-        #     self.pref_team_id = args.fav_team
-        # else:
-        #     self.pref_team_id = json['pref_team_id']
 
     def read_json(self, filename):
         # Find and return a json file

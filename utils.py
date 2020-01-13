@@ -4,11 +4,6 @@ import argparse
 import os
 import debug
 import datetime
-from tzlocal import get_localzone
-import pytz
-
-# get local timezone
-local_tz = get_localzone()
 
 def get_file(path):
   dir = os.path.dirname(__file__)
@@ -94,7 +89,8 @@ def deep_update(source, overrides):
     return source
 
 def convert_time(utc_dt):
+  local_dt = datetime.strptime(utc_dt, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc).astimezone(tz=None)
+  return local_dt
 
-  local_dt = datetime.datetime.strptime(utc_dt, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=pytz.utc).astimezone(local_tz)
-  return local_tz.normalize(local_dt)  # .normalize might be unnecessary
-
+def is_empty_list(list):
+    return not len(list)

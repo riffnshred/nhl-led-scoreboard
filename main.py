@@ -33,7 +33,9 @@ data = Data(config)
 
 #Testing routine without the matrix
 try:
+    #data.debug_overview()
     MainRenderer(data).render()
+
 except KeyboardInterrupt:
     print("Exiting NHL-LED-SCOREBOARD\n")
     sys.exit(0)
