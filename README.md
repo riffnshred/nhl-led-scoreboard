@@ -1,6 +1,16 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](imgs/scoreboard.jpg)
 
+## TO ADD TO README
+
+need to run python 3 by default.
+https://learn.sparkfun.com/tutorials/python-programming-tutorial-getting-started-with-the-raspberry-pi/configure-your-pi
+
+need to install pip3
+sudo apt-get update
+sudo apt install python3-pip
+
+
 Display NHL score of your favorite team's game on a Raspberry Pi driven RGB LED 
 matrix. Currently supports 64x32 boards only.
 
@@ -47,7 +57,7 @@ You need Git for cloning this repo and PIP for installing the scoreboard softwar
 Since version V 0.2.0 you need python 3.3 and up.
 ```
 sudo apt-get update
-sudo apt-get install git python-pip
+sudo apt install python3-pip
 ```
 
 #### Installing the NHL scoreboard software

@@ -1,11 +1,11 @@
 import nhl_api.data
 import nhl_api.object
+import debug
 
 
 def team_info():
     """
-    Returns a list of team information dictionaries
-
+        Returns a list of team information dictionaries
     """
     data = nhl_api.data.get_teams()
     parsed = data.json()
@@ -21,11 +21,30 @@ def team_info():
         short_name = team['shortName']
         division_id = team['division']['id']
         division_name = team['division']['name']
-        division_abrev = team['division']['abbreviation']
+        division_abbrev = team['division']['abbreviation']
         conference_id = team['conference']['id']
         conference_name = team['conference']['name']
         official_site_url = team['officialSiteUrl']
         franchise_id = team['franchiseId']
+
+        try:
+            previous_game = team['previousGameSchedule']
+            # previous_game = False
+        except:
+            debug.log("No next game detected for {}".format(team_name))
+            previous_game = False
+
+        try:
+            next_game = team['nextGameSchedule']
+        except:
+            debug.log("No next game detected for {}".format(team_name))
+            next_game = False
+
+        try:
+            stats = team['teamStats'][0]['splits'][0]['stat']
+        except:
+            debug.log("No Stats detected for {}".format(team_name))
+            stats = False
 
         output = {
             'team_id': team_id,
@@ -36,18 +55,20 @@ def team_info():
             'short_name': short_name,
             'division_id': division_id,
             'division_name': division_name,
-            'division_abrev': division_abrev,
+            'division_abbrev': division_abbrev,
             'conference_id': conference_id,
             'conference_name': conference_name,
             'official_site_url': official_site_url,
-            'franchise_id': franchise_id
+            'franchise_id': franchise_id,
+            'previous_game': previous_game,
+            'next_game': next_game,
+            'stats': stats
         }
 
         # put this dictionary into the larger dictionary
         teams.append(output)
 
     return teams
-
 
 def status():
     data = nhl_api.data.get_game_status().json()
@@ -83,7 +104,8 @@ def standings():
             standing_records[team_id] = {
                 'division': division_name,
                 'conference': conference_name,
-                'team_name': team_name
+                'team_name': team_name,
+                'team_id': team_id
             }
             for key, value in team_records[team].items():
                 standing_records[team_id][key] = value

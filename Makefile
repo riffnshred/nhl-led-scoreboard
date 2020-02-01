@@ -7,3 +7,4 @@ LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
+

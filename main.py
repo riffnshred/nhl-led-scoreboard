@@ -2,8 +2,8 @@ import sys
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-#from rgbmatrix import RGBMatrix, RGBMatrixOptions
-#from utils import args, led_matrix_options
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from utils import args, led_matrix_options
 from data.data import Data
 import debug
 
@@ -11,33 +11,27 @@ SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 SCRIPT_VERSION = "0.1.0"
 
 # Get supplied command line arguments
-#args = args()
+args = args()
 
 # Check for led configuration arguments
-#matrixOptions = led_matrix_options(args)
+matrixOptions = led_matrix_options(args)
 
 # Initialize the matrix
-#matrix = RGBMatrix(options = matrixOptions)
+matrix = RGBMatrix(options = matrixOptions)
 
 # Print some basic info on startup
-#debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
+debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
 
 # Read scoreboard options from config.json if it exists
-#Removing the args to text rendering routine
-config = ScoreboardConfig("config")
+config = ScoreboardConfig("config", args, matrix.width, matrix.height)
 
-#config = ScoreboardConfig("config", args)
 debug.set_debug_status(config)
 
 data = Data(config)
 
-#Testing routine without the matrix
 try:
-    #data.debug_overview()
-    MainRenderer(data).render()
+    MainRenderer(matrix, data).render()
 
 except KeyboardInterrupt:
     print("Exiting NHL-LED-SCOREBOARD\n")
     sys.exit(0)
-
-#MainRenderer(matrix, data).render()

@@ -15,8 +15,6 @@ class Data:
                 - Add Delay option to match the TV broadcast
                 - Add a network issues handler. (Show Red bar at bottom of screen)
                 - Add Playoff data info. (research required)
-                - Wrap the Overview for cleaner access to basic info.
-                - Add Matrix as submodule
                 - Add Powerplay info (research required)
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
@@ -31,6 +29,9 @@ class Data:
 
         # Flag for network issues
         self.network_issues = False
+
+        # Get all the team's info
+        self.get_teams_info()
 
         # get favorite team's id
         self.pref_teams = self.get_pref_teams_id()
@@ -71,7 +72,6 @@ class Data:
         self.year, self.month, self.day = self.__parse_today()
 
     def _is_new_day(self):
-        print(self.today == self.date())
         self.refresh_current_date()
         if self.today != self.date():
             self.refresh_data()
@@ -103,7 +103,7 @@ class Data:
 
                 if not self.is_pref_team_offday():
                     self.pref_games = self.__prioritize_pref_games(self.pref_games, self.pref_teams)
-                    self.current_game_index = self.pref_games[self.current_game_index].game_id
+                    self.current_game_id = self.pref_games[self.current_game_index].game_id
 
                 self.network_issues = False
                 break
@@ -151,7 +151,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                self.overview = nhl_api.overview(self.current_game_index)
+                self.overview = nhl_api.overview(self.current_game_id)
                 self.needs_refresh = False
                 self.network_issues = False
                 break
@@ -188,6 +188,15 @@ class Data:
     #
     # Teams
 
+    def get_teams_info(self):
+        self.teams = nhl_api.teams()
+        info_by_id = {}
+        for team in self.teams:
+            info_by_id[team.team_id] = team
+
+        self.teams_info = info_by_id
+
+
     def get_pref_teams_id(self):
         """
             Finds the preferred teams ID. The type of Team information variate throughout the API except for the team's id.
@@ -196,7 +205,7 @@ class Data:
         :return: list of the preferred team's ID in order
         """
 
-        allteams = nhl_api.teams()
+        allteams = self.teams
         pref_teams = self.config.preferred_teams
         allteams_id = {}
         pref_teams_id = []
@@ -239,4 +248,4 @@ class Data:
         ## Test scoreboard.py
         debug.log("Off day for preferred team: {}".format(self.is_pref_team_offday()))
         debug.log(self.status.is_offseason(self.date()))
-        debug.log(Scoreboard(self.overview))
+        debug.log(Scoreboard(self.overview, self))

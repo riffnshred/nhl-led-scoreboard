@@ -1,16 +1,32 @@
 {
-    "end_of_day": "12:00",
-    "debug": true,
-    "data_refresh_rate": 15,
-
-    "preferences": {
-        "teams": ["Stars"],
-        "standing_type": "conference",
-        "divisions": "Atlantic",
-        "conference": "Eastern"
-    },
-
-    "rotation": {
-        "preferred_teams_only": false
-    }
+	"debug": true,
+	"live_mode": false,
+	"preferences": {
+		"live_game_refresh_rate": 15,
+		"end_of_day": "12:00",
+		"teams": [
+			"Canadiens", "Stars", "Maple Leafs", "Canucks", "Capitals", "Wild"
+		],
+		"standing_type": "conference",
+		"divisions": "atlantic",
+		"conference": "eastern"
+	},
+	"boards": {
+		"off_day": [
+			"scoreticker"
+		],
+		"scheduled": [
+			"standings"
+		],
+		"intermission": [
+			"scoreticker"
+		],
+		"scoreticker": {
+			"preferred_teams_only": false,
+			"rotation_rate": 5
+		},
+		"standings": {
+			"preferred_standings_only": false
+		}
+	}
 }

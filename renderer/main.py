@@ -1,14 +1,16 @@
 from time import sleep
 from datetime import datetime
 import debug
-from renderer.Scoreboard import Scoreboard
-from renderer.Scoreticker import Scoreticker
+from boards.boards import Boards
+from data.scoreboard import Scoreboard
 
 class MainRenderer:
-    def __init__(self, data):
+    def __init__(self, matrix, data):
+        self.matrix = matrix
+        self.canvas = self.matrix.CreateFrameCanvas()
         self.data = data
         self.status = self.data.status
-        self.dummy_data = 'Papoute'
+        self.boards = Boards()
 
     def render(self):
         while True:
@@ -19,7 +21,11 @@ class MainRenderer:
                 self.__render_offday()
             else:
                 # Season.
-                if self.data.is_pref_team_offday():
+                print(self.data.config.live_mode)
+                if not self.data.config.live_mode:
+                    debug.info("Live mode is off. Going through the boards")
+                    self.__render_offday()
+                elif self.data.is_pref_team_offday():
                     debug.info("Your preferred teams are Off today")
                     self.__render_offday()
                 elif self.data.is_nhl_offday():
@@ -31,12 +37,11 @@ class MainRenderer:
 
     def __render_offday(self):
         while True:
+            print('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
-            print("Showing Offday")
-            Scoreticker(self.data)
-
+            self.boards._off_day(self.data, self.matrix)
             sleep(5)
 
     def __render_game_day(self):
@@ -62,8 +67,9 @@ class MainRenderer:
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
+                print("Game of the day : {}".format(Scoreboard(self.data.overview)))
+                sleep(15)
 
-            Scoreboard(self.dummy_data).render()
             sleep(10)
 
     def __render_pregame(self):
@@ -72,7 +78,6 @@ class MainRenderer:
 
     def __render_postgame(self):
         debug.info("Showing Post-Game")
-        Scoreboard(self.dummy_data).render()
         return
 
     def __render_Live(self, overview):
@@ -83,7 +88,7 @@ class MainRenderer:
                 return
             else:
                 debug.info("Showing game Live")
-                Scoreboard(self.dummy_data).render()
+                # Scoreboard(self.dummy_data).render()
             sleep(5)
 
     def chk_time(self):

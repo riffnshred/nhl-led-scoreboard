@@ -9,7 +9,12 @@ def test_game():
 
 def test_team_info():
     team_list = [x['team_id'] for x in nhl_api.info.team_info()]
-    print(team_list)
+    team_info = [nhl_api.info.Info(x) for x in nhl_api.info.team_info()]
+    info_by_id = {}
+    for team in team_info:
+        info_by_id[team.team_id] = team
+
+    print(info_by_id[8].abbreviation)
 
 def test_overview():
     game_info = nhl_api.game.overview('2017020659')
@@ -24,10 +29,10 @@ def test_status_info():
 def test_standings():
     standings, wildcard = nhl_api.info.standings()
     standings = nhl_api.info.Standings(standings, wildcard)
-    standings = standings.by_wildcard
+    standings = standings.by_conference
 
-    for record in standings.eastern.wild_card:
-        print(record)
+    # for record in standings.eastern.wild_card:
+    #     print(record)
 
     # for team in standings.central:
     #     pos = team['divisionRank']
@@ -39,32 +44,32 @@ def test_standings():
     #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points, wins, losses, ot)
     #     print(message)
 
-    # print('EASTERN')
-    # for team in standings.eastern:
-    #
-    #     pos = team['conferenceRank']
-    #     team_name = team['team_name']
-    #     points = team['points']
-    #     wins = team['leagueRecord']['wins']
-    #     losses = team['leagueRecord']['losses']
-    #     ot = team['leagueRecord']['ot']
-    #
-    #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
-    #     print(message)
-    #
-    # print("\r")
-    # print('WESTERN')
-    #
-    # for team in standings.western:
-    #     pos = team['conferenceRank']
-    #     team_name = team['team_name']
-    #     points = team['points']
-    #     wins = team['leagueRecord']['wins']
-    #     losses = team['leagueRecord']['losses']
-    #     ot = team['leagueRecord']['ot']
-    #
-    #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
-    #     print(message)
+    print('EASTERN')
+    for team in standings.eastern:
+
+        pos = team['conferenceRank']
+        team_name = team['team_name']
+        points = team['points']
+        wins = team['leagueRecord']['wins']
+        losses = team['leagueRecord']['losses']
+        ot = team['leagueRecord']['ot']
+
+        message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
+        print(message)
+
+    print("\r")
+    print('WESTERN')
+
+    for team in standings.western:
+        pos = team['conferenceRank']
+        team_name = team['team_name']
+        points = team['points']
+        wins = team['leagueRecord']['wins']
+        losses = team['leagueRecord']['losses']
+        ot = team['leagueRecord']['ot']
+
+        message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
+        print(message)
 
 
 # Test Games

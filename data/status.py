@@ -27,7 +27,7 @@ class Status:
     def is_live(self, status):
         return status in self.Live
 
-    def is_Final(self, status):
+    def is_final(self, status):
         return status in self.Final
 
     def is_irregular(self, status):

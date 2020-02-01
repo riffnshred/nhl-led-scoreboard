@@ -37,15 +37,8 @@ def scoreboard(year, month, day):
             status = game['status']['detailedState']
             status_code = game['status']['statusCode']
             status_abstract_state = game['status']['abstractGameState']
+            linescore = game['linescore']
 
-            if game['linescore'] and game['linescore']['currentPeriod'] > 0:
-                current_period = game['linescore']['currentPeriod']
-                current_period_ordinal = game['linescore']['currentPeriodOrdinal']
-                current_period_time_remaining = game['linescore']['currentPeriodTimeRemaining']
-            else:
-                current_period = game['linescore']['currentPeriod']
-                current_period_ordinal = False
-                current_period_time_remaining = False
 
             output = {
                 'game_id': game_id,
@@ -61,9 +54,7 @@ def scoreboard(year, month, day):
                 'status': status,
                 'status_code': status_code,
                 'status_abstract_state': status_abstract_state,
-                'current_period': current_period,
-                'current_period_ordinal': current_period_ordinal,
-                'current_period_time_remaining': current_period_time_remaining
+                'linescore': linescore,  # All the linescore information (goals, sog, periods etc...)
             }
 
             # put this dictionary into the larger dictionary
@@ -87,6 +78,9 @@ class GameScoreboard(object):
                 except ValueError:
                     # string if not number
                     setattr(self, x, str(data[x]))
+            except TypeError:
+                obj = nhl_api.object.Object(data[x])
+                setattr(self, x, obj)
 
         # calculate the winning team
         if self.home_score > self.away_score:
@@ -96,7 +90,7 @@ class GameScoreboard(object):
             self.w_team = self.away_team_id
             self.l_team = self.home_team_id
 
-        self.full_date = convert_time(self.game_date).strftime("%Y-%m-%d %I:%M")
+        self.full_date = convert_time(self.game_date).strftime("%Y-%m-%d")
         self.start_time = convert_time(self.game_date).strftime("%I:%M")
 
     def __str__(self):
@@ -113,24 +107,43 @@ def overview(game_id):
     time_stamp = parsed['gameData']['game']
     game_type = parsed['gameData']['game']['type']
     status = parsed['gameData']['status']['detailedState']
+    status_code = parsed['gameData']['status']['statusCode']
+    status_abstract_state = parsed['gameData']['status']['abstractGameState']
     game_date = parsed['gameData']['datetime']['dateTime']
 
     # Sub level information (Details)
-    away_team = parsed['gameData']['teams']['away']
-    home_team = parsed['gameData']['teams']['home']
     plays = parsed['liveData']['plays']
     linescore = parsed['liveData']['linescore']
+    away_score = linescore['teams']['away']['goals']
+    home_score = linescore['teams']['home']['goals']
+
+    # Team details
+    away_team_id = parsed['gameData']['teams']['away']['id']
+    away_team_name = parsed['gameData']['teams']['away']['name']
+    away_team_abrev = parsed['gameData']['teams']['away']['abbreviation']
+    home_team_id = parsed['gameData']['teams']['home']['id']
+    home_team_name = parsed['gameData']['teams']['home']['name']
+    home_team_abrev = parsed['gameData']['teams']['home']['abbreviation']
+
 
     output = {
         'id': id,  # ID of the game
         'time_stamp': time_stamp,  # Last time the data was refreshed (UTC)
         'game_type': game_type,  # Type of game ("R" for Regular season, "P" for Post season or playoff)
         'status': status,   # Status of the game.
+        'status_code': status_code,
+        'status_abstract_state': status_abstract_state,
         'game_date': game_date,  # Date and time of the game
-        'away_team': away_team,  # Information about the Away team (ID, Name, Abbreviation, Division and Conference, etc)
-        'home_team': home_team,  # Information about the Home team (ID, Name, Abbreviation, Division and Conference, etc)
-        'plays': plays,  # Dictionary of all the plays of the game.
-        'linescore': linescore  # Dictionary of all the line score related data (Periods, Goals, SOG etc...)
+        'away_team_id': away_team_id,  # ID of the Away team
+        'away_team_name': away_team_name, #Away team name
+        'away_team_abrev': away_team_abrev,  # Away team name abbreviation
+        'home_team_id': home_team_id,  # ID of the Home team
+        'home_team_name': home_team_name, # Home team name
+        'home_team_abrev': home_team_abrev,  # Home team name abbreviation
+        'linescore': linescore,  # All the linescore information (goals, sog, periods etc...)
+        'away_score': away_score, # Away team goals
+        'home_score': home_score, # Home team goals
+        'plays': plays  # Dictionary of all the plays of the game.
     }
     return output
 
@@ -152,5 +165,13 @@ class Overview(object):
                 obj = nhl_api.object.Object(data[x])
                 setattr(self, x, obj)
 
-        self.full_date = convert_time(self.game_date).strftime("%Y-%m-%d %I:%M")
+        # calculate the winning team
+        if self.home_score > self.away_score:
+            self.w_team = self.home_team_id
+            self.l_team = self.away_team_id
+        elif self.away_score > self.home_score:
+            self.w_team = self.away_team_id
+            self.l_team = self.home_team_id
+
+        self.full_date = convert_time(self.game_date).strftime("%Y-%m-%d")
         self.start_time = convert_time(self.game_date).strftime("%I:%M")
