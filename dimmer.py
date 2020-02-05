@@ -41,7 +41,7 @@ class Dimmer(object):
                    self.brightness = 5
                else:
                    debug.info("It is day time")
-                   self.brightness = 55
+                   self.brightness = 50
             
                self.matrix.set_brightness(self.brightness)
                self.matrix.render()
