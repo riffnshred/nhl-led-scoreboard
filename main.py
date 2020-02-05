@@ -5,6 +5,8 @@ from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from utils import args, led_matrix_options
 from data.data import Data
+import threading
+from dimmer import Dimmer
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
@@ -28,6 +30,11 @@ config = ScoreboardConfig("config", args, matrix.width, matrix.height)
 debug.set_debug_status(config)
 
 data = Data(config)
+
+dimmer = Dimmer(data,matrix)
+dimmerThread = threading.Thread(target=dimmer.run, args=())
+dimmerThread.daemon = True
+dimmerThread.start()
 
 try:
     MainRenderer(matrix, data).render()
