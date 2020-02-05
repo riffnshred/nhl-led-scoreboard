@@ -46,21 +46,31 @@ class Boards:
     def _intermission(self, data, matrix):
         bord_index = 0
         while True:
+            if bord_index >= (len(data.config.boards_intermission)):
+                return
             board = getattr(self, data.config.boards_intermission[bord_index])
             board(data, matrix)
+            bord_index += 1
+            sleep(1)
 
-            if bord_index >= (len(data.config.boards_intermission) - 1):
+    def _post_game(self, data, matrix):
+        bord_index = 0
+        while True:
+            board = getattr(self, data.config.boards_post_game[bord_index])
+            board(data, matrix)
+
+            if bord_index >= (len(data.config.boards_post_game) - 1):
                 return
             else:
                 bord_index += 1
             sleep(5)
 
-    # Board renderer for score ticker
     def scoreticker(self, data, matrix):
         Scoreticker(data, matrix).render()
 
     def standings(self, data, matrix):
-        Standings(data, matrix).render()
+        Standings(self, data, matrix).render()
 
     def team_summary(self, data, matrix):
-        TeamSummary(data, matrix).render()
+        TeamSummary(self, data, matrix).render()
+

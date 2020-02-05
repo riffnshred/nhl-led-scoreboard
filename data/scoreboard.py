@@ -1,9 +1,9 @@
 from data.team import Team
 from data.periods import Periods
 
+
 class Scoreboard:
     def __init__(self, overview, teams_info):
-
         linescore = overview.linescore
         away = linescore.teams.away
         home = linescore.teams.home
@@ -17,6 +17,7 @@ class Scoreboard:
         self.start_time = overview.start_time
         self.status = overview.status
         self.periods = Periods(overview)
+        self.intermission = linescore.intermissionInfo.inIntermission
 
         if self.status == "Final":
             self.winning_team = overview.w_team

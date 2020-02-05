@@ -8,6 +8,30 @@ from data.scoreboard import Scoreboard
 NETWORK_RETRY_SLEEP_TIME = 10
 
 
+def filter_list_of_games(games, teams):
+    """
+    Filter the list 'games' and keep only the games which the teams in the list 'teams' are part of.
+    """
+    return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
+
+
+def prioritize_pref_games(games, teams):
+    """
+    This one is a doozy. If you find a cleaner or more efficient way, please let me know.
+
+    Ordered list of preferred games to match the order of their corresponding team and clean the 'None' element
+    produced by the'map' function.
+
+    return the cleaned game list. lemony fresh!!!
+    """
+
+    ordered_game_list = map(lambda team: next(
+        (game for game in games if game.away_team_id == team or game.home_team_id == team), None),
+                            teams)
+    cleaned_game_list = list(filter(None, list(dict.fromkeys(ordered_game_list))))
+    return cleaned_game_list
+
+
 class Data:
     def __init__(self, config):
         """
@@ -20,20 +44,26 @@ class Data:
         :param config:
         """
         # Save the parsed config
+        self.teams = nhl_api.teams()
         self.config = config
-        self.refresh_data()
 
-    def refresh_data(self):
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
         # Flag for network issues
         self.network_issues = False
 
+        # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
+        # It shows the last time (UTC) the data was updated. EX 20200114_041103
+        self.time_stamp = "00000000_000000"
+
+        # Flag for when the data live feed of a game has updated
+        self.new_data = True
+
         # Get all the team's info
         self.get_teams_info()
 
-        # get favorite team's id
+        # Get favorite team's id
         self.pref_teams = self.get_pref_teams_id()
 
         # Parse today's date and see if we should use today or yesterday
@@ -53,6 +83,9 @@ class Data:
 
         # Get refresh standings
         self.refresh_standings()
+
+
+
     #
     # Date
 
@@ -97,16 +130,17 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.games = nhl_api.day(self.year, self.month, self.day)
-                self.pref_games = self.__filter_list_of_games(self.games, self.pref_teams)
+                self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
 
                 if not self.is_pref_team_offday():
-                    self.pref_games = self.__prioritize_pref_games(self.pref_games, self.pref_teams)
+                    self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
 
                 self.network_issues = False
                 break
+
             except ValueError as error_message:
                 self.network_issues = True
                 debug.error("Failed to refresh the list of games. {} attempt remaining.".format(attempts_remaining))
@@ -117,28 +151,6 @@ class Data:
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
         self.status = Status()
-
-    def __filter_list_of_games(self, games, teams):
-        """
-        Filter the list 'games' and keep only the games which the teams in the list 'teams' are part of.
-        """
-        return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
-
-    def __prioritize_pref_games(self, games, teams):
-        """
-        This one is a doozy. If you find a cleaner or more efficient way, please let me know.
-
-        Order list of preferred games to match the order of their corresponding team and clean the 'None' element
-        produced by the'map' function.
-
-        return the cleaned game list. lemony fresh!!!
-        """
-
-        ordered_game_list = map(lambda team: next(
-            (game for game in games if game.away_team_id == team or game.home_team_id == team), None),
-                                teams)
-        cleaned_game_list = list(filter(None, list(dict.fromkeys(ordered_game_list))))
-        return cleaned_game_list
 
     #
     # Main game event data
@@ -152,6 +164,9 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
+                if self.time_stamp != self.overview.time_stamp:
+                    self.time_stamp = self.overview.time_stamp
+                    self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False
                 break
@@ -164,6 +179,7 @@ class Data:
 
     def advance_to_next_game(self):
         """
+        TODO: Needs to be done after the V1 launch
         function to show the next game of in the "games" list.
 
         Check the status of the current preferred game and if it's Final or between periods rotate to the next game on
@@ -189,13 +205,11 @@ class Data:
     # Teams
 
     def get_teams_info(self):
-        self.teams = nhl_api.teams()
         info_by_id = {}
         for team in self.teams:
             info_by_id[team.team_id] = team
 
         self.teams_info = info_by_id
-
 
     def get_pref_teams_id(self):
         """
@@ -240,12 +254,48 @@ class Data:
         except:
             return True
 
+    def refresh_data(self):
+        """
+            This method is used when the software move to the next day. It reset all the main variables
+            and re-initialize the overall data.
+        :return:
+        """
+        # Flag to determine when to refresh data
+        self.needs_refresh = True
+
+        # Flag for network issues
+        self.network_issues = False
+
+        # Get all the team's info
+        self.get_teams_info()
+
+        # Get favorite team's id
+        self.pref_teams = self.get_pref_teams_id()
+
+        # Parse today's date and see if we should use today or yesterday
+        self.refresh_current_date()
+
+        # Set the pointer to the first game in the list of Pref Games
+        self.current_game_index = 0
+
+        # Fetch the games for today
+        self.refresh_games()
+
+        # Today's date
+        self.today = self.date()
+
+        # Get the status from the API
+        self.get_status()
+
+        # Get refresh standings
+        self.refresh_standings()
+
     #
     # Debugging
     def debug_overview(self):
-        ## Test refresh Overview
+        # Test refresh Overview
         self.refresh_overview()
-        ## Test scoreboard.py
+        # Test scoreboard.py
         debug.log("Off day for preferred team: {}".format(self.is_pref_team_offday()))
         debug.log(self.status.is_offseason(self.date()))
         debug.log(Scoreboard(self.overview, self))

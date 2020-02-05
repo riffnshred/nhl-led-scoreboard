@@ -4,7 +4,7 @@ from renderer.logos import TeamLogos as LogoRenderer
 
 
 class ScoreboardRenderer:
-    def __init__(self, data, matrix, scoreboard, index):
+    def __init__(self, data, matrix, scoreboard):
         self.data = data
         self.status = data.status
         self.layout = self.data.config.layout
@@ -13,7 +13,6 @@ class ScoreboardRenderer:
         self.scoreboard = scoreboard
         self.matrix = matrix
         self.canvas = matrix.CreateFrameCanvas()
-        self.index = index
 
     def render(self):
         # Create a new data image.
@@ -30,6 +29,7 @@ class ScoreboardRenderer:
             self.draw_final()
 
         if self.status.is_irregular(self.scoreboard.status):
+            '''TODO: Need to figure out the irregular status'''
             pass
 
         LogoRenderer(self.scoreboard.away_team, self.scoreboard.home_team, self.layout, self.canvas).render()
@@ -58,11 +58,14 @@ class ScoreboardRenderer:
         period = self.scoreboard.periods.ordinal
         clock = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
+        SOG = '{}-{}'.format(self.scoreboard.away_team.shot_on_goal, self.scoreboard.home_team.shot_on_goal)
 
         # Align the into with center of screen
         period_align = center_text(self.font.getsize(period)[0], 32)
         clock_align = center_text(self.font.getsize(clock)[0], 32)
         score_align = center_text(self.font_large.getsize(score)[0], 32)
+        SOG_align = center_text(self.font.getsize(SOG)[0], 32)
+        SOG_label_align = center_text(self.font.getsize("SOG")[0], 32)
 
         # Draw the info
         self.draw.multiline_text((period_align, -1), period, fill=(255, 255, 255), font=self.font, align="center")
@@ -86,7 +89,6 @@ class ScoreboardRenderer:
         # Draw the info
         self.draw.multiline_text((date_align, -1), date, fill=(255, 255, 255), font=self.font, align="center")
         if self.scoreboard.periods.number > 3:
-            print("Hello")
             result_align = center_text(self.font.getsize("F/{}".format(period))[0], 32)
             self.draw.multiline_text((result_align, 5), "F/{}".format(period), fill=(255, 255, 255), font=self.font, align="center")
         else:

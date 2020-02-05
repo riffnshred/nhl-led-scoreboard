@@ -27,6 +27,7 @@ class ScoreboardConfig:
         self.boards_off_day = json["boards"]["off_day"]
         self.boards_scheduled = json["boards"]["scheduled"]
         self.boards_intermission = json["boards"]["intermission"]
+        self.boards_post_game = json["boards"]["post_game"]
 
         # Scoreticker
         self.preferred_teams_only = json["boards"]["scoreticker"]["preferred_teams_only"]

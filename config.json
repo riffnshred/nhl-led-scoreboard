@@ -1,11 +1,11 @@
 {
 	"debug": true,
-	"live_mode": false,
+	"live_mode": true,
 	"preferences": {
 		"live_game_refresh_rate": 15,
 		"end_of_day": "12:00",
 		"teams": [
-			"Canadiens", "Stars", "Maple Leafs", "Canucks", "Capitals", "Wild"
+			"Canadiens"
 		],
 		"standing_type": "conference",
 		"divisions": "atlantic",
@@ -19,6 +19,9 @@
 			"standings"
 		],
 		"intermission": [
+			"scoreticker"
+		],
+		"post_game": [
 			"scoreticker"
 		],
 		"scoreticker": {

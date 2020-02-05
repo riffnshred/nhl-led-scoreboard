@@ -19,17 +19,17 @@ class Scoreticker:
         self.data.refresh_games()
         self.games = self.data.games
         self.num_games = len(self.games)
+        print(self.num_games)
         try:
             while True:
-                print(Scoreboard(self.games[self.index], self.data.teams_info))
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info), self.index).render()
-                self.show_indicator()
-                if self.index < (len(self.games) - 1):
-                    self.index += 1
-                else:
+                print(self.index)
+                if self.index >= (len(self.games)):
                     return
-
+                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info)).render()
+                self.show_indicator()
                 sleep(self.rotation_rate)
+                self.index += 1
+
         except IndexError:
             print("NHL OFF DAY today")
             return
@@ -63,6 +63,3 @@ class Scoreticker:
                 self.matrix.SetPixel((align + dot_position), 30, 255, 50, 50)
             else:
                 self.matrix.SetPixel((align + dot_position), 30, 70, 70, 70)
-
-    def reset(self):
-        self.index = 0
