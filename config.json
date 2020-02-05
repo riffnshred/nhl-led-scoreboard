@@ -9,7 +9,14 @@
 		],
 		"standing_type": "conference",
 		"divisions": "atlantic",
-		"conference": "eastern"
+		"conference": "eastern",
+                "dimmer": {
+                        "source": "hardware",
+			"light_level_lux": 400,
+                        "mode": "offday",
+                        "sunset_brightness": 5,
+                        "sunrise_brightness": 50
+                }
 	},
 	"boards": {
 		"off_day": [
