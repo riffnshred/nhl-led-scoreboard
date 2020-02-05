@@ -11,7 +11,7 @@
 		"divisions": "atlantic",
 		"conference": "eastern",
                 "dimmer": {
-                        "source": "hardware",
+                        "source": "software",
 			"light_level_lux": 400,
                         "mode": "offday",
                         "sunset_brightness": 5,
