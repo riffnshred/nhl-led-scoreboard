@@ -9,16 +9,12 @@ from data.scoreboard import Scoreboard
 from time import sleep
 from utils import convert_date_format
 
-
 class TeamSummary:
     def __init__(self, data, matrix):
         self.data = data
         self.teams_info = data.teams_info
         self.preferred_teams = data.pref_teams
         self.matrix = matrix
-        self.width = matrix.width
-        self.height = matrix.height
-        self.canvas = matrix.CreateFrameCanvas()
         self.team_colors = data.config.team_colors
         self.layout = data.config.layout
 
@@ -54,30 +50,33 @@ class TeamSummary:
 
             i = 0
             image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
-                                           im_height, self.width, i)
-            self.canvas.SetImage(image, 0, 0)
-            self.canvas.SetImage(team_logo.convert("RGB"), logo_coord["x"], logo_coord["y"])
-            self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                                           im_height, self.matrix.width, i)
+
+            self.matrix.clear()
+            self.matrix.draw_image((0, 0), image)
+            self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
+            self.matrix.render()
             sleep(5)
 
             # Move the image up until we hit the bottom.
             while i > -(im_height - self.matrix.height):
                 i -= 1
                 image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
-                                               im_height, self.width,
-                                               i)
-                self.canvas.SetImage(image, 0, 0)
-                self.canvas.SetImage(team_logo.convert("RGB"), logo_coord["x"], logo_coord["y"])
-                self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                                               im_height, self.matrix.width,
+                                                i)
+
+                self.matrix.clear()
+                self.matrix.draw_image((0, 0), image)
+                self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
+                self.matrix.render()
                 sleep(0.3)
             # Show the bottom before we change to the next table.
             sleep(5)
 
     def draw_team_summary(self, stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color, im_height,
                           width, i):
-        image = Image.new('RGB', (self.width, self.height))
+        image = Image.new('RGB', (self.matrix.width, self.matrix.height))
         draw = ImageDraw.Draw(image)
-        self.canvas.SetImage(image, 0, 0)
 
         draw.rectangle([0, 6 + i, 26, -1 + i], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 0 + i), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),

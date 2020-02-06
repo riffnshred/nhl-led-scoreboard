@@ -5,16 +5,12 @@ from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 from time import sleep
 
-
 class Standings:
     def __init__(self, data, matrix):
         self.conferences = ["eastern", "western"]
         self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
         self.data = data
         self.matrix = matrix
-        self.width = matrix.width
-        self.height = matrix.height
-        self.canvas = matrix.CreateFrameCanvas()
         self.team_colors = data.config.team_colors
 
     def render(self):
@@ -37,17 +33,17 @@ class Standings:
                     im_height = (len(records)+1) * 7
                     # Increment to move image up
                     i = 0
-                    image = draw_records(self.data, conference, records, im_height, self.width, i)
-                    self.canvas.SetImage(image, 0, 0)
-                    self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                    image = draw_records(self.data, conference, records, im_height, self.matrix.width, i)
+                    self.matrix.draw_image((0, 0), image)
+                    self.matrix.render()
                     sleep(5)
 
                     # Move the image up until we hit the bottom.
                     while i > -(im_height - self.matrix.height):
                         i -= 1
-                        image = draw_records(self.data, conference, records, im_height, self.width, i)
-                        self.canvas.SetImage(image, 0, 0)
-                        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                        image = draw_records(self.data, conference, records, im_height, self.matrix.width, i)
+                        self.matrix.draw_image((0, 0), image)
+                        self.matrix.render()
                         sleep(0.2)
                     # Show the bottom before we change to the next table.
                     sleep(5)
@@ -60,17 +56,17 @@ class Standings:
                     im_height = (len(records) + 1) * 7
                     # Increment to move image up
                     i = 0
-                    image = draw_records(self.data, division, records, im_height, self.width, i)
-                    self.canvas.SetImage(image, 0, 0)
-                    self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                    image = draw_records(self.data, division, records, im_height, self.matrix.width, i)
+                    self.matrix.draw_image((0, 0), image)
+                    self.matrix.render()
                     sleep(5)
 
                     # Move the image up until we hit the bottom.
                     while i > -(im_height - self.matrix.height):
                         i -= 1
-                        image = draw_records (self.data, division, records, im_height, self.width, i)
-                        self.canvas.SetImage(image, 0, 0)
-                        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+                        image = draw_records (self.data, division, records, im_height, self.matrix.width, i)
+                        self.matrix.draw_image((0, 0), image)
+                        self.matrix.render()
                         sleep(0.2)
                     # Show the bottom before we change to the next table.
                     sleep(5)

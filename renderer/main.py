@@ -10,7 +10,6 @@ from renderer.scoreboard import ScoreboardRenderer
 class MainRenderer:
     def __init__(self, matrix, data):
         self.matrix = matrix
-        self.canvas = self.matrix.CreateFrameCanvas()
         self.data = data
         self.status = self.data.status
         self.refresh_rate = self.data.config.live_game_refresh_rate
@@ -75,23 +74,18 @@ class MainRenderer:
                 """ Post Game state """
                 debug.info("Game Over")
                 self.__render_postgame()
-                self.boards._post_game(self.data, self.matrix)
-
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
                 self.__render_pregame()
-                self.boards._scheduled(self.data, self.matrix)
 
     def __render_pregame(self):
-        sleep(self.refresh_rate)
-        return
+        self.boards._scheduled(self.data, self.matrix)
 
     def __render_postgame(self):
         debug.info("Showing Post-Game")
-        sleep(self.refresh_rate)
-        return
+        self.boards._post_game(self.data, self.matrix)
 
     def __render_live(self, scoreboard):
         if scoreboard.intermission:
@@ -121,8 +115,8 @@ class MainRenderer:
         # Set the frame index to 0
         frame_nub = 0
 
-        self.canvas.Clear()
-
+        self.matrix.clear()
+        
         # Go through the frames
         x = 0
         while x is not 5:
@@ -133,7 +127,8 @@ class MainRenderer:
                 frame_nub = 0
                 im.seek(frame_nub)
 
-            self.canvas.SetImage(im.convert('RGB'), 0, 0)
-            self.canvas = self.matrix.SwapOnVSync(self.canvas)
+            self.matrix.draw_image((0, 0), im)
+            self.matrix.render()
+            
             frame_nub += 1
             sleep(0.1)
