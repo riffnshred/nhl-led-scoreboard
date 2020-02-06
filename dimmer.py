@@ -28,6 +28,17 @@ class Dimmer(object):
         #If selected hardware, attempt to initialize sensor
         self.luxsensor = False
 
+        # Make sure brightness values are not less than 0 or higher than 100
+        if data.config.dimmer_sunset_brightness < 0:
+            data.config.dimmer_sunset_brightness = 0
+        if data.config.dimmer_sunset_brightness > 100:
+            data.config.dimmer_sunset_brightness = 100
+
+        if data.config.dimmer_sunrise_brightness  <0:
+            data.config.dimmer_sunrise_brightness = 0
+        if data.config.dimmer_sunrise_brightness > 100:
+            data.config.dimmer_sunrise_brightness = 100
+
         if data.config.dimmer_source == "hardware":
             try:
                 tsl = tsl2591()  # initialize
