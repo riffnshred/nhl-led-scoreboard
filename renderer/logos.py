@@ -1,20 +1,19 @@
 from PIL import Image
+
 class TeamLogos:
-    def __init__(self, away, home, coords, canvas):
-        self.coords = coords
-        self.canvas = canvas
-        self.away = away
-        self.home = home
+    def __init__(self, matrix, layout, team, gameLocation):
+        self.matrix = matrix
+        self.layout = layout
+        self.team = team
+        self.gameLocation = gameLocation
 
     def render(self):
         # Get the on-screen position of both logos
-        away_team_logo_pos, home_team_logo_pos = self.coords._get_scoreboard_logo_coord(self.away.id, self.home.id)
+        logo_pos = self.layout.get_scoreboard_logo_coord(self.team.id)[self.gameLocation]
 
         # Open the logo image file
-        away_team_logo = Image.open('logos/{}.png'.format(self.away.abbrev))
-        home_team_logo = Image.open('logos/{}.png'.format(self.home.abbrev))
+        team_logo = Image.open('logos/{}.png'.format(self.team.abbrev))
 
         # Put the images on the canvas
-        self.canvas.SetImage(away_team_logo.convert("RGB"), away_team_logo_pos["x"], away_team_logo_pos["y"])
-        self.canvas.SetImage(home_team_logo.convert("RGB"), home_team_logo_pos["x"], home_team_logo_pos["y"])
+        self.matrix.draw_image((logo_pos["x"], logo_pos["y"]), team_logo)
 

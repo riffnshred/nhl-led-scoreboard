@@ -69,8 +69,8 @@ class Boards:
         Scoreticker(data, matrix).render()
 
     def standings(self, data, matrix):
-        Standings(self, data, matrix).render()
+        Standings(data, matrix).render()
 
     def team_summary(self, data, matrix):
-        TeamSummary(self, data, matrix).render()
+        TeamSummary(data, matrix).render()
 

@@ -2,7 +2,6 @@ from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from utils import center_text, convert_date_format
 from renderer.logos import TeamLogos as LogoRenderer
 
-
 class ScoreboardRenderer:
     def __init__(self, data, matrix, scoreboard):
         self.data = data
@@ -12,12 +11,24 @@ class ScoreboardRenderer:
         self.font_large = self.layout.font_large
         self.scoreboard = scoreboard
         self.matrix = matrix
-        self.canvas = matrix.CreateFrameCanvas()
+
+        self.home_logo_renderer = LogoRenderer(
+            self.matrix,
+            self.layout,
+            self.scoreboard.home_team,
+            "home"
+        )
+        self.away_logo_renderer = LogoRenderer(
+            self.matrix,
+            self.layout,
+            self.scoreboard.away_team,
+            "away"
+        )
 
     def render(self):
-        # Create a new data image.
-        self.image = Image.new('RGB', (self.matrix.width, self.matrix.height))
-        self.draw = ImageDraw.Draw(self.image)
+        
+        self.away_logo_renderer.render()
+        self.home_logo_renderer.render()
 
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()
@@ -32,26 +43,16 @@ class ScoreboardRenderer:
             '''TODO: Need to figure out the irregular status'''
             pass
 
-        LogoRenderer(self.scoreboard.away_team, self.scoreboard.home_team, self.layout, self.canvas).render()
-
-        # Load the canvas on screen.
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
-
     def draw_scheduled(self):
         start_time = self.scoreboard.start_time
 
-        # Center the game time on screen.
-        game_time_pos = center_text(self.font.getsize(start_time)[0], 32)
-
         # Draw the text on the Data image.
-        """ TODO: need to use center_text function for all text"""
-        self.draw.text((22, -1), 'TODAY', font=self.layout.font)
-        self.draw.multiline_text((game_time_pos, 5), start_time, fill=(255, 255, 255), font=self.font,
-                                 align="center")
-        self.draw.text((25, 13), 'VS', font=self.font_large)
-
-        # Put the data on the canvas
-        self.canvas.SetImage(self.image, 0, 0)
+        self.matrix.draw_text((0, -1), 'TODAY', font=self.layout.font, location="center")
+        self.matrix.draw_text(
+            (0, 5), start_time, fill=(255, 255, 255), location="center", 
+            font=self.font, align="center", multiline=True
+        )
+        self.matrix.draw_text((0, 13), 'VS', font=self.font_large, location="center")
 
     def draw_live(self):
         # Get the Info
@@ -60,20 +61,19 @@ class ScoreboardRenderer:
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
         SOG = '{}-{}'.format(self.scoreboard.away_team.shot_on_goal, self.scoreboard.home_team.shot_on_goal)
 
-        # Align the into with center of screen
-        period_align = center_text(self.font.getsize(period)[0], 32)
-        clock_align = center_text(self.font.getsize(clock)[0], 32)
-        score_align = center_text(self.font_large.getsize(score)[0], 32)
-        SOG_align = center_text(self.font.getsize(SOG)[0], 32)
-        SOG_label_align = center_text(self.font.getsize("SOG")[0], 32)
-
         # Draw the info
-        self.draw.multiline_text((period_align, -1), period, fill=(255, 255, 255), font=self.font, align="center")
-        self.draw.multiline_text((clock_align, 5), clock, fill=(255, 255, 255), font=self.font, align="center")
-        self.draw.multiline_text((score_align, 15), score, fill=(255, 255, 255), font=self.font_large, align="center")
-
-        # Put the data on the canvas
-        self.canvas.SetImage(self.image, 0, 0)
+        self.matrix.draw_text(
+            (0, -1), period, fill=(255, 255, 255), location="center",
+            font=self.font, align="center", multiline=True
+        )
+        self.matrix.draw_text(
+            (0, 5), clock, fill=(255, 255, 255), location="center", 
+            font=self.font, align="center", multiline=True
+        )
+        self.matrix.draw_text(
+            (0, 15), score, fill=(255, 255, 255), location="center", 
+            font=self.font_large, align="center", multiline=True
+        )
 
     def draw_final(self):
         # Get the Info
@@ -87,18 +87,25 @@ class ScoreboardRenderer:
         score_align = center_text(self.font_large.getsize(score)[0], 32)
 
         # Draw the info
-        self.draw.multiline_text((date_align, -1), date, fill=(255, 255, 255), font=self.font, align="center")
+        self.matrix.draw_text(
+            (0, -1), date, fill=(255, 255, 255), location="center", 
+            font=self.font, align="center", multiline=True
+        )
         if self.scoreboard.periods.number > 3:
-            result_align = center_text(self.font.getsize("F/{}".format(period))[0], 32)
-            self.draw.multiline_text((result_align, 5), "F/{}".format(period), fill=(255, 255, 255), font=self.font, align="center")
+            self.matrix.draw_text(
+                (0, 5), "F/{}".format(period), fill=(255, 255, 255), location="center", 
+                font=self.font, align="center", multiline=True
+            )
         else:
-            result_align = center_text(self.font.getsize(result)[0], 32)
-            self.draw.multiline_text((result_align, 5), result, fill=(255, 255, 255), font=self.font, align="center")
+            self.matrix.draw_text(
+                (0, 5), result, fill=(255, 255, 255), location="center", 
+                font=self.font, align="center", multiline=True
+            )
 
-        self.draw.multiline_text((score_align, 15), score, fill=(255, 255, 255), font=self.font_large, align="center")
-
-        # Put the data on the canvas
-        self.canvas.SetImage(self.image, 0, 0)
+        self.matrix.draw_text(
+            (0, 15), score, fill=(255, 255, 255), location="center", 
+            font=self.font_large, align="center", multiline=True
+        )
 
     def draw_Irregular(self):
         pass

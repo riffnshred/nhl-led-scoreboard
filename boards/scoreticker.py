@@ -7,6 +7,7 @@ from time import sleep
 from utils import center_obj
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
+
 class Scoreticker:
     def __init__(self, data, matrix):
         self.data = data
@@ -22,11 +23,17 @@ class Scoreticker:
         print(self.num_games)
         try:
             while True:
+                self.matrix.clear()
+
                 print(self.index)
                 if self.index >= (len(self.games)):
                     return
+                    
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info)).render()
                 self.show_indicator()
+
+                self.matrix.render()
+
                 sleep(self.rotation_rate)
                 self.index += 1
 
@@ -60,6 +67,6 @@ class Scoreticker:
         for i in range(self.num_games):
             dot_position = ((self.spacing * i) - 1) + 1
             if i == self.index:
-                self.matrix.SetPixel((align + dot_position), 30, 255, 50, 50)
+                self.matrix.set_pixel(((align + dot_position), 30), (255, 50, 50))
             else:
-                self.matrix.SetPixel((align + dot_position), 30, 70, 70, 70)
+                self.matrix.set_pixel(((align + dot_position), 30), (70, 70, 70))
