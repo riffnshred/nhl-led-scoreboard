@@ -22,6 +22,13 @@ class ScoreboardConfig:
         self.preferred_divisions = json["preferences"]["divisions"]
         self.preferred_conference = json["preferences"]["conference"]
 
+        # Dimmer preferences
+        self.dimmer_source = json["preferences"]["dimmer"]["source"]
+        self.dimmer_light_level_lux = json["preferences"]["dimmer"]["light_level_lux"]
+        self.dimmer_mode = json["preferences"]["dimmer"]["mode"]
+        self.dimmer_sunset_brightness = json["preferences"]["dimmer"]["sunset_brightness"]
+        self.dimmer_sunrise_brightness = json["preferences"]["dimmer"]["sunrise_brightness"]
+
         # Boards configuration
         # Boards
         self.boards_off_day = json["boards"]["off_day"]
