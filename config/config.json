@@ -10,13 +10,13 @@
 		"standing_type": "conference",
 		"divisions": "atlantic",
 		"conference": "eastern",
-                "dimmer": {
-                        "source": "software",
-			"light_level_lux": 400,
-                        "mode": "offday",
-                        "sunset_brightness": 5,
-                        "sunrise_brightness": 50
-                }
+			"dimmer": {
+				"source": "software",
+				"light_level_lux": 400,
+				"mode": "offday",
+				"sunset_brightness": 5,
+				"sunrise_brightness": 50
+			}
 	},
 	"boards": {
 		"off_day": [
