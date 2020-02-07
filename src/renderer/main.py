@@ -5,6 +5,7 @@ import debug
 from boards.boards import Boards
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
+from utils import get_file
 
 class MainRenderer:
     def __init__(self, matrix, data):
@@ -111,7 +112,7 @@ class MainRenderer:
 
         debug.info('SCOOOOOOOORE, MAY DAY, MAY DAY, MAY DAY, MAY DAAAAAAAAY - Rick Jeanneret')
         # Load the gif file
-        im = Image.open("assets/animations/goal_light_animation.gif")
+        im = Image.open(get_file("assets/animations/goal_light_animation.gif"))
         # Set the frame index to 0
         frame_nub = 0
 
