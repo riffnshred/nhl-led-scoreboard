@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Make script work regardless of where it is run from
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-cd "../$parent_path"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "${DIR}/.."
 
 # Pull submodule and ignore changes from script
 git submodule update --init --recursive
