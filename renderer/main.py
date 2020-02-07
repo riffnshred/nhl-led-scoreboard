@@ -91,11 +91,12 @@ class MainRenderer:
         if scoreboard.intermission:
             # Show Boards for Intermission
             debug.info("Main event is in Intermission")
-            ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
             self.boards._intermission(self.data, self.matrix)
-
+        
         debug.info("Showing Main Event")
+        self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        self.matrix.render()
 
         self.data.needs_refresh = True
         sleep(self.refresh_rate)
