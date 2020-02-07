@@ -12,7 +12,7 @@ class TeamLogos:
         logo_pos = self.layout.get_scoreboard_logo_coord(self.team.id)[self.gameLocation]
 
         # Open the logo image file
-        team_logo = Image.open('logos/{}.png'.format(self.team.abbrev))
+        team_logo = Image.open('assets/logos/{}.png'.format(self.team.abbrev))
 
         # Put the images on the canvas
         self.matrix.draw_image((logo_pos["x"], logo_pos["y"]), team_logo)

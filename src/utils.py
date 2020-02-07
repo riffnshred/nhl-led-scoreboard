@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def get_file(path):
-    dir = os.path.dirname(__file__)
+    dir = os.path.dirname(os.path.dirname(__file__))
     return os.path.join(dir, path)
 
 
