@@ -7,7 +7,7 @@ from rgbmatrix import graphics
 import nhl_api
 from data.scoreboard import Scoreboard
 from time import sleep
-from utils import convert_date_format
+from utils import convert_date_format, get_file
 
 class TeamSummary:
     def __init__(self, data, matrix):
@@ -46,7 +46,7 @@ class TeamSummary:
             print(stats.gamesPlayed)
             print(team_abbrev)
             logo_coord = self.layout._get_summary_logo_coord(team_id)
-            team_logo = Image.open('assets/logos/{}.png'.format(team_abbrev))
+            team_logo = Image.open(get_file('assets/logos/{}.png'.format(team_abbrev)))
 
             i = 0
             image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
