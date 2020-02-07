@@ -54,7 +54,7 @@ class ScoreboardConfig:
         # Find and return a json file
 
         j = {}
-        path = get_file(filename)
+        path = get_file("config/{}".format(filename))
         if os.path.isfile(path):
             j = json.load(open(path))
         return j
@@ -63,6 +63,7 @@ class ScoreboardConfig:
         # Look and return config.json file
 
         filename = "{}.json".format(base_filename)
+
         reference_config = self.read_json(filename)
 
         return reference_config
@@ -75,8 +76,6 @@ class ScoreboardConfig:
         except:
             debug.error("Invalid {} reference color file. Make sure {} exists in ledcolors/".format(base_filename, base_filename))
             sys.exit(1)
-
-
 
     def __get_layout(self, width, height):
         filename = "renderer/{}x{}_config.json".format(width, height)

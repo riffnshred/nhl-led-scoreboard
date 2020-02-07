@@ -46,7 +46,7 @@ class TeamSummary:
             print(stats.gamesPlayed)
             print(team_abbrev)
             logo_coord = self.layout._get_summary_logo_coord(team_id)
-            team_logo = Image.open('logos/{}.png'.format(team_abbrev))
+            team_logo = Image.open('assets/logos/{}.png'.format(team_abbrev))
 
             i = 0
             image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
