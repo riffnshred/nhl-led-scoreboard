@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"live_mode": true,
+	"live_mode": false,
 	"preferences": {
 		"live_game_refresh_rate": 15,
 		"end_of_day": "12:00",
@@ -24,7 +24,7 @@
 	},
 	"boards": {
 		"off_day": [
-			"scoreticker"
+			"standings"
 		],
 		"scheduled": [
 			"standings"
@@ -40,7 +40,7 @@
 			"rotation_rate": 5
 		},
 		"standings": {
-			"preferred_standings_only": false
+			"preferred_standings_only": true
 		}
 	}
 }
