@@ -97,8 +97,8 @@ class Dimmer(object):
                            self.brightness = self.data.config.dimmer_sunset_brightness
 
                self.matrix.set_brightness(self.brightness)
-               self.matrix.render()
+               #self.matrix.render()
             else:
                debug.info("No dimming...Live Game on?")
             # Run every 5 minutes
-            sleep(60 * 5)
+            sleep(60 * self.data.config.dimmer_frequency)
