@@ -24,6 +24,7 @@ class ScoreboardConfig:
 
         # Dimmer preferences
         self.dimmer_source = json["preferences"]["dimmer"]["source"]
+        self.dimmer_frequency = json["preferences"]["dimmer"]["frequency"]
         self.dimmer_light_level_lux = json["preferences"]["dimmer"]["light_level_lux"]
         self.dimmer_mode = json["preferences"]["dimmer"]["mode"]
         self.dimmer_sunset_brightness = json["preferences"]["dimmer"]["sunset_brightness"]
