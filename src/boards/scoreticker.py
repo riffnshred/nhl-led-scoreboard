@@ -20,12 +20,9 @@ class Scoreticker:
         self.data.refresh_games()
         self.games = self.data.games
         self.num_games = len(self.games)
-        print(self.num_games)
         try:
             while True:
                 self.matrix.clear()
-
-                print(self.index)
                 if self.index >= (len(self.games)):
                     return
                     

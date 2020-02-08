@@ -3,7 +3,7 @@
 	"live_mode": true,
 	"preferences": {
 		"live_game_refresh_rate": 15,
-		"end_of_day": "12:00",
+		"end_of_day": "8:00",
 		"teams": [
 			"Jets",
 			"Stars",
@@ -12,7 +12,7 @@
 		],
 		"standing_type": "conference",
 		"divisions": "central",
-		"conference": "western",
+		"conference": "eastern",
 			"dimmer": {
 				"source": "software",
 				"frequency": 5,
@@ -24,9 +24,13 @@
 	},
 	"boards": {
 		"off_day": [
-			"scoreticker"
+			"scoreticker",
+			"team_summary",
+			"standings"
 		],
 		"scheduled": [
+			"scoreticker",
+			"team_summary",
 			"standings"
 		],
 		"intermission": [

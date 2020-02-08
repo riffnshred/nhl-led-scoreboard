@@ -29,7 +29,6 @@ class Boards:
                 return
             else:
                 bord_index += 1
-            sleep(5)
 
     def _scheduled(self, data, matrix):
         bord_index = 0
@@ -41,7 +40,6 @@ class Boards:
                 return
             else:
                 bord_index += 1
-            sleep(5)
 
     def _intermission(self, data, matrix):
         bord_index = 0
@@ -51,7 +49,6 @@ class Boards:
             board = getattr(self, data.config.boards_intermission[bord_index])
             board(data, matrix)
             bord_index += 1
-            sleep(1)
 
     def _post_game(self, data, matrix):
         bord_index = 0
@@ -63,7 +60,6 @@ class Boards:
                 return
             else:
                 bord_index += 1
-            sleep(5)
 
     def scoreticker(self, data, matrix):
         Scoreticker(data, matrix).render()
