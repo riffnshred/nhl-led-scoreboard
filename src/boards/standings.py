@@ -5,6 +5,7 @@ from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 from time import sleep
 
+
 class Standings:
     def __init__(self, data, matrix):
         self.conferences = ["eastern", "western"]
@@ -17,7 +18,6 @@ class Standings:
         type = self.data.config.standing_type
         if self.data.config.preferred_standings_only:
             if type == 'conference':
-                print("conf1")
                 conference = self.data.config.preferred_conference
                 records = getattr(self.data.standings.by_conference, conference)
                 # calculate the image height
@@ -38,7 +38,6 @@ class Standings:
                 sleep(5)
 
             elif type == 'division':
-                print("div1")
                 division = self.data.config.preferred_divisions
                 records = getattr(self.data.standings.by_division, division)
                 # calculate the image height
@@ -61,10 +60,9 @@ class Standings:
         else:
             if type == 'conference':
                 for conference in self.conferences:
-                    print("conf2")
                     records = getattr(self.data.standings.by_conference, conference)
                     # calculate the image height
-                    im_height = (len(records)+1) * 7
+                    im_height = (len(records) + 1) * 7
                     # Increment to move image up
                     i = 0
                     image = draw_records(self.data, conference, records, im_height, self.matrix.width)
@@ -83,7 +81,6 @@ class Standings:
 
             elif type == 'division':
                 for division in self.divisions:
-                    print("div2")
                     records = getattr(self.data.standings.by_division, division)
                     # calculate the image height
                     im_height = (len(records) + 1) * 7
@@ -146,6 +143,4 @@ def draw_records(data, name, records, img_height, width):
         draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
         row_pos += row_height
 
-        # message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, abbev, points, wins, losses, ot)
-        # print(message)
     return image

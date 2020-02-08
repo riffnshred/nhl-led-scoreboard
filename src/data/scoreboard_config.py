@@ -32,6 +32,7 @@ class ScoreboardConfig:
 
         # Boards configuration
         # Boards
+        '''TODO: Put condition so that the user dont leave any board list empty'''
         self.boards_off_day = json["boards"]["off_day"]
         self.boards_scheduled = json["boards"]["scheduled"]
         self.boards_intermission = json["boards"]["intermission"]
