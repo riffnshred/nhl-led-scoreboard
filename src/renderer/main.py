@@ -82,10 +82,12 @@ class MainRenderer:
 
     def __render_pregame(self):
         self.boards._scheduled(self.data, self.matrix)
+        self.data.needs_refresh = True
 
     def __render_postgame(self):
         debug.info("Showing Post-Game")
         self.boards._post_game(self.data, self.matrix)
+        self.data.needs_refresh = True
 
     def __render_live(self, scoreboard):
         if scoreboard.intermission:
