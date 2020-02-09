@@ -41,7 +41,7 @@ class Dimmer(object):
 
         if data.config.dimmer_source == "hardware":
             try:
-                tsl = tsl2591()  # initialize
+                self.tsl = tsl2591()  # initialize
                 self.luxsensor = True
             except:
                 debug.error("Light sensor not found or not connected, falling back to software mode")
@@ -85,8 +85,8 @@ class Dimmer(object):
                    debug.info("Using " + self.data.config.dimmer_source + " to determine dimming" )
                    if self.luxsensor: 
                        # Read current value of light, and adjust brightness level based on that
-                       full, ir = tsl.get_full_luminosity()
-                       lux = tsl.calculate_lux(full, ir)
+                       full, ir = self.tsl.get_full_luminosity()
+                       lux = self.tsl.calculate_lux(full, ir)
                        debug.info("Ambient light level = " + str(lux) + " lux")
                        #Using a lux value>=400 for sunrise (see https://en.wikipedia.org/wiki/Lux), set up brightness
                        #Some actual testing in your environment might be needed to adjust lux values and what you
