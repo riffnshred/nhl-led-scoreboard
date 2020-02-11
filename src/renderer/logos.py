@@ -17,8 +17,6 @@ class TeamLogos:
         self.matrix = matrix
         self.layout = config.layout
 
-        team.abbrev = 'TOR'
-        team.id = 10
         self.new_layout = config.config.layout.get_scoreboard_logo(team.abbrev, gameLocation)
         self.gameLocation = gameLocation
 
