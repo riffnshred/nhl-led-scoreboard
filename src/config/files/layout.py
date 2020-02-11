@@ -13,4 +13,4 @@ class LayoutConfig:
       logo.__merge__(logos[team][gameLocation])
       return logo
     
-    return default
+    return logo
