@@ -1,0 +1,36 @@
+{
+  "scoreboard": {
+    "logos": {
+      "_default": {
+        "zoom": 1.0,
+        "offset": [0, 0],
+        "flip": 0,
+        "rotate": 0,
+        "crop": [0, 0, 0, 0]
+      },
+      "DET": {
+        "zoom": 2.0,
+        "home": {
+          "offset": [10, 0]
+        },
+        "away": {
+          "offset": [10, 0]
+        }
+      },
+      "TOR": {
+        "zoom": 2.0,
+        "home": {
+          "rotate": 45,
+          "offset": [0, 0],
+          "crop": [0.3, 0, 0, 0]
+        },
+        "away": {
+          "zoom": 1.4,
+          "flip": 1,
+          "rotate": 90,
+          "offset": [0.3, 0]
+        }
+      }
+    }
+  }
+}

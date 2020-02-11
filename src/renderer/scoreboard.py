@@ -14,13 +14,13 @@ class ScoreboardRenderer:
 
         self.home_logo_renderer = LogoRenderer(
             self.matrix,
-            self.layout,
+            data.config,
             self.scoreboard.home_team,
             "home"
         )
         self.away_logo_renderer = LogoRenderer(
             self.matrix,
-            self.layout,
+            data.config,
             self.scoreboard.away_team,
             "away"
         )

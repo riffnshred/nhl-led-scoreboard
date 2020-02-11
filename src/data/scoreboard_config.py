@@ -1,6 +1,7 @@
 from utils import get_file
 from data.layout import Layout
 from data.colors import Color
+from config.main import Config  
 import json
 import os
 import sys
@@ -31,7 +32,6 @@ class ScoreboardConfig:
         self.dimmer_sunrise_brightness = json["preferences"]["dimmer"]["sunrise_brightness"]
 
         # Boards configuration
-        # Boards
         '''TODO: Put condition so that the user dont leave any board list empty'''
         self.boards_off_day = json["boards"]["off_day"]
         self.boards_scheduled = json["boards"]["scheduled"]
@@ -46,11 +46,21 @@ class ScoreboardConfig:
         self.preferred_standings_only = json["boards"]["standings"]["preferred_standings_only"]
 
         # Element's led coordinates
-        self.layout = Layout(self.__get_layout(width, height))
+        self.layout = Layout(self.__get_config(
+            "layout/{}x{}_config".format(width, height),
+            "Invalid matrix dimensions provided or missing resolution config file (64x32_config.json). This software currently support 64x32 matrix board only.\nIf you would like to see new dimensions supported, please file an issue on GitHub!"
+        ))
+        self.dynamic_layout = Layout(self.__get_config(
+            "layout/dynamic",
+            "Invalid dynamic layout config file!"
+        ))
 
-        # load colors
-        json = self.__get_colors("teams")
-        self.team_colors = Color(json)
+        # load colors 
+        self.team_colors = Color(self.__get_config(
+            "colors/teams"
+        ))
+
+        self.config = Config()
 
     def read_json(self, filename):
         # Find and return a json file
@@ -61,30 +71,17 @@ class ScoreboardConfig:
             j = json.load(open(path))
         return j
 
-    def __get_config(self, base_filename):
+    def __get_config(self, base_filename, error=None):
         # Look and return config.json file
 
         filename = "{}.json".format(base_filename)
 
         reference_config = self.read_json(filename)
+        if not reference_config:
+            if (error):
+                debug.error(error)
+            else:
+                debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
+            sys.exit(1)
 
         return reference_config
-
-    def __get_colors(self, base_filename):
-        try:
-            filename = "colors/teams.json".format(base_filename)
-            reference_colors = self.read_json(filename)
-            return reference_colors
-        except:
-            debug.error("Invalid {} reference color file. Make sure {} exists in ledcolors/".format(base_filename, base_filename))
-            sys.exit(1)
-
-    def __get_layout(self, width, height):
-        filename = "renderer/{}x{}_config.json".format(width, height)
-        reference_layout = self.read_json(filename)
-        if not reference_layout:
-            # Unsupported coordinates
-            debug.error("Invalid matrix dimensions provided or missing resolution config file (64x32_config.json). This software currently support 64x32 matrix board only.\nIf you would like to see new dimensions supported, please file an issue on GitHub!")
-            sys.exit(1)
-
-        return reference_layout
