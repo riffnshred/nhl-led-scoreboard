@@ -17,7 +17,6 @@ class Scoreticker:
 
     def render(self):
         self.index = 0
-        self.data.refresh_games()
         self.games = self.data.games
         self.num_games = len(self.games)
         try:
@@ -25,11 +24,13 @@ class Scoreticker:
                 self.matrix.clear()
                 if self.index >= (len(self.games)):
                     return
-                    
+
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info)).render()
                 self.show_indicator()
-
                 self.matrix.render()
+
+                if self.data.network_issues:
+                    self.matrix.network_issue_indicator()
 
                 sleep(self.rotation_rate)
                 self.index += 1
@@ -48,7 +49,7 @@ class Scoreticker:
         self.many_games = False
 
         # if there is more then 11 games, reduce the spacing of each dots
-        if self.num_games > 11:
+        if self.num_games > 10:
             self.many_games = True
             self.spacing = 2
 

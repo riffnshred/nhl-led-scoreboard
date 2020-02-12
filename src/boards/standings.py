@@ -68,6 +68,8 @@ class Standings:
                     image = draw_records(self.data, conference, records, im_height, self.matrix.width)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
+                    if self.data.network_issues:
+                        self.matrix.network_issue_indicator()
                     sleep(5)
 
                     # Move the image up until we hit the bottom.
@@ -75,6 +77,8 @@ class Standings:
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
+                        if self.data.network_issues:
+                            self.matrix.network_issue_indicator()
                         sleep(0.2)
                     # Show the bottom before we change to the next table.
                     sleep(5)

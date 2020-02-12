@@ -7,6 +7,7 @@ from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from utils import get_file
 
+
 class MainRenderer:
     def __init__(self, matrix, data):
         self.matrix = matrix
@@ -16,27 +17,37 @@ class MainRenderer:
         self.boards = Boards()
 
     def render(self):
+        while self.data.network_issues:
+            self.matrix.network_issue_indicator()
+            self.data.refresh_data()
+
         while True:
-            debug.info('Rendering...')
-            if self.status.is_offseason(self.data.date()):
-                # Offseason (Show offseason related stuff)
-                debug.info("It's offseason")
-                self.__render_offday()
-            else:
-                # Season.
-                print(self.data.config.live_mode)
-                if not self.data.config.live_mode:
-                    debug.info("Live mode is off. Going through the boards")
-                    self.__render_offday()
-                elif self.data.is_pref_team_offday():
-                    debug.info("Your preferred teams are Off today")
-                    self.__render_offday()
-                elif self.data.is_nhl_offday():
-                    debug.info("There is no game in the NHL today")
+            try:
+                debug.info('Rendering...')
+                if self.status.is_offseason(self.data.date()):
+                    # Offseason (Show offseason related stuff)
+                    debug.info("It's offseason")
                     self.__render_offday()
                 else:
-                    debug.info("Game Day Wooooo")
-                    self.__render_game_day()
+                    # Season.
+                    if not self.data.config.live_mode:
+                        debug.info("Live mode is off. Going through the boards")
+                        self.__render_offday()
+                    elif self.data.is_pref_team_offday():
+                        debug.info("Your preferred teams are Off today")
+                        self.__render_offday()
+                    elif self.data.is_nhl_offday():
+                        debug.info("There is no game in the NHL today")
+                        self.__render_offday()
+                    else:
+                        debug.info("Game Day Wooooo")
+                        self.__render_game_day()
+
+            except AttributeError as e:
+                print(e)
+                self.data.refresh_data()
+                self.status = self.data.status
+
 
     def __render_offday(self):
         while True:
@@ -44,6 +55,8 @@ class MainRenderer:
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
+            self.data.refresh_games()
+            self.data.refresh_standings()
             self.boards._off_day(self.data, self.matrix)
 
     def __render_game_day(self):
@@ -59,15 +72,17 @@ class MainRenderer:
                 return
 
             if self.data.needs_refresh:
+                print("refreshing")
                 self.data.refresh_current_date()
                 self.data.refresh_overview()
+                if self.data.network_issues:
+                    self.matrix.network_issue_indicator()
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
                 debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
                 self.check_new_goals()
-
                 self.__render_live(self.scoreboard)
 
             elif self.status.is_final(self.data.overview.status):
@@ -94,7 +109,7 @@ class MainRenderer:
             # Show Boards for Intermission
             debug.info("Main event is in Intermission")
             self.boards._intermission(self.data, self.matrix)
-        
+
         debug.info("Showing Main Event")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
@@ -119,7 +134,7 @@ class MainRenderer:
         frame_nub = 0
 
         self.matrix.clear()
-        
+
         # Go through the frames
         x = 0
         while x is not 5:
@@ -132,6 +147,6 @@ class MainRenderer:
 
             self.matrix.draw_image((0, 0), im)
             self.matrix.render()
-            
+
             frame_nub += 1
             sleep(0.1)
