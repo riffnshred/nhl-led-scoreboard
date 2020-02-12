@@ -33,8 +33,7 @@ def get_teams():
 
 def get_overview(game_id):
     try:
-        time = float(input("enter time"))
-        data = requests.get(OVERVIEW_URL.format(game_id), timeout=time)
+        data = requests.get(OVERVIEW_URL.format(game_id), timeout=REQUEST_TIMEOUT)
         # data = dummie_overview()
         return data
     except requests.exceptions.RequestException as e:

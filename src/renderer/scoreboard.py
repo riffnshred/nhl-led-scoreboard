@@ -115,5 +115,5 @@ class ScoreboardRenderer:
     def draw_power_play(self):
         away_number_skaters = self.scoreboard.away_team.num_skaters
         home_number_skaters = self.scoreboard.home_team.num_skaters
-        red = self.matrix.graphics.Color(255, 0, 0)
+        yellow = self.matrix.graphics.Color(255,250,205)
         self.matrix.graphics.DrawLine(self.matrix.matrix, 5, 5, 22, 13, red)
