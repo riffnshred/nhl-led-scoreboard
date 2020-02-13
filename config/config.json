@@ -44,6 +44,7 @@
 	},
 
 	"dimmer": {
+		"enabled": false,
 		"source": "software",
 		"frequency": 5,
 		"light_level_lux": 400,

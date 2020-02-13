@@ -169,7 +169,7 @@ result or the status of the other games in the league.
 | `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |  |  |  |
 
 
-
+Dimmer
 
 ```
 {
