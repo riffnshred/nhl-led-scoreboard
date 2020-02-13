@@ -144,11 +144,15 @@ All the data related options.
 | `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |
 
 ### States
+If the live mode is enabled, the scoreboard will go through different states depending on the current situation.
+For each state, you can define which of the available board you want to scoreboard to show. For exemple, if one of my preferred
+team has a game scheduled on the current day, during the day, the scoreboard will be in the `scheduled` state. I personally like
+to have all the data possible shown during the day so I'll set the 
 | Settings                                            | Type  | Parameters                                    | Description                                               |
 |-----------------------------------------------------|-------|-----------------------------------------------|-----------------------------------------------------------|
 | `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings"]` | List of preferred boards to show for each specific state. |
 
-
+### Boards
 
 
 ```
