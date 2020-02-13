@@ -48,7 +48,6 @@ class MainRenderer:
                 self.data.refresh_data()
                 self.status = self.data.status
 
-
     def __render_offday(self):
         while True:
             debug.log('PING !!! Render off day')
@@ -75,6 +74,7 @@ class MainRenderer:
                 print("refreshing")
                 self.data.refresh_current_date()
                 self.data.refresh_overview()
+                self.data.refresh_games()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
@@ -88,19 +88,28 @@ class MainRenderer:
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("Game Over")
-                self.__render_postgame()
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.__render_postgame(self.scoreboard)
+
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                self.__render_pregame()
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.__render_pregame(self.scoreboard)
 
-    def __render_pregame(self):
+    def __render_pregame(self, scoreboard):
+        debug.info("Showing Main Event")
+        self.matrix.clear()
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        sleep(self.refresh_rate)
         self.boards._scheduled(self.data, self.matrix)
         self.data.needs_refresh = True
 
-    def __render_postgame(self):
+    def __render_postgame(self, scoreboard):
         debug.info("Showing Post-Game")
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        sleep(self.refresh_rate)
         self.boards._post_game(self.data, self.matrix)
         self.data.needs_refresh = True
 
@@ -113,7 +122,6 @@ class MainRenderer:
         debug.info("Showing Main Event")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        self.matrix.render()
 
         self.data.needs_refresh = True
         sleep(self.refresh_rate)
