@@ -11,6 +11,11 @@ from utils import convert_date_format, get_file
 
 class TeamSummary:
     def __init__(self, data, matrix):
+        '''
+            TODO:
+                Need to move the Previous/Next game info in the data section. I think loading it in the data section
+                and then taking that info here would make sense
+        '''
         self.data = data
         self.teams_info = data.teams_info
         self.preferred_teams = data.pref_teams
@@ -27,17 +32,29 @@ class TeamSummary:
             prev_game = self.teams_info[team_id].previous_game
             next_game = self.teams_info[team_id].next_game
 
-            if prev_game:
-                prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
-                prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.teams_info)
-            else:
-                prev_game_scoreboard = False
+            try:
+                if prev_game:
+                    prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
+                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.teams_info)
+                else:
+                    prev_game_scoreboard = False
 
-            if next_game:
-                next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
-                next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.teams_info)
-            else:
+                self.data.network_issues = False
+            except ValueError:
+                prev_game_scoreboard = False
+                self.data.network_issues = True
+
+            try:
+                if next_game:
+                    next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
+                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.teams_info)
+                else:
+                    next_game_scoreboard = False
+
+                self.data.network_issues = False
+            except ValueError:
                 next_game_scoreboard = False
+                self.data.network_issues = True
 
             stats = self.teams_info[team_id].stats
             im_height = 67
@@ -53,6 +70,8 @@ class TeamSummary:
             self.matrix.draw_image((0, 0), image)
             self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
             self.matrix.render()
+            if self.data.network_issues:
+                self.matrix.network_issue_indicator()
             sleep(5)
 
             # Move the image up until we hit the bottom.
@@ -63,6 +82,8 @@ class TeamSummary:
                 self.matrix.draw_image((0, i), image)
                 self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
                 self.matrix.render()
+                if self.data.network_issues:
+                    self.matrix.network_issue_indicator()
                 sleep(0.3)
             # Show the bottom before we change to the next table.
             sleep(5)
@@ -118,5 +139,7 @@ class TeamSummary:
             if next_game_scoreboard.home_team.id == self.team_id:
                 draw.text((0, 61), "VS {}".format(next_game_scoreboard.away_team.abbrev), fill=(255, 255, 255),
                           font=self.layout.font)
+        else:
+            draw.text((1, 61), "--------", fill=(200, 200, 200), font=self.layout.font)
 
         return image

@@ -2,6 +2,7 @@ from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from utils import center_text, convert_date_format
 from renderer.logos import TeamLogos as LogoRenderer
 
+
 class ScoreboardRenderer:
     def __init__(self, data, matrix, scoreboard):
         self.data = data
@@ -26,7 +27,7 @@ class ScoreboardRenderer:
         )
 
     def render(self):
-        
+
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
 
@@ -49,10 +50,11 @@ class ScoreboardRenderer:
         # Draw the text on the Data image.
         self.matrix.draw_text((0, -1), 'TODAY', font=self.layout.font, location="center")
         self.matrix.draw_text(
-            (0, 5), start_time, fill=(255, 255, 255), location="center", 
+            (0, 5), start_time, fill=(255, 255, 255), location="center",
             font=self.font, align="center", multiline=True
         )
         self.matrix.draw_text((0, 13), 'VS', font=self.font_large, location="center")
+
 
     def draw_live(self):
         # Get the Info
@@ -67,11 +69,11 @@ class ScoreboardRenderer:
             font=self.font, align="center", multiline=True
         )
         self.matrix.draw_text(
-            (0, 5), clock, fill=(255, 255, 255), location="center", 
+            (0, 5), clock, fill=(255, 255, 255), location="center",
             font=self.font, align="center", multiline=True
         )
         self.matrix.draw_text(
-            (0, 15), score, fill=(255, 255, 255), location="center", 
+            (0, 15), score, fill=(255, 255, 255), location="center",
             font=self.font_large, align="center", multiline=True
         )
 
@@ -88,24 +90,30 @@ class ScoreboardRenderer:
 
         # Draw the info
         self.matrix.draw_text(
-            (0, -1), date, fill=(255, 255, 255), location="center", 
+            (0, -1), date, fill=(255, 255, 255), location="center",
             font=self.font, align="center", multiline=True
         )
         if self.scoreboard.periods.number > 3:
             self.matrix.draw_text(
-                (0, 5), "F/{}".format(period), fill=(255, 255, 255), location="center", 
+                (0, 5), "F/{}".format(period), fill=(255, 255, 255), location="center",
                 font=self.font, align="center", multiline=True
             )
         else:
             self.matrix.draw_text(
-                (0, 5), result, fill=(255, 255, 255), location="center", 
+                (0, 5), result, fill=(255, 255, 255), location="center",
                 font=self.font, align="center", multiline=True
             )
 
         self.matrix.draw_text(
-            (0, 15), score, fill=(255, 255, 255), location="center", 
+            (0, 15), score, fill=(255, 255, 255), location="center",
             font=self.font_large, align="center", multiline=True
         )
 
-    def draw_Irregular(self):
+    def draw_irregular(self):
         pass
+
+    def draw_power_play(self):
+        away_number_skaters = self.scoreboard.away_team.num_skaters
+        home_number_skaters = self.scoreboard.home_team.num_skaters
+        yellow = self.matrix.graphics.Color(255,250,205)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 5, 5, 22, 13, red)

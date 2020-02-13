@@ -1,43 +1,61 @@
 # NHL-LED-scoreboard
-![scoreboard demo](imgs/scoreboard.jpg)
+![scoreboard demo](assets/images/scoreboard.jpg)
 
-## TO ADD TO README
+## Features (Beta V 1.0.0)
 
-need to run python 3 by default.
-https://learn.sparkfun.com/tutorials/python-programming-tutorial-getting-started-with-the-raspberry-pi/configure-your-pi
+### State
+Depending on the situation, the scoreboard will operate in different state. For exemple, If your team is off today, the
+scoreboard we be in the "Offday" State. This allows to show specific boards (see Boards) depending on the state of the unit.
 
-need to install pip3
-sudo apt-get update
-sudo apt install python3-pip
+* **Scheduled** : When one of you preferred team has a game scheduled on the current day, the scoreboard will rotate through
+a list of board set by the user in the config file.
 
-
-Display NHL score of your favorite team's game on a Raspberry Pi driven RGB LED 
-matrix. Currently supports 64x32 boards only.
-
-### Shout-out (Credit)
-This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
-I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
-
-## Features (V 0.1.0)
-
-### Live game 
-Display the live score in near real time (refresh every minute) of a 
-select game (set in the config file). If one of the team score a goal, 
+* **Live game** : Display the live score in near real time of your favorite game. If one of the team score a goal, 
 a goal animation (.gif) is played.
 
-### Game day
-If your team has a game scheduled, The screen will display a preview 
-screen of the game.
+* **Intermission** : Between periods, the scoreboard will rotate through a list of board set 
+for the intermission state by the user in the config file.
 
-### Off day
-Display a message to announce the sad news.
+* **Post-game** : Once the game is over, the scoreboard will rotate through a list of board set 
+for the Post-game state by the user in the config file.
+
+### New Board System
+The board system allow the user to choose what to display depending on the state of the scoreboard.
+For exemple: While the game I'm watch is in the intermission state, I like to see the score ticker, which show the score 
+of the other games.
+
+There is currently three different boards available:
+* **Score Ticker**: A carousel that cycle through the games of the day. 
+* **Team Summary**: Display your preferred team's summary. It display their standing record, the result of their previous game
+and the next game on their schedule.
+* **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be 
+available soon.
+
+The board system also allow to easily integrate new features. For example, if you want to have a clock displayed during the day
+along with other boards, or if you wish one of the existing board would show something different, you can make your 
+own and integrate it without touching the main software. I strongly suggest you play around with the python examples in 
+the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn 
+how to display anything on the matrix.
+
+More will come soon with playoff related features
+
+### Dimmer
+The scoreboard now has a dimmer function. The scoreboard will change it's brightness at sunrise and sunset. If you have
+a [TSL2561](https://www.adafruit.com/product/439) light sensor installed on your raspberry pi, you can configure the scoreboard
+to use it to adjust the brightness.
+
+### Network Indicator
+If your scoreboard has trouble communicating with the API due to poor wifi or internet connection, It will display
+a red bar at the bottom of the screen. Once the connection is back, the red bar will disappear.  
 
 ### Time and data accuracy
-Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV broadcast is different depending on where you are in relation to the game's location. I use the NHL API which will refresh and show scores before the TV broadcast. That means that most of the time, the scoreboard will show the goal before you see it happen on the TV.
+For this version, the scoreboard refresh the data at a faster rate (15 seconds by default, don't go faster then 10). This does not change the fact
+that the data from the API is refreshed every minute. The faster refresh rate allow to catch the new data from the API faster.
 
-During a live game, the stats will refresh every minute. This is because generally, the API refresh at the same rate. Also, the API update to the new day at 4 PM UTC (At noon EST time). The scoreboard will fallow that update in the hour following this.
-
-If you see the scoreboard doesn't show the right state or stats, just quit and re-run it.
+Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV 
+broadcast is different depending on where you are in relation to the game's location. This also mean that you will 
+definitely see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement
+a delay.
 
 ## Installation
 ### Hardware Assembly
@@ -45,8 +63,17 @@ While writing this README page, I realized that the mlb-led-scoreboard guys made
 [See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
 
 ### Software Installation
-#### Raspbian Distribution
-It is recommended you install the Lite version of Raspbian from the [Raspbian Downloads Page](https://www.raspberrypi.org/downloads/raspbian/). This version lacks a GUI, allowing your Pi to dedicate more system resources to drawing the screen.
+#### Raspbian Buster Lite
+
+To be sure that you have the best performance possible, this project require Raspbian Buster Lite.
+this version does not have a GUI which allow the Pi to dedicate as much resource as possible to the scoreboard.
+
+![scoreboard demo](assets/images/raspbian_buster_lite.png)
+
+Fallow these instructions to install Raspbian Buster Lite on your Raspberry Pi and once you are up and running comeback to 
+this page.
+
+[Raspbian Buster Lite Installation](https://medium.com/@danidudas/install-raspbian-jessie-lite-and-setup-wi-fi-without-access-to-command-line-or-using-the-network-97f065af722e)
 
 #### Time Zones
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
@@ -54,37 +81,36 @@ Before you start installing anything, make sure your raspberry pi is set to your
 #### Requirements
 You need Git for cloning this repo and PIP for installing the scoreboard software.
 
-Since version V 0.2.0 you need python 3.3 and up.
+Since version V 1.0.0 you need python 3.3 and up.
 ```
 sudo apt-get update
-sudo apt install python3-pip
+sudo apt install git python3-pip
 ```
 
 #### Installing the NHL scoreboard software
 This installation process might take some time because it will install all the dependencies listed below.
 
 ```
-git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
+git clone -b dev --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
 sudo chmod +x install.sh
-sudo ./install.sh
+sudo ./scripts/install.sh
 ```
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
-
-[pytz](http://pytz.sourceforge.net/), [tzlocal](https://github.com/regebro/tzlocal): Timezone libraries. These allow the scoreboard to convert times to your local timezone.
-
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
+
 
 ## Testing & Optimization (IMPORTANT)
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
+Depending on your setup, you will need to configure the scoreboard using specific command flags when you run it.
 
 Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 Once you found out how to make it run smoothly, come back here and do what's next.
 
 ### Adafruit HAT/bonnet
-If you are using any thing from raspberry pi 3+ to the newest versions with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+If you are using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 * Do the hardware mod found in the [Improving flicker section ](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 * Disable the on-board sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
@@ -92,68 +118,68 @@ If you are using any thing from raspberry pi 3+ to the newest versions with an A
 
 Finally, here's the command I use. 
 ```
-sudo python main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
+sudo python3 main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 ```
 
 ## Usage
-First thing first, find your fav team's id number.
+First thing first, Using Open the config.json file from the root folder configure your scoreboard.
 
-| Team                  | ID |   | Team                 | ID |
-|-----------------------|----|---|----------------------|----|
-| Anaheim Ducks         | 24 |   | Nashville Predators  | 18 |
-| Arizona Coyotes       | 53 |   | New Jersey Devils    | 1  |
-| Boston Bruins         | 6  |   | New York Islanders   | 2  |
-| Buffalo Sabres        | 7  |   | New York Rangers     | 3  |
-| Calgary Flames        | 20 |   | Ottawa Senators      | 9  |
-| Carolina Hurricanes   | 12 |   | Philadelphia Flyers  | 4  |
-| Chicago Blackhawks    | 16 |   | Pittsburgh Penguins  | 5  |
-| Colorado Avalanche    | 21 |   | San Jose Sharks      | 28 |
-| Columbus Blue Jackets | 29 |   | St Louis Blues       | 19 |
-| Dallas Stars          | 25 |   | Tampa Bay Lightning  | 14 |
-| Detroit Red Wings     | 17 |   | Toronto Maple Leafs  | 10 |
-| Edmonton Oilers       | 22 |   | Vancouver Canucks    | 23 |
-| Florida Panthers      | 13 |   | Vegas Golden Knights | 54 |
-| Los Angeles Kings     | 26 |   | Washington Capitals  | 15 |
-| Minnesota Wild        | 30 |   | Winnipeg Jets        | 52 |
-| Montreal Canadiens    | 8  |   |                      |    |
+```
+{
+	"debug": true,
+	"live_mode": true,
+	"preferences": {
+		"live_game_refresh_rate": 15,
+		"end_of_day": "12:00",
+		"teams": [
+			"Canadiens",
+			"Blackhawks",
+			"Avalanche"
+		],
+		"standing_type": "conference",
+		"divisions": "central",
+		"conference": "eastern",
+			"dimmer": {
+				"source": "software",
+				"frequency": 5,
+				"light_level_lux": 400,
+				"mode": "always",
+				"sunset_brightness": 10,
+				"sunrise_brightness": 60
+			}
+	},
+	"boards": {
+		"off_day": [
+			"scoreticker",
+			"team_summary",
+			"standings"
+		],
+		"scheduled": [
+			"scoreticker",
+			"team_summary",
+			"standings"
+		],
+		"intermission": [
+			"scoreticker"
+		],
+		"post_game": [
+			"scoreticker"
+		],
+		"scoreticker": {
+			"preferred_teams_only": false,
+			"rotation_rate": 5
+		},
+		"standings": {
+			"preferred_standings_only": false
+		}
+	}
+}
 
-
-Open the config.json file from the root folder and change the `"fav_team_id"` to your favorite team's id. This will make the scoreboard to fallow
-your team by default. Otherwise... GO HABS GO !!!!
-
-Now, in a terminal, cd to the nhl-led-scoreboard folder and run this command. 
-```
-sudo python main.py 
-```
-**If you run your screen on an Adafruit HAT or Bonnet, you need to supply a flag.**
-```
-sudo python main.py --led-gpio-mapping=adafruit-hat
 ```
 
-### Flags
-Use the same flags used in the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/) library to configure your screen.
-```
---led-rows                Display rows. 16 for 16x32, 32 for 32x32. (Default: 32)
---led-cols                Panel columns. Typically 32 or 64. (Default: 32)
---led-chain               Daisy-chained boards. (Default: 1)
---led-parallel            For Plus-models or RPi2: parallel chains. 1..3. (Default: 1)
---led-pwm-bits            Bits used for PWM. Range 1..11. (Default: 11)
---led-brightness          Sets brightness level. Range: 1..100. (Default: 100)
---led-gpio-mapping        Hardware Mapping: regular, adafruit-hat, adafruit-hat-pwm
---led-scan-mode           Progressive or interlaced scan. 0 = Progressive, 1 = Interlaced. (Default: 1)
---led-pwm-lsb-nanosecond  Base time-unit for the on-time in the lowest significant bit in nanoseconds. (Default: 130)
---led-show-refresh        Shows the current refresh rate of the LED panel.
---led-slowdown-gpio       Slow down writing to GPIO. Range: 0..4. (Default: 1)
---led-no-hardware-pulse   Don't use hardware pin-pulse generation.
---led-rgb-sequence        Switch if your matrix has led colors swapped. (Default: RGB)
---led-pixel-mapper        Apply pixel mappers. e.g Rotate:90, U-mapper
---led-row-addr-type       0 = default; 1 = AB-addressed panels. (Default: 0)
---led-multiplexing        Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)
-```
-I also created a flag to change which team to fallow instead of the default team. 
-```
---fav-team                Select a team to follow by using it's ID (Default: 8 "Montreal Canadiens") 
-```
+### Shout-out (Credit)
+This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
+I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
 ## Licensing
 This project use the GNU Public License. If you intend to sell these, the code must remain open source.

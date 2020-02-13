@@ -5,7 +5,7 @@ import nhl_api
 from data.status import Status
 from data.scoreboard import Scoreboard
 
-NETWORK_RETRY_SLEEP_TIME = 10
+NETWORK_RETRY_SLEEP_TIME = 2
 
 
 def filter_list_of_games(games, teams):
@@ -36,22 +36,25 @@ class Data:
     def __init__(self, config):
         """
             TODO:
+                - Rearrange the Teams info. (make one function instead of two)
                 - Add Delay option to match the TV broadcast
-                - Add a network issues handler. (Show Red bar at bottom of screen)
-                - Add Playoff data info. (research required)
-                - Add Powerplay info (research required)
+                - Add Playoff data info.
+                - Add Powerplay info
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
-        # Save the parsed config
-        self.teams = nhl_api.teams()
-        self.config = config
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
         # Flag for network issues
         self.network_issues = False
+
+        # Get the teams info
+        self.teams = self.get_teams()
+
+        # Save the parsed config
+        self.config = config
 
         # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
         # It shows the last time (UTC) the data was updated. EX 20200114_041103
@@ -60,7 +63,7 @@ class Data:
         # Flag for when the data live feed of a game has updated
         self.new_data = True
 
-        # Get all the team's info
+        # Get each team's data from the teams info
         self.get_teams_info()
 
         # Get favorite team's id
@@ -105,15 +108,34 @@ class Data:
         self.year, self.month, self.day = self.__parse_today()
 
     def _is_new_day(self):
+        debug.info('Checking for new day')
         self.refresh_current_date()
         if self.today != self.date():
+            debug.info('It is a new day, refreshing Data')
             self.refresh_data()
             return True
         else:
+            debug.info("It is not a new day")
             return False
 
     #
     # Daily NHL Data
+
+    def get_teams(self):
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                teams = nhl_api.teams()
+                self.network_issues = False
+                return teams
+
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to Get the list of Teams. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                sleep(NETWORK_RETRY_SLEEP_TIME)
+
 
     def refresh_games(self):
         """
@@ -150,7 +172,19 @@ class Data:
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
-        self.status = Status()
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                self.status = Status()
+                break
+
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to refresh the Status data. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                self.status = []
+                sleep(NETWORK_RETRY_SLEEP_TIME)
 
     #
     # Main game event data
@@ -199,17 +233,30 @@ class Data:
     # Standings
 
     def refresh_standings(self):
-        self.standings = nhl_api.standings()
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                self.standings = nhl_api.standings()
+                break
 
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to refresh the Standings. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                sleep(NETWORK_RETRY_SLEEP_TIME)
     #
     # Teams
 
     def get_teams_info(self):
-        info_by_id = {}
-        for team in self.teams:
-            info_by_id[team.team_id] = team
+        try:
+            info_by_id = {}
+            for team in self.teams:
+                info_by_id[team.team_id] = team
 
-        self.teams_info = info_by_id
+            self.teams_info = info_by_id
+        except TypeError:
+            self.teams_info = []
 
     def get_pref_teams_id(self):
         """
@@ -218,26 +265,29 @@ class Data:
 
         :return: list of the preferred team's ID in order
         """
+        try:
+            allteams = self.teams
+            pref_teams = self.config.preferred_teams
+            allteams_id = {}
+            pref_teams_id = []
+            # Put all the team's in a dict with there name as KEY and ID as value.
+            for team in allteams:
+                allteams_id[team.team_name] = team.team_id
 
-        allteams = self.teams
-        pref_teams = self.config.preferred_teams
-        allteams_id = {}
-        pref_teams_id = []
-        # Put all the team's in a dict with there name as KEY and ID as value.
-        for team in allteams:
-            allteams_id[team.team_name] = team.team_id
+            # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
+            if pref_teams:
+                for team in pref_teams:
+                    if team in allteams_id:
+                        pref_teams_id.append(allteams_id[team])
+                    else:
+                        debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
 
-        # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
-        if pref_teams:
-            for team in pref_teams:
-                if team in allteams_id:
-                    pref_teams_id.append(allteams_id[team])
-                else:
-                    debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
+                return pref_teams_id
+            else:
+                return False
+        except TypeError:
+            return []
 
-            return pref_teams_id
-        else:
-            return False
 
     #
     # Offdays
@@ -260,13 +310,17 @@ class Data:
             and re-initialize the overall data.
         :return:
         """
+        print("refresing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
         # Flag for network issues
         self.network_issues = False
 
-        # Get all the team's info
+        # Get the teams info
+        self.teams = self.get_teams()
+
+        # Get all the team's data
         self.get_teams_info()
 
         # Get favorite team's id
@@ -289,13 +343,3 @@ class Data:
 
         # Get refresh standings
         self.refresh_standings()
-
-    #
-    # Debugging
-    def debug_overview(self):
-        # Test refresh Overview
-        self.refresh_overview()
-        # Test scoreboard.py
-        debug.log("Off day for preferred team: {}".format(self.is_pref_team_offday()))
-        debug.log(self.status.is_offseason(self.date()))
-        debug.log(Scoreboard(self.overview, self))

@@ -34,7 +34,7 @@ def run():
 
     data = Data(config)
 
-    dimmer = Dimmer(data,matrix)
+    dimmer = Dimmer(data, matrix)
     dimmerThread = threading.Thread(target=dimmer.run, args=())
     dimmerThread.daemon = True
     dimmerThread.start()
