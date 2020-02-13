@@ -153,6 +153,22 @@ to have all the data possible shown during the day so I'll set the
 | `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings"]` | List of preferred boards to show for each specific state. |
 
 ### Boards
+Boards are essentially like pages on a website. Each show something specific and the using can decide which board to display
+at depending of the state of the scoreboard. Currently there is only three boards available:
+
+* **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the 
+result or the status of the other games in the league. 
+
+* **Standings**: Self explanatory, it shows the current standings. Currently you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
+* **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
+
+| Boards        | Settings                   | Type | Parameters      | Description                                                                                       |  |  |  |
+|---------------|----------------------------|------|-----------------|---------------------------------------------------------------------------------------------------|--|--|--|
+| `scoreticker` | `preferred_teams_only`     | Bool | `true`, `false` | Choose between showing all the games of the day or just the ones your preferred teams are playing |  |  |  |
+|               | `rotation_rate`            | INT  | `5`             | Duration at witch each games are shown on screen.                                                 |  |  |  |
+| `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |  |  |  |
+
+
 
 
 ```
