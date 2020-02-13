@@ -23,21 +23,22 @@ class ScoreboardConfig:
         self.preferred_conference = json["preferences"]["conference"]
 
         # Dimmer preferences
-        self.dimmer_source = json["preferences"]["dimmer"]["source"]
-        self.dimmer_frequency = json["preferences"]["dimmer"]["frequency"]
-        self.dimmer_light_level_lux = json["preferences"]["dimmer"]["light_level_lux"]
-        self.dimmer_mode = json["preferences"]["dimmer"]["mode"]
-        self.dimmer_sunset_brightness = json["preferences"]["dimmer"]["sunset_brightness"]
-        self.dimmer_sunrise_brightness = json["preferences"]["dimmer"]["sunrise_brightness"]
+        self.dimmer_source = json["dimmer"]["source"]
+        self.dimmer_frequency = json["dimmer"]["frequency"]
+        self.dimmer_light_level_lux = json["dimmer"]["light_level_lux"]
+        self.dimmer_mode = json["dimmer"]["mode"]
+        self.dimmer_sunset_brightness = json["dimmer"]["sunset_brightness"]
+        self.dimmer_sunrise_brightness = json["dimmer"]["sunrise_brightness"]
+
+        # States
+        '''TODO: Put condition so that the user dont leave any board list empty'''
+        self.boards_off_day = json["states"]["off_day"]
+        self.boards_scheduled = json["states"]["scheduled"]
+        self.boards_intermission = json["states"]["intermission"]
+        self.boards_post_game = json["states"]["post_game"]
 
         # Boards configuration
         # Boards
-        '''TODO: Put condition so that the user dont leave any board list empty'''
-        self.boards_off_day = json["boards"]["off_day"]
-        self.boards_scheduled = json["boards"]["scheduled"]
-        self.boards_intermission = json["boards"]["intermission"]
-        self.boards_post_game = json["boards"]["post_game"]
-
         # Scoreticker
         self.preferred_teams_only = json["boards"]["scoreticker"]["preferred_teams_only"]
         self.scoreticker_rotation_rate = json["boards"]["scoreticker"]["rotation_rate"]
