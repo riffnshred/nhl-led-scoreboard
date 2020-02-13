@@ -6,7 +6,7 @@ import errno
 
 USE_SVGS = True
 AUTO_POSITION = True
-AUTO_POSITION_OFFSET = 22
+AUTO_POSITION_OFFSET = 21
 
 PATH = 'assets/logos'
 LOGO_NAME = 'light'
@@ -52,21 +52,22 @@ class TeamLogos:
             if (USE_SVGS):
                 self.save_image(filename, team)
 
-        rotate = self.new_layout.rotate
-        flip = self.new_layout.flip
-        crop = self.new_layout.crop
+        if (USE_SVGS):
+          rotate = self.new_layout.rotate
+          flip = self.new_layout.flip
+          crop = self.new_layout.crop
 
-        if (rotate != 0):
-            self.logo = self.logo.rotate(rotate)
-        if (flip == 1):
-            self.logo = self.logo.transpose(method=Image.FLIP_LEFT_RIGHT)
-        if (crop != 0):
-            self.logo = self.logo.crop((
-                self.logo.width * (crop[0]),
-                self.logo.height * (crop[1]),
-                self.logo.width - (self.logo.width * (crop[2])),
-                self.logo.height - (self.logo.height * (crop[3])),
-            ))
+          if (rotate != 0):
+              self.logo = self.logo.rotate(rotate, expand=True)
+          if (flip == 1):
+              self.logo = self.logo.transpose(method=Image.FLIP_LEFT_RIGHT)
+          if (crop != 0):
+              self.logo = self.logo.crop((
+                  self.logo.width * (crop[0]),
+                  self.logo.height * (crop[1]),
+                  self.logo.width - (self.logo.width * (crop[2])),
+                  self.logo.height - (self.logo.height * (crop[3])),
+              ))
        
     def save_image(self, filename, team):
         if not os.path.exists(os.path.dirname(filename)):
