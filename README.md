@@ -122,12 +122,39 @@ sudo python3 main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --l
 ```
 
 ## Usage
-First thing first, Using Open the config.json file from the root folder configure your scoreboard.
+First thing first, Using Open the config.json file from the root folder to configure your scoreboard.
+
+### Modes
+These are options to set the scoreboard to run in certain mode. This is where you enable the live game mode
+while will show the scoreboard of your favorite game when it's live.
+| Settings    | Type | Parameters  | Description                                                           |
+|-------------|------|-------------|-----------------------------------------------------------------------|
+| `debug`     | Bool | true, false | Enable the debug mode which show on your console what the scoreboard  |
+| `live_mode` | Bool | true, false | Enable the live mode which show live game data of your favorite team. |
+
+### Preferences
+All the data related options. 
+| Settings                 | Type   | Parameters                                       | Description                                                                                                                                                                          |
+|--------------------------|--------|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `live_game_refresh_rate` | INT    | `15`                                             | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
+| `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
+| `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |
+| `standing_type`          | String | `conference`, `division`                         | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
+| `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
+| `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |
+
+### States
+| Settings                                            | Type  | Parameters                                    | Description                                               |
+|-----------------------------------------------------|-------|-----------------------------------------------|-----------------------------------------------------------|
+| `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings"]` | List of preferred boards to show for each specific state. |
+
+
+
 
 ```
 {
-	"debug": true,
-	"live_mode": true,
+	"debug": true,                          
+	"live_mode": true,                      
 	"preferences": {
 		"live_game_refresh_rate": 15,
 		"end_of_day": "12:00",
@@ -139,14 +166,6 @@ First thing first, Using Open the config.json file from the root folder configur
 		"standing_type": "conference",
 		"divisions": "central",
 		"conference": "eastern",
-			"dimmer": {
-				"source": "software",
-				"frequency": 5,
-				"light_level_lux": 400,
-				"mode": "always",
-				"sunset_brightness": 10,
-				"sunrise_brightness": 60
-			}
 	},
 	"boards": {
 		"off_day": [
