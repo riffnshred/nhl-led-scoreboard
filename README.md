@@ -121,8 +121,8 @@ Finally, here's the command I use.
 sudo python3 main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 ```
 
-## Usage
-First thing first, Using Open the config.json file from the root folder to configure your scoreboard.
+## Configuration
+First thing first, Open the config.json file from the config directory to configure your scoreboard.
 
 ### Modes
 These are options to set the scoreboard to run in certain mode. This is where you enable the live game mode
@@ -187,50 +187,6 @@ control the brightness instead.
 | `sunset_brightness`  | INT    | `10`                       | The brightness level (between 5 and 100)  you want when it's night.                                                                                                                                                                                                                              |
 | `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day.                                                                                                                                                                                                                               |
 
-```
-{
-	"debug": true,                          
-	"live_mode": true,                      
-	"preferences": {
-		"live_game_refresh_rate": 15,
-		"end_of_day": "12:00",
-		"teams": [
-			"Canadiens",
-			"Blackhawks",
-			"Avalanche"
-		],
-		"standing_type": "conference",
-		"divisions": "central",
-		"conference": "eastern",
-	},
-	"boards": {
-		"off_day": [
-			"scoreticker",
-			"team_summary",
-			"standings"
-		],
-		"scheduled": [
-			"scoreticker",
-			"team_summary",
-			"standings"
-		],
-		"intermission": [
-			"scoreticker"
-		],
-		"post_game": [
-			"scoreticker"
-		],
-		"scoreticker": {
-			"preferred_teams_only": false,
-			"rotation_rate": 5
-		},
-		"standings": {
-			"preferred_standings_only": false
-		}
-	}
-}
-
-```
 
 ### Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
