@@ -41,7 +41,7 @@ More will come soon with playoff related features
 
 ### Dimmer
 The scoreboard now has a dimmer function. The scoreboard will change it's brightness at sunrise and sunset. If you have
-a [TSL2561](https://www.adafruit.com/product/439) light sensor installed on your raspberry pi, you can configure the scoreboard
+a [TSL2591](https://www.adafruit.com/product/1980) light sensor installed on your raspberry pi, you can configure the scoreboard
 to use it to adjust the brightness.
 
 ### Network Indicator
@@ -169,7 +169,23 @@ result or the status of the other games in the league.
 | `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |  |  |  |
 
 
-Dimmer
+### Dimmer
+The scoreboard can adjust the brightness of the matrix will running using the Dimmer function. By default, if enabled, 
+the scoreboard software will detect your location using your IP address and will calculate the when the sun rise and the sun set.
+It will then use these moment to change the brightness of the screen depending on the parameters set in the config.
+
+If you install the [TSL2591](https://www.adafruit.com/product/1980) lux sensor, you can tell the scoreboard to use that to
+control the brightness instead.
+
+| Settings             | Type   | Parameters                 | Description                                                                                                                                                                                                                                                                                      |
+|----------------------|--------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `enabled`            | Bool   | `true`, `false`            | Enable the dimmer or not                                                                                                                                                                                                                                                                         |
+| `source`             | String | `"hardware"`, `"software"` | Select the source that controle the dimmer. If set to `"software"`, the scoreboard will find your latitude and longitude based on your IP address. If an adafruit TSL2591 light sensor is connected to the Pi, you can set the source to `"hardware"` and let the sensor control the brightness. |
+| `light_level_lux`    | INT    | `400`                      | This is the value you want the light sensor to start changing the brightness at                                                                                                                                                                                                                  |
+| `frequency`          | INT    | `5`                        | Frequency at which the scoreboard will look if it needs to change the brightness                                                                                                                                                                                                                 |
+| `mode`               | String | `"always"`, `"offday"`     | Mode at which the dimmer will operate. If set at `"always"`, the dimmer will operate at all time. at `"offday"`, it will operate only when your preferred teams don't play any games.                                                                                                            |
+| `sunset_brightness`  | INT    | `10`                       | The brightness level (between 5 and 100)  you want when it's night.                                                                                                                                                                                                                              |
+| `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day.                                                                                                                                                                                                                               |
 
 ```
 {
