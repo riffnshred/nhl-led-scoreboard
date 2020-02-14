@@ -162,11 +162,11 @@ result or the status of the other games in the league.
 * **Standings**: Self explanatory, it shows the current standings. Currently you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
 * **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
 
-| Boards        | Settings                   | Type | Parameters      | Description                                                                                       |  |  |  |
-|---------------|----------------------------|------|-----------------|---------------------------------------------------------------------------------------------------|--|--|--|
-| `scoreticker` | `preferred_teams_only`     | Bool | `true`, `false` | Choose between showing all the games of the day or just the ones your preferred teams are playing |  |  |  |
-|               | `rotation_rate`            | INT  | `5`             | Duration at witch each games are shown on screen.                                                 |  |  |  |
-| `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |  |  |  |
+| Boards        | Settings                   | Type | Parameters      | Description                                                                                       |
+|---------------|----------------------------|------|-----------------|---------------------------------------------------------------------------------------------------|
+| `scoreticker` | `preferred_teams_only`     | Bool | `true`, `false` | Choose between showing all the games of the day or just the ones your preferred teams are playing |
+|               | `rotation_rate`            | INT  | `5`             | Duration at witch each games are shown on screen.                                                 |
+| `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |
 
 
 ### Dimmer
