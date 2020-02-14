@@ -10,9 +10,8 @@ with people on something that I intend to make for my self is challenging, yet e
 Even if this is a personal project, I want to turn it into something customizable so that the user can make his own 
 personalized scoreboard. That's why I made the board system. If you have an idea like showing the weather during the day,
 you can fork the repository and work on a weather board. If it looks and works great and we don't have something
-similar already on the project, I will accept a pull request. Even if I don't accept your feature or idea into the project 
-If it's well made and I think someone else might enjoy it, I will advertise it in the Wiki page or the READ ME.
-
+similar already on the project, I will accept a pull request. Even if I don't accept your feature or idea into the project, 
+if it's well made and I think someone else might enjoy it, I will advertise it in the Wiki page or the READ ME.
 
 
 ## TL;DR
@@ -20,8 +19,8 @@ If it's well made and I think someone else might enjoy it, I will advertise it i
 ### What this Project IS !
 - A project meant for novice and those who are curious about making their first DIY electronic project. (Read more below)
 - A desktop unit that display your favourite teams scoreboard and keeps you posted on whats going on in the hockey world.
-- Aiming at 64x32 resolution matrix board but open to 32x32 , 64x64, and 128x32 development as long as it respect the 
-design guide line (Make a guide line).
+- Aiming at 64x32 resolution matrix board but open to 32x32 , 64x64, and 128x32 intergration as long as it respect the 
+design guide line.
 
 ### What it's NOT !
 - An extension of what you are watching on TV. (Read Limitations below)
@@ -35,8 +34,8 @@ The hardware is very easy to assemble without any knowledge of electronics and t
 instruction. There for, any features added to this project must not require extra knowledge from the user (other then the basic from running a Pi) and needs to be properly documented.
 
 ## Limitations
-Because of how the API works, there are some limitations and inconveniences. For instance, the API refresh it self every
-minutes, so even if the scoreboard check the API at a set refresh rate (10 sec by default), the information will not change until
+Because of how the API works, there are some limitations and inconveniences. For instance, the API refresh itself every
+minutes, so even if the scoreboard check the API at a set refresh rate (15 sec by default), the information will not change until
 it catch the update.
 
 An other inconvenient is that the live broadcast on TV/Radio/Internet has a random latency which can be between 30 sec to
@@ -45,7 +44,7 @@ broadcast you are watching/listening. I'm working on a feature that adds a delay
 
 The other limitation is the screen size. Due too the 64x32 resolution, the amount of information we can show on screen is
 limited. Obviously you can add multiple screen together and show even more information, but my goal is to keep the setup simple,
-(single screen for now, maximum 2 later). I intend to develop some text scrolling and rotating functions along with the new features but keep in mind that it wont be
+(single screen for now). I intend to develop some text scrolling and rotating functions along with the new features but keep in mind that it wont be
 meant to display detailed information.
 
 
@@ -59,11 +58,4 @@ Features:
 - Events (Special dates like Draft, Trade Deadline, Season start and end.)
 - Shootout screen (Show the shootout table.)
 
-Enhancement:
-- Fallow multiple team (issue #16). Program a handler that manage the game priorities depending the favorite team's list
-and time when those game start. show The First game scheduled then if a game that's higher priority is about to start, switch
-to that game.
-
-Ideas:
-- Transitions between boards (fade in and out)
 
