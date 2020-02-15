@@ -81,8 +81,7 @@ class ScoreboardRenderer:
         if (self.scoreboard.away_team.num_skaters < 5) or (self.scoreboard.home_team.num_skaters < 5):
             print("hello")
             self.draw_power_play()
-        if self.scoreboard.intermission:
-            self.draw_end_period_indicator()
+
 
     def draw_final(self):
         # Get the Info
@@ -116,7 +115,6 @@ class ScoreboardRenderer:
             font=self.font_large, align="center", multiline=True
         )
         self.matrix.render()
-        self.draw_end_period_indicator()
 
     def draw_irregular(self):
         pass
@@ -142,11 +140,3 @@ class ScoreboardRenderer:
                                       self.matrix.height - 2, colors[str(home_number_skaters)])
         self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 3, 63,
                                       self.matrix.height - 3, colors[str(home_number_skaters)])
-
-
-    def draw_end_period_indicator(self):
-        """TODO: change the width depending how much time is left to the intermission"""
-        color = self.matrix.graphics.Color(0, 255, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1,
-                                      color)
