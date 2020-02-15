@@ -110,20 +110,22 @@ class MainRenderer:
         debug.info("Showing Post-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        self.draw_end_period_indicator()
         sleep(self.refresh_rate)
         self.boards._post_game(self.data, self.matrix)
         self.data.needs_refresh = True
 
     def __render_live(self, scoreboard):
-        if scoreboard.intermission:
-            # Show Boards for Intermission
-            debug.info("Main event is in Intermission")
-            self.boards._intermission(self.data, self.matrix)
+
 
         debug.info("Showing Main Event")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-
+        if scoreboard.intermission:
+            # Show Boards for Intermission
+            self.draw_end_period_indicator()
+            debug.info("Main event is in Intermission")
+            self.boards._intermission(self.data, self.matrix)
         self.data.needs_refresh = True
         sleep(self.refresh_rate)
 
@@ -159,3 +161,10 @@ class MainRenderer:
 
             frame_nub += 1
             sleep(0.1)
+
+    def draw_end_period_indicator(self):
+        """TODO: change the width depending how much time is left to the intermission"""
+        color = self.matrix.graphics.Color(0, 255, 0)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1,
+                                      color)
