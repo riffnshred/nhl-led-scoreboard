@@ -27,7 +27,6 @@ class ScoreboardRenderer:
         )
 
     def render(self):
-
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
 
@@ -80,10 +79,10 @@ class ScoreboardRenderer:
 
         self.matrix.render()
         if (self.scoreboard.away_team.num_skaters < 5) or (self.scoreboard.home_team.num_skaters < 5):
+            print("hello")
             self.draw_power_play()
-
         if self.scoreboard.intermission:
-            self.draw_intermission()
+            self.draw_end_period_indicator()
 
     def draw_final(self):
         # Get the Info
@@ -117,6 +116,7 @@ class ScoreboardRenderer:
             font=self.font_large, align="center", multiline=True
         )
         self.matrix.render()
+        self.draw_end_period_indicator()
 
     def draw_irregular(self):
         pass
@@ -124,23 +124,29 @@ class ScoreboardRenderer:
     def draw_power_play(self):
         away_number_skaters = self.scoreboard.away_team.num_skaters
         home_number_skaters = self.scoreboard.home_team.num_skaters
-        yellow = self.matrix.graphics.Color(160, 160, 0)
+        yellow = self.matrix.graphics.Color(255, 255, 0)
         red = self.matrix.graphics.Color(255, 0, 0)
         green = self.matrix.graphics.Color(0, 255, 0)
         colors = {"6": green, "5": green, "4": yellow, "3": red}
 
-
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 1, 15, self.matrix.height - 1,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 1, 3, self.matrix.height - 1,
+                                      colors[str(away_number_skaters)])
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 2, 1, self.matrix.height - 2,
+                                      colors[str(away_number_skaters)])
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 3, 0, self.matrix.height - 3,
                                       colors[str(away_number_skaters)])
 
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 1, 48,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 1, 60,
                                       self.matrix.height - 1, colors[str(home_number_skaters)])
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 2, 62,
+                                      self.matrix.height - 2, colors[str(home_number_skaters)])
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 3, 63,
+                                      self.matrix.height - 3, colors[str(home_number_skaters)])
 
 
-
-
-    def draw_intermission(self):
-        green = self.matrix.graphics.Color(0, 255, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, green)
+    def draw_end_period_indicator(self):
+        """TODO: change the width depending how much time is left to the intermission"""
+        color = self.matrix.graphics.Color(0, 255, 0)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
         self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1,
-                                      green)
+                                      color)
