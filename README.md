@@ -93,7 +93,7 @@ This installation process might take some time because it will install all the d
 ```
 git clone -b dev --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
-sudo chmod +x install.sh
+sudo chmod +x scripts/install.sh
 sudo ./scripts/install.sh
 ```
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
