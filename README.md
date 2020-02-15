@@ -109,6 +109,28 @@ Depending on your setup, you will need to configure the scoreboard using specifi
 Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 Once you found out how to make it run smoothly, come back here and do what's next.
 
+### Flags
+This is a list of Flags you can use to optimize your screen's performance. For more details check out the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/).
+
+```
+--led-rows                Display rows. 16 for 16x32, 32 for 32x32 and 64x32. (Default: 32)
+--led-cols                Panel columns. Typically 32 or 64. (Default: 32)
+--led-chain               Daisy-chained boards. (Default: 1)
+--led-parallel            For Plus-models or RPi2: parallel chains. 1..3. (Default: 1)
+--led-pwm-bits            Bits used for PWM. Range 1..11. (Default: 11)
+--led-brightness          Sets brightness level. Range: 1..100. (Default: 100)
+--led-gpio-mapping        Hardware Mapping: regular, adafruit-hat, adafruit-hat-pwm
+--led-scan-mode           Progressive or interlaced scan. 0 = Progressive, 1 = Interlaced. (Default: 1)
+--led-pwm-lsb-nanosecond  Base time-unit for the on-time in the lowest significant bit in nanoseconds. (Default: 130)
+--led-show-refresh        Shows the current refresh rate of the LED panel.
+--led-slowdown-gpio       Slow down writing to GPIO. Range: 0..4. (Default: 1)
+--led-no-hardware-pulse   Don't use hardware pin-pulse generation.
+--led-rgb-sequence        Switch if your matrix has led colors swapped. (Default: RGB)
+--led-pixel-mapper        Apply pixel mappers. e.g Rotate:90, U-mapper
+--led-row-addr-type       0 = default; 1 = AB-addressed panels. (Default: 0)
+--led-multiplexing        Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)
+```
+
 ### Adafruit HAT/bonnet
 If you are using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
@@ -116,9 +138,9 @@ If you are using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT o
 * Disable the on-board sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
 * From the same section, run the command that remove the bluetooth firmware, Unless you use any bluetooth device with your Pi.
 
-Finally, here's the command I use. 
+Finally, these are the flag I use. 
 ```
-sudo python3 main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
+--led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 ```
 
 ## Configuration
@@ -187,6 +209,36 @@ control the brightness instead.
 | `sunset_brightness`  | INT    | `10`                       | The brightness level (between 5 and 100)  you want when it's night.                                                                                                                                                                                                                              |
 | `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day.                                                                                                                                                                                                                               |
 
+
+### Usage
+Once you are done optimizing your setup and configuring the software, you are ready to go.
+
+Start by running your board and see if it runs properly. If you use the typical Pi 3b+ and HAT/Bonnet setup, here's the command I use.
+
+```
+sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
+```
+
+Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the 
+python script stopped. 
+
+To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/)
+
+To install Screen, run the fallowing in your terminal.
+```
+sudo apt install screen
+```
+
+Then start a screen session like so
+```
+screen
+```
+
+Now run the scoreboard. Once it's up and running do `Ctrl+a` then `d`. This will detach the screen session from your terminal. 
+NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
+
+To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
+This is useful if the scoreboard stop working for some reason, you can find out the error it returns and use that to find a solution.
 
 ### Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
