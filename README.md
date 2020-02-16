@@ -1,9 +1,39 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
+## Table of Contents
+- [Features (Beta V 1.0.0)](#features--beta-v-100-)
+  * [States](#states)
+  * [New Board System](#new-board-system)
+  * [Dimmer](#dimmer)
+  * [Network Indicator](#network-indicator)
+- [Time and data accuracy](#time-and-data-accuracy)
+- [Installation](#installation)
+  * [Hardware Assembly](#hardware-assembly)
+  * [Software Installation](#software-installation)
+    + [Raspbian Buster Lite](#raspbian-buster-lite)
+    + [Time Zones](#time-zones)
+    + [Requirements](#requirements)
+    + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
+- [Testing & Optimization (IMPORTANT)](#testing---optimization--important-)
+  * [Flags](#flags)
+  * [Best Performance (Almost zero flicker)](#best-performance--almost-zero-flicker-)
+- [Configuration](#configuration)
+  * [Modes](#modes)
+  * [Preferences](#preferences)
+  * [Teams](#teams)
+  * [States](#states-1)
+  * [Boards](#boards)
+  * [Dimmer](#dimmer-1)
+  * [Usage](#usage)
+- [Shout-out (Credit)](#shout-out--credit-)
+- [Licensing](#licensing)
+  
+
+
 ## Features (Beta V 1.0.0)
 
-### State
+### States
 Depending on the situation, the scoreboard will operate in different state. For exemple, If your team is off today, the
 scoreboard we be in the "Offday" State. This allows to show specific boards (see Boards) depending on the state of the unit.
 
@@ -48,7 +78,7 @@ to use it to adjust the brightness.
 If your scoreboard has trouble communicating with the API due to poor wifi or internet connection, It will display
 a red bar at the bottom of the screen. Once the connection is back, the red bar will disappear.  
 
-### Time and data accuracy
+## Time and data accuracy
 For this version, the scoreboard refresh the data at a faster rate (15 seconds by default, don't go faster then 10). This does not change the fact
 that the data from the API is refreshed every minute. The faster refresh rate allow to catch the new data from the API faster.
 
@@ -83,7 +113,7 @@ this page.
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
 #### Requirements
-You need Git for cloning this repo and PIP for installing the scoreboard software.
+You need Git for cloning this repo and PIP3 for installing the scoreboard software.
 
 Since version V 1.0.0 you need python 3.3 and up.
 ```
@@ -294,7 +324,7 @@ NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
 To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
 This is useful if the scoreboard stop working for some reason, you can find out the error it returns and use that to find a solution.
 
-### Shout-out (Credit)
+## Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
