@@ -4,6 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.."
 
+sudo apt-get update && sudo apt-get install python3-dev
+
 # Pull submodule and ignore changes from script
 git submodule update --init --recursive
 git config submodule.matrix.ignore all
