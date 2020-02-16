@@ -2,9 +2,8 @@
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
 ## Join our community
-We have a nice community growing everyday on discord. If you need help or
-is curious of the developement of the project come join by clicking on this
-button.
+We have a nice community growing every day on discord. If you need help 
+or you are curious about the development of the project, come join us by clicking on this button.
 
 [![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
 
