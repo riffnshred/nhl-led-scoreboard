@@ -1,6 +1,13 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
+## Join our community
+We have a nice community growing everyday on discord. If you need help or
+is curious of the developement of the project come join by clicking on this
+button.
+
+[![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
+
 ## Table of Contents
 - [Features (Beta V 1.0.0)](#features--beta-v-100-)
   * [States](#states)
