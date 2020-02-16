@@ -72,4 +72,5 @@ class Matrix:
 
     def network_issue_indicator(self):
         red = self.graphics.Color(255, 0, 0)
+
         self.graphics.DrawLine(self.matrix, 0, self.matrix.height-1, self.matrix.width, self.matrix.height-1, red)
