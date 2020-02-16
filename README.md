@@ -34,43 +34,28 @@
 ## Features (Beta V 1.0.0)
 
 ### States
-Depending on the situation, the scoreboard will operate in different state. For exemple, If your team is off today, the
-scoreboard we be in the "Offday" State. This allows to show specific boards (see Boards) depending on the state of the unit.
+Depending on the situation, the scoreboard will operate in a different state. For example, If your team is off today, the scoreboard will be in the "Offday" State. This allows showing specific boards (see Boards) depending on the state of the unit.
 
-* **Scheduled** : When one of you preferred team has a game scheduled on the current day, the scoreboard will rotate through
-a list of board set by the user in the config file.
-
-* **Live game** : Display the live score in near real time of your favorite game. If one of the team score a goal, 
-a goal animation (.gif) is played.
-
-* **Intermission** : Between periods, the scoreboard will rotate through a list of board set 
-for the intermission state by the user in the config file.
-
-* **Post-game** : Once the game is over, the scoreboard will rotate through a list of board set 
-for the Post-game state by the user in the config file.
+-   **Scheduled**: When one of your preferred team has a game scheduled on the current day, the scoreboard will rotate through a list of boards set by the user in the config file.
+-   **Live game**: Display the live score in near real-time of your favorite game. If one of the team scores a goal, a goal animation (.gif) is played.
+-   **Intermission**: Between periods, the scoreboard will rotate through a list of boards set for the intermission state by the user in the config file.
+-   **Post-game**: Once the game is over, the scoreboard will rotate through a list of boards set for the Post-game state by the user in the config file.
 
 ### New Board System
-The board system allow the user to choose what to display depending on the state of the scoreboard.
-For exemple: While the game I'm watch is in the intermission state, I like to see the score ticker, which show the score 
-of the other games.
+The board system allows the user to choose what to display depending on the state of the scoreboard. For example: While the game I'm watching is in the intermission state, I like to see the score ticker, which is showing the score of the other games.
 
-There is currently three different boards available:
-* **Score Ticker**: A carousel that cycle through the games of the day. 
-* **Team Summary**: Display your preferred team's summary. It display their standing record, the result of their previous game
-and the next game on their schedule.
-* **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be 
-available soon.
+There are currently three different boards available:
 
-The board system also allow to easily integrate new features. For example, if you want to have a clock displayed during the day
-along with other boards, or if you wish one of the existing board would show something different, you can make your 
-own and integrate it without touching the main software. I strongly suggest you play around with the python examples in 
-the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn 
-how to display anything on the matrix.
+-   **Score Ticker**: A carousel that cycles through the games of the day.
+-   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
+-   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
+
+The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
 
 More will come soon with playoff related features
 
 ### Dimmer
-The scoreboard now has a dimmer function. The scoreboard will change it's brightness at sunrise and sunset. If you have
+The scoreboard now has a dimmer function. The scoreboard will change its brightness at sunrise and sunset. If you have
 a [TSL2591](https://www.adafruit.com/product/1980) light sensor installed on your raspberry pi, you can configure the scoreboard
 to use it to adjust the brightness.
 
@@ -79,18 +64,17 @@ If your scoreboard has trouble communicating with the API due to poor wifi or in
 a red bar at the bottom of the screen. Once the connection is back, the red bar will disappear.  
 
 ## Time and data accuracy
-For this version, the scoreboard refresh the data at a faster rate (15 seconds by default, don't go faster then 10). This does not change the fact
-that the data from the API is refreshed every minute. The faster refresh rate allow to catch the new data from the API faster.
+For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact
+that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.
 
 Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV 
-broadcast is different depending on where you are in relation to the game's location. This also mean that you will 
-definitely see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement
+broadcast is different depending on where you are in relation to the game's location. This also means that you will see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement
 a delay.
 
 ## Installation
 ### Hardware Assembly
 **IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet.
-If you create an issue because you are having trouble running your setup, I will automaticly close it and tell you to buy the
+If you create an issue because you are having trouble running your setup, I will close it and tell you to buy the
 appropriate parts.
 
 While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
@@ -99,12 +83,12 @@ While writing this README page, I realized that the mlb-led-scoreboard guys made
 ### Software Installation
 #### Raspbian Buster Lite
 
-To be sure that you have the best performance possible, this project require Raspbian Buster Lite.
-this version does not have a GUI which allow the Pi to dedicate as much resource as possible to the scoreboard.
+To be sure that you have the best performance possible, this project requires Raspbian Buster Lite.
+This version does not have a GUI which allows the Pi to dedicate as much resource as possible to the scoreboard.
 
 ![scoreboard demo](assets/images/raspbian_buster_lite.png)
 
-Fallow these instructions to install Raspbian Buster Lite on your Raspberry Pi and once you are up and running comeback to 
+Follow these instructions to install Raspbian Buster Lite on your Raspberry Pi and once you are up and running comeback to 
 this page.
 
 [Raspbian Buster Lite Installation](https://medium.com/@danidudas/install-raspbian-jessie-lite-and-setup-wi-fi-without-access-to-command-line-or-using-the-network-97f065af722e)
@@ -113,7 +97,7 @@ this page.
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
 #### Requirements
-You need Git for cloning this repo and PIP3 for installing the scoreboard software.
+You need Git to clone this repo and PIP3 for installing the scoreboard software.
 
 Since version V 1.0.0 you need python 3.3 and up.
 ```
@@ -130,6 +114,7 @@ cd nhl-led-scoreboard/
 sudo chmod +x scripts/install.sh
 sudo ./scripts/install.sh
 ```
+
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
@@ -137,10 +122,10 @@ sudo ./scripts/install.sh
 ## Testing & Optimization (IMPORTANT)
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
 
-If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
+If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get too excited just yet.
 Depending on your setup, you will need to configure the scoreboard using specific command flags when you run it.
 
-Todo so, start by disabling the audio of the raspberry pi (this is a must to run the led matrix properly).
+To do so, start by disabling the audio of the raspberry pi (this is a must to run the led matrix properly).
 From the root of the pi open the boot config file like so.
 ```
 sudo nano /boot/config.txt
@@ -159,7 +144,8 @@ reboot the pi
 sudo reboot now
 ```
 
-Now lets show something on screen. Get to the matrix submodule and run some samples.
+Now let's show something on the screen. Get to the matrix submodule and run some samples.
+
 ```
 cd nhl-led-matrix/submodules/matrix/bindings/python/samples
 sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60
@@ -195,11 +181,12 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 ### Best Performance (Almost zero flicker)
 Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
-* Do the hardware mod found in the [Improving flicker section ](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
-* Disable the on-board sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
-* From the same section, run the command that remove the bluetooth firmware, Unless you use any bluetooth device with your Pi.
+-   Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
+-   Disable the onboard sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
+-   From the same section, run the command that removes the Bluetooth firmware, Unless you use any Bluetooth device with your Pi.
 
-Finally, these are the flag I use. 
+Finally, these are the flag I use.
+
 ```
 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 ```
@@ -208,7 +195,7 @@ Finally, these are the flag I use.
 First thing first, Open the config.json file from the config directory to configure your scoreboard.
 
 ### Modes
-These are options to set the scoreboard to run in certain mode. This is where you enable the live game mode
+These are options to set the scoreboard to run in a certain mode. This is where you enable the live game mode
 while will show the scoreboard of your favorite game when it's live.
 | Settings    | Type | Parameters  | Description                                                           |
 |-------------|------|-------------|-----------------------------------------------------------------------|
@@ -227,7 +214,7 @@ All the data related options.
 | `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |
 
 ### Teams
-For the `teams` parameters, only put the teams name. You can copy and paste your team's name from this table.
+For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
 
 | Team names     | Team names  |
 |----------------|-------------|
@@ -251,22 +238,23 @@ For the `teams` parameters, only put the teams name. You can copy and paste your
 
 ### States
 If the live mode is enabled, the scoreboard will go through different states depending on the current situation.
-For each state, you can define which of the available board you want to scoreboard to show. For exemple, if one of my preferred
+For each state, you can define which of the available board you want the scoreboard to show. For example, if one of my preferred
 team has a game scheduled on the current day, during the day, the scoreboard will be in the `scheduled` state. I personally like
-to have all the data possible shown during the day so I'll set the 
+to have all the data possible shown during the day so I'll set the all the boards in the `scheduled` setting.
+
 | Settings                                            | Type  | Parameters                                    | Description                                               |
 |-----------------------------------------------------|-------|-----------------------------------------------|-----------------------------------------------------------|
 | `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings"]` | List of preferred boards to show for each specific state. |
 
 ### Boards
-Boards are essentially like pages on a website. Each show something specific and the using can decide which board to display
-at depending of the state of the scoreboard. Currently there is only three boards available:
+Boards are essentially like pages on a website. Each of them shows something specific and the user can decide which board to display
 
-* **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the 
-result or the status of the other games in the league. 
+depending on the state of the scoreboard. Currently, there are only three boards available:
 
-* **Standings**: Self explanatory, it shows the current standings. Currently you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
-* **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
+-   **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the
+-   result or the status of the other games in the league.
+-   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
+-   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
 
 | Boards        | Settings                   | Type | Parameters      | Description                                                                                       |
 |---------------|----------------------------|------|-----------------|---------------------------------------------------------------------------------------------------|
@@ -278,7 +266,7 @@ result or the status of the other games in the league.
 ### Dimmer
 The scoreboard can adjust the brightness of the matrix will running using the Dimmer function. By default, if enabled, 
 the scoreboard software will detect your location using your IP address and will calculate the when the sun rise and the sun set.
-It will then use these moment to change the brightness of the screen depending on the parameters set in the config.
+It will then use these moments to change the brightness of the screen depending on the parameters set in the config.
 
 If you install the [TSL2591](https://www.adafruit.com/product/1980) lux sensor, you can tell the scoreboard to use that to
 control the brightness instead.
@@ -322,11 +310,11 @@ Now run the scoreboard. Once it's up and running do `Ctrl+a` then `d`. This will
 NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
 
 To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
-This is useful if the scoreboard stop working for some reason, you can find out the error it returns and use that to find a solution.
+This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
 
 ## Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
 ## Licensing
-This project use the GNU Public License. If you intend to sell these, the code must remain open source.
+This project uses the GNU Public License. If you intend to sell these, the code must remain open source.
