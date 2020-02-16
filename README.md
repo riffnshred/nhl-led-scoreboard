@@ -59,6 +59,10 @@ a delay.
 
 ## Installation
 ### Hardware Assembly
+**IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet.
+If you create an issue because you are having trouble running your setup, I will automaticly close it and tell you to buy the
+appropriate parts.
+
 While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
 [See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
 
@@ -106,6 +110,33 @@ If you have been using a Led matrix on a raspberry pi before and know how to run
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get to excited just yet.
 Depending on your setup, you will need to configure the scoreboard using specific command flags when you run it.
 
+Todo so, start by disabling the audio of the raspberry pi (this is a must to run the led matrix properly).
+From the root of the pi open the boot config file like so.
+```
+sudo nano /boot/config.txt
+```
+
+Find `dtparam=audio=on` and change it to `dtparam=audio=off`.
+
+Save and close the file like so
+```
+Press Control-x
+Press y
+Press [enter]
+```
+reboot the pi
+```
+sudo reboot now
+```
+
+Now lets show something on screen. Get to the matrix submodule and run some samples.
+```
+cd nhl-led-matrix/submodules/matrix/bindings/python/samples
+sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60
+```
+You should see "Hello World" scroll on screen.
+
+
 Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 Once you found out how to make it run smoothly, come back here and do what's next.
 
@@ -131,8 +162,8 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 --led-multiplexing        Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)
 ```
 
-### Adafruit HAT/bonnet
-If you are using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+### Best Performance (Almost zero flicker)
+Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 * Do the hardware mod found in the [Improving flicker section ](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 * Disable the on-board sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
