@@ -165,6 +165,29 @@ All the data related options.
 | `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
 | `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |
 
+### Teams
+For the `teams` parameters, only put the teams name. You can copy and paste your team's name from this table.
+
+| Team names     | Team names  |
+|----------------|-------------|
+| `Avalanche`    | `Kings`     |
+| `Blackhawks`   | `Knights`   |
+| `Blues`        | `Leafs`     |
+| `Blue Jackets` | `Lightning` |
+| `Bruins`       | `Oilers`    |
+| `Canadiens`    | `Panthers`  |
+| `Canucks`      | `Penguins`  |
+| `Capitals`     | `Predators` |
+| `Coyotes`      | `Rangers`   |
+| `Devils`       | `Red Wings` |
+| `Ducks`        | `Sabres`    |
+| `Flames`       | `Senators`  |
+| `Flyers`       | `Sharks`    |
+| `Hurricanes`   | `Stars`     |
+| `Islanders`    | `Wild`      |
+| `Jets`         |             |
+
+
 ### States
 If the live mode is enabled, the scoreboard will go through different states depending on the current situation.
 For each state, you can define which of the available board you want to scoreboard to show. For exemple, if one of my preferred
