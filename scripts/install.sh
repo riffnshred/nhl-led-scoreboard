@@ -4,6 +4,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.."
 
+# Install the latest version of Python 3
 sudo apt-get update && sudo apt-get install python3-dev
 
 # Pull submodule and ignore changes from script
