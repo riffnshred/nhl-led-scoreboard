@@ -78,8 +78,7 @@ class ScoreboardRenderer:
         )
 
         self.matrix.render()
-        if (self.scoreboard.away_team.num_skaters < 5) or (self.scoreboard.home_team.num_skaters < 5):
-            print("hello")
+        if (3 <= self.scoreboard.away_team.num_skaters <= 4) or (3 <= self.scoreboard.home_team.num_skaters <= 4):
             self.draw_power_play()
 
 
