@@ -1,7 +1,7 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](imgs/scoreboard.jpg)
 
-#V1.0 in beta testing. See the Beta branch. Will officialy release on Feb 19 2020
+# V1.0 in beta testing. See the Beta branch. Will officialy release on Feb 19 2020
 
 Display NHL score of your favorite team's game on a Raspberry Pi driven RGB LED 
 matrix. Currently supports 64x32 boards only.
