@@ -153,7 +153,7 @@ sudo reboot now
 Now let's show something on the screen. Get to the matrix submodule and run some samples.
 
 ```
-cd nhl-led-matrix/submodules/matrix/bindings/python/samples
+cd nhl-led-scoreboard/submodules/matrix/bindings/python/samples
 sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60
 ```
 You should see "Hello World" scroll on screen.
