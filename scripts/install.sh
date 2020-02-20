@@ -30,4 +30,4 @@ sudo pip3 install geocoder python_tsl2591 ephem
 
 make
 echo "If you didn't see any errors above, everything should be installed!"
-echo "Installation complete! Play around with the examples in matrix/bindings/python/samples to make sure your matrix is working."
+echo "Installation complete! Play around with the examples in nhl-led-scoreboard/submodules/matrix/bindings/python/samples to make sure your matrix is working."
