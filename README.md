@@ -222,24 +222,24 @@ All the data related options.
 ### Teams
 For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
 
-| Team names     | Team names  |
-|----------------|-------------|
-| `Avalanche`    | `Kings`     |
-| `Blackhawks`   | `Golden Knights`   |
-| `Blues`        | `Leafs`     |
-| `Blue Jackets` | `Lightning` |
-| `Bruins`       | `Oilers`    |
-| `Canadiens`    | `Panthers`  |
-| `Canucks`      | `Penguins`  |
-| `Capitals`     | `Predators` |
-| `Coyotes`      | `Rangers`   |
-| `Devils`       | `Red Wings` |
-| `Ducks`        | `Sabres`    |
-| `Flames`       | `Senators`  |
-| `Flyers`       | `Sharks`    |
-| `Hurricanes`   | `Stars`     |
-| `Islanders`    | `Wild`      |
-| `Jets`         |             |
+| Team names       | Team names  |
+|------------------|-------------|
+| `Avalanche`      | `Jets`      |
+| `Blackhawks`     | `Kings`     |
+| `Blues`          | `Leafs`     |
+| `Blue Jackets`   | `Lightning` |
+| `Bruins`         | `Oilers`    |
+| `Canadiens`      | `Panthers`  |
+| `Canucks`        | `Penguins`  |
+| `Capitals`       | `Predators` |
+| `Coyotes`        | `Rangers`   |
+| `Devils`         | `Red Wings` |
+| `Ducks`          | `Sabres`    |
+| `Flames`         | `Senators`  |
+| `Flyers`         | `Sharks`    |
+| `Golden Knights` | `Stars`     |
+| `Hurricanes`     | `Wild`      |
+| `Islanders`      |             |
 
 
 ### States
