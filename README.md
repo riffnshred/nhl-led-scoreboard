@@ -225,7 +225,7 @@ For the `teams` parameters, only put the team's name. You can copy and paste you
 | Team names     | Team names  |
 |----------------|-------------|
 | `Avalanche`    | `Kings`     |
-| `Blackhawks`   | `Knights`   |
+| `Blackhawks`   | `Golden Knights`   |
 | `Blues`        | `Leafs`     |
 | `Blue Jackets` | `Lightning` |
 | `Bruins`       | `Oilers`    |
