@@ -35,7 +35,7 @@ class TeamSummary:
             try:
                 if prev_game:
                     prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
-                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.teams_info)
+                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.teams_info, self.data.config)
                 else:
                     prev_game_scoreboard = False
 
@@ -47,7 +47,7 @@ class TeamSummary:
             try:
                 if next_game:
                     next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
-                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.teams_info)
+                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.teams_info, self.data.config)
                 else:
                     next_game_scoreboard = False
 

@@ -17,9 +17,6 @@ class Boards:
 
     # Board handler for Off day state
     def _off_day(self, data, matrix):
-        """
-            Only run the scoreticker for now. Testing the sequence before applying it to standings.
-        """
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_off_day[bord_index])
@@ -44,11 +41,13 @@ class Boards:
     def _intermission(self, data, matrix):
         bord_index = 0
         while True:
-            if bord_index >= (len(data.config.boards_intermission)):
-                return
             board = getattr(self, data.config.boards_intermission[bord_index])
             board(data, matrix)
-            bord_index += 1
+
+            if bord_index >= (len(data.config.boards_intermission) - 1):
+                return
+            else:
+                bord_index += 1
 
     def _post_game(self, data, matrix):
         bord_index = 0

@@ -62,7 +62,7 @@ class MainRenderer:
         debug.info("Showing Game")
         # Initialize the scoreboard. get the current status at startup
         self.data.refresh_overview()
-        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
         while True:
@@ -81,21 +81,21 @@ class MainRenderer:
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
                 debug.info("Game is Live")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
 
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("Game Over")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.__render_postgame(self.scoreboard)
 
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.__render_pregame(self.scoreboard)
 
     def __render_pregame(self, scoreboard):
@@ -171,5 +171,4 @@ class MainRenderer:
         """TODO: change the width depending how much time is left to the intermission"""
         color = self.matrix.graphics.Color(0, 255, 0)
         self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1,
-                                      color)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1, color)

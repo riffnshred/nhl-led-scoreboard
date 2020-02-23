@@ -2,11 +2,12 @@
 	"debug": true,
 	"live_mode": true,
 	"preferences": {
-		"live_game_refresh_rate": 15,
+		"time_format": "24h",
 		"end_of_day": "12:00",
+		"live_game_refresh_rate": 15,
 		"teams": [
 			"Canadiens",
-			"Blackhawks",
+			"Flames",
 			"Avalanche"
 		],
 		"standing_type": "conference",
@@ -16,8 +17,6 @@
 
 	"states":{
 		"off_day": [
-			"scoreticker",
-			"team_summary",
 			"standings"
 		],
 		"scheduled": [
@@ -29,7 +28,8 @@
 			"scoreticker"
 		],
 		"post_game": [
-			"scoreticker"
+			"scoreticker",
+			"standings"
 		]
 	},
 

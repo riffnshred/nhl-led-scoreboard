@@ -89,9 +89,6 @@ class ScoreboardRenderer:
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
         date = convert_date_format(self.scoreboard.date)
 
-        # Align the into with center of screen
-        date_align = center_text(self.font.getsize(date)[0], 32)
-        score_align = center_text(self.font_large.getsize(score)[0], 32)
 
         # Draw the info
         self.matrix.draw_text(

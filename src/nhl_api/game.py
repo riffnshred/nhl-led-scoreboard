@@ -172,6 +172,3 @@ class Overview(object):
         elif self.away_score > self.home_score:
             self.w_team = self.away_team_id
             self.l_team = self.home_team_id
-
-        self.full_date = convert_time(self.game_date).strftime("%Y-%m-%d")
-        self.start_time = convert_time(self.game_date).strftime("%I:%M")

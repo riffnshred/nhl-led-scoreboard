@@ -3,7 +3,7 @@ import collections
 import argparse
 import os
 import debug
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def get_file(path):

@@ -60,6 +60,11 @@ The board system also allows to easily integrate new features. For example, if y
 
 More will come soon with playoff related features
 
+### Goal animation
+When ever a team in the main event score a goal, a goal light animation is played.
+Soon you will have to option to set the animation for your favorite team only or play a different animation for
+the opposing team.
+
 ### Dimmer
 The scoreboard now has a dimmer function. The scoreboard will change its brightness at sunrise and sunset. If you have
 a [TSL2591](https://www.adafruit.com/product/1980) light sensor installed on your raspberry pi, you can configure the scoreboard
@@ -213,11 +218,12 @@ All the data related options.
 | Settings                 | Type   | Parameters                                       | Description                                                                                                                                                                          |
 |--------------------------|--------|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `live_game_refresh_rate` | INT    | `15`                                             | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
+| `time_format`            | String | `"12h"` or `"24h"`                               | The format in which the game start time will be displayed.                                                                                                                           |
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
 | `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |
 | `standing_type`          | String | `conference`, `division`                         | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
 | `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
-| `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |
+| `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |                                                                                                                                                          |
 
 ### Teams
 For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
