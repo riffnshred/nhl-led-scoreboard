@@ -116,8 +116,6 @@ class MainRenderer:
         self.data.needs_refresh = True
 
     def __render_live(self, scoreboard):
-
-
         debug.info("Showing Main Event")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
@@ -138,15 +136,15 @@ class MainRenderer:
             self.home_score = self.scoreboard.home_team.goals
             self._draw_goal(self.scoreboard.home_team.id, self.scoreboard.home_team.name)
 
-
     def _draw_goal(self, id, name):
-
         debug.info('Score by team: ' + name)
         # Set opposing team goal animation here
         filename = "assets/animations/goal_light_animation.gif"
         if id in self.data.pref_teams:
             # Set your preferred team goal animation here
             filename = "assets/animations/goal_light_animation.gif"
+
+        im = Image.open(get_file(filename))
 
         # Set the frame index to 0
         frame_nub = 0
