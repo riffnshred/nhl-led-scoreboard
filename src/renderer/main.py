@@ -131,16 +131,23 @@ class MainRenderer:
 
     def check_new_goals(self):
         debug.log("Check new goal")
-        if self.away_score < self.scoreboard.away_team.goals or self.home_score < self.scoreboard.home_team.goals:
+        if self.away_score < self.scoreboard.away_team.goals:
             self.away_score = self.scoreboard.away_team.goals
+            self._draw_goal(self.scoreboard.away_team.id, self.scoreboard.away_team.name)
+        if self.home_score < self.scoreboard.home_team.goals:
             self.home_score = self.scoreboard.home_team.goals
-            self._draw_goal()
+            self._draw_goal(self.scoreboard.home_team.id, self.scoreboard.home_team.name)
 
-    def _draw_goal(self):
 
-        debug.info('SCOOOOOOOORE, MAY DAY, MAY DAY, MAY DAY, MAY DAAAAAAAAY - Rick Jeanneret')
-        # Load the gif file
-        im = Image.open(get_file("assets/animations/goal_light_animation.gif"))
+    def _draw_goal(self, id, name):
+
+        debug.info('Score by team: ' + name)
+        # Set opposing team goal animation here
+        filename = "assets/animations/goal_light_animation.gif"
+        if id in self.data.pref_teams:
+            # Set your preferred team goal animation here
+            filename = "assets/animations/goal_light_animation.gif"
+
         # Set the frame index to 0
         frame_nub = 0
 
