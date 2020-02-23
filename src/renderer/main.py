@@ -75,6 +75,7 @@ class MainRenderer:
                 self.data.refresh_current_date()
                 self.data.refresh_overview()
                 self.data.refresh_games()
+                self.data.refresh_standings()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
