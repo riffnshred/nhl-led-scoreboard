@@ -88,8 +88,8 @@ a delay.
 ## Installation
 ### Hardware Assembly
 **IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet.
-If you create an issue because you are having trouble running your setup, I will close it and tell you to buy the
-appropriate parts.
+If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the
+appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
 While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
 [See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
