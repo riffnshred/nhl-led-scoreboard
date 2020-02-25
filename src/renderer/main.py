@@ -48,7 +48,6 @@ class MainRenderer:
                 self.data.refresh_data()
                 self.status = self.data.status
 
-
     def __render_offday(self):
         while True:
             debug.log('PING !!! Render off day')
@@ -63,7 +62,7 @@ class MainRenderer:
         debug.info("Showing Game")
         # Initialize the scoreboard. get the current status at startup
         self.data.refresh_overview()
-        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
         while True:
@@ -75,61 +74,78 @@ class MainRenderer:
                 print("refreshing")
                 self.data.refresh_current_date()
                 self.data.refresh_overview()
+                self.data.refresh_games()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
                 debug.info("Game is Live")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info)
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
 
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("Game Over")
-                self.__render_postgame()
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                self.__render_postgame(self.scoreboard)
+
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                self.__render_pregame()
+                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                self.__render_pregame(self.scoreboard)
 
-    def __render_pregame(self):
+    def __render_pregame(self, scoreboard):
+        debug.info("Showing Main Event")
+        self.matrix.clear()
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        sleep(self.refresh_rate)
         self.boards._scheduled(self.data, self.matrix)
         self.data.needs_refresh = True
 
-    def __render_postgame(self):
+    def __render_postgame(self, scoreboard):
         debug.info("Showing Post-Game")
+        self.matrix.clear()
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        self.draw_end_period_indicator()
+        sleep(self.refresh_rate)
         self.boards._post_game(self.data, self.matrix)
         self.data.needs_refresh = True
 
     def __render_live(self, scoreboard):
-        if scoreboard.intermission:
-            # Show Boards for Intermission
-            debug.info("Main event is in Intermission")
-            self.boards._intermission(self.data, self.matrix)
-
         debug.info("Showing Main Event")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        self.matrix.render()
-
+        if scoreboard.intermission:
+            # Show Boards for Intermission
+            self.draw_end_period_indicator()
+            debug.info("Main event is in Intermission")
+            self.boards._intermission(self.data, self.matrix)
         self.data.needs_refresh = True
         sleep(self.refresh_rate)
 
     def check_new_goals(self):
         debug.log("Check new goal")
-        if self.away_score < self.scoreboard.away_team.goals or self.home_score < self.scoreboard.home_team.goals:
+        if self.away_score < self.scoreboard.away_team.goals:
             self.away_score = self.scoreboard.away_team.goals
+            self._draw_goal(self.scoreboard.away_team.id, self.scoreboard.away_team.name)
+        if self.home_score < self.scoreboard.home_team.goals:
             self.home_score = self.scoreboard.home_team.goals
-            self._draw_goal()
+            self._draw_goal(self.scoreboard.home_team.id, self.scoreboard.home_team.name)
 
-    def _draw_goal(self):
+    def _draw_goal(self, id, name):
+        debug.info('Score by team: ' + name)
+        # Set opposing team goal animation here
+        filename = "assets/animations/goal_light_animation.gif"
+        if id in self.data.pref_teams:
+            # Set your preferred team goal animation here
+            filename = "assets/animations/goal_light_animation.gif"
 
-        debug.info('SCOOOOOOOORE, MAY DAY, MAY DAY, MAY DAY, MAY DAAAAAAAAY - Rick Jeanneret')
-        # Load the gif file
-        im = Image.open(get_file("assets/animations/goal_light_animation.gif"))
+        im = Image.open(get_file(filename))
+
         # Set the frame index to 0
         frame_nub = 0
 
@@ -150,3 +166,9 @@ class MainRenderer:
 
             frame_nub += 1
             sleep(0.1)
+
+    def draw_end_period_indicator(self):
+        """TODO: change the width depending how much time is left to the intermission"""
+        color = self.matrix.graphics.Color(0, 255, 0)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1, color)

@@ -27,6 +27,7 @@ def test_status_info():
         print(status)
 
 def test_standings():
+    global wc
     standings, wildcard = nhl_api.info.standings()
     standings = nhl_api.info.Standings(standings, wildcard)
     standings = standings.by_conference
@@ -44,33 +45,68 @@ def test_standings():
     #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points, wins, losses, ot)
     #     print(message)
 
-    print('EASTERN')
-    for team in standings.eastern:
+    for conf, value in vars(standings).items():
+        print(conf)
+        for type, value in vars(value).items():
+            if type == "wild_card":
+                wc = value
+            else:
+                for div, value in vars(value).items():
+                    print(div)
+                    for record in value:
+                        show_div_record(record)
+                if wc:
+                    print("wildcard")
+                    for record in wc:
+                        show_wild_card_record(record)
 
-        pos = team['conferenceRank']
-        team_name = team['team_name']
-        points = team['points']
-        wins = team['leagueRecord']['wins']
-        losses = team['leagueRecord']['losses']
-        ot = team['leagueRecord']['ot']
+    # print('EASTERN')
+    # for team in standings.eastern:
+    #
+    #     pos = team['conferenceRank']
+    #     team_name = team['team_name']
+    #     points = team['points']
+    #     wins = team['leagueRecord']['wins']
+    #     losses = team['leagueRecord']['losses']
+    #     ot = team['leagueRecord']['ot']
+    #
+    #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
+    #     print(message)
+    #
+    # print("\r")
+    # print('WESTERN')
+    #
+    # for team in standings.western:
+    #     pos = team['conferenceRank']
+    #     team_name = team['team_name']
+    #     points = team['points']
+    #     wins = team['leagueRecord']['wins']
+    #     losses = team['leagueRecord']['losses']
+    #     ot = team['leagueRecord']['ot']
+    #
+    #     message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
+    #     print(message)
 
-        message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
-        print(message)
+def show_wild_card_record(record):
+    pos = record['wildCardRank']
+    team_name = record["team"]['name']
+    points = record['points']
+    wins = record['leagueRecord']['wins']
+    losses = record['leagueRecord']['losses']
+    ot = record['leagueRecord']['ot']
+    message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points, wins, losses, ot)
+    print(message)
 
-    print("\r")
-    print('WESTERN')
 
-    for team in standings.western:
-        pos = team['conferenceRank']
-        team_name = team['team_name']
-        points = team['points']
-        wins = team['leagueRecord']['wins']
-        losses = team['leagueRecord']['losses']
-        ot = team['leagueRecord']['ot']
-
-        message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points,  wins, losses, ot)
-        print(message)
-
+def show_div_record(record):
+    pos = record['divisionRank']
+    team_name = record["team"]['name']
+    points = record['points']
+    wins = record['leagueRecord']['wins']
+    losses = record['leagueRecord']['losses']
+    ot = record['leagueRecord']['ot']
+    message = "{}. {} - Points: {} - W: {} L: {} OT: {}".format(pos, team_name, points, wins, losses, ot)
+    print(message)
 
 # Test Games
 #test_game()

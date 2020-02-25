@@ -17,6 +17,7 @@ class ScoreboardConfig:
 
         # Preferences
         self.end_of_day = json["preferences"]["end_of_day"]
+        self.time_format = json["preferences"]["time_format"]
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.standing_type = json["preferences"]["standing_type"]
@@ -24,20 +25,23 @@ class ScoreboardConfig:
         self.preferred_conference = json["preferences"]["conference"]
 
         # Dimmer preferences
-        self.dimmer_source = json["preferences"]["dimmer"]["source"]
-        self.dimmer_frequency = json["preferences"]["dimmer"]["frequency"]
-        self.dimmer_light_level_lux = json["preferences"]["dimmer"]["light_level_lux"]
-        self.dimmer_mode = json["preferences"]["dimmer"]["mode"]
-        self.dimmer_sunset_brightness = json["preferences"]["dimmer"]["sunset_brightness"]
-        self.dimmer_sunrise_brightness = json["preferences"]["dimmer"]["sunrise_brightness"]
+        self.dimmer_enabled = json["dimmer"]["enabled"]
+        self.dimmer_source = json["dimmer"]["source"]
+        self.dimmer_frequency = json["dimmer"]["frequency"]
+        self.dimmer_light_level_lux = json["dimmer"]["light_level_lux"]
+        self.dimmer_mode = json["dimmer"]["mode"]
+        self.dimmer_sunset_brightness = json["dimmer"]["sunset_brightness"]
+        self.dimmer_sunrise_brightness = json["dimmer"]["sunrise_brightness"]
+
+        # States
+        '''TODO: Put condition so that the user dont leave any board list empty'''
+        self.boards_off_day = json["states"]["off_day"]
+        self.boards_scheduled = json["states"]["scheduled"]
+        self.boards_intermission = json["states"]["intermission"]
+        self.boards_post_game = json["states"]["post_game"]
 
         # Boards configuration
-        '''TODO: Put condition so that the user dont leave any board list empty'''
-        self.boards_off_day = json["boards"]["off_day"]
-        self.boards_scheduled = json["boards"]["scheduled"]
-        self.boards_intermission = json["boards"]["intermission"]
-        self.boards_post_game = json["boards"]["post_game"]
-
+        # Boards
         # Scoreticker
         self.preferred_teams_only = json["boards"]["scoreticker"]["preferred_teams_only"]
         self.scoreticker_rotation_rate = json["boards"]["scoreticker"]["rotation_rate"]
