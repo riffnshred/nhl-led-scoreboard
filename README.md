@@ -11,6 +11,7 @@ or you are curious about the development of the project, come join us by clickin
 - [Features (Beta V 1.0.0)](#features--beta-v-100-)
   * [States](#states)
   * [New Board System](#new-board-system)
+  * [Goal animation](#goal-animation)
   * [Dimmer](#dimmer)
   * [Network Indicator](#network-indicator)
 - [Time and data accuracy](#time-and-data-accuracy)
@@ -31,7 +32,9 @@ or you are curious about the development of the project, come join us by clickin
   * [States](#states-1)
   * [Boards](#boards)
   * [Dimmer](#dimmer-1)
-  * [Usage](#usage)
+- [Usage](#usage)
+  * [Method #1 Using Supervisor (auto mode)](#method--1-using-supervisor--auto-mode-)
+  * [Method #2 Using Terminal Multiplexer (Hands on method)](#method--2-using-terminal-multiplexer--hands-on-method-)
 - [Shout-out (Credit)](#shout-out--credit-)
 - [Licensing](#licensing)
   
@@ -85,8 +88,8 @@ a delay.
 ## Installation
 ### Hardware Assembly
 **IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet.
-If you create an issue because you are having trouble running your setup, I will close it and tell you to buy the
-appropriate parts.
+If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the
+appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
 While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
 [See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
@@ -190,7 +193,7 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 ```
 
 ### Best Performance (Almost zero flicker)
-Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+Using either a raspberry pi Zero W, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 -   Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 -   Disable the onboard sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
@@ -221,7 +224,7 @@ All the data related options.
 | `time_format`            | String | `"12h"` or `"24h"`                               | The format in which the game start time will be displayed.                                                                                                                           |
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
 | `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |
-| `standing_type`          | String | `conference`, `division`                         | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
+| `standing_type`          | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
 | `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
 | `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |                                                                                                                                                          |
 
@@ -294,7 +297,7 @@ control the brightness instead.
 | `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day.                                                                                                                                                                                                                               |
 
 
-### Usage
+## Usage
 Once you are done optimizing your setup and configuring the software, you are ready to go.
 
 Start by running your board and see if it runs properly. If you use the typical Pi 3b+ and HAT/Bonnet setup, here's the command I use.
@@ -304,10 +307,67 @@ sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60
 ```
 
 Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the 
-python script stopped. 
+python script stopped.
 
-To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/)
+There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
+board automatically (and even restart in case of a crash).
 
+### Method #1 Using Supervisor (auto mode)
+![supervisor](assets/images/supervisor.PNG)
+
+[Supervisor](http://supervisord.org/) is a Process Control System. Once installed and configured it will run the scoreboard for you and restart it
+in case of a crash. What's even better is that you can also control the board from your phone !!!!
+
+To install Supervisor, run this installation command in your terminal.
+```
+apt-get install supervisor
+```
+
+Once the process done, open the supervisor config file,
+```
+sudo nano /etc/supervisor/supervisord.conf
+```
+and add those two lines at the bottom of the file.
+```
+[inet_http_server]
+port=*:9001
+```
+Close and save the file.
+```
+Press Control-x
+Press y
+Press [enter]
+```
+
+Now lets create a new file called scoreboard.conf into the conf.d directory of supervisor, by running this command,
+```
+sudo nano /etc/supervisor/conf.d/scoreboard.conf
+```
+In this new file copy and past these line.
+```
+[program:scoreboard]
+command=[SCOREBOARD COMMAND]
+directory=[LOCATION OF THE SCOREBOARD DIRECTORY]
+autostart=true
+autorestart=true
+```
+Than fill in the missing information. For the `command`, insert the command that worked for you when you tested the scoreboard. If
+you used the same as mine then this line should look like, `command=sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2`.
+Lastly, for the `directory`, insert the location of the scoreboard directory. It should be something like `/home/{user}/nhl-led-scoreboard`. If you use the base account "pi" then
+the `{user}` will be `pi`.
+
+Now, reboot the raspberry pi. It should run the scoreboard automatically. Open a browser and enter the ip address of your raspberry pi in the address bar
+fallowing of `:9001`. It should look similar to this `192.168.2.19:9001`. You will see the supervisor dashboard with the scoreboard process running.
+If you see the dashboard but no process, reboot the pi and refresh the page. 
+
+You should be up and running now. From the supervison dashboard, you can control the process of the scoreboard (e.g start, restart, stop).
+
+To troubleshoot the scoreboard using supervision, you can click on the name of the process to see the latest log of the scoreboard. This is really useful to know what the scoreboard
+is doing in case of a problem.
+
+### Method #2 Using Terminal Multiplexer (Hands on method)
+To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/).
+This allows you to run the scoreboard manually in a terminal and 
 To install Screen, run the fallowing in your terminal.
 ```
 sudo apt install screen
@@ -323,6 +383,7 @@ NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
 
 To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
 This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
+
 
 ## Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
