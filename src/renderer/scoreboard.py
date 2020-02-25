@@ -1,29 +1,33 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from utils import center_text, convert_date_format
-from renderer.logos import TeamLogos as LogoRenderer
+from renderer.logos import LogoRenderer
 
 
 class ScoreboardRenderer:
     def __init__(self, data, matrix, scoreboard):
         self.data = data
         self.status = data.status
-        self.layout = self.data.config.layout
-        self.font = self.layout.font
-        self.font_large = self.layout.font_large
+        self.layout = self.data.config.config.layout.get_board_layout('scoreboard')
+        self.font = self.data.config.layout.font
+        self.font_large = self.data.config.layout.font_large
         self.scoreboard = scoreboard
         self.matrix = matrix
 
         self.home_logo_renderer = LogoRenderer(
             self.matrix,
             data.config,
+            self.layout.home_logo,
             self.scoreboard.home_team,
-            "home"
+            'scoreboard',
+            'home'
         )
         self.away_logo_renderer = LogoRenderer(
             self.matrix,
             data.config,
+            self.layout.away_logo,
             self.scoreboard.away_team,
-            "away"
+            'scoreboard',
+            'away'
         )
 
     def render(self):
@@ -48,7 +52,7 @@ class ScoreboardRenderer:
         start_time = self.scoreboard.start_time
 
         # Draw the text on the Data image.
-        self.matrix.draw_text((0, -1), 'TODAY', font=self.layout.font, location="center")
+        self.matrix.draw_text((0, -1), 'TODAY', font=self.font, location="center")
         self.matrix.draw_text(
             (0, 5), start_time, fill=(255, 255, 255), location="center",
             font=self.font, align="center", multiline=True

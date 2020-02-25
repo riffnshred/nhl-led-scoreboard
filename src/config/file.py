@@ -1,15 +1,17 @@
 import json
 
 class ConfigFile:
-  def __init__(self, path):
+  def __init__(self, path, size):
     self.path = path
+    self.size = size
+
     self.load()
 
   def load(self):
     with open(self.path) as f:
       self.json = json.load(f)
 
-    self.data = JSONData(self.json)
+    self.data = JSONData(self.json, self.size)
 
   def save(self):
       with open(self.path, 'w') as f:
@@ -17,15 +19,38 @@ class ConfigFile:
 
 class JSONData:
   '''The recursive class for building and representing objects with.'''
-  def __init__(self, obj):
+  def __init__(self, obj, size):
+    self.size = size
+
     for k, v in obj.items():
       if isinstance(v, dict):
-        setattr(self, k, JSONData(v))
+        setattr(self, k, JSONData(v, size))
       else:
-        setattr(self, k, v)
+        setattr(self, k, self.parse_attr(k, v))
 
+  def parse_attr(self, key, value):
+    if (isinstance(value, list)):
+      if (len(value) == 2):
+        return [
+          self.parse_attr_value(value[0], self.size[0]),
+          self.parse_attr_value(value[1], self.size[1])
+        ]
+
+    return self.parse_attr_value(value)
+
+  def parse_attr_value(self, value, dimension = None):
+    if (isinstance(value, int)):
+      return value
+    elif (isinstance(value, str) and value.endswith('%')):
+      if (dimension is None):
+        return float(value[:-1]) / 100.0
+      else:
+        return round((float(value[:-1]) / 100.0) * dimension)
+
+    return value
+      
   def __copy__(self):
-    return JSONData(self.__dict__)
+    return JSONData(self.__dict__, self.size)
 
   def __contains__(self, item):
     return item in self.__dict__
@@ -43,5 +68,5 @@ class JSONData:
 
   def __merge__(self, obj):
     for k, v in obj:
-      if (hasattr(self, k)):
+      if (not hasattr(self, k)):
         setattr(self, k, v)

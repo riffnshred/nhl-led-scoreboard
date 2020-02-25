@@ -8,9 +8,12 @@ cd "${DIR}/.."
 git submodule update --init --recursive
 git config submodule.matrix.ignore all
 
+sudo apt-get update
+sudo apt-get --yes --force-yes install python3-dev python3-pillow -y
+
 cd submodules/matrix || exit
 echo "Running rgbmatrix installation..."
-sudo apt-get update && sudo apt-get install python3-dev python3-pillow -y
+
 make build-python PYTHON=$(which python3)
 sudo make install-python PYTHON=$(which python3)
 cd bindings
@@ -19,12 +22,12 @@ sudo pip3 install -e python/
 cd ../../../
 
 echo "Installing required dependencies. This may take some time (10-20 minutes-ish)..."
-# git reset --hard
-# git checkout master
-# git fetch origin --prune
-# git pull
+
 sudo pip3 install requests 
 sudo pip3 install geocoder python_tsl2591 ephem
+
+sudo apt-get --yes --force-yes install libcairo2-dev
+sudo pip3 install cariosvg
 
 make
 echo "If you didn't see any errors above, everything should be installed!"

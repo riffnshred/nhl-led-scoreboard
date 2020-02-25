@@ -5,9 +5,7 @@
 		"live_game_refresh_rate": 15,
 		"end_of_day": "12:00",
 		"teams": [
-			"Canadiens",
-			"Blackhawks",
-			"Avalanche"
+			"Panthers"
 		],
 		"standing_type": "conference",
 		"divisions": "central",
@@ -18,14 +16,12 @@
 				"light_level_lux": 400,
 				"mode": "always",
 				"sunset_brightness": 10,
-				"sunrise_brightness": 60
+				"sunrise_brightness": 20
 			}
 	},
 	"boards": {
 		"off_day": [
-			"scoreticker",
-			"team_summary",
-			"standings"
+			"scoreticker"
 		],
 		"scheduled": [
 			"scoreticker",

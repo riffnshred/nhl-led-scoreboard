@@ -1,0 +1,22 @@
+{
+  "team_summary": {
+    "info": {
+      "position": ["0%", "0%"]
+    },
+    "logo": {
+      "position": ["45%", "0%"]
+    }
+  },
+  "scoreboard": {
+    "home_logo": {
+      "position": [15, 0],
+      "location": "center",
+      "align": "left"
+    },
+    "away_logo": {
+      "position": [-15, 0],
+      "location": "center",
+      "align": "right"
+    }
+  }
+}

@@ -8,7 +8,7 @@ import sys
 import debug
 
 class ScoreboardConfig:
-    def __init__(self, filename_base, args, width, height):
+    def __init__(self, filename_base, args, size):
         json = self.__get_config(filename_base)
 
         # Misc config options
@@ -47,12 +47,8 @@ class ScoreboardConfig:
 
         # Element's led coordinates
         self.layout = Layout(self.__get_config(
-            "layout/{}x{}_config".format(width, height),
+            "layout/{}x{}_config".format(size[0], size[1]),
             "Invalid matrix dimensions provided or missing resolution config file (64x32_config.json). This software currently support 64x32 matrix board only.\nIf you would like to see new dimensions supported, please file an issue on GitHub!"
-        ))
-        self.dynamic_layout = Layout(self.__get_config(
-            "layout/dynamic",
-            "Invalid dynamic layout config file!"
         ))
 
         # load colors 
@@ -60,7 +56,7 @@ class ScoreboardConfig:
             "colors/teams"
         ))
 
-        self.config = Config()
+        self.config = Config(size)
 
     def read_json(self, filename):
         # Find and return a json file
