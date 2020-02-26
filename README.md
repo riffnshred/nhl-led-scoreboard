@@ -11,7 +11,7 @@ or you are curious about the development of the project, come join us by clickin
 You need Git to clone this repo and PIP3 for installing the scoreboard software.
 
 Since version V1.0.0 you need python 3.3 and up.
-Run these two command in your terminal to install git and PIP3.
+Run these two commands in your terminal to install git and PIP3.
 ```
 sudo apt-get update
 sudo apt install git python3-pip
