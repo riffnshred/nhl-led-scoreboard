@@ -1,18 +1,18 @@
 {
 	"debug": true,
-	"live_mode": true,
+	"live_mode": false,
 	"preferences": {
-		"time_format": "24h",
+		"time_format": "12h",
 		"end_of_day": "12:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
+			"Jets",
 			"Canadiens",
-			"Flames",
-			"Avalanche"
+			"Stars"
 		],
-		"standing_type": "conference",
+		"standing_type": "wild_card",
 		"divisions": "central",
-		"conference": "eastern"
+		"conference": "western"
 	},
 
 	"states":{
@@ -43,13 +43,24 @@
 		}
 	},
 
-	"dimmer": {
-		"enabled": false,
-		"source": "software",
-		"frequency": 5,
-		"light_level_lux": 400,
-		"mode": "always",
-		"sunset_brightness": 10,
-		"sunrise_brightness": 60
+	"sbio": {
+		"dimmer": {
+			"enabled": false,
+			"source": "software",
+			"frequency": 5,
+			"light_level_lux": 400,
+			"mode": "always",
+			"sunset_brightness": 5,
+			"sunrise_brightness": 50
+		},
+		"pushbutton": {
+			"enabled": true,
+			"bonnet": true,
+			"pin": 25,
+			"reboot_duration": 2,
+			"poweroff_duration": 10,
+			"state_triggered1": "team_summary"
+		}
 	}
+	
 }

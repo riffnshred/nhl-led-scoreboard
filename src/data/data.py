@@ -43,7 +43,10 @@ class Data:
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
-
+        
+        # Flag for if pushbutton has triggered
+        self.pb_trigger = False
+        
         # Flag to determine when to refresh data
         self.needs_refresh = True
 

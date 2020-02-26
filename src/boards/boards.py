@@ -15,6 +15,18 @@ class Boards:
         # self.standings_board = Standings(config, matrix)
         pass
 
+    # Board handler for PushButton
+    def _pb_board(self, data, matrix):
+        #bord_index = 0
+        #while True:
+        board = getattr(self, data.config.pushbutton_state_triggered1)
+        board(data, matrix)
+
+        #    if bord_index >= (len(data.config.boards_off_day) - 1):
+        #        return
+        #    else:
+        #        bord_index += 1
+
     # Board handler for Off day state
     def _off_day(self, data, matrix):
         bord_index = 0
@@ -69,3 +81,4 @@ class Boards:
     def team_summary(self, data, matrix):
         TeamSummary(data, matrix).render()
 
+        

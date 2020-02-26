@@ -6,7 +6,8 @@ from boards.boards import Boards
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from utils import get_file
-
+import random
+import glob
 
 class MainRenderer:
     def __init__(self, matrix, data):
@@ -56,7 +57,13 @@ class MainRenderer:
                 return
             self.data.refresh_games()
             self.data.refresh_standings()
-            self.boards._off_day(self.data, self.matrix)
+            if self.data.pb_trigger:
+                debug.info('PushButton triggered....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
+                self.data.pb_trigger = False
+                #Display the board from the config
+                self.boards._pb_board(self.data, self.matrix)
+            else:
+                self.boards._off_day(self.data, self.matrix)
 
     def __render_game_day(self):
         debug.info("Showing Game")
@@ -138,11 +145,21 @@ class MainRenderer:
 
     def _draw_goal(self, id, name):
         debug.info('Score by team: ' + name)
+
+        # Get the list of gif's under the preferred and opposing directory
+        preferred_gifs = glob.glob("assets/animations/preferred/*.gif")
+        opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
+        
         # Set opposing team goal animation here
-        filename = "assets/animations/goal_light_animation.gif"
+        #filename = "assets/animations/goal_light_animation.gif"
+        filename = random.choice(opposing_gifs)
+        debug.info("Opposing animation is: " + filename)
         if id in self.data.pref_teams:
             # Set your preferred team goal animation here
-            filename = "assets/animations/goal_light_animation.gif"
+            #filename = "assets/animations/goal_light_animation.gif"
+            filename = random.choice(preferred_gifs)
+            debug.info("Preferred animation is: " + filename)
+
 
         im = Image.open(get_file(filename))
 
@@ -161,7 +178,7 @@ class MainRenderer:
                 frame_nub = 0
                 im.seek(frame_nub)
 
-            self.matrix.draw_image((0, 0), im)
+            self.matrix.draw_image((0, 0), im,"center")
             self.matrix.render()
 
             frame_nub += 1

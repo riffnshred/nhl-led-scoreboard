@@ -24,13 +24,22 @@ class ScoreboardConfig:
         self.preferred_conference = json["preferences"]["conference"]
 
         # Dimmer preferences
-        self.dimmer_enabled = json["dimmer"]["enabled"]
-        self.dimmer_source = json["dimmer"]["source"]
-        self.dimmer_frequency = json["dimmer"]["frequency"]
-        self.dimmer_light_level_lux = json["dimmer"]["light_level_lux"]
-        self.dimmer_mode = json["dimmer"]["mode"]
-        self.dimmer_sunset_brightness = json["dimmer"]["sunset_brightness"]
-        self.dimmer_sunrise_brightness = json["dimmer"]["sunrise_brightness"]
+        self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
+        self.dimmer_source = json["sbio"]["dimmer"]["source"]
+        self.dimmer_frequency = json["sbio"]["dimmer"]["frequency"]
+        self.dimmer_light_level_lux = json["sbio"]["dimmer"]["light_level_lux"]
+        self.dimmer_mode = json["sbio"]["dimmer"]["mode"]
+        self.dimmer_sunset_brightness = json["sbio"]["dimmer"]["sunset_brightness"]
+        self.dimmer_sunrise_brightness = json["sbio"]["dimmer"]["sunrise_brightness"]
+
+        # Pushbutton preferences
+        self.pushbutton_enabled = json["sbio"]["pushbutton"]["enabled"]
+        self.pushbutton_bonnet = json["sbio"]["pushbutton"]["bonnet"]
+        self.pushbutton_pin = json["sbio"]["pushbutton"]["pin"]
+        self.pushbutton_reboot_duration = json["sbio"]["pushbutton"]["reboot_duration"]
+        self.pushbutton_poweroff_duration = json["sbio"]["pushbutton"]["poweroff_duration"]
+        self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
+
 
         # States
         '''TODO: Put condition so that the user dont leave any board list empty'''

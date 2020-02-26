@@ -6,7 +6,8 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from utils import args, led_matrix_options
 from data.data import Data
 import threading
-from dimmer import Dimmer
+from sbio.dimmer import Dimmer
+from sbio.pushbutton import PushButton
 from renderer.matrix import Matrix
 import debug
 
@@ -39,6 +40,13 @@ def run():
         dimmerThread = threading.Thread(target=dimmer.run, args=())
         dimmerThread.daemon = True
         dimmerThread.start()
+    
+    if data.config.pushbutton_enabled:
+        pushbutton = PushButton(data,matrix)
+        pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
+        pushbuttonThread.daemon = True
+        pushbuttonThread.start()
+
 
     MainRenderer(matrix, data).render()
 
