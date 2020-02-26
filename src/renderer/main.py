@@ -82,6 +82,7 @@ class MainRenderer:
                 self.data.refresh_current_date()
                 self.data.refresh_overview()
                 self.data.refresh_games()
+                self.data.refresh_standings()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
@@ -127,12 +128,15 @@ class MainRenderer:
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
         if scoreboard.intermission:
+            debug.info("Main event is in Intermission")
             # Show Boards for Intermission
             self.draw_end_period_indicator()
-            debug.info("Main event is in Intermission")
+            sleep(self.refresh_rate)
             self.boards._intermission(self.data, self.matrix)
+        else:
+            sleep(self.refresh_rate)
         self.data.needs_refresh = True
-        sleep(self.refresh_rate)
+        
 
     def check_new_goals(self):
         debug.log("Check new goal")
