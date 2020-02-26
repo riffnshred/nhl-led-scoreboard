@@ -24,7 +24,7 @@ class Scoreticker:
                 self.matrix.clear()
                 if self.index >= (len(self.games)):
                     return
-
+                    
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info, self.data.config)).render()
                 self.show_indicator()
                 self.matrix.render()

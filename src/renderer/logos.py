@@ -83,6 +83,5 @@ class LogoRenderer:
         self.matrix.draw_image(
             (position[0] + x, position[1] + y), 
             self.logo,
-            self.element_layout.location,
             self.element_layout.align
         )

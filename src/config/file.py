@@ -46,6 +46,8 @@ class JSONData:
         return float(value[:-1]) / 100.0
       else:
         return round((float(value[:-1]) / 100.0) * dimension)
+    elif (isinstance(value, list)):
+      return sum([self.parse_attr_value(x, dimension) for x in value])
 
     return value
       

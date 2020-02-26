@@ -9,14 +9,24 @@
   },
   "scoreboard": {
     "home_logo": {
-      "position": [15, 0],
-      "location": "center",
+      "position": [["50%", 15], 0],
       "align": "left"
     },
     "away_logo": {
-      "position": [-15, 0],
-      "location": "center",
+      "position": [["50%", -15], 0],
       "align": "right"
+    },
+    "score": {
+      "position": ["50%", "50%"],
+      "align": "center-center"
+    },
+    "time": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "period": {
+      "position": ["50%", 6],
+      "align": "center-top"
     }
   }
 }

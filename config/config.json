@@ -3,7 +3,7 @@
 	"live_mode": true,
 	"preferences": {
 		"time_format": "24h",
-		"end_of_day": "12:00",
+		"end_of_day": "4:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
 			"Canadiens",
@@ -17,7 +17,7 @@
 
 	"states":{
 		"off_day": [
-			"standings"
+			"scoreticker"
 		],
 		"scheduled": [
 			"scoreticker",
@@ -44,7 +44,7 @@
 	},
 
 	"dimmer": {
-		"enabled": false,
+		"enabled": true,
 		"source": "software",
 		"frequency": 5,
 		"light_level_lux": 400,

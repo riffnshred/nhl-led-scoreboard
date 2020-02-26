@@ -97,6 +97,9 @@ class GameScoreboard(object):
         return ('{0.away_team_name} ({0.away_score}) VS '
                 '{0.home_team_name} ({0.home_score})').format(self)
 
+    def __repr__(self):
+        return self.__str__()
+
 
 def overview(game_id):
     data = nhl_api.data.get_overview(game_id)
