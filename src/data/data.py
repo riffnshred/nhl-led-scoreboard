@@ -3,9 +3,8 @@ from time import sleep
 import debug
 import nhl_api
 from data.status import Status
-from data.scoreboard import Scoreboard
 
-NETWORK_RETRY_SLEEP_TIME = 2
+NETWORK_RETRY_SLEEP_TIME = 0.5
 
 
 def filter_list_of_games(games, teams):

@@ -1,7 +1,5 @@
 """
     Shows list of games.
-    TODO:
-        Make sliding animation.
 """
 from time import sleep
 from utils import center_obj

@@ -3,9 +3,14 @@ from time import sleep
 from datetime import datetime
 import debug
 from boards.boards import Boards
+from boards.clock import Clock
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from utils import get_file
+
+
+class Refreshing_data(object):
+    pass
 
 
 class MainRenderer:
@@ -18,7 +23,7 @@ class MainRenderer:
 
     def render(self):
         while self.data.network_issues:
-            self.matrix.network_issue_indicator()
+            Clock(self.data, self.matrix, duration=60)
             self.data.refresh_data()
 
         while True:
@@ -44,9 +49,12 @@ class MainRenderer:
                         self.__render_game_day()
 
             except AttributeError as e:
-                print(e)
+                debug.log("ERROR WHILE RENDERING: "+e)
+                debug.log("Refreshing data in a minute")
+                self.boards.fallback(self.data, self.matrix)
                 self.data.refresh_data()
                 self.status = self.data.status
+
 
     def __render_offday(self):
         while True:
@@ -99,6 +107,7 @@ class MainRenderer:
                 self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.__render_pregame(self.scoreboard)
 
+
     def __render_pregame(self, scoreboard):
         debug.info("Showing Main Event")
         self.matrix.clear()
@@ -129,7 +138,7 @@ class MainRenderer:
         else:
             sleep(self.refresh_rate)
         self.data.needs_refresh = True
-        
+
 
     def check_new_goals(self):
         debug.log("Check new goal")

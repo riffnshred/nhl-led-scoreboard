@@ -2,19 +2,10 @@ from data.team import Team
 from data.periods import Periods
 from utils import convert_time
 
-def get_time_format(config):
-    # Set the time format to 12h.
-    time_format = "%I:%M"
-
-    # Check if the time format is different in the config. if so, change it.
-    if config.time_format == "24h":
-        time_format = "%H:%M"
-
-    return time_format
 
 class Scoreboard:
     def __init__(self, overview, teams_info, config):
-        time_format = get_time_format(config)
+        time_format = config.time_format
         linescore = overview.linescore
         away = linescore.teams.away
         home = linescore.teams.home
