@@ -56,8 +56,7 @@ class ScoreboardConfig:
         self.layout = Layout(self.__get_layout(width, height))
 
         # load colors
-        json = self.__get_colors("teams")
-        self.team_colors = Color(json)
+        self.team_colors = Color(self.__get_colors("teams"))
 
     def read_json(self, filename):
         # Find and return a json file
@@ -79,7 +78,7 @@ class ScoreboardConfig:
 
     def __get_colors(self, base_filename):
         try:
-            filename = "colors/teams.json".format(base_filename)
+            filename = "colors/{}.json".format(base_filename)
             reference_colors = self.read_json(filename)
             return reference_colors
         except:
