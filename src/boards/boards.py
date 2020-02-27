@@ -85,4 +85,5 @@ class Boards:
     def team_summary(self, data, matrix):
         TeamSummary(data, matrix).render()
 
-        
+    def clock(self, data, matrix):
+        Clock(data, matrix)    

@@ -71,7 +71,7 @@
 			"reboot_override_process": "",
 			"poweroff_duration": 10,
 			"poweroff_override_process": "",
-			"state_triggered1": "team_summary"
+			"state_triggered1": "clock"
 		}
 	}
 	
