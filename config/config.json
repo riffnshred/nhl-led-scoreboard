@@ -58,7 +58,7 @@
 			"bonnet": true,
 			"pin": 25,
 			"reboot_duration": 2,
-			"reboot_override_process": "/sbin/reboooot",
+			"reboot_override_process": "",
 			"poweroff_duration": 10,
 			"poweroff_override_process": "",
 			"state_triggered1": "team_summary"

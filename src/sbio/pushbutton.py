@@ -36,12 +36,17 @@ class PushButton(object):
             if not os.path.isfile(self.reboot_process):
                 debug.error("Reboot override process does not exist or is blank in config.json, falling back to default /sbin/reboot.  Check the config.json for errors")
                 self.reboot_process = "/sbin/reboot"
-            
+        else:
+            self.reboot_process = "/sbin/reboot"
+
         if self.poweroff_process:
             if not os.path.isfile(self.poweroff_process):
                 debug.error("Poweroff override process does not exist or is blank in config.json, falling back to default /sbin/poweroff.  Check the config.json for errors")
                 self.poweroff_process = "/sbin/poweroff"
+        else:
+            self.poweroff_process = "/sbin/poweroff"
 
+        debug.info(self.reboot_process + " <-- reboot poweroff --> " + self.poweroff_process)
         self.__press_time = None
         self.__press_count = 0
 
@@ -81,7 +86,7 @@ class PushButton(object):
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
             check_call([self.reboot_process])
         else:
-            debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop" + str(self.__press_count))
+            debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop " + str(self.__press_count))
             self.data.pb_trigger = True
 
     def on_hold(self):
