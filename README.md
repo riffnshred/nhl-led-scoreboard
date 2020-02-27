@@ -7,6 +7,11 @@ or you are curious about the development of the project, come join us by clickin
 
 [![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
 
+## Tutorials from other source (DIY websites, reddit etc...)
+>"I fallowed instructions from somewhere and I'm having issues"
+
+This project is new and is in constant evolution. Please fallow the instructions provided *here*.
+
 ## Table of Contents
 - [Features (Beta V 1.0.0)](#features--beta-v-100-)
   * [States](#states)
@@ -86,13 +91,13 @@ broadcast is different depending on where you are in relation to the game's loca
 a delay.
 
 ## Installation
+
 ### Hardware Assembly
 **IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet.
 If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the
 appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
-While writing this README page, I realized that the mlb-led-scoreboard guys made a great wiki page to cover the hardware part of the project. 
-[See the mlb-led-scoreboard wiki page.](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard/wiki)
+Please refer to the [Home page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Home) and [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need order and build your scoreboard.
 
 ### Software Installation
 #### Raspbian Buster Lite

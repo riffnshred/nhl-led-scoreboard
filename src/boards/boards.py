@@ -7,6 +7,7 @@ import debug
 from boards.scoreticker import Scoreticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
+from boards.clock import Clock
 from time import sleep
 
 
@@ -71,6 +72,9 @@ class Boards:
                 return
             else:
                 bord_index += 1
+
+    def fallback(self, data, matrix):
+        Clock(data, matrix)
 
     def scoreticker(self, data, matrix):
         Scoreticker(data, matrix).render()
