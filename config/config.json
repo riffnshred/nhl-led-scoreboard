@@ -17,19 +17,25 @@
 
 	"states":{
 		"off_day": [
-			"standings"
+			"clock",
+			"standings",
+			"scoreticker",
+			"team_summary"
 		],
 		"scheduled": [
+			"clock",
+			"standings",
 			"scoreticker",
-			"team_summary",
-			"standings"
+			"team_summary"
 		],
 		"intermission": [
 			"scoreticker"
 		],
 		"post_game": [
 			"scoreticker",
-			"standings"
+			"standings",
+			"team_summary",
+			"clock"
 		]
 	},
 
@@ -39,7 +45,11 @@
 			"rotation_rate": 5
 		},
 		"standings": {
-			"preferred_standings_only": false
+			"preferred_standings_only": true
+		},
+		"clock": {
+			"duration": 60,
+			"hide_indicator": false
 		}
 	},
 

@@ -16,7 +16,7 @@ class ScoreboardConfig:
 
         # Preferences
         self.end_of_day = json["preferences"]["end_of_day"]
-        self.time_format = json["preferences"]["time_format"]
+        self.time_format = self.__get_time_format(json["preferences"]["time_format"])
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.standing_type = json["preferences"]["standing_type"]
@@ -62,12 +62,15 @@ class ScoreboardConfig:
         # Standings
         self.preferred_standings_only = json["boards"]["standings"]["preferred_standings_only"]
 
+        # Clock
+        self.clock_board_duration = json["boards"]["clock"]["duration"]
+        self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
+
         # Element's led coordinates
         self.layout = Layout(self.__get_layout(width, height))
 
         # load colors
-        json = self.__get_colors("teams")
-        self.team_colors = Color(json)
+        self.team_colors = Color(self.__get_colors("teams"))
 
     def read_json(self, filename):
         # Find and return a json file
@@ -89,7 +92,7 @@ class ScoreboardConfig:
 
     def __get_colors(self, base_filename):
         try:
-            filename = "colors/teams.json".format(base_filename)
+            filename = "colors/{}.json".format(base_filename)
             reference_colors = self.read_json(filename)
             return reference_colors
         except:
@@ -105,3 +108,13 @@ class ScoreboardConfig:
             sys.exit(1)
 
         return reference_layout
+
+    def __get_time_format(self, config):
+        # Set the time format to 12h.
+        time_format = "%I:%M"
+
+        # Check if the time format is different in the config. if so, change it.
+        if config == "24h":
+            time_format = "%H:%M"
+
+        return time_format
