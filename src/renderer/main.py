@@ -142,19 +142,33 @@ class MainRenderer:
 
     def check_new_goals(self):
         debug.log("Check new goal")
-        if self.away_score < self.scoreboard.away_team.goals:
-            self.away_score = self.scoreboard.away_team.goals
-            self._draw_goal(self.scoreboard.away_team.id, self.scoreboard.away_team.name)
-        if self.home_score < self.scoreboard.home_team.goals:
-            self.home_score = self.scoreboard.home_team.goals
-            self._draw_goal(self.scoreboard.home_team.id, self.scoreboard.home_team.name)
+        pref_team_only = self.data.config.goal_anim_pref_team_only
+        away_id = self.scoreboard.away_team.id
+        away_name = self.scoreboard.away_team.name
+        away_goals = self.scoreboard.away_team.goals
+        away_score = self.away_score
+        home_id = self.scoreboard.home_team.id
+        home_name = self.scoreboard.home_team.name
+        home_goals = self.scoreboard.home_team.goals
+        home_score = self.home_score
+
+        if away_score < away_goals:
+            if away_id not in self.data.pref_teams and pref_team_only:
+                return
+            self.away_score = away_goals
+            self._draw_goal(away_id, away_name)
+        if home_score < home_goals:
+            if home_id not in self.data.pref_teams and pref_team_only:
+                return
+            self.home_score = home_goals
+            self._draw_goal(home_id, home_name)
 
     def _draw_goal(self, id, name):
         debug.info('Score by team: ' + name)
         # Set opposing team goal animation here
         filename = "assets/animations/goal_light_animation.gif"
         if id in self.data.pref_teams:
-            # Set your preferred team goal animation here
+            # Set your preferred team goal animat ion here
             filename = "assets/animations/goal_light_animation.gif"
 
         im = Image.open(get_file(filename))

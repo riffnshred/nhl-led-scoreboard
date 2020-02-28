@@ -20,6 +20,9 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
 
+        # Goal animation
+        self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
+
         # Dimmer preferences
         self.dimmer_enabled = json["dimmer"]["enabled"]
         self.dimmer_source = json["dimmer"]["source"]
