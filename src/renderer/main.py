@@ -9,10 +9,6 @@ from renderer.scoreboard import ScoreboardRenderer
 from utils import get_file
 
 
-class Refreshing_data(object):
-    pass
-
-
 class MainRenderer:
     def __init__(self, matrix, data):
         self.matrix = matrix
