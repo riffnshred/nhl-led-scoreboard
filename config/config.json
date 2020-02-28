@@ -45,7 +45,10 @@
 			"rotation_rate": 5
 		},
 		"standings": {
-			"preferred_standings_only": true
+			"preferred_standings_only": true,
+			"standing_type": "wild_card",
+			"divisions": "central",
+			"conference": "eastern"
 		},
 		"clock": {
 			"duration": 60,
