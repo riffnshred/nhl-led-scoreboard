@@ -17,73 +17,98 @@ class Boards:
         pass
 
     # Board handler for PushButton
-    def _pb_board(self, data, matrix):
-        #bord_index = 0
-        #while True:
+    def _pb_board(self, data, matrix,sleepEvent):
+        
         board = getattr(self, data.config.pushbutton_state_triggered1)
-        board(data, matrix)
-
-        #    if bord_index >= (len(data.config.boards_off_day) - 1):
-        #        return
-        #    else:
-        #        bord_index += 1
+        board(data, matrix,sleepEvent)
 
     # Board handler for Off day state
-    def _off_day(self, data, matrix):
+    def _off_day(self, data, matrix,sleepEvent):
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_off_day[bord_index])
-            board(data, matrix)
+            if data.pb_trigger:
+                debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding off_day -> " + data.config.boards_off_day[bord_index])
+                data.pb_trigger = False
+                board = getattr(self,data.config.pushbutton_state_triggered1)
+                bord_index -= 1
+    
+            board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_off_day) - 1):
                 return
             else:
-                bord_index += 1
+                if not data.pb_trigger:
+                   bord_index += 1
 
-    def _scheduled(self, data, matrix):
+    def _scheduled(self, data, matrix,sleepEvent):
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_scheduled[bord_index])
-            board(data, matrix)
+            data.curr_board = data.config.boards_scheduled[bord_index]
+            if data.pb_trigger:
+                debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding scheduled -> " + data.config.boards_scheduled[bord_index])
+                data.pb_trigger = False
+                board = getattr(self,data.config.pushbutton_state_triggered1)
+                data.curr_board = data.config.pushbutton_state_triggered1
+                bord_index -= 1
+
+            board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_scheduled) - 1):
                 return
             else:
-                bord_index += 1
+                if not data.pb_trigger:
+                   bord_index += 1
 
-    def _intermission(self, data, matrix):
+    def _intermission(self, data, matrix,sleepEvent):
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_intermission[bord_index])
-            board(data, matrix)
+            if data.pb_trigger:
+                debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding intermission -> " + data.config.boards_intermission[bord_index])
+                data.pb_trigger = False
+                board = getattr(self,data.config.pushbutton_state_triggered1)
+                bord_index -= 1
+
+            board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_intermission) - 1):
                 return
             else:
-                bord_index += 1
+                if not data.pb_trigger:
+                   bord_index += 1
 
-    def _post_game(self, data, matrix):
+    def _post_game(self, data, matrix,sleepEvent):
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_post_game[bord_index])
-            board(data, matrix)
+            if data.pb_trigger:
+                debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding post_game -> " + data.config.boards_post_game[bord_index])
+                data.pb_trigger = False
+                board = getattr(self,data.config.pushbutton_state_triggered1)
+                bord_index -= 1
+
+            board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_post_game) - 1):
                 return
             else:
-                bord_index += 1
+                if not data.pb_trigger:
+                   bord_index += 1
 
     def fallback(self, data, matrix):
-        Clock(data, matrix)
+        Clock(data, matrix,sleepEvent)
 
-    def scoreticker(self, data, matrix):
-        Scoreticker(data, matrix).render()
+    def scoreticker(self, data, matrix,sleepEvent):
+        Scoreticker(data, matrix,sleepEvent).render()
 
-    def standings(self, data, matrix):
-        Standings(data, matrix).render()
+    def standings(self, data, matrix,sleepEvent):
+        #Try making standings a thread
+        Standings(data, matrix,sleepEvent).render()
 
-    def team_summary(self, data, matrix):
-        TeamSummary(data, matrix).render()
+    def team_summary(self, data, matrix,sleepEvent):
+        TeamSummary(data, matrix,sleepEvent).render()
 
-    def clock(self, data, matrix):
-        Clock(data, matrix)    
+    def clock(self, data, matrix,sleepEvent):
+        Clock(data, matrix,sleepEvent)    

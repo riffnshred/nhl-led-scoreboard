@@ -12,7 +12,7 @@ from renderer.matrix import Matrix
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
-SCRIPT_VERSION = "1.0.0 (BETA)"
+SCRIPT_VERSION = "1.1.0 (BETA)"
 
 def run():
     # Get supplied command line arguments
@@ -35,6 +35,10 @@ def run():
 
     data = Data(config)
 
+    # Event used to sleep when rendering
+    # Allows Web API (coming in V2) and pushbutton to cancel the sleep
+    sleepEvent = threading.Event()
+
     if data.config.dimmer_enabled:
         dimmer = Dimmer(data, matrix)
         dimmerThread = threading.Thread(target=dimmer.run, args=())
@@ -42,13 +46,12 @@ def run():
         dimmerThread.start()
     
     if data.config.pushbutton_enabled:
-        pushbutton = PushButton(data,matrix)
+        pushbutton = PushButton(data,matrix,sleepEvent)
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
 
-
-    MainRenderer(matrix, data).render()
+    MainRenderer(matrix, data, sleepEvent).render()
 
 if __name__ == "__main__":
     try:

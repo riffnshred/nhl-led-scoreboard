@@ -26,7 +26,6 @@
 			"team_summary"
 		],
 		"scheduled": [
-			"clock",
 			"standings",
 			"scoreticker",
 			"team_summary"

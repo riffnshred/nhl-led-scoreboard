@@ -11,12 +11,13 @@ import random
 import glob
 
 class MainRenderer:
-    def __init__(self, matrix, data):
+    def __init__(self, matrix, data, sleepEvent):
         self.matrix = matrix
         self.data = data
         self.status = self.data.status
         self.refresh_rate = self.data.config.live_game_refresh_rate
         self.boards = Boards()
+        self.sleepEvent = sleepEvent
 
     def render(self):
         while self.data.network_issues:
@@ -61,13 +62,7 @@ class MainRenderer:
                 return
             self.data.refresh_games()
             self.data.refresh_standings()
-            if self.data.pb_trigger:
-                debug.info('PushButton triggered....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
-                self.data.pb_trigger = False
-                #Display the board from the config
-                self.boards._pb_board(self.data, self.matrix)
-            else:
-                self.boards._off_day(self.data, self.matrix)
+            self.boards._off_day(self.data, self.matrix,self.sleepEvent)
 
     def __render_game_day(self):
         debug.info("Showing Game")
@@ -76,7 +71,10 @@ class MainRenderer:
         self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
-        while True:
+        self.sleepEvent.clear()
+
+        while not self.sleepEvent.is_set():
+                
             if self.data._is_new_day():
                 debug.log('This is a new day')
                 return
@@ -90,9 +88,16 @@ class MainRenderer:
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
+            # Display the pushbutton board            
+            if self.data.pb_trigger:
+                debug.info('PushButton triggered in game day loop....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
+                self.data.pb_trigger = False
+                #Display the board from the config
+                self.boards._pb_board(self.data, self.matrix, self.sleepEvent)
+
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
-                debug.info("Game is Live")
+                debug.info("Game is Live")                    
                 self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
@@ -112,11 +117,12 @@ class MainRenderer:
 
 
     def __render_pregame(self, scoreboard):
-        debug.info("Showing Main Event")
+        debug.info("Showing Pre-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        sleep(self.refresh_rate)
-        self.boards._scheduled(self.data, self.matrix)
+        #sleep(self.refresh_rate)
+        self.sleepEvent.wait(self.refresh_rate)
+        self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
         self.data.needs_refresh = True
 
     def __render_postgame(self, scoreboard):
@@ -124,8 +130,9 @@ class MainRenderer:
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
         self.draw_end_period_indicator()
-        sleep(self.refresh_rate)
-        self.boards._post_game(self.data, self.matrix)
+        #sleep(self.refresh_rate)
+        self.sleepEvent.wait(self.refresh_rate)
+        self.boards._post_game(self.data, self.matrix,self.sleepEvent)
         self.data.needs_refresh = True
 
     def __render_live(self, scoreboard):
@@ -136,10 +143,14 @@ class MainRenderer:
             debug.info("Main event is in Intermission")
             # Show Boards for Intermission
             self.draw_end_period_indicator()
-            sleep(self.refresh_rate)
-            self.boards._intermission(self.data, self.matrix)
+            #sleep(self.refresh_rate)
+            self.sleepEvent.wait(self.refresh_rate)
+
+            self.boards._intermission(self.data, self.matrix,self.sleepEvent)
         else:
-            sleep(self.refresh_rate)
+            #sleep(self.refresh_rate)
+            self.sleepEvent.wait(self.refresh_rate)
+
         self.data.needs_refresh = True
 
 

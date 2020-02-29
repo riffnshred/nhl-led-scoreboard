@@ -7,7 +7,7 @@ from utils import center_text
 
 
 class Clock:
-    def __init__(self, data, matrix, duration=None):
+    def __init__(self, data, matrix, sleepEvent,duration=None):
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
@@ -18,25 +18,30 @@ class Clock:
         self.duration = duration
         if not self.duration:
             self.duration = data.config.clock_board_duration
+        self.sleepEvent = sleepEvent
 
-        # Initialize he clock
+        self.sleepEvent.clear()
+
+        # Initialize the clock
         self.clock_size = self.font_large.getsize(self.time.strftime(self.time_format))
         self.clock_width = self.clock_size[0]
         self.time_align = center_text(self.clock_width, 32)
 
         display_time = 0
-        while display_time < self.duration:
+        while display_time < self.duration and not self.sleepEvent.is_set():
             self.time = datetime.datetime.now().strftime(self.time_format.replace(":", " "))
             self.meridiem = datetime.datetime.now().strftime("%P")
             display_time += 1
             self.draw_clock()
-            sleep(1)
+            #sleep(1)
+            self.sleepEvent.wait(1)
 
             self.time = datetime.datetime.now().strftime(self.time_format)
             self.meridiem = datetime.datetime.now().strftime("%P")
             self.draw_clock()
             display_time += 1
-            sleep(1)
+            #sleep(1)
+            self.sleepEvent.wait(1)
 
     def draw_clock(self):
         self.clock_size = self.font_large.getsize(self.time)

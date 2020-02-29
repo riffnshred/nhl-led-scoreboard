@@ -10,7 +10,7 @@ from time import sleep
 from utils import convert_date_format, get_file
 
 class TeamSummary:
-    def __init__(self, data, matrix):
+    def __init__(self, data, matrix,sleepEvent):
         '''
             TODO:
                 Need to move the Previous/Next game info in the data section. I think loading it in the data section
@@ -22,6 +22,8 @@ class TeamSummary:
         self.matrix = matrix
         self.team_colors = data.config.team_colors
         self.layout = data.config.layout
+        self.sleepEvent = sleepEvent
+        self.sleepEvent.clear()
 
     def render(self):
         for team_id in self.preferred_teams:
@@ -63,30 +65,34 @@ class TeamSummary:
             team_logo = Image.open(get_file('assets/logos/{}.png'.format(team_abbrev)))
 
             i = 0
-            image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
-                                           im_height)
-
-            self.matrix.clear()
-            self.matrix.draw_image((0, 0), image)
-            self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
-            self.matrix.render()
-            if self.data.network_issues:
-                self.matrix.network_issue_indicator()
-            sleep(5)
-
-            # Move the image up until we hit the bottom.
-            while i > -(im_height - self.matrix.height):
-                i -= 1
+            if not self.sleepEvent.is_set():
+                image = self.draw_team_summary(stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color,
+                                            im_height)
 
                 self.matrix.clear()
-                self.matrix.draw_image((0, i), image)
+                self.matrix.draw_image((0, 0), image)
                 self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
                 self.matrix.render()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
-                sleep(0.3)
-            # Show the bottom before we change to the next table.
-            sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
+
+                # Move the image up until we hit the bottom.
+                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
+                    i -= 1
+
+                    self.matrix.clear()
+                    self.matrix.draw_image((0, i), image)
+                    self.matrix.draw_image((logo_coord["x"], logo_coord["y"]), team_logo.convert("RGB"))
+                    self.matrix.render()
+                    if self.data.network_issues:
+                        self.matrix.network_issue_indicator()
+                    #sleep(0.3)
+                    self.sleepEvent.wait(0.3)
+                # Show the bottom before we change to the next table.
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
     def draw_team_summary(self, stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color, im_height):
         image = Image.new('RGB', (self.matrix.width, im_height))

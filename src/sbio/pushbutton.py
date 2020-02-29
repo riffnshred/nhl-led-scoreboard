@@ -8,7 +8,7 @@ from subprocess import check_call
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 
 class PushButton(object):
-    def __init__(self, data, matrix):
+    def __init__(self, data, matrix, sleepEvent):
 
         # Pins available for HAT: RX, TX, 25, MOSI, MISO, SCLK, CE0, CE1, 19.
         # Pins available on bonnet: SCL, SDA, RX, TX, #25, MOSI, MISO, SCLK, CE0, CE1, #19.
@@ -17,10 +17,12 @@ class PushButton(object):
         self.data = data
         self.matrix = matrix
         self.pb_run = True
+        self.sleepEvent = sleepEvent
 
         self.trigger_board = data.config.pushbutton_state_triggered1
         self.poweroff_duration = data.config.pushbutton_poweroff_duration
         self.reboot_duration = data.config.pushbutton_reboot_duration
+        self.data.curr_board = "***Dummy Board***"
 
         # Make sure that poweroff duration is greater than reboot
         if self.poweroff_duration <= self.reboot_duration:
@@ -46,7 +48,7 @@ class PushButton(object):
         else:
             self.poweroff_process = "/sbin/poweroff"
 
-        debug.info(self.reboot_process + " <-- reboot poweroff --> " + self.poweroff_process)
+        debug.info(self.reboot_process + " <-- reboot || poweroff --> " + self.poweroff_process)
         self.__press_time = None
         self.__press_count = 0
 
@@ -75,19 +77,25 @@ class PushButton(object):
         self.__press_time = time.time()
         # Count how many times a button is pressed.  Could be used to trigger another process or board display
         self.__press_count += 1
-        debug.info("Now showing! " + str(self.__press_time))
+        #debug.info("Now showing! " + str(self.__press_time))
         
     def on_release(self):
         release_time = time.time()
         held_for = release_time - self.__press_time
-        debug.info("Released....." + str(held_for))
+        #debug.info("Released....." + str(held_for))
         if (held_for >= self.reboot_duration):
             self.__press_count = 0
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
             check_call([self.reboot_process])
         else:
-            debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop " + str(self.__press_count))
-            self.data.pb_trigger = True
+            if self.data.curr_board != self.trigger_board:
+                debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop. Currently displayed board " + self.data.curr_board)
+                self.data.pb_trigger = True
+                self.sleepEvent.set()
+            else:
+                debug.info("Trigger board " + self.trigger_board + " is the same as currently displayed board " + self.data.curr_board + " killing and going back to previous board")
+                self.sleepEvent.set()
+
 
     def on_hold(self):
         debug.info("power off process " + self.poweroff_process + " triggered after " + str(self.poweroff_duration) + " seconds")

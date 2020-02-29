@@ -45,6 +45,9 @@ class Data:
         
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
+
+        # Currently displayed board
+        self.curr_board = None
         
         # Flag to determine when to refresh data
         self.needs_refresh = True
