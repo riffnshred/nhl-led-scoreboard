@@ -18,22 +18,25 @@
 
 	"states":{
 		"off_day": [
-			"clock",
-			"standings",
+			"team_summary",
 			"scoreticker",
-			"team_summary"
+			"standings",
+			"clock"
 		],
 		"scheduled": [
-			"clock",
-			"standings",
+			"team_summary",
 			"scoreticker",
-			"team_summary"
+			"standings",
+			"clock"
 		],
 		"intermission": [
-			"scoreticker"
+			"scoreticker",
 		],
 		"post_game": [
-			"scoreticker"
+			"scoreticker",
+			"standings",
+			"team_summary",
+			"clock"
 		]
 	},
 

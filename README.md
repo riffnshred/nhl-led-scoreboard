@@ -243,6 +243,14 @@ All the data related options.
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
 | `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |                                                                                                                                                      |                                                                                                                                                          |
 
+### Goal Animations
+The goal animations can be set for both teams of just the preferred teams. MORE OPTIONS COMING SOON
+
+| Settings         | Type | Parameters      | Description      |
+|------------------|------|-----------------|------------------|
+| `pref_team_only` | Bool | `true`, `false` | self explanatory |
+
+
 ### Teams
 For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
 
