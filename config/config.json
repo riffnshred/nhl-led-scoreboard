@@ -1,14 +1,12 @@
 {
 	"debug": true,
-	"live_mode": true,
+	"live_mode": false,
 	"preferences": {
 		"time_format": "12h",
 		"end_of_day": "12:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
-			"Canadiens",
-			"Flames",
-			"Wild"
+			"Flames"
 		]
 	},
 
@@ -30,7 +28,7 @@
 			"clock"
 		],
 		"intermission": [
-			"scoreticker",
+			"scoreticker"
 		],
 		"post_game": [
 			"scoreticker",
