@@ -161,14 +161,16 @@ class Data:
                 if not self.is_pref_team_offday():
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
+                else:
+                    self.current_game_id = 0
 
                 # Remove the current game id (Main event) form the list of games.
-                #if self.config.live_mode:
-                #    game_list = []
-                #    for game in self.games:
-                #        if game.game_id == self.current_game_id:
-                #            game_list.append(game)
-                #    self.games = game_list
+                if self.config.live_mode:
+                    game_list = []
+                    for game in self.games:
+                        if game.game_id != self.current_game_id:
+                            game_list.append(game)
+                    self.games = game_list
 
                 self.network_issues = False
                 break
