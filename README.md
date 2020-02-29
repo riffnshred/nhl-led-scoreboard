@@ -228,7 +228,10 @@ All the data related options.
 | `live_game_refresh_rate` | INT    | `15`                                             | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
 | `time_format`            | String | `"12h"` or `"24h"`                               | The format in which the game start time will be displayed.                                                                                                                           |
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
-| `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |                                                                                                                                                      |                                                                                                                                                          |
+| `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |
+| `standing_type`          | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
+| `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
+| `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |                                                                                                                                                          |
 
 ### Teams
 For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
@@ -273,14 +276,11 @@ depending on the state of the scoreboard. Currently, there are only three boards
 -   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
 -   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
 
-| Boards        | Settings                   | Type   | Parameters                                       | Description                                                                                       |
-|---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| `scoreticker` | `preferred_teams_only`     | Bool   | `true`, `false`                                  | Choose between showing all the games of the day or just the ones your preferred teams are playing |
-|               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each games are shown on screen.                                                 |
-| `standings`   | `preferred_standings_only` | Bool   | `true`, `false`                                  | Choose between showing all the standings or only the the preferred division and conference.       |
-|               | `standing_type`            | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                |
-|               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                           |
-|               | `conference`               | String | `eastern`, `western`                             | Your preferred conference                                                                         |
+| Boards        | Settings                   | Type | Parameters      | Description                                                                                       |
+|---------------|----------------------------|------|-----------------|---------------------------------------------------------------------------------------------------|
+| `scoreticker` | `preferred_teams_only`     | Bool | `true`, `false` | Choose between showing all the games of the day or just the ones your preferred teams are playing |
+|               | `rotation_rate`            | INT  | `5`             | Duration at witch each games are shown on screen.                                                 |
+| `standings`   | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference.       |
 
 
 ### Dimmer
