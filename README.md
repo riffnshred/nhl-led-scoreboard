@@ -17,6 +17,18 @@ for my work?
 
 This project is new and is in constant evolution. Please fallow the instructions provided *here*.
 
+
+## Requirements (START HERE)
+You need Git to clone this repo and PIP3 for installing the scoreboard software.
+
+Since version V1.0.0 you need python 3.3 and up.
+Run these two commands in your terminal to install git and PIP3.
+```
+sudo apt-get update
+sudo apt install git python3-pip
+```
+
+
 ## Table of Contents
 - [Features (Beta V 1.0.0)](#features--beta-v-100-)
   * [States](#states)
@@ -30,7 +42,6 @@ This project is new and is in constant evolution. Please fallow the instructions
   * [Software Installation](#software-installation)
     + [Raspbian Buster Lite](#raspbian-buster-lite)
     + [Time Zones](#time-zones)
-    + [Requirements](#requirements)
     + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
 - [Testing & Optimization (IMPORTANT)](#testing---optimization--important-)
   * [Flags](#flags)
@@ -125,14 +136,6 @@ this page.
 #### Time Zones
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
-#### Requirements
-You need Git to clone this repo and PIP3 for installing the scoreboard software.
-
-Since version V 1.0.0 you need python 3.3 and up.
-```
-sudo apt-get update
-sudo apt install git python3-pip
-```
 
 #### Installing the NHL scoreboard software
 This installation process might take some time because it will install all the dependencies listed below.
