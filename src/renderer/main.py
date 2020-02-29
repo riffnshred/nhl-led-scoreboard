@@ -129,7 +129,7 @@ class MainRenderer:
         debug.info("Showing Post-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        self.draw_end_period_indicator()
+        self.draw_end_of_game_indicator()
         #sleep(self.refresh_rate)
         self.sleepEvent.wait(self.refresh_rate)
         self.boards._post_game(self.data, self.matrix,self.sleepEvent)
@@ -221,5 +221,11 @@ class MainRenderer:
     def draw_end_period_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""
         color = self.matrix.graphics.Color(0, 255, 0)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
+        self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1, color)
+
+    def draw_end_of_game_indicator(self):
+        """TODO: change the width depending how much time is left to the intermission"""
+        color = self.matrix.graphics.Color(255, 0, 0)
         self.matrix.graphics.DrawLine(self.matrix.matrix, 23, self.matrix.height - 2, 39, self.matrix.height - 2, color)
         self.matrix.graphics.DrawLine(self.matrix.matrix, 22, self.matrix.height - 1, 40, self.matrix.height - 1, color)
