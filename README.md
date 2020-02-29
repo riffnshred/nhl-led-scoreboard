@@ -77,6 +77,7 @@ The board system also allows to easily integrate new features. For example, if y
 More will come soon with playoff related features
 
 ### Goal animation
+<img  width="400" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/goal_light_animation.png">
 When ever a team in the main event score a goal, a goal light animation is played.
 Soon you will have to option to set the animation for your favorite team only or play a different animation for
 the opposing team.
@@ -86,9 +87,10 @@ The scoreboard now has a dimmer function. The scoreboard will change its brightn
 a [TSL2591](https://www.adafruit.com/product/1980) light sensor installed on your raspberry pi, you can configure the scoreboard
 to use it to adjust the brightness.
 
-### Network Indicator
-If your scoreboard has trouble communicating with the API due to poor wifi or internet connection, It will display
-a red bar at the bottom of the screen. Once the connection is back, the red bar will disappear.  
+### Indicators
+Because of its size, I programmed some indicators to display more information without filling up the screen and create an information overload issue. Please read the [Indicators](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Indicators) page in the Wiki section for more details.
+
+<img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="210" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
 
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact
