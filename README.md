@@ -141,7 +141,7 @@ Before you start installing anything, make sure your raspberry pi is set to your
 This installation process might take some time because it will install all the dependencies listed below.
 
 ```
-git clone -b beta --recursive https://github.com/riffnshred/nhl-led-scoreboard
+git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
 sudo chmod +x scripts/install.sh
 sudo ./scripts/install.sh
