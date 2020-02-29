@@ -15,6 +15,10 @@
 		"conference": "western"
 	},
 
+	"goal_animations": {
+		"pref_team_only": true
+	},
+
 	"states":{
 		"off_day": [
 			"clock",
