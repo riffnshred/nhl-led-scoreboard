@@ -51,27 +51,11 @@ meant to display detailed information.
 ## Roadmap
 
 ### V1.x
+
 Features:
 - Brainstorm playoff features (need to make board draft and work on Playoff data)
 - Off season features (Drafting)
 - News ticker
 - Events (Special dates like Draft, Trade Deadline, Season start and end.)
 - Shootout screen (Show the shootout table.)
-
-# Indicators
-## Network Issue Indicator
-When ever the scoreboard has an issue communicating with the NHL api, the scoreboard will show a red bar at the bottom of the
-matrix. If it happens the scoreboard will stay in the state it is currently in and show the latest information is has, until
-it connects again. If it happens on boot, the scoreboard will fallback to showing the clock board.
-
-## End of Period/Game
-When the period end and the intermission start, a green bar in the middle of the screen will appear.
-
-## Power Play Indicator
-If there is an Power play or an unregular number of player on the ice (5v4, 4v4, etc...), the board will show colored 
-triangle at each bottom corner. Each color represent a number of player on the ice the respected team:
-
-Green: 5 or 6 players
-Yellow: 4 players
-Red: 3 players
 
