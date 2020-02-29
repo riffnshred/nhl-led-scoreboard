@@ -163,7 +163,7 @@ class Data:
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
 
                 # Remove the current game id (Main event) form the list of games.
-                if self.data.config.live_mode:
+                if self.config.live_mode:
                     game_list = []
                     for game in self.games:
                         if game.game_id == self.current_game_id:
