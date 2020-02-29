@@ -21,7 +21,6 @@
 
 	"states":{
 		"off_day": [
-			"clock",
 			"standings",
 			"scoreticker",
 			"team_summary"
