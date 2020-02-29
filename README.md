@@ -1,11 +1,16 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
-## Join our community
+## Support and community
 We have a nice community growing every day on discord. If you need help 
 or you are curious about the development of the project, come join us by clicking on this button.
 
 [![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
+
+Want to help me turn coffee into features? Or just want to contribute
+for my work? 
+
+<a href="https://www.buymeacoffee.com/MgDa5sr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 ## Tutorials from other source (DIY websites, reddit etc...)
 >"I fallowed instructions from somewhere and I'm having issues"
