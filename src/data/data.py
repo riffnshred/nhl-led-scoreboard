@@ -163,7 +163,7 @@ class Data:
                 if self.config.live_mode:
                     game_list = []
                     for game in self.games:
-                        if game.game_id == self.current_game_id:
+                        if game.game_id != self.current_game_id:
                             game_list.append(game)
                     self.games = game_list
 
