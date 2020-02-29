@@ -102,7 +102,7 @@ class ScoreboardRenderer:
             )
         else:
             self.matrix.draw_text(
-                (0, 5), result, fill=(255, 255, 255), location="center",
+                (0, 5), result, fill=(255, 0, 0), location="center",
                 font=self.font, align="center", multiline=True
             )
 

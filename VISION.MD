@@ -51,11 +51,11 @@ meant to display detailed information.
 ## Roadmap
 
 ### V1.x
+
 Features:
 - Brainstorm playoff features (need to make board draft and work on Playoff data)
 - Off season features (Drafting)
 - News ticker
 - Events (Special dates like Draft, Trade Deadline, Season start and end.)
 - Shootout screen (Show the shootout table.)
-
 
