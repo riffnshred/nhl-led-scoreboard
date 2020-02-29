@@ -15,7 +15,7 @@ for my work?
 ## Tutorials from other source (DIY websites, reddit etc...)
 >"I fallowed instructions from somewhere and I'm having issues"
 
-This project is new and is in constant evolution. Please read the documentation and fallow the instructions provided *here*.
+This project is new and is in constant evolution. Please read the documentation and fallow the instructions provided in this repository.
 
 
 ## Requirements (START HERE)
