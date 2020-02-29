@@ -1,0 +1,67 @@
+{
+	"debug": true,
+	"live_mode": false,
+	"preferences": {
+		"time_format": "12h",
+		"end_of_day": "12:00",
+		"live_game_refresh_rate": 15,
+		"teams": [
+			"Flames"
+		]
+	},
+
+	"goal_animations": {
+		"pref_team_only": true
+	},
+
+	"states":{
+		"off_day": [
+			"team_summary",
+			"scoreticker",
+			"standings",
+			"clock"
+		],
+		"scheduled": [
+			"team_summary",
+			"scoreticker",
+			"standings",
+			"clock"
+		],
+		"intermission": [
+			"scoreticker"
+		],
+		"post_game": [
+			"scoreticker",
+			"standings",
+			"team_summary",
+			"clock"
+		]
+	},
+
+	"boards": {
+		"scoreticker": {
+			"preferred_teams_only": false,
+			"rotation_rate": 5
+		},
+		"standings": {
+			"preferred_standings_only": true,
+			"standing_type": "wild_card",
+			"divisions": "central",
+			"conference": "eastern"
+		},
+		"clock": {
+			"duration": 60,
+			"hide_indicator": false
+		}
+	},
+
+	"dimmer": {
+		"enabled": true,
+		"source": "software",
+		"frequency": 5,
+		"light_level_lux": 400,
+		"mode": "always",
+		"sunset_brightness": 5,
+		"sunrise_brightness": 40
+	}
+}

@@ -1,0 +1,49 @@
+{
+	"debug": true,
+	"live_mode": true,
+	"preferences": {
+		"live_game_refresh_rate": 15,
+		"end_of_day": "12:00",
+		"teams": [
+			"Canadiens",
+			"Blackhawks",
+			"Avalanche"
+		],
+		"standing_type": "conference",
+		"divisions": "central",
+		"conference": "eastern",
+			"dimmer": {
+				"source": "software",
+				"frequency": 5,
+				"light_level_lux": 400,
+				"mode": "always",
+				"sunset_brightness": 10,
+				"sunrise_brightness": 60
+			}
+	},
+	"boards": {
+		"off_day": [
+			"scoreticker",
+			"team_summary",
+			"standings"
+		],
+		"scheduled": [
+			"scoreticker",
+			"team_summary",
+			"standings"
+		],
+		"intermission": [
+			"scoreticker"
+		],
+		"post_game": [
+			"scoreticker"
+		],
+		"scoreticker": {
+			"preferred_teams_only": false,
+			"rotation_rate": 5
+		},
+		"standings": {
+			"preferred_standings_only": false
+		}
+	}
+}
