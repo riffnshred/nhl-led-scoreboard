@@ -51,12 +51,24 @@ class ScoreboardRenderer:
         start_time = self.scoreboard.start_time
 
         # Draw the text on the Data image.
-        self.matrix.draw_text((0, -1), 'TODAY', font=self.font)
-        self.matrix.draw_text(
-            (0, 5), start_time, fill=(255, 255, 255),
-            font=self.font, align=["center"], multiline=True
+        self.matrix.draw_text_layout(
+          self.layout.scheduled_date, 
+          'TODAY', 
+          font=self.font
         )
-        self.matrix.draw_text((0, 13), 'VS', font=self.font_large)
+        self.matrix.draw_text_layout(
+          self.layout.scheduled_time, 
+          start_time, 
+          fill=(255, 255, 255),
+          font=self.font, 
+          multiline=True
+        )
+        self.matrix.draw_text_layout(
+          self.layout.vs, 
+          'VS', 
+          font=self.font_large
+        )
+
         self.matrix.render()
 
     def draw_live(self):
@@ -67,20 +79,25 @@ class ScoreboardRenderer:
         SOG = '{}-{}'.format(self.scoreboard.away_team.shot_on_goal, self.scoreboard.home_team.shot_on_goal)
 
         # Draw the info
-        self.matrix.draw_text(
-            (0, -1), period, fill=(255, 255, 255),
-            font=self.font, align="center", multiline=True
+        self.matrix.draw_text_layout(
+            self.layout.period,
+            period, 
+            fill=(255, 255, 255),
+            font=self.font, 
+            multiline=True
         )
-        self.matrix.draw_text(
-            (0, 5), clock, fill=(255, 255, 255),
-            font=self.font, align="center", multiline=True
+        self.matrix.draw_text_layout(
+            self.layout.clock,
+            clock, 
+            fill=(255, 255, 255),
+            font=self.font,
+            multiline=True
         )
-        self.matrix.draw_text(
-            self.layout.score.position, 
+        self.matrix.draw_text_layout(
+            self.layout.score,
             score,
             fill=(255, 255, 255),
             font=self.font_large,
-            align=self.layout.score.align,
             multiline=True
         )
 
@@ -97,12 +114,11 @@ class ScoreboardRenderer:
         date = convert_date_format(self.scoreboard.date)
 
         # Draw the info
-        self.matrix.draw_text(
-            self.layout.time.position, 
+        self.matrix.draw_text_layout(
+            self.layout.scheduled_date, 
             date, 
             fill=(255, 255, 255),
-            font=self.font, 
-            align=self.layout.time.align, 
+            font=self.font,
             multiline=True
         )
 
@@ -110,21 +126,19 @@ class ScoreboardRenderer:
         if self.scoreboard.periods.number > 3:
             end_text = "F/{}".format(period)
 
-        self.matrix.draw_text(
-            self.layout.period.position, 
+        self.matrix.draw_text_layout(
+            self.layout.period, 
             end_text, 
             fill=(255, 255, 255),
-            font=self.font, 
-            align=self.layout.period.align, 
+            font=self.font,
             multiline=True
         )
 
-        self.matrix.draw_text(
-            self.layout.score.position, 
+        self.matrix.draw_text_layout(
+            self.layout.score, 
             score,
             fill=(255, 255, 255),
             font=self.font_large,
-            align=self.layout.score.align,
             multiline=True
         )
 

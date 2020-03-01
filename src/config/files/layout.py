@@ -7,9 +7,10 @@ class LayoutConfig:
 
   def get_board_layout(self, board):
     layouts = self.config.data
-    layout = None
+    layout = self.config.data._default.__copy__()
 
     if (board in layouts):
+
       layout = layouts[board].__copy__()
 
     return layout
@@ -20,7 +21,7 @@ class LayoutConfig:
     logos = self.logo_config.data[board].logos
     if (team in logos):
       logo.__merge__(logos[team])
-      if (gameLocation != None & gameLocation in logos[team]):
+      if (gameLocation != None and gameLocation in logos[team]):
         logo.__merge__(logos[team][gameLocation])
     
     return logo

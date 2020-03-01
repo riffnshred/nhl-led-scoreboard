@@ -6,9 +6,7 @@
 		"end_of_day": "4:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
-			"Canadiens",
-			"Flames",
-			"Avalanche"
+			"Panthers"
 		],
 		"standing_type": "conference",
 		"divisions": "central",

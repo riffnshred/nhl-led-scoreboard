@@ -1,4 +1,8 @@
 {
+  "_default": {
+    "position": [0, 0],
+    "align": "left-top"
+  },
   "team_summary": {
     "info": {
       "position": ["0%", "0%"]
@@ -16,17 +20,35 @@
       "position": [["50%", -15], 0],
       "align": "right"
     },
-    "score": {
-      "position": ["50%", "50%"],
-      "align": "center-center"
+    "vs": {
+      "position": ["50%", "45%"],
+      "align": "center-top"
     },
-    "time": {
+    "score": {
+      "position": ["50%", "45%"],
+      "align": "center-top"
+    },
+    "scheduled_date": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "scheduled_time": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "clock": {
       "position": ["50%", 0],
       "align": "center-top"
     },
     "period": {
       "position": ["50%", 6],
       "align": "center-top"
+    }
+  },
+  "scoreticker": {
+    "indicator_dots": {
+      "position": ["50%", ["100%", -1]],
+      "align": "center"
     }
   }
 }

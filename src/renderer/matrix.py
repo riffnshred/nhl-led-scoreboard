@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw
 from rgbmatrix import graphics
+import math
 
 class Matrix:
   def __init__(self, matrix):
@@ -25,16 +26,9 @@ class Matrix:
     self.brightness = brightness
     self.matrix.brightness = self.brightness
 
-  def draw_text(self, position, text, font, fill=None,
-          align="left", multiline=False):
-    x, y = position
-
-    if (multiline):
-      size = self.draw.multiline_textsize(text, font)
-    else:
-      size = self.draw.textsize(text, font)
-
+  def align_position(self, align, position, size):
     align = align.split("-")
+    x, y = position
 
     if (align[0] == "center"):
       x -= size[0] / 2
@@ -47,38 +41,82 @@ class Matrix:
       elif (align[1] == "bottom"):
         y -= size[1]
 
+    if x % 2 == 0:
+      x = math.ceil(x)
+    else:
+      x = math.floor(x)
+    
+    return (x, round(y))
+
+  def draw_text(self, position, text, font, fill=None, align="left", multiline=False):
+    if (multiline):
+      size = self.draw.multiline_textsize(text, font)
+    else:
+      size = self.draw.textsize(text, font)
+
+    size = (size[0] - 1, size[1] - 1)
+
+    x, y = self.align_position(align, position, size)
+
     if (multiline):
       self.draw.multiline_text(
-        (round(x), round(y) - 1), 
-        text, fill=fill, font=font,
-        align=align[0]
+        (round(x) + 1, round(y) - 1), 
+        text, 
+        fill=fill, 
+        font=font,
+        align=align.split("-")[0]
       )
     else:
-      self.draw.text((round(x), round(y) - 1), text, fill=fill, font=font)
+      self.draw.text(
+        (round(x) + 1, round(y) - 1), 
+        text, 
+        fill=fill, 
+        font=font
+      )
 
   def draw_image(self, position, image, align="left"):
-    x, y = position
-
-    align = align.split("-")
-
-    if (align[0] == "center"):
-      x -= image.size[0] / 2
-    elif (align[0] == "right"):
-      x -= image.size[0]
-
-    if (len(align) > 1):
-      if (align[1] == "center"):
-        y -= size[1] / 2
-      elif (align[1] == "bottom"):
-        y -= size[1]
+    position = self.align_position(align, position, image.size)
 
     try:
-      self.image.paste(image, (round(x), round(y)), image)
+      self.image.paste(image, position, image)
     except:
-      self.image.paste(image, (round(x), round(y)))
+      self.image.paste(image, position)
 
-  def set_pixel(self, position, color):
-    self.pixels[position] = color
+  def draw_pixel(self, position, color):
+    try:
+      self.pixels[position] = color
+    except:
+      print(position, "out of range!")
+
+  def draw_pixels(self, position, pixels, size, align="left"):
+    x, y = self.align_position(align, position, size)
+
+    for pixel in pixels:
+      self.draw_pixel(
+        (
+          pixel.position[0] + x,
+          pixel.position[1] + y,
+        ),
+        pixel.color
+      )
+
+  def draw_text_layout(self, layout, text, font, fill=None, align="left", multiline=False):
+    self.draw_text(
+      layout.position,
+      text,
+      fill=fill,
+      font=font,
+      align=layout.align,
+      multiline=multiline
+    )
+
+  def draw_pixels_layout(self, layout, pixels, size):
+    self.draw_pixels(
+      layout.position,
+      pixels,
+      size,
+      layout.align
+    )
 
   def render(self):
     if (self.use_canvas):
@@ -93,3 +131,8 @@ class Matrix:
   def network_issue_indicator(self):
     red = self.graphics.Color(255, 0, 0)
     self.graphics.DrawLine(self.matrix, 0, self.matrix.height-1, self.matrix.width, self.matrix.height-1, red)
+
+class MatrixPixels:
+  def __init__(self, position, color):
+    self.position = position
+    self.color = color

@@ -43,9 +43,11 @@ class JSONData:
       return value
     elif (isinstance(value, str) and value.endswith('%')):
       if (dimension is None):
-        return float(value[:-1]) / 100.0
+        # Convert to percent (0 - 1)
+        return float(value[:-1]) / 100.0 - 1
       else:
-        return round((float(value[:-1]) / 100.0) * dimension)
+        # Convert to pixels taking into account dimension (width or height)
+        return round((float(value[:-1]) / 100.0) * dimension) - 1
     elif (isinstance(value, list)):
       return sum([self.parse_attr_value(x, dimension) for x in value])
 
