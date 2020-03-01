@@ -2,17 +2,6 @@
 	"debug": true,
 	"live_mode": false,
 	"preferences": {
-<<<<<<< HEAD
-		"time_format": "24h",
-		"end_of_day": "4:00",
-		"live_game_refresh_rate": 15,
-		"teams": [
-			"Panthers"
-		],
-		"standing_type": "conference",
-		"divisions": "central",
-		"conference": "eastern"
-=======
 		"time_format": "12h",
 		"end_of_day": "12:00",
 		"live_game_refresh_rate": 15,
@@ -23,19 +12,14 @@
 
 	"goal_animations": {
 		"pref_team_only": true
->>>>>>> riff/dev
 	},
 
 	"states":{
 		"off_day": [
-<<<<<<< HEAD
-			"scoreticker"
-=======
 			"team_summary",
 			"scoreticker",
 			"standings",
 			"clock"
->>>>>>> riff/dev
 		],
 		"scheduled": [
 			"team_summary",
