@@ -27,10 +27,13 @@ class Boards:
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_off_day[bord_index])
+            data.curr_board = data.config.boards_scheduled[bord_index]
+
             if data.pb_trigger:
                 debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding off_day -> " + data.config.boards_off_day[bord_index])
                 data.pb_trigger = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
+                data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
     
             board(data, matrix,sleepEvent)
@@ -65,10 +68,13 @@ class Boards:
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_intermission[bord_index])
+            data.curr_board = data.config.boards_scheduled[bord_index]
+
             if data.pb_trigger:
                 debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding intermission -> " + data.config.boards_intermission[bord_index])
                 data.pb_trigger = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
+                data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
 
             board(data, matrix,sleepEvent)
@@ -83,10 +89,13 @@ class Boards:
         bord_index = 0
         while True:
             board = getattr(self, data.config.boards_post_game[bord_index])
+            data.curr_board = data.config.boards_post_game[bord_index]
+
             if data.pb_trigger:
                 debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding post_game -> " + data.config.boards_post_game[bord_index])
                 data.pb_trigger = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
+                data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
 
             board(data, matrix,sleepEvent)

@@ -69,7 +69,7 @@
 			"enabled": true,
 			"bonnet": true,
 			"pin": 25,
-			"reboot_duration": 2,
+			"reboot_duration": 1,
 			"reboot_override_process": "",
 			"poweroff_duration": 10,
 			"poweroff_override_process": "",

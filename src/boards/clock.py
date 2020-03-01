@@ -18,8 +18,8 @@ class Clock:
         self.duration = duration
         if not self.duration:
             self.duration = data.config.clock_board_duration
-        self.sleepEvent = sleepEvent
 
+        self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
 
         # Initialize the clock

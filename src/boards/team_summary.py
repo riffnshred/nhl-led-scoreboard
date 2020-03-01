@@ -22,6 +22,7 @@ class TeamSummary:
         self.matrix = matrix
         self.team_colors = data.config.team_colors
         self.layout = data.config.layout
+        
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
 

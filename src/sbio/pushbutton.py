@@ -1,3 +1,4 @@
+# Version 1.0 - initial version 03/01/20
 import debug
 import time
 import os
@@ -6,19 +7,25 @@ from signal import pause
 from subprocess import check_call
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
+REBOOT_DEFAULT = 2
+AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock"]
 
 class PushButton(object):
     def __init__(self, data, matrix, sleepEvent):
 
         # Pins available for HAT: RX, TX, 25, MOSI, MISO, SCLK, CE0, CE1, 19.
         # Pins available on bonnet: SCL, SDA, RX, TX, #25, MOSI, MISO, SCLK, CE0, CE1, #19.
-        # GPIOZero pin numbering: 14,15,10,9,11,19,25,8,7 (bonnet) HAT adds 2,3
+        # GPIOZero pin numbering: 7,8,9,10,11,14,15,19,25 HAT , bonnet adds 2,3
         
         self.data = data
         self.matrix = matrix
         self.pb_run = True
         self.sleepEvent = sleepEvent
 
+        #Test the state_triggered1 to make sure that the board exists, if not, default to clock
+        if data.config.pushbutton_state_triggered1 not in AVAIL_BOARDS:
+            debug.error("Your preferred board is not one of the available boards.  Defaulting to clock.  Please change your config to select one of " + str(AVAIL_BOARDS))
+            data.config.pushbutton_state_triggered1 = "clock"
         self.trigger_board = data.config.pushbutton_state_triggered1
         self.poweroff_duration = data.config.pushbutton_poweroff_duration
         self.reboot_duration = data.config.pushbutton_reboot_duration
@@ -30,6 +37,11 @@ class PushButton(object):
             debug.error("Power off duration (" + str(self.poweroff_duration) +  "s) is less than reboot duration (" +str(self.reboot_duration) + "s), values have been swapped, please change config for next run")
             self.reboot_duration = data.config.pushbutton_poweroff_duration
             self.poweroff_duration = data.config.pushbutton_reboot_duration
+        
+        # Make sure reboot suration is not less than REBOOT_DEFAULT seconds 
+        if self.reboot_duration < REBOOT_DEFAULT:
+            debug.error("Reboot duration (" + str(self.reboot_duration) +  "s) is less than minimum of " + str(REBOOT_DEFAULT) + "s , please change config for next run")
+            self.reboot_duration = REBOOT_DEFAULT
 
         self.reboot_process = data.config.pushbutton_reboot_override_process
         self.poweroff_process = data.config.pushbutton_poweroff_override_process

@@ -26,7 +26,11 @@ git reset --hard
 git fetch origin --prune
 git pull
 sudo pip3 install requests 
+# For dimmer
 sudo pip3 install geocoder python_tsl2591 ephem
+
+# For push button
+sudo apt install python3-gpiozero
 
 make
 echo "If you didn't see any errors above, everything should be installed!"
