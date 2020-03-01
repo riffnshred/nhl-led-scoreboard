@@ -30,7 +30,7 @@ sudo apt install git python3-pip
 
 
 ## Table of Contents
-- [Features (Beta V 1.0.0)](#features--beta-v-100-)
+- [Features](#features)
   * [States](#states)
   * [New Board System](#new-board-system)
   * [Goal animation](#goal-animation)
@@ -43,9 +43,9 @@ sudo apt install git python3-pip
     + [Raspbian Buster Lite](#raspbian-buster-lite)
     + [Time Zones](#time-zones)
     + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
-- [Testing & Optimization (IMPORTANT)](#testing-and-optimization--important-)
+- [Testing and Optimization](#testing-and-optimization)
   * [Flags](#flags)
-  * [Best Performance (Almost zero flicker)](#best-performance--almost-zero-flicker-)
+  * [Best Performance](#best-performance)
 - [Configuration](#configuration)
   * [Modes](#modes)
   * [Preferences](#preferences)
@@ -54,14 +54,14 @@ sudo apt install git python3-pip
   * [Boards](#boards)
   * [Dimmer](#dimmer-1)
 - [Usage](#usage)
-  * [Method #1 Using Supervisor (auto mode)](#method--1-using-supervisor--auto-mode-)
-  * [Method #2 Using Terminal Multiplexer (Hands on method)](#method--2-using-terminal-multiplexer--hands-on-method-)
-- [Shout-out (Credit)](#shout-out--credit-)
+  * [Method 1 Using Supervisor](#method-1-using-supervisor)
+  * [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
+- [Shout-out](#shout-out)
 - [Licensing](#licensing)
   
 
 
-## Features (Beta V 1.0.0)
+## Features
 
 ### States
 Depending on the situation, the scoreboard will operate in a different state. For example, If your team is off today, the scoreboard will be in the "Offday" State. This allows showing specific boards (see Boards) depending on the state of the unit.
@@ -151,7 +151,7 @@ sudo ./scripts/install.sh
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 
-## Testing and Optimization (IMPORTANT)
+## Testing and Optimization
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get too excited just yet.
@@ -210,7 +210,7 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 --led-multiplexing        Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)
 ```
 
-### Best Performance (Almost zero flicker)
+### Best Performance
 Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 -   Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
@@ -338,7 +338,7 @@ python script stopped.
 There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
 board automatically (and even restart in case of a crash).
 
-### Method #1 Using Supervisor (auto mode)
+### Method 1 Using Supervisor
 ![supervisor](assets/images/supervisor.PNG)
 
 [Supervisor](http://supervisord.org/) is a Process Control System. Once installed and configured it will run the scoreboard for you and restart it
@@ -391,7 +391,7 @@ You should be up and running now. From the supervison dashboard, you can control
 To troubleshoot the scoreboard using supervision, you can click on the name of the process to see the latest log of the scoreboard. This is really useful to know what the scoreboard
 is doing in case of a problem.
 
-### Method #2 Using Terminal Multiplexer (Hands on method)
+### Method 2 Using Terminal Multiplexer
 To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/).
 This allows you to run the scoreboard manually in a terminal and 
 To install Screen, run the fallowing in your terminal.
@@ -411,7 +411,7 @@ To go back and stop the scoreboard, open your terminal again and ssh to your Pi.
 This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
 
 
-## Shout-out (Credit)
+## Shout-out
 
 First, these two for making this repo top notch and already working on future versions:
 [joshkay](https://github.com/joshkay)
