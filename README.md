@@ -141,7 +141,7 @@ Before you start installing anything, make sure your raspberry pi is set to your
 This installation process might take some time because it will install all the dependencies listed below.
 
 ```
-git clone -b beta --recursive https://github.com/riffnshred/nhl-led-scoreboard
+git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
 sudo chmod +x scripts/install.sh
 sudo ./scripts/install.sh
@@ -412,6 +412,12 @@ This is useful if the scoreboard stop working for some reason, you can find out 
 
 
 ## Shout-out (Credit)
+
+First, these two for making this repo top notch and already working on future versions:
+[joshkay](https://github.com/joshkay)
+[falkyre](https://github.com/falkyre)
+
+
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
