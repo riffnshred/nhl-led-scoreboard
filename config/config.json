@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"live_mode": false,
+	"live_mode": true,
 	"preferences": {
 		"time_format": "12h",
 		"end_of_day": "12:00",
