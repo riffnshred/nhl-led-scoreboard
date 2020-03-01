@@ -5,10 +5,10 @@
   },
   "team_summary": {
     "info": {
-      "position": ["0%", "0%"]
+      "position": ["0%", 0]
     },
     "logo": {
-      "position": ["45%", "0%"]
+      "position": ["50%", 0]
     }
   },
   "scoreboard": {

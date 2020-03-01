@@ -8,14 +8,21 @@ class ConfigFile:
     self.load()
 
   def load(self):
-    with open(self.path) as f:
-      self.json = json.load(f)
+    try:
+      with open(self.path) as f:
+        self.json = json.load(f)
 
-    self.data = JSONData(self.json, self.size)
+      self.data = JSONData(self.json, self.size)
+    except:
+      print('Config file {} not found!'.format(self.path))
 
   def save(self):
-      with open(self.path, 'w') as f:
-        json.dump(self.json, f)
+    with open(self.path, 'w') as f:
+      json.dump(self.json, f)
+
+  def combine(self, file):
+    if (hasattr(self, 'data') and hasattr(file, 'data')):
+      self.data.__merge_nested__(file.data)
 
 class JSONData:
   '''The recursive class for building and representing objects with.'''
@@ -44,10 +51,10 @@ class JSONData:
     elif (isinstance(value, str) and value.endswith('%')):
       if (dimension is None):
         # Convert to percent (0 - 1)
-        return float(value[:-1]) / 100.0 - 1
+        return float(value[:-1]) / 100.0
       else:
         # Convert to pixels taking into account dimension (width or height)
-        return round((float(value[:-1]) / 100.0) * dimension) - 1
+        return round((float(value[:-1]) / 100.0) * (dimension - 1))
     elif (isinstance(value, list)):
       return sum([self.parse_attr_value(x, dimension) for x in value])
 
@@ -70,7 +77,17 @@ class JSONData:
     return '{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
       (k, v) in self.__dict__.items()))
 
-  def __merge__(self, obj):
+  def __merge__(self, obj, overwrite=False):
     for k, v in obj:
-      if (not hasattr(self, k)):
+      if (overwrite or not hasattr(self, k)):
+        setattr(self, k, v)
+
+  def __merge_nested__(self, obj, overwrite=False):
+    for k, v in obj:
+      if (isinstance(v, JSONData)):
+        if (hasattr(self, k)):
+          getattr(self, k).__merge_nested__(v)
+        else:
+          setattr(self, k, v.__copy__())
+      else:
         setattr(self, k, v)

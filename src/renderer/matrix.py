@@ -110,6 +110,14 @@ class Matrix:
       multiline=multiline
     )
 
+  def draw_image_layout(self, layout, image, offset=(0, 0)):
+    self.draw_image(
+      (layout.position[0] + offset[0],
+      layout.position[1] + offset[1]),
+      image,
+      layout.align
+    )
+
   def draw_pixels_layout(self, layout, pixels, size):
     self.draw_pixels(
       layout.position,

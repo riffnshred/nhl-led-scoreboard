@@ -56,11 +56,8 @@ class ScoreboardConfig:
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
 
-        # Element's led coordinates
-        self.layout = Layout(self.__get_config(
-            "layout/{}x{}_config".format(size[0], size[1]),
-            "Invalid matrix dimensions provided or missing resolution config file (64x32_config.json). This software currently support 64x32 matrix board only.\nIf you would like to see new dimensions supported, please file an issue on GitHub!"
-        ))
+        # Fonts
+        self.layout = Layout()
 
         # load colors 
         self.team_colors = Color(self.__get_config(
