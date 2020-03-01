@@ -412,6 +412,12 @@ This is useful if the scoreboard stop working for some reason, you can find out 
 
 
 ## Shout-out (Credit)
+
+First, these two for making this repo top notch and already working on future versions:
+[joshkay](https://github.com/joshkay)
+[falkyre](https://github.com/falkyre)
+
+
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
 
