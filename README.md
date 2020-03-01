@@ -346,7 +346,7 @@ in case of a crash. What's even better is that you can also control the board fr
 
 To install Supervisor, run this installation command in your terminal.
 ```
-apt-get install supervisor
+sudo apt-get install supervisor
 ```
 
 Once the process done, open the supervisor config file,
