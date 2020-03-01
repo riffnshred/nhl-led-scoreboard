@@ -43,7 +43,7 @@ sudo apt install git python3-pip
     + [Raspbian Buster Lite](#raspbian-buster-lite)
     + [Time Zones](#time-zones)
     + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
-- [Testing & Optimization (IMPORTANT)](#testing---optimization--important-)
+- [Testing & Optimization (IMPORTANT)](#testing-and-optimization--important-)
   * [Flags](#flags)
   * [Best Performance (Almost zero flicker)](#best-performance--almost-zero-flicker-)
 - [Configuration](#configuration)
@@ -151,7 +151,7 @@ sudo ./scripts/install.sh
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 
-## Testing & Optimization (IMPORTANT)
+## Testing and Optimization (IMPORTANT)
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 
 
 If you just bought your Led matrix and want to run this software right away, first thank you. Second, don't get too excited just yet.
