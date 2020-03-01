@@ -38,6 +38,7 @@ In order for the PushButton to work properly, you need to have a momentary and n
 
 Squid Button![squidbutton](../../assets/images/squid_button.jpg)
 Button Mounted on Panel![buttonmounted](../../assets/images/button_mounted.jpg)
+Button connected to Pin 25 on bonnet![buttonpin25](../../assets/images/bonnet_pushbutton.jpg)
 
 One side of your PushButton connects to a ground pin on your bonnet or HAT and the other connects to an open usable pin on the bonnet or HAT.  The pins available to use with the NHL Scoreboard are as follows:
 
