@@ -3,9 +3,8 @@ from time import sleep
 import debug
 import nhl_api
 from data.status import Status
-from data.scoreboard import Scoreboard
 
-NETWORK_RETRY_SLEEP_TIME = 2
+NETWORK_RETRY_SLEEP_TIME = 0.5
 
 
 def filter_list_of_games(games, teams):
@@ -159,6 +158,15 @@ class Data:
                 if not self.is_pref_team_offday():
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
+
+                    # Remove the current game id (Main event) form the list of games.
+                    if self.config.live_mode:
+                        game_list = []
+                        for game in self.games:
+                            if game.game_id != self.current_game_id:
+                                game_list.append(game)
+                        self.games = game_list
+
 
                 self.network_issues = False
                 break

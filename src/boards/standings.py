@@ -1,6 +1,3 @@
-"""
-TODO: add Wildcard.
-"""
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 from time import sleep

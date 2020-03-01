@@ -129,7 +129,7 @@ class ScoreboardRenderer:
         self.matrix.draw_text_layout(
             self.layout.period, 
             end_text, 
-            fill=(255, 255, 255),
+            fill=(255, 0, 0),
             font=self.font,
             multiline=True
         )
