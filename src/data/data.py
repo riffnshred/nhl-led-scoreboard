@@ -92,7 +92,6 @@ class Data:
 
     def __parse_today(self):
         today = datetime.today()
-        print(datetime.time(today))
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
