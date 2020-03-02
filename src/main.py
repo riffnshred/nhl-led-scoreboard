@@ -11,7 +11,7 @@ from renderer.matrix import Matrix
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
-SCRIPT_VERSION = "1.0.0 (BETA)"
+SCRIPT_VERSION = "1.0.1 (BETA)"
 
 def run():
     # Get supplied command line arguments
