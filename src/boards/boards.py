@@ -8,6 +8,7 @@ from boards.scoreticker import Scoreticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
+from boards.pbdisplay import pbDisplay
 from time import sleep
 
 
@@ -120,4 +121,7 @@ class Boards:
         TeamSummary(data, matrix,sleepEvent).render()
 
     def clock(self, data, matrix,sleepEvent):
-        Clock(data, matrix,sleepEvent)    
+        Clock(data, matrix,sleepEvent)  
+
+    def pbdisplay(self, data, matrix,sleepEvent):
+        pbDisplay(data, matrix,sleepEvent)    

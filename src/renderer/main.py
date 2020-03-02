@@ -185,12 +185,10 @@ class MainRenderer:
         opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
         
         # Set opposing team goal animation here
-        #filename = "assets/animations/goal_light_animation.gif"
         filename = random.choice(opposing_gifs)
         debug.info("Opposing animation is: " + filename)
         if id in self.data.pref_teams:
             # Set your preferred team goal animation here
-            #filename = "assets/animations/goal_light_animation.gif"
             filename = random.choice(preferred_gifs)
             debug.info("Preferred animation is: " + filename)
 

@@ -8,7 +8,7 @@ from subprocess import check_call
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 REBOOT_DEFAULT = 2
-AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock"]
+AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock","pbdisplay"]
 
 class PushButton(object):
     def __init__(self, data, matrix, sleepEvent):
@@ -45,6 +45,9 @@ class PushButton(object):
 
         self.reboot_process = data.config.pushbutton_reboot_override_process
         self.poweroff_process = data.config.pushbutton_poweroff_override_process
+        self.display_reboot = data.config.pushbutton_display_reboot
+        self.display_halt = data.config.pushbutton_display_halt
+
 
         if self.reboot_process:
             if not os.path.isfile(self.reboot_process):
@@ -89,15 +92,21 @@ class PushButton(object):
         self.__press_time = time.time()
         # Count how many times a button is pressed.  Could be used to trigger another process or board display
         self.__press_count += 1
-        #debug.info("Now showing! " + str(self.__press_time))
         
     def on_release(self):
         release_time = time.time()
         held_for = release_time - self.__press_time
-        #debug.info("Released....." + str(held_for))
+
         if (held_for >= self.reboot_duration):
             self.__press_count = 0
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
+            self.data.pb_state = "REBOOT"
+            # Call display
+            if self.display_reboot:
+                self.data.pb_trigger = True
+                self.data.config.pushbutton_state_triggered1 = "pbdisplay"
+                self.sleepEvent.set()
+            
             check_call([self.reboot_process])
         else:
             if self.data.curr_board != self.trigger_board:
@@ -111,6 +120,13 @@ class PushButton(object):
 
     def on_hold(self):
         debug.info("power off process " + self.poweroff_process + " triggered after " + str(self.poweroff_duration) + " seconds")
+        self.data.pb_state = "! HALT !"
+        # Call display
+        if self.display_halt:
+            self.data.pb_trigger = True
+            self.data.config.pushbutton_state_triggered1 = "pbdisplay"
+            self.sleepEvent.set()    
+                
         check_call([self.poweroff_process])
     
 

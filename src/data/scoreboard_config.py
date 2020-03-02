@@ -43,9 +43,11 @@ class ScoreboardConfig:
         self.pushbutton_reboot_duration = json["sbio"]["pushbutton"]["reboot_duration"]
         # Override process is used to trigger a different process other than the default.  reboot uses /sbin/reboot poweroff uses /sbin/poweroff
         self.pushbutton_reboot_override_process = json["sbio"]["pushbutton"]["reboot_override_process"]
+        self.pushbutton_display_reboot = json["sbio"]["pushbutton"]["display_reboot"]
         # Poweroff duration should be a long press (greater than 5 or 6 seconds).  This is ties to the hold_time property of a button
         self.pushbutton_poweroff_duration = json["sbio"]["pushbutton"]["poweroff_duration"]
         self.pushbutton_poweroff_override_process = json["sbio"]["pushbutton"]["poweroff_override_process"]
+        self.pushbutton_display_halt = json["sbio"]["pushbutton"]["display_halt"]
         self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
 
 

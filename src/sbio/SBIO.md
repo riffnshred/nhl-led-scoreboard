@@ -16,9 +16,9 @@
 <!-- /TOC -->
 
 ## Features
-The SBIO PushButton addition to the NHL scoreboard was created to add a physical push button to your scoreboard and have it run within the scoreboard rather than a seperate process on your Pi.  With this button, you have the ability to reboot and poweroff your Raspberry Pi as well as trigger the display of a preferred board.  The timing of the reboot command and the poweroff command are configurable.  If you don't want to do a reboot or poweroff, there are settings to override those functions to lauch whatever process you want.
+The SBIO PushButton addition to the NHL scoreboard was created to add a physical push button to your scoreboard and have it run within the scoreboard rather than a seperate process on your Pi.  With this button, you have the ability to reboot and poweroff your Raspberry Pi as well as trigger the display of a preferred board.  The timing of the reboot command and the poweroff command are configurable.  If you don't want to do a reboot or poweroff, there are settings to override those functions to lauch whatever process you want.  When a reboot command is triggered, **REBOOT** in yellow will display on your scoreboard.  When the poweroff command is triggered, **! HALT !** is displayed in red.  
 
-When you are using the button to display a preferrered board, it will injext your preferred board into the loop for the different states.  Once your preferred board is done displaying, the loop will contiunue from the board that was interrupted.
+When you are using the button to display a preferrered board, it will inject your preferred board into the loop for the different states.  Once your preferred board is done displaying, the loop will contiunue from the board that was interrupted.
 
 ## Software Requirements
 The PushButton code utilizes the [**gpiozero**](https://gpiozero.readthedocs.io/en/stable/index.html) library to access the GPIO pins on the Raspberry Pi.  This library is already installed on your Raspberry Pi if you are using Raspberry Pi Desktop image.  As the NHL Scoreboard requires a minimal image such as  Raspbian Lite or DietPi, you will need to do the following to use:
@@ -60,9 +60,11 @@ The preferences for the PushButton resides in the sbio portion of the config.jso
 			"bonnet": true,
 			"pin": 25,
 			"reboot_duration": 2,
-			"reboot_override_process": "",
+            "reboot_override_process": "",
+            "display_reboot:" true,
 			"poweroff_duration": 10,
-			"poweroff_override_process": "",
+            "poweroff_override_process": "",
+            "display_halt": true,
 			"state_triggered1": "clock"
 		}
 ```
@@ -73,8 +75,10 @@ The preferences for the PushButton resides in the sbio portion of the config.jso
 | `pin` | INT | `25` | The **gpiozero** number pin your button is connected to |
 | `reboot_duration` | INT | `2` | Number of seconds the PushButton must be held to trigger a reboot.  2 is the minimum value|
 | `reboot_override_process` | String | `""` | Process or script to use instead of the default `/sbin/reboot` command.  If this is blank or the command/process does not exist, falls back to the default|
+| `display_reboot` | Bool | true,false | Show the word **REBOOT** in yellow on scoreboard when reboot triggered|
 | `poweroff_duration` | INT | `10` | Number of seconds the PushButton must be held to trigger a poweroff.  Must be greater than `reboot_duration`.  If `reboot_duration` is higher than `poweroff_duration`, the code will swap them|
 | `poweroff_override_process` | String | `""` | Process or script to use instead of the default `/sbin/poweroff` command.  If this is blank or the command/process does not exist, falls back to the default|
+| `display_halt` | Bool | true,false | Show the word  **! HALT !** in red on scoreboard when poweroff triggered|
 | `state_triggered1` | String | `"clock"` | The board you want displayed on button press.  If this is blank falls back to the default board which is `"clock"`. Current boards available are `team_summary`,`standings`,`scoreticker` and `clock`|
 
 ## Notes for developing new display boards
@@ -110,6 +114,7 @@ For example, instead of using `sleep(5)` , it now becomes `self.sleepEvent.wait(
 ## Roadmap
 * Add extra checks for multiple short term presses to stop or minimize issue #1
 * Add a medium length duration with an option for another function
+* ~~On reboot or poweroff, display on board that reboot or poweroff is happening.~~
   
 ## ChangeLog 
 * V1.0 - Initial release March 1, 2020

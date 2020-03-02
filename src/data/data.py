@@ -46,6 +46,9 @@ class Data:
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
 
+        # For pb state,  reboot or poweroff
+        self.pb_state = None
+
         # Currently displayed board
         self.curr_board = None
         
