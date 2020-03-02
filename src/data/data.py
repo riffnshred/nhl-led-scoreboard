@@ -87,15 +87,19 @@ class Data:
         self.refresh_standings()
 
 
-
     #
     # Date
 
     def __parse_today(self):
         today = datetime.today()
+        print(datetime.time(today))
+        noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
+                                                                                day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
-        if end_of_day > datetime.now():
+        if noon < end_of_day < datetime.now() and datetime.now() > noon:
+            today += timedelta(days=1)
+        elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
         return today.year, today.month, today.day
@@ -308,7 +312,7 @@ class Data:
 
     def is_nhl_offday(self):
         try:
-            return not len(self.games)
+            return not len(self.games) and not len(self.pref_games)
         except:
             return True
 

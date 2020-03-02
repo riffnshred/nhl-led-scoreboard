@@ -25,6 +25,7 @@ class MainRenderer:
         while True:
             try:
                 debug.info('Rendering...')
+                self.data.refresh_data()
                 if self.status.is_offseason(self.data.date()):
                     # Offseason (Show offseason related stuff)
                     debug.info("It's offseason")

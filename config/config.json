@@ -3,7 +3,7 @@
 	"live_mode": false,
 	"preferences": {
 		"time_format": "12h",
-		"end_of_day": "12:00",
+		"end_of_day": "21:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
 			"Flames"
@@ -11,7 +11,7 @@
 	},
 
 	"goal_animations": {
-		"pref_team_only": true
+		"pref_team_only": false
 	},
 
 	"states":{
@@ -47,7 +47,7 @@
 			"preferred_standings_only": true,
 			"standing_type": "wild_card",
 			"divisions": "central",
-			"conference": "eastern"
+			"conference": "western"
 		},
 		"clock": {
 			"duration": 60,
@@ -62,6 +62,6 @@
 		"light_level_lux": 400,
 		"mode": "always",
 		"sunset_brightness": 5,
-		"sunrise_brightness": 40
+		"sunrise_brightness": 8
 	}
 }
