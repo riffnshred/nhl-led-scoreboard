@@ -114,6 +114,7 @@ def overview(game_id):
     # Sub level information (Details)
     plays = parsed['liveData']['plays']
     linescore = parsed['liveData']['linescore']
+    boxscore = parsed['liveData']['boxscore']
     away_score = linescore['teams']['away']['goals']
     home_score = linescore['teams']['home']['goals']
 
@@ -124,6 +125,19 @@ def overview(game_id):
     home_team_id = parsed['gameData']['teams']['home']['id']
     home_team_name = parsed['gameData']['teams']['home']['name']
     home_team_abrev = parsed['gameData']['teams']['home']['abbreviation']
+
+    # 3 stars (if any available)
+    try:
+        first_star = parsed['liveData']['decisions']['firstStar']
+        second_star = parsed['liveData']['decisions']['secondStar']
+        third_star = parsed['liveData']['decisions']['thirdStar']
+
+    except ValueError:
+        first_star = {}
+        second_star = {}
+        third_star = {}
+
+
 
 
     output = {
@@ -141,9 +155,13 @@ def overview(game_id):
         'home_team_name': home_team_name, # Home team name
         'home_team_abrev': home_team_abrev,  # Home team name abbreviation
         'linescore': linescore,  # All the linescore information (goals, sog, periods etc...)
+        'boxscore': boxscore, # All the boxscore information (players, onice, team's stats, penalty box etc...)
         'away_score': away_score, # Away team goals
         'home_score': home_score, # Home team goals
-        'plays': plays  # Dictionary of all the plays of the game.
+        'plays': plays,  # Dictionary of all the plays of the game.
+        'first_star': first_star,
+        'second_star': second_star,
+        'third_star': third_star
     }
     return output
 

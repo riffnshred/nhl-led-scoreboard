@@ -4,7 +4,7 @@ from renderer.logos import TeamLogos as LogoRenderer
 
 
 class ScoreboardRenderer:
-    def __init__(self, data, matrix, scoreboard):
+    def __init__(self, data, matrix, scoreboard, shot_on_goal=False):
         self.data = data
         self.status = data.status
         self.layout = self.data.config.layout
@@ -12,6 +12,7 @@ class ScoreboardRenderer:
         self.font_large = self.layout.font_large
         self.scoreboard = scoreboard
         self.matrix = matrix
+        self.show_sog = shot_on_goal
 
         self.home_logo_renderer = LogoRenderer(
             self.matrix,
@@ -97,7 +98,7 @@ class ScoreboardRenderer:
         )
         if self.scoreboard.periods.number > 3:
             self.matrix.draw_text(
-                (0, 5), "F/{}".format(period), fill=(255, 255, 255), location="center",
+                (0, 5), "F/{}".format(period), fill=(255, 0, 0), location="center",
                 font=self.font, align="center", multiline=True
             )
         else:
