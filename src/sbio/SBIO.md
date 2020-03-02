@@ -61,7 +61,7 @@ The preferences for the PushButton resides in the sbio portion of the config.jso
 			"pin": 25,
 			"reboot_duration": 2,
             "reboot_override_process": "",
-            "display_reboot:" true,
+            "display_reboot": true,
 			"poweroff_duration": 10,
             "poweroff_override_process": "",
             "display_halt": true,
