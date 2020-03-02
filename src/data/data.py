@@ -321,7 +321,7 @@ class Data:
             and re-initialize the overall data.
         :return:
         """
-        print("refresing data")
+        debug.log("refresing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
