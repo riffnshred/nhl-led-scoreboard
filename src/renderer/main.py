@@ -150,14 +150,14 @@ class MainRenderer:
         home_score = self.home_score
 
         if away_score < away_goals:
+            self.away_score = away_goals
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
-            self.away_score = away_goals
             self._draw_goal(away_id, away_name)
         if home_score < home_goals:
+            self.home_score = home_goals
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
-            self.home_score = home_goals
             self._draw_goal(home_id, home_name)
 
     def _draw_goal(self, id, name):
