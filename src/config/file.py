@@ -1,7 +1,7 @@
 import json
 
 class ConfigFile:
-  def __init__(self, path, size):
+  def __init__(self, path, size=None):
     self.path = path
     self.size = size
 
@@ -27,7 +27,8 @@ class ConfigFile:
 class JSONData:
   '''The recursive class for building and representing objects with.'''
   def __init__(self, obj, size):
-    self.size = size
+    if (size is not None):
+      self.size = size
 
     for k, v in obj.items():
       if isinstance(v, dict):
@@ -38,10 +39,12 @@ class JSONData:
   def parse_attr(self, key, value):
     if (isinstance(value, list)):
       if (len(value) == 2):
-        return [
+        return (
           self.parse_attr_value(value[0], self.size[0]),
           self.parse_attr_value(value[1], self.size[1])
-        ]
+        )
+      else:
+        return tuple(map(lambda x: self.parse_attr_value(x), value))
 
     return self.parse_attr_value(value)
 

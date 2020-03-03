@@ -62,8 +62,9 @@ class Matrix:
       self.draw.multiline_text(
         (round(x) + 1, round(y) - 1), 
         text, 
-        fill=fill, 
+        fill=fill,
         font=font,
+        spacing=0,
         align=align.split("-")[0]
       )
     else:
@@ -100,11 +101,11 @@ class Matrix:
         pixel.color
       )
 
-  def draw_text_layout(self, layout, text, font, fill=None, align="left", multiline=False):
+  def draw_text_layout(self, layout, text, font, align="left", multiline=False):
     self.draw_text(
       layout.position,
       text,
-      fill=fill,
+      fill=layout.color,
       font=font,
       align=layout.align,
       multiline=multiline
