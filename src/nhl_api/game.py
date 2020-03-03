@@ -135,7 +135,7 @@ def overview(game_id):
         second_star = parsed['liveData']['decisions']['secondStar']
         third_star = parsed['liveData']['decisions']['thirdStar']
 
-    except ValueError:
+    except:
         first_star = {}
         second_star = {}
         third_star = {}
