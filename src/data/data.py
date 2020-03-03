@@ -86,16 +86,18 @@ class Data:
         # Get refresh standings
         self.refresh_standings()
 
-
-
     #
     # Date
 
     def __parse_today(self):
         today = datetime.today()
+        noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
+                                                           day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
-        if end_of_day > datetime.now():
+        if noon < end_of_day < datetime.now() and datetime.now() > noon:
+            today += timedelta(days=1)
+        elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
         return today.year, today.month, today.day
@@ -135,7 +137,6 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
-
     def refresh_games(self):
         """
             Refresh the current list of games of the day.
@@ -167,7 +168,6 @@ class Data:
                                 game_list.append(game)
                         self.games = game_list
 
-
                 self.network_issues = False
                 break
 
@@ -177,6 +177,12 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
+            # except IndexError as error_message:
+            #     debug.error(error_message)
+            #     debug.info("All preferred games are Final, showing the top preferred game")
+            #     self.current_game_index = 0
+            #     self.refresh_games()
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
@@ -219,7 +225,7 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
-    def advance_to_next_game(self):
+    def _next_game(self):
         """
         TODO: Needs to be done after the V1 launch
         function to show the next game of in the "games" list.
@@ -229,13 +235,13 @@ class Data:
 
         :return:
         """
-        pass
+        self.current_game_index += 1
+        if self.current_game_index >= len(self.games):
+            self.current_game_index = 0
+            return False
 
-    def __next_game_index(self):
-        counter = self.current_game_index + 1
-        if counter >= len(self.games):
-            counter = 0
-        return counter
+        self.refresh_games()
+        return True
 
     #
     # Standings
@@ -253,6 +259,7 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
     #
     # Teams
 
@@ -296,7 +303,6 @@ class Data:
         except TypeError:
             return []
 
-
     #
     # Offdays
 
@@ -308,7 +314,7 @@ class Data:
 
     def is_nhl_offday(self):
         try:
-            return not len(self.games)
+            return not len(self.games) and not len(self.pref_games)
         except:
             return True
 
@@ -318,7 +324,7 @@ class Data:
             and re-initialize the overall data.
         :return:
         """
-        print("refresing data")
+        debug.log("refresing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 

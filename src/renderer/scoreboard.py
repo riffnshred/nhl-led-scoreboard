@@ -4,7 +4,7 @@ from renderer.logos import LogoRenderer
 
 
 class ScoreboardRenderer:
-    def __init__(self, data, matrix, scoreboard):
+    def __init__(self, data, matrix, scoreboard, shot_on_goal=False):
         self.data = data
         self.status = data.status
         self.layout = self.data.config.config.layout.get_board_layout('scoreboard')
@@ -12,6 +12,7 @@ class ScoreboardRenderer:
         self.font_large = self.data.config.layout.font_large
         self.scoreboard = scoreboard
         self.matrix = matrix
+        self.show_sog = shot_on_goal
 
         self.home_logo_renderer = LogoRenderer(
             self.matrix,
