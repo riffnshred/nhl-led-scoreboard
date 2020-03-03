@@ -16,7 +16,7 @@
 <!-- /TOC -->
 
 ## Features
-The SBIO PushButton addition to the NHL scoreboard was created to add a physical push button to your scoreboard and have it run within the scoreboard rather than a seperate process on your Pi.  With this button, you have the ability to reboot and poweroff your Raspberry Pi as well as trigger the display of a preferred board.  The timing of the reboot command and the poweroff command are configurable.  If you don't want to do a reboot or poweroff, there are settings to override those functions to lauch whatever process you want.  
+The SBIO PushButton addition to the NHL scoreboard was created to add a physical push button to your scoreboard and have it run within the scoreboard rather than a seperate process on your Pi.  With this button, you have the ability to reboot and poweroff your Raspberry Pi as well as trigger the display of a preferred board.  The timing of the reboot command and the poweroff command are configurable.  If you don't want to do a reboot or poweroff, there are settings to override those functions to lauch whatever process you want.   You can also have the single press of the button launch a process or script of your choice. 
 
 When a reboot command is triggered, **REBOOT** in green will display on your scoreboard.  
 ![reboot display](../../assets/images/reboot_display.jpg)
@@ -41,7 +41,7 @@ The library uses the BCM pin numbering scheme and the PushButton code relies on 
 ![gpiozero pins](../../assets/images/gpiozero.png)
 
 ## Hardware
-In order for the PushButton to work properly, you need to have a momentary and non-latching PushButton.  You can get these buttons from any shop that sells a Raspberry Pi or Arduino.  Most buttons do not come with leads soldered on so you will have to make a choice on what you need.  The button that I selected for my build is the Squid Button (non-latching) [https://www.monkmakes.com/squid-button/](https://www.monkmakes.com/squid-button/).  
+In order for the PushButton to work properly, you need to have a momentary, non-latching PushButton.  You can get these buttons from any shop that sells a Raspberry Pi or Arduino.  Most buttons do not come with leads soldered on so you will have to make a choice on what you need.  The button that I selected for my build is the Squid Button (non-latching) [https://www.monkmakes.com/squid-button/](https://www.monkmakes.com/squid-button/).  
 
 
 Squid Button![squidbutton](../../assets/images/squid_button.jpg)
