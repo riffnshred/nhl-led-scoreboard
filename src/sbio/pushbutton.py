@@ -4,7 +4,7 @@ import time
 import os
 from gpiozero import Button
 from signal import pause
-from subprocess import check_call
+from subprocess import check_call,call
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 REBOOT_DEFAULT = 2
@@ -45,10 +45,12 @@ class PushButton(object):
 
         self.reboot_process = data.config.pushbutton_reboot_override_process
         self.poweroff_process = data.config.pushbutton_poweroff_override_process
+        self.trigger1_process = data.config.pushbutton_state_triggered1_process
+        self.trigger1_process_run = False
         self.display_reboot = data.config.pushbutton_display_reboot
         self.display_halt = data.config.pushbutton_display_halt
 
-
+    
         if self.reboot_process:
             if not os.path.isfile(self.reboot_process):
                 debug.error("Reboot override process does not exist or is blank in config.json, falling back to default /sbin/reboot.  Check the config.json for errors")
@@ -62,6 +64,13 @@ class PushButton(object):
                 self.poweroff_process = "/sbin/poweroff"
         else:
             self.poweroff_process = "/sbin/poweroff"
+
+        if self.trigger1_process:
+            if not os.path.isfile(self.trigger1_process):
+                debug.error("State Trigger1 process does not exist or is blank in config.json, will not attempt to run.  Check the config.json for errors")
+            else:
+                debug.info("Process " + self.trigger1_process + " for state_triggered1 is good.")
+                self.trigger1_process_run = True
 
         debug.info(self.reboot_process + " <-- reboot || poweroff --> " + self.poweroff_process)
         self.__press_time = None
@@ -96,7 +105,7 @@ class PushButton(object):
     def on_release(self):
         release_time = time.time()
         held_for = release_time - self.__press_time
-
+  
         if (held_for >= self.reboot_duration):
             self.__press_count = 0
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
@@ -110,9 +119,14 @@ class PushButton(object):
             check_call([self.reboot_process])
         else:
             if self.data.curr_board != self.trigger_board:
+                if self.trigger1_process_run:
+                    debug.info("Running " + self.trigger1_process)
+                    call([self.trigger1_process])
+
                 debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop. Currently displayed board " + self.data.curr_board)
                 self.data.pb_trigger = True
                 self.sleepEvent.set()
+
             else:
                 debug.info("Trigger board " + self.trigger_board + " is the same as currently displayed board " + self.data.curr_board + " killing and going back to previous board")
                 self.sleepEvent.set()
@@ -126,7 +140,7 @@ class PushButton(object):
             self.data.pb_trigger = True
             self.data.config.pushbutton_state_triggered1 = "pbdisplay"
             self.sleepEvent.set()    
-                
+
         check_call([self.poweroff_process])
     
 

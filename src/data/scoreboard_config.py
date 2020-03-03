@@ -49,6 +49,7 @@ class ScoreboardConfig:
         self.pushbutton_poweroff_override_process = json["sbio"]["pushbutton"]["poweroff_override_process"]
         self.pushbutton_display_halt = json["sbio"]["pushbutton"]["display_halt"]
         self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
+        self.pushbutton_state_triggered1_process = json["sbio"]["pushbutton"]["state_triggered1_process"]
 
 
         # States

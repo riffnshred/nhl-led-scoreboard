@@ -21,12 +21,13 @@ class MainRenderer:
 
     def render(self):
         while self.data.network_issues:
-            Clock(self.data, self.matrix, duration=60)
+            Clock(self.data, self.matrix, sleepEvent,duration=60)
             self.data.refresh_data()
 
         while True:
             try:
                 debug.info('Rendering...')
+                self.data.refresh_data()
                 if self.status.is_offseason(self.data.date()):
                     # Offseason (Show offseason related stuff)
                     debug.info("It's offseason")
@@ -167,14 +168,14 @@ class MainRenderer:
         home_score = self.home_score
 
         if away_score < away_goals:
+            self.away_score = away_goals
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
-            self.away_score = away_goals
             self._draw_goal(away_id, away_name)
         if home_score < home_goals:
+            self.home_score = home_goals
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
-            self.home_score = home_goals
             self._draw_goal(home_id, home_name)
 
     def _draw_goal(self, id, name):

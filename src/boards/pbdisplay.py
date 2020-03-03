@@ -1,7 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 from time import sleep
-from utils import center_text
+from utils import center_text,get_file
 
 DISPLAY_DURATION = 5
 
@@ -14,10 +14,13 @@ class pbDisplay:
         self.matrix = matrix
         self.state = data.pb_state
 
-        # Initialize the REBOOTING
+        # Initialize
         self.pbdis_size = self.font_large.getsize(self.state)
         self.pbdis_width = self.pbdis_size[0]
         self.pbdis_align = center_text(self.pbdis_width, 28)
+
+        self.pb_reboot_icon = Image.open(get_file('assets/images/reboot.png'))
+        self.pb_halt_icon = Image.open(get_file('assets/images/halt.png'))
 
         display_time = 0
         while display_time < DISPLAY_DURATION:
@@ -28,11 +31,15 @@ class pbDisplay:
     def draw_pbdis(self):
         
         self.matrix.clear()
+        
+
         if self.state == "REBOOT":
+            self.matrix.draw_image((0, 0), self.pb_reboot_icon,"center")
             self.matrix.draw_text((self.pbdis_align, 8), self.state,
-                                fill=(255, 255, 0),
+                                fill=(0, 255, 0),
                                 font=self.font_large, multiline=False,location="center")
         else:
+            self.matrix.draw_image((0, 0), self.pb_halt_icon,"center")
             self.matrix.draw_text((self.pbdis_align, 8), self.state,
                               fill=(255, 0, 0),
                               font=self.font_large, multiline=False,location="center")
