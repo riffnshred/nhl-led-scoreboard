@@ -6,14 +6,19 @@ cd "${DIR}/.."
 
 # Install the latest version of Python 3
 sudo apt-get update && sudo apt-get install python3-dev
+sudo apt-get install python3-setuptools
+sudo apt-get install build-essential
 
 # Pull submodule and ignore changes from script
 git submodule update --init --recursive
 git config submodule.matrix.ignore all
 
+sudo apt-get update
+sudo apt-get --yes --force-yes install python3-dev python3-pillow -y
+
 cd submodules/matrix || exit
 echo "Running rgbmatrix installation..."
-sudo apt-get update && sudo apt-get install python3-dev python3-pillow -y
+
 make build-python PYTHON=$(which python3)
 sudo make install-python PYTHON=$(which python3)
 cd bindings
@@ -27,6 +32,8 @@ git fetch origin --prune
 git pull
 sudo pip3 install requests 
 sudo pip3 install geocoder python_tsl2591 ephem
+
+sudo apt-get install -y python3-cairosvg
 
 make
 echo "If you didn't see any errors above, everything should be installed!"

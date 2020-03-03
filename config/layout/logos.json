@@ -1,0 +1,32 @@
+{
+  "team_summary": {
+    "logos": {
+      "_default": {
+        "zoom": "100%",
+        "offset": [0, 0],
+        "flip": 0,
+        "rotate": 0,
+        "crop": [0, 0, 0, 0]
+      }
+    }
+  },
+  "scoreboard": {
+    "logos": {
+      "_default": {
+        "zoom": "100%",
+        "offset": [0, 0],
+        "flip": 0,
+        "rotate": 0,
+        "crop": [0, 0, 0, 0]
+      },
+      "TOR": {
+        "home": {
+          
+        },
+        "away": {
+         
+        }
+      }
+    }
+  }
+}

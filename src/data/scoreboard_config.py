@@ -1,13 +1,14 @@
 from utils import get_file
 from data.layout import Layout
 from data.colors import Color
+from config.main import Config  
 import json
 import os
 import sys
 import debug
 
 class ScoreboardConfig:
-    def __init__(self, filename_base, args, width, height):
+    def __init__(self, filename_base, args, size):
         json = self.__get_config(filename_base)
 
         # Misc config options
@@ -55,11 +56,15 @@ class ScoreboardConfig:
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
 
-        # Element's led coordinates
-        self.layout = Layout(self.__get_layout(width, height))
+        # Fonts
+        self.layout = Layout()
 
-        # load colors
-        self.team_colors = Color(self.__get_colors("teams"))
+        # load colors 
+        self.team_colors = Color(self.__get_config(
+            "colors/teams"
+        ))
+
+        self.config = Config(size)
 
     def read_json(self, filename):
         # Find and return a json file
@@ -70,33 +75,20 @@ class ScoreboardConfig:
             j = json.load(open(path))
         return j
 
-    def __get_config(self, base_filename):
+    def __get_config(self, base_filename, error=None):
         # Look and return config.json file
 
         filename = "{}.json".format(base_filename)
 
         reference_config = self.read_json(filename)
+        if not reference_config:
+            if (error):
+                debug.error(error)
+            else:
+                debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
+            sys.exit(1)
 
         return reference_config
-
-    def __get_colors(self, base_filename):
-        try:
-            filename = "colors/{}.json".format(base_filename)
-            reference_colors = self.read_json(filename)
-            return reference_colors
-        except:
-            debug.error("Invalid {} reference color file. Make sure {} exists in ledcolors/".format(base_filename, base_filename))
-            sys.exit(1)
-
-    def __get_layout(self, width, height):
-        filename = "renderer/{}x{}_config.json".format(width, height)
-        reference_layout = self.read_json(filename)
-        if not reference_layout:
-            # Unsupported coordinates
-            debug.error("Invalid matrix dimensions provided or missing resolution config file (64x32_config.json). This software currently support 64x32 matrix board only.\nIf you would like to see new dimensions supported, please file an issue on GitHub!")
-            sys.exit(1)
-
-        return reference_layout
 
     def __get_time_format(self, config):
         # Set the time format to 12h.

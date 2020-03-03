@@ -211,7 +211,7 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 ```
 
 ### Best Performance (Almost zero flicker)
-Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+Using either a raspberry pi Zero W, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 -   Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 -   Disable the onboard sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
