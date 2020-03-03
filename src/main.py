@@ -29,7 +29,7 @@ def run():
     debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
 
     # Read scoreboard options from config.json if it exists
-    config = ScoreboardConfig("config", commandArgs, matrix.width, matrix.height)
+    config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
     debug.set_debug_status(config)
 

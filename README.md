@@ -1,16 +1,33 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
-## Join our community
+## Support and community
 We have a nice community growing every day on discord. If you need help 
 or you are curious about the development of the project, come join us by clicking on this button.
 
 [![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
 
-## Tutorials from other source (DIY websites, reddit etc...)
->"I fallowed instructions from somewhere and I'm having issues"
+Want to help me turn coffee into features? Or just want to contribute
+for my work? 
 
-This project is new and is in constant evolution. Please fallow the instructions provided *here*.
+<a href="https://www.buymeacoffee.com/MgDa5sr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
+## Tutorials from other source
+>"I followed instructions from somewhere else and I'm having issues"
+
+This project is new and is in constant evolution. Please read the documentation and instructions to install and run this software provided here. 
+
+
+## Requirements (START HERE)
+You need Git to clone this repo and PIP3 for installing the scoreboard software.
+
+Since version V1.0.0 you need python 3.3 and up.
+Run these two commands in your terminal to install git and PIP3.
+```
+sudo apt-get update
+sudo apt install git python3-pip
+```
+
 
 ## Table of Contents
 - [Features (Beta V 1.0.0)](#features--beta-v-100-)
@@ -25,7 +42,6 @@ This project is new and is in constant evolution. Please fallow the instructions
   * [Software Installation](#software-installation)
     + [Raspbian Buster Lite](#raspbian-buster-lite)
     + [Time Zones](#time-zones)
-    + [Requirements](#requirements)
     + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
 - [Testing & Optimization (IMPORTANT)](#testing---optimization--important-)
   * [Flags](#flags)
@@ -56,6 +72,8 @@ Depending on the situation, the scoreboard will operate in a different state. Fo
 -   **Post-game**: Once the game is over, the scoreboard will rotate through a list of boards set for the Post-game state by the user in the config file.
 
 ### New Board System
+<img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_scoreticker.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_team_summary.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/board_standings.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/clock.png">
+
 The board system allows the user to choose what to display depending on the state of the scoreboard. For example: While the game I'm watching is in the intermission state, I like to see the score ticker, which is showing the score of the other games.
 
 There are currently three different boards available:
@@ -63,12 +81,14 @@ There are currently three different boards available:
 -   **Score Ticker**: A carousel that cycles through the games of the day.
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
 -   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
+-   **Clock**: a basic clock.
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
 
 More will come soon with playoff related features
 
 ### Goal animation
+<img  width="400" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/goal_light_animation.png">
 When ever a team in the main event score a goal, a goal light animation is played.
 Soon you will have to option to set the animation for your favorite team only or play a different animation for
 the opposing team.
@@ -78,9 +98,10 @@ The scoreboard now has a dimmer function. The scoreboard will change its brightn
 a [TSL2591](https://www.adafruit.com/product/1980) light sensor installed on your raspberry pi, you can configure the scoreboard
 to use it to adjust the brightness.
 
-### Network Indicator
-If your scoreboard has trouble communicating with the API due to poor wifi or internet connection, It will display
-a red bar at the bottom of the screen. Once the connection is back, the red bar will disappear.  
+### Indicators
+Because of its size, I programmed some indicators to display more information without filling up the screen and create an information overload issue. Please read the [Indicators](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Indicators) page in the Wiki section for more details.
+
+<img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="210" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
 
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact
@@ -97,7 +118,7 @@ a delay.
 If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the
 appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
-Please refer to the [Home page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Home) and [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need order and build your scoreboard.
+Please refer to the [Home page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Home) and [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need to order and build your scoreboard.
 
 ### Software Installation
 #### Raspbian Buster Lite
@@ -115,14 +136,6 @@ this page.
 #### Time Zones
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
-#### Requirements
-You need Git to clone this repo and PIP3 for installing the scoreboard software.
-
-Since version V 1.0.0 you need python 3.3 and up.
-```
-sudo apt-get update
-sudo apt install git python3-pip
-```
 
 #### Installing the NHL scoreboard software
 This installation process might take some time because it will install all the dependencies listed below.
@@ -198,7 +211,7 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 ```
 
 ### Best Performance (Almost zero flicker)
-Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
+Using either a raspberry pi Zero W, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
 
 -   Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 -   Disable the onboard sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
@@ -232,6 +245,14 @@ All the data related options.
 | `standing_type`          | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                                                                                                   |
 | `divisions`              | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                                                                                                              |
 | `conference`             | String | `eastern`, `western`                             | Your preferred conference                                                                                                                                                            |                                                                                                                                                          |
+
+### Goal Animations
+The goal animations can be set for both teams of just the preferred teams. MORE OPTIONS COMING SOON
+
+| Settings         | Type | Parameters      | Description      |
+|------------------|------|-----------------|------------------|
+| `pref_team_only` | Bool | `true`, `false` | self explanatory |
+
 
 ### Teams
 For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
@@ -393,6 +414,8 @@ This is useful if the scoreboard stop working for some reason, you can find out 
 ## Shout-out (Credit)
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
+
+You all can thank [Drew Hynes](https://gitlab.com/dword4) for his hard work on documenting the free [nhl api](https://gitlab.com/dword4/nhlapi).
 
 ## Licensing
 This project uses the GNU Public License. If you intend to sell these, the code must remain open source.

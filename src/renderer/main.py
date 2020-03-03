@@ -108,13 +108,16 @@ class MainRenderer:
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.__render_postgame(self.scoreboard)
-
+                if self.data._next_game():
+                    debug.info("moving to the next preferred game")
+                    return
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
                 self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
                 self.__render_pregame(self.scoreboard)
+
 
 
     def __render_pregame(self, scoreboard):

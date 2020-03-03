@@ -9,26 +9,25 @@
 			"Jets",
 			"Canadiens",
 			"Stars"
-		],
-		"standing_type": "wild_card",
-		"divisions": "central",
-		"conference": "western"
+		]
 	},
 
 	"goal_animations": {
-		"pref_team_only": true
+		"pref_team_only": false
 	},
 
 	"states":{
 		"off_day": [
-			"standings",
+			"team_summary",
 			"scoreticker",
-			"team_summary"
+			"standings",
+			"clock"
 		],
 		"scheduled": [
 			"standings",
 			"scoreticker",
-			"team_summary"
+			"standings",
+			"clock"
 		],
 		"intermission": [
 			"scoreticker"
@@ -47,7 +46,10 @@
 			"rotation_rate": 5
 		},
 		"standings": {
-			"preferred_standings_only": true
+			"preferred_standings_only": true,
+			"standing_type": "wild_card",
+			"divisions": "central",
+			"conference": "western"
 		},
 		"clock": {
 			"duration": 60,

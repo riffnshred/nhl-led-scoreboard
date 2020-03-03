@@ -1,0 +1,80 @@
+{
+  "_default": {
+    "position": [0, 0],
+    "align": "left-top",
+    "font": {
+      "file": "04B_24__.TTF",
+      "size": 8
+    }
+  },
+  "team_summary": {
+    "info": {
+      "position": ["0%", 0]
+    },
+    "logo": {
+      "position": ["65%", 0]
+    }
+  },
+  "scoreboard": {
+    "home_logo": {
+      "position": [["50%", 15], 0],
+      "align": "left"
+    },
+    "away_logo": {
+      "position": [["50%", -15], 0],
+      "align": "right"
+    },
+    "vs": {
+      "position": ["50%", "45%"],
+      "align": "center-top"
+    },
+    "score": {
+      "position": ["50%", "45%"],
+      "align": "center-top"
+    },
+    "scheduled_date": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "scheduled_time": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "clock": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "period": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "period_final": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    }
+  },
+  "scoreticker": {
+    "indicator_dots": {
+      "position": ["50%", ["100%", -1]],
+      "align": "center"
+    }
+  },
+  "clock": {
+    "date": {
+      "position": ["10%", "12%"],
+      "align": "left-top"
+    },
+    "time": {
+      "position": ["90%", "30%"],
+      "font": {
+        "file": "04B_24__.TTF",
+        "size": 24
+      },
+      "align": "right-top"
+    },
+    "meridiem": {
+      "position": ["96%", "35%"],
+      "align": "right-top"
+    }
+  }
+}
