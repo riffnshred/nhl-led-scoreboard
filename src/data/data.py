@@ -42,7 +42,16 @@ class Data:
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
+        
+        # Flag for if pushbutton has triggered
+        self.pb_trigger = False
 
+        # For pb state,  reboot or poweroff
+        self.pb_state = None
+
+        # Currently displayed board
+        self.curr_board = None
+        
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
@@ -159,6 +168,7 @@ class Data:
                 if not self.is_pref_team_offday():
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
+                
 
                     # Remove the current game id (Main event) form the list of games.
                     if self.config.live_mode:

@@ -20,18 +20,36 @@ class ScoreboardConfig:
         self.time_format = self.__get_time_format(json["preferences"]["time_format"])
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
+        
 
         # Goal animation
         self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
 
         # Dimmer preferences
-        self.dimmer_enabled = json["dimmer"]["enabled"]
-        self.dimmer_source = json["dimmer"]["source"]
-        self.dimmer_frequency = json["dimmer"]["frequency"]
-        self.dimmer_light_level_lux = json["dimmer"]["light_level_lux"]
-        self.dimmer_mode = json["dimmer"]["mode"]
-        self.dimmer_sunset_brightness = json["dimmer"]["sunset_brightness"]
-        self.dimmer_sunrise_brightness = json["dimmer"]["sunrise_brightness"]
+        self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
+        self.dimmer_source = json["sbio"]["dimmer"]["source"]
+        self.dimmer_frequency = json["sbio"]["dimmer"]["frequency"]
+        self.dimmer_light_level_lux = json["sbio"]["dimmer"]["light_level_lux"]
+        self.dimmer_mode = json["sbio"]["dimmer"]["mode"]
+        self.dimmer_sunset_brightness = json["sbio"]["dimmer"]["sunset_brightness"]
+        self.dimmer_sunrise_brightness = json["sbio"]["dimmer"]["sunrise_brightness"]
+
+        # Pushbutton preferences
+        self.pushbutton_enabled = json["sbio"]["pushbutton"]["enabled"]
+        self.pushbutton_bonnet = json["sbio"]["pushbutton"]["bonnet"]
+        self.pushbutton_pin = json["sbio"]["pushbutton"]["pin"]
+        # Reboot duration should be a medium time press (ie greater than 2 seconds)
+        self.pushbutton_reboot_duration = json["sbio"]["pushbutton"]["reboot_duration"]
+        # Override process is used to trigger a different process other than the default.  reboot uses /sbin/reboot poweroff uses /sbin/poweroff
+        self.pushbutton_reboot_override_process = json["sbio"]["pushbutton"]["reboot_override_process"]
+        self.pushbutton_display_reboot = json["sbio"]["pushbutton"]["display_reboot"]
+        # Poweroff duration should be a long press (greater than 5 or 6 seconds).  This is ties to the hold_time property of a button
+        self.pushbutton_poweroff_duration = json["sbio"]["pushbutton"]["poweroff_duration"]
+        self.pushbutton_poweroff_override_process = json["sbio"]["pushbutton"]["poweroff_override_process"]
+        self.pushbutton_display_halt = json["sbio"]["pushbutton"]["display_halt"]
+        self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
+        self.pushbutton_state_triggered1_process = json["sbio"]["pushbutton"]["state_triggered1_process"]
+
 
         # States
         '''TODO: Put condition so that the user dont leave any board list empty'''
@@ -51,6 +69,10 @@ class ScoreboardConfig:
         self.standing_type = json["boards"]["standings"]["standing_type"]
         self.preferred_divisions = json["boards"]["standings"]["divisions"]
         self.preferred_conference = json["boards"]["standings"]["conference"]
+
+        # Clock
+        self.clock_board_duration = json["boards"]["clock"]["duration"]
+        self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
 
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]

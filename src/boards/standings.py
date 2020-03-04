@@ -4,12 +4,14 @@ from time import sleep
 
 
 class Standings:
-    def __init__(self, data, matrix):
+    def __init__(self, data, matrix,sleepEvent):
         self.conferences = ["eastern", "western"]
         self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
         self.data = data
         self.matrix = matrix
         self.team_colors = data.config.team_colors
+        self.sleepEvent= sleepEvent
+        self.sleepEvent.clear()
 
     def render(self):
         type = self.data.config.standing_type
@@ -24,15 +26,18 @@ class Standings:
                 image = draw_standing(self.data, conference, records, im_height, self.matrix.width)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
                 # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height):
+                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
                 # Show the bottom before we change to the next table.
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
             elif type == 'division':
                 division = self.data.config.preferred_divisions
@@ -44,16 +49,19 @@ class Standings:
                 image = draw_standing(self.data, division, records, im_height, self.matrix.width)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
                 # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height):
+                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
                 # Show the bottom before we change to the next table.
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
             elif type == 'wild_card':
                 wildcard_records = {}
@@ -84,14 +92,17 @@ class Standings:
                 image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
                 # Move the image up until we hit the bottom.
-                while i > -(img_height - self.matrix.height):
+                while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
-                sleep(5)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
+                #sleep(5)
+                self.sleepEvent.wait(5)
         else:
             if type == 'conference':
                 for conference in self.conferences:
@@ -105,18 +116,21 @@ class Standings:
                     self.matrix.render()
                     if self.data.network_issues:
                         self.matrix.network_issue_indicator()
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
                     # Move the image up until we hit the bottom.
-                    while i > -(im_height - self.matrix.height):
+                    while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
                         if self.data.network_issues:
                             self.matrix.network_issue_indicator()
-                        sleep(0.2)
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
             elif type == 'division':
                 for division in self.divisions:
@@ -128,16 +142,19 @@ class Standings:
                     image = draw_standing(self.data, division, records, im_height, self.matrix.width)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
                     # Move the image up until we hit the bottom.
-                    while i > -(im_height - self.matrix.height):
+                    while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
-                        sleep(0.2)
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
             elif type == 'wild_card':
                 wildcard_records = {}
                 for conf_name, conf_data in vars(self.data.standings.by_wildcard).items():
@@ -166,14 +183,17 @@ class Standings:
                     image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
                     # Move the image up until we hit the bottom.
-                    while i > -(img_height - self.matrix.height):
+                    while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
-                        sleep(0.2)
-                    sleep(5)
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
 
 def draw_standing(data, name, records, img_height, width):

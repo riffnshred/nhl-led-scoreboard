@@ -6,7 +6,9 @@
 		"end_of_day": "12:00",
 		"live_game_refresh_rate": 15,
 		"teams": [
-			"Maple Leafs"
+			"Jets",
+			"Canadiens",
+			"Stars"
 		]
 	},
 
@@ -22,7 +24,7 @@
 			"clock"
 		],
 		"scheduled": [
-			"team_summary",
+			"standings",
 			"scoreticker",
 			"standings",
 			"clock"
@@ -55,13 +57,29 @@
 		}
 	},
 
-	"dimmer": {
-		"enabled": true,
-		"source": "software",
-		"frequency": 5,
-		"light_level_lux": 400,
-		"mode": "always",
-		"sunset_brightness": 5,
-		"sunrise_brightness": 8
+	"sbio": {
+		"dimmer": {
+			"enabled": true,
+			"source": "software",
+			"frequency": 5,
+			"light_level_lux": 400,
+			"mode": "always",
+			"sunset_brightness": 5,
+			"sunrise_brightness": 50
+		},
+		"pushbutton": {
+			"enabled": true,
+			"bonnet": true,
+			"pin": 25,
+			"reboot_duration": 2,
+			"reboot_override_process": "",
+			"display_reboot": true,
+			"poweroff_duration": 10,
+			"poweroff_override_process": "",
+			"display_halt": true,
+			"state_triggered1": "clock",
+			"state_triggered1_process": ""
+		}
 	}
+	
 }
