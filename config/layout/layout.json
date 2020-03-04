@@ -60,17 +60,21 @@
     }
   },
   "clock": {
-    "date": {
-      "position": ["10%", "12%"],
-      "align": "left-top"
-    },
     "time": {
-      "position": ["90%", "30%"],
+      "position": ["50%", "55%"],
       "font": {
         "file": "04B_24__.TTF",
         "size": 24
       },
-      "align": "right-top"
+      "align": "center-center"
+    },
+    "date": {
+      "position": [0, 1],
+      "align": "left-bottom",
+      "relative": {
+        "to": "time",
+        "align": "left-top"
+      } 
     },
     "meridiem": {
       "position": ["96%", "35%"],

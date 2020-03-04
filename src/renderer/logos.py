@@ -3,6 +3,7 @@ from utils import get_file
 from images.image_helper import ImageHelper
 import os
 import errno
+from utils import round_normal
 
 PATH = 'assets/logos'
 LOGO_NAME = 'light'
@@ -23,8 +24,8 @@ class LogoRenderer:
 
     def get_size(self):
         return (
-            int(round(self.matrix.width * self.layout.zoom)), 
-            int(round(self.matrix.height * self.layout.zoom))
+            int(round_normal(self.matrix.width * self.layout.zoom)), 
+            int(round_normal(self.matrix.height * self.layout.zoom))
         )
 
     def get_path(self, team):

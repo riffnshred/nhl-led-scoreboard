@@ -1,4 +1,5 @@
 import json
+from utils import round_normal
 
 class ConfigFile:
   def __init__(self, path, size=None):
@@ -57,7 +58,7 @@ class JSONData:
         return float(value[:-1]) / 100.0
       else:
         # Convert to pixels taking into account dimension (width or height)
-        return round((float(value[:-1]) / 100.0) * (dimension - 1))
+        return round_normal((float(value[:-1]) / 100.0) * (dimension - 1))
     elif (isinstance(value, list)):
       return sum([self.parse_attr_value(x, dimension) for x in value])
 

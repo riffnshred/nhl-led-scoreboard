@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 from rgbmatrix import graphics
 import math
+from utils import round_normal
 
 class Matrix:
   def __init__(self, matrix):
@@ -26,9 +27,20 @@ class Matrix:
     self.brightness = brightness
     self.matrix.brightness = self.brightness
 
+  def parse_location(self, value, dimension):
+    # Check if number is percentage and calculate pixels
+    if (isinstance(value, str) and value.endswith('%')):
+      return round_normal((float(value[:-1]) / 100.0) * (dimension - 1))
+
+    return value
+
   def align_position(self, align, position, size):
     align = align.split("-")
     x, y = position
+
+    # Handle percentages by converting to pixels
+    x = self.parse_location(x, self.width)
+    y = self.parse_location(y, self.height)
 
     if (align[0] == "center"):
       x -= size[0] / 2
@@ -45,8 +57,8 @@ class Matrix:
       x = math.ceil(x)
     else:
       x = math.floor(x)
-    
-    return (x, round(y))
+
+    return (x, round_normal(y))
 
   def draw_text(self, position, text, font, fill=None, align="left", multiline=False):
     if (multiline):
@@ -60,7 +72,7 @@ class Matrix:
 
     if (multiline):
       self.draw.multiline_text(
-        (round(x) + 1, round(y) - 1), 
+        (round_normal(x) + 1, round_normal(y) - 1), 
         text, 
         fill=fill,
         font=font,
@@ -69,7 +81,7 @@ class Matrix:
       )
     else:
       self.draw.text(
-        (round(x) + 1, round(y) - 1), 
+        (round_normal(x) + 1, round_normal(y) - 1), 
         text, 
         fill=fill, 
         font=font

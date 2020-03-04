@@ -22,9 +22,6 @@
 			"clock"
 		],
 		"scheduled": [
-			"team_summary",
-			"scoreticker",
-			"standings",
 			"clock"
 		],
 		"intermission": [
@@ -61,7 +58,7 @@
 		"frequency": 5,
 		"light_level_lux": 400,
 		"mode": "always",
-		"sunset_brightness": 5,
-		"sunrise_brightness": 8
+		"sunset_brightness": 40,
+		"sunrise_brightness": 60
 	}
 }
