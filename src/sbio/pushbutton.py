@@ -4,7 +4,7 @@ import time
 import os
 from gpiozero import Button
 from signal import pause
-from subprocess import check_call,call
+from subprocess import check_call
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 REBOOT_DEFAULT = 2
@@ -101,10 +101,17 @@ class PushButton(object):
         self.__press_time = time.time()
         # Count how many times a button is pressed.  Could be used to trigger another process or board display
         self.__press_count += 1
+
+        #Test - Uncomment to test pbdisplay
+        #self.data.pb_state = "! HALT !"
+        #self.data.pb_trigger = True
+        #self.data.config.pushbutton_state_triggered1 = "pbdisplay"
+        #self.sleepEvent.set()
         
     def on_release(self):
         release_time = time.time()
         held_for = release_time - self.__press_time
+        
   
         if (held_for >= self.reboot_duration):
             self.__press_count = 0
@@ -115,13 +122,18 @@ class PushButton(object):
                 self.data.pb_trigger = True
                 self.data.config.pushbutton_state_triggered1 = "pbdisplay"
                 self.sleepEvent.set()
-            
-            check_call([self.reboot_process])
+            try:
+                check_call([self.reboot_process])
+            except CalledProcessError as e:
+                debug.error("Unable to run " + self.reboot_process + "Error: " + format(e))
         else:
             if self.data.curr_board != self.trigger_board:
                 if self.trigger1_process_run:
                     debug.info("Running " + self.trigger1_process)
-                    call([self.trigger1_process])
+                    try:
+                        check_call([self.trigger1_process])
+                    except CalledProcessError as e:
+                        debug.error("Unable to run " + self.trigger1_process + "Error: " + format(e))
 
                 debug.info("Trigger fired...." + self.trigger_board + " will be shown on next loop. Currently displayed board " + self.data.curr_board)
                 self.data.pb_trigger = True
@@ -141,7 +153,10 @@ class PushButton(object):
             self.data.config.pushbutton_state_triggered1 = "pbdisplay"
             self.sleepEvent.set()    
 
-        check_call([self.poweroff_process])
+        try:
+            check_call([self.poweroff_process])
+        except CalledProcessError as e:
+            debug.error("Unable to run " + self.poweroff_process + "Error: " + format(e))
     
 
     def run(self):

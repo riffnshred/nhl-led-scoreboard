@@ -34,15 +34,20 @@ class pbDisplay:
         
 
         if self.state == "REBOOT":
-            self.matrix.draw_image((0, 0), self.pb_reboot_icon,"center")
-            self.matrix.draw_text((self.pbdis_align, 8), self.state,
+            self.matrix.draw_image(["50%", "50%"] , self.pb_reboot_icon,"center-center")
+
+            self.matrix.draw_text(["50%", "50%"], self.state,font=self.font_large,
                                 fill=(0, 255, 0),
-                                font=self.font_large, multiline=False,location="center")
+                                 align="center-center",multiline=False)
+
+            
         else:
-            self.matrix.draw_image((0, 0), self.pb_halt_icon,"center")
-            self.matrix.draw_text((self.pbdis_align, 8), self.state,
+            self.matrix.draw_image(["50%", "50%"] , self.pb_halt_icon,"center-center")
+
+            self.matrix.draw_text(["50%", "50%"], self.state,font=self.font_large,
                               fill=(255, 0, 0),
-                              font=self.font_large, multiline=False,location="center")
+                              align="center-center",multiline=False)
+
 
 
         self.matrix.render()

@@ -26,9 +26,20 @@ class Matrix:
     self.brightness = brightness
     self.matrix.brightness = self.brightness
 
+  def parse_location(self, value, dimension):
+    # Check if number is percentage and calculate pixels
+    if (isinstance(value, str) and value.endswith('%')):
+      return round((float(value[:-1]) / 100.0) * (dimension - 1))
+
+    return value
+
   def align_position(self, align, position, size):
     align = align.split("-")
     x, y = position
+
+    # Handle percentages by converting to pixels
+    x = self.parse_location(x, self.width)
+    y = self.parse_location(y, self.height)
 
     if (align[0] == "center"):
       x -= size[0] / 2
@@ -45,7 +56,7 @@ class Matrix:
       x = math.ceil(x)
     else:
       x = math.floor(x)
-    
+
     return (x, round(y))
 
   def draw_text(self, position, text, font, fill=None, align="left", multiline=False):
@@ -101,7 +112,7 @@ class Matrix:
         pixel.color
       )
 
-  def draw_text_layout(self, layout, text, font, align="left", multiline=False):
+  def draw_text_layout(self, layout, text, font, align="left", multiline=False, fill=None):
     self.draw_text(
       layout.position,
       text,
