@@ -138,4 +138,5 @@ def convert_date_format(date):
 
 def round_normal(n, decimals=0):
     multiplier = 10 ** decimals
-    return math.floor(n * multiplier + 0.5) / multiplier
+    value = math.floor(n * multiplier + 0.5) / multiplier
+    return int(value) if decimals == 0 else value

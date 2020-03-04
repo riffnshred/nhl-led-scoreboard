@@ -69,7 +69,7 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, 1],
+      "position": [0, 0],
       "align": "left-bottom",
       "relative": {
         "to": "time",
@@ -77,8 +77,12 @@
       } 
     },
     "meridiem": {
-      "position": ["96%", "35%"],
-      "align": "right-top"
+      "position": [1, 2],
+      "align": "center-top",
+      "relative": {
+        "to": "time",
+        "align": "right-top"
+      } 
     }
   }
 }

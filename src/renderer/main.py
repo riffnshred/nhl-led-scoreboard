@@ -112,8 +112,8 @@ class MainRenderer:
     def __render_pregame(self, scoreboard):
         debug.info("Showing Main Event")
         self.matrix.clear()
-        #ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        #sleep(self.refresh_rate)
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        sleep(self.refresh_rate)
         self.boards._scheduled(self.data, self.matrix)
         self.data.needs_refresh = True
 

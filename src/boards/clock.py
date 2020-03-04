@@ -11,8 +11,10 @@ class Clock:
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
+        
         self.font = data.config.layout.font
         self.font_large = data.config.layout.font_large_2
+
         self.matrix = matrix
         self.time_format = data.config.time_format
         self.duration = duration
@@ -37,39 +39,18 @@ class Clock:
             sleep(1)
 
     def draw_clock(self):
-        self.time = "00:00"
-        self.clock_size = self.font_large.getsize(self.time)
-        self.clock_width = self.clock_size[0]
-        self.time_align = center_text(self.clock_width, 32)
         self.matrix.clear()
-        self.matrix.draw_text((self.time_align, 4), "{}".format(self.date.strftime("%b %d %Y")),
-                              fill=(255, 255, 255),
-                              font=self.font, multiline=True)
-
-        self.matrix.draw_text((self.time_align, 9), "{}".format(self.time),
-                              fill=(255, 50, 50),
-                              font=self.font_large, multiline=True)
-
-        # If time format is 12h, show the meridiem
-        if self.time_format == "%I:%M":
-            h = 11
-            for letter in self.meridiem:
-                self.matrix.draw_text((self.time_align + (self.clock_width - 2), h), "{}".format(letter),
-                                      fill=(255, 255, 255),
-                                      font=self.font, multiline=True)
-                h += 6
-
-
-        self.matrix.draw_text_layout(
-            self.layout.date, 
-            self.date.strftime("%b %d %Y"),
-            font=self.font
-        )
-
+        
         self.matrix.draw_text_layout(
             self.layout.time,
             self.time,
             font=self.font_large
+        )
+        
+        self.matrix.draw_text_layout(
+            self.layout.date, 
+            self.date.strftime("%b %d %Y"),
+            font=self.font
         )
 
         self.matrix.draw_text_layout(

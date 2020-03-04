@@ -9,6 +9,8 @@ class Matrix:
     self.graphics = graphics
     self.brightness = None
 
+    self.position_cache = {}
+
     # Create a new data image.
     self.width = matrix.width
     self.height = matrix.height
@@ -58,7 +60,7 @@ class Matrix:
     else:
       x = math.floor(x)
 
-    return (x, round_normal(y))
+    return (round_normal(x), round_normal(y))
 
   def draw_text(self, position, text, font, fill=None, align="left", multiline=False):
     if (multiline):
@@ -69,10 +71,11 @@ class Matrix:
     size = (size[0] - 1, size[1] - 1)
 
     x, y = self.align_position(align, position, size)
+    position = (x, y)
 
     if (multiline):
       self.draw.multiline_text(
-        (round_normal(x) + 1, round_normal(y) - 1), 
+        position,
         text, 
         fill=fill,
         font=font,
@@ -81,11 +84,16 @@ class Matrix:
       )
     else:
       self.draw.text(
-        (round_normal(x) + 1, round_normal(y) - 1), 
+        position,
         text, 
         fill=fill, 
         font=font
       )
+    
+    return {
+      "position": position,
+      "size": size
+    }
 
   def draw_image(self, position, image, align="left"):
     position = self.align_position(align, position, image.size)
@@ -94,6 +102,11 @@ class Matrix:
       self.image.paste(image, position, image)
     except:
       self.image.paste(image, position)
+
+    return {
+      "position": position,
+      "size": image.size
+    }
 
   def draw_pixel(self, position, color):
     try:
@@ -114,32 +127,73 @@ class Matrix:
       )
 
   def draw_text_layout(self, layout, text, font, align="left", multiline=False):
-    self.draw_text(
-      layout.position,
-      text,
-      fill=layout.color,
-      font=font,
-      align=layout.align,
-      multiline=multiline
+    self.cache_position(
+      layout.id,
+      self.draw_text(
+        self.layout_position(layout),
+        text,
+        fill=layout.color,
+        font=font,
+        align=layout.align,
+        multiline=multiline
+      )
     )
 
   def draw_image_layout(self, layout, image, offset=(0, 0)):
-    self.draw_image(
-      (layout.position[0] + offset[0],
-      layout.position[1] + offset[1]),
-      image,
-      layout.align
+    self.cache_position(
+      layout.id,
+      self.draw_image(
+        self.layout_position(layout, offset),
+        image,
+        layout.align
+      )
     )
 
   def draw_pixels_layout(self, layout, pixels, size):
-    self.draw_pixels(
-      layout.position,
-      pixels,
-      size,
-      layout.align
+    self.cache_position(
+      layout.id,
+      self.draw_pixels(
+        self.layout_position(layout),
+        pixels,
+        size,
+        layout.align
+      )
     )
 
+  def layout_position(self, layout, offset=(0, 0)):
+    x = layout.position[0] + offset[0]
+    y = layout.position[1] + offset[1]
+
+    if (hasattr(layout, 'relative') and layout.relative.to in self.position_cache):
+      cached_position = self.position_cache[layout.relative.to]
+      position = self.align_position(
+        layout.relative.align,
+        cached_position["position"],
+        (
+          -cached_position["size"][0],
+          -cached_position["size"][1]
+        )          
+      )
+
+      x += position[0]
+      y += position[1]
+
+    return (x, y)
+
+  def cache_position(self, id, position):
+    self.position_cache[id] = position
+
   def render(self):
+    for x in range(self.height):
+      self.draw_pixel(
+        (30, x),
+        (0, 255, 0)
+      )
+      self.draw_pixel(
+        (31, x),
+        (0, 255, 0)
+      )
+
     if (self.use_canvas):
       self.canvas.SetImage(self.image.convert('RGB'), 0, 0)
       self.canvas = self.matrix.SwapOnVSync(self.canvas)

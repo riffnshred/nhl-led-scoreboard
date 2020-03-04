@@ -25,7 +25,7 @@
 			"clock"
 		],
 		"intermission": [
-			"scoreticker"
+			"clock"
 		],
 		"post_game": [
 			"scoreticker",
