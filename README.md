@@ -414,8 +414,9 @@ This is useful if the scoreboard stop working for some reason, you can find out 
 ## Shout-out
 
 First, these two for making this repo top notch and already working on future versions:
-[joshkay](https://github.com/joshkay)
-[falkyre](https://github.com/falkyre)
+
+- [Josh Kay](https://github.com/joshkay)
+- [Sean Ostermann](https://github.com/falkyre)
 
 
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
