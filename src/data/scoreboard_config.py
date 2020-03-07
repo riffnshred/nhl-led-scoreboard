@@ -20,6 +20,7 @@ class ScoreboardConfig:
         self.time_format = self.__get_time_format(json["preferences"]["time_format"])
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
+        self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
         
 
         # Goal animation

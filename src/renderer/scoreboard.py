@@ -12,7 +12,7 @@ class ScoreboardRenderer:
         self.font_large = self.data.config.layout.font_large
         self.scoreboard = scoreboard
         self.matrix = matrix
-        self.show_sog = shot_on_goal
+        self.show_SOG = shot_on_goal
 
         self.home_logo_renderer = LogoRenderer(
             self.matrix,
@@ -76,21 +76,25 @@ class ScoreboardRenderer:
         period = self.scoreboard.periods.ordinal
         clock = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
-        SOG = '{}-{}'.format(self.scoreboard.away_team.shot_on_goal, self.scoreboard.home_team.shot_on_goal)
+        
 
-        # Draw the info
-        self.matrix.draw_text_layout(
-            self.layout.period,
-            period,
-            font=self.font, 
-            multiline=True
-        )
-        self.matrix.draw_text_layout(
-            self.layout.clock,
-            clock,
-            font=self.font,
-            multiline=True
-        )
+        if self.show_SOG:
+            self.draw_SOG()
+        else:
+            # Draw the info
+            self.matrix.draw_text_layout(
+                self.layout.period,
+                period,
+                font=self.font, 
+                multiline=True
+            )
+            self.matrix.draw_text_layout(
+                self.layout.clock,
+                clock,
+                font=self.font,
+                multiline=True
+            )
+
         self.matrix.draw_text_layout(
             self.layout.score,
             score,
@@ -162,3 +166,21 @@ class ScoreboardRenderer:
                                       self.matrix.height - 2, colors[str(home_number_skaters)])
         self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 3, 63,
                                       self.matrix.height - 3, colors[str(home_number_skaters)])
+
+    def draw_SOG(self):
+
+        # Draw the Shot on goal
+        SOG = '{}-{}'.format(self.scoreboard.away_team.shot_on_goal, self.scoreboard.home_team.shot_on_goal)
+        
+        self.matrix.draw_text_layout(
+            self.layout.SOG_label,
+            "SHOTS",
+            font=self.font,
+            multiline=True
+        )
+        self.matrix.draw_text_layout(
+            self.layout.SOG,
+            SOG,
+            font=self.font,
+            multiline=True
+        )

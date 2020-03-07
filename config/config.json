@@ -2,18 +2,17 @@
 	"debug": true,
 	"live_mode": true,
 	"preferences": {
-		"time_format": "12h",
-		"end_of_day": "12:00",
-		"live_game_refresh_rate": 15,
+		"time_format": "24h",
+		"end_of_day": "10:00",
+		"live_game_refresh_rate": 10,
 		"teams": [
-			"Jets",
-			"Canadiens",
 			"Stars"
-		]
+		],
+		"sog_display_frequency": 4
 	},
 
 	"goal_animations": {
-		"pref_team_only": false
+		"pref_team_only": true
 	},
 
 	"states":{
@@ -24,19 +23,16 @@
 			"clock"
 		],
 		"scheduled": [
+			"team_summary",
 			"standings",
 			"scoreticker",
-			"standings",
 			"clock"
 		],
 		"intermission": [
 			"scoreticker"
 		],
 		"post_game": [
-			"scoreticker",
-			"standings",
-			"team_summary",
-			"clock"
+			"scoreticker"
 		]
 	},
 
@@ -52,7 +48,7 @@
 			"conference": "western"
 		},
 		"clock": {
-			"duration": 60,
+			"duration": 15,
 			"hide_indicator": false
 		}
 	},
@@ -65,7 +61,7 @@
 			"light_level_lux": 400,
 			"mode": "always",
 			"sunset_brightness": 5,
-			"sunrise_brightness": 50
+			"sunrise_brightness": 40
 		},
 		"pushbutton": {
 			"enabled": true,

@@ -138,10 +138,13 @@ class TeamSummary:
         draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                   font=self.font)
-        draw.text((0, 7), "GP: {} P: {}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
+        if stats:
+            draw.text((0, 7), "GP: {} P: {}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
                   font=self.font)
-        draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
+            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
                   font=self.font)
+        else:
+            draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
 
         draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 21), "LAST GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),

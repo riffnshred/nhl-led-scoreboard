@@ -4,6 +4,7 @@
     "time": [255, 50, 50]
   },
   "scoreboard": {
-    "period_final": [255, 0, 0]
+    "period_final": [255, 0, 0],
+    "SOG_label": [255, 111, 0]
   }
 }

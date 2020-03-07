@@ -41,17 +41,26 @@
       "align": "center-top"
     },
     "clock": {
-      "position": ["50%", 0],
+      "position": ["50%", 6],
       "align": "center-top"
     },
     "period": {
-      "position": ["50%", 6],
+      "position": ["50%", 0],
       "align": "center-top"
     },
     "period_final": {
       "position": ["50%", 6],
       "align": "center-top"
+    },
+    "SOG_label": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "SOG": {
+      "position": ["50%", 6],
+      "align": "center-top"
     }
+    
   },
   "scoreticker": {
     "indicator_dots": {
