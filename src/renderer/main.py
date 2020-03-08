@@ -21,7 +21,7 @@ class MainRenderer:
         self.boards = Boards()
         self.sleepEvent = sleepEvent
         self.sog_display_frequency = data.config.sog_display_frequency
-        self.alternate_data_counter = 0 
+        self.alternate_data_counter = 1
 
     def render(self):
         while self.data.network_issues:
@@ -154,7 +154,7 @@ class MainRenderer:
         debug.info("Showing Main Event")
         self.matrix.clear()
         show_SOG = False
-        if self.alternate_data_counter % self.sog_display_frequency:
+        if self.alternate_data_counter % self.sog_display_frequency == 0:
             show_SOG = True
         ScoreboardRenderer(self.data, self.matrix, scoreboard, show_SOG).render()
         self.alternate_data_counter += 1 

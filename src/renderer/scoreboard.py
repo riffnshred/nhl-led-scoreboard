@@ -80,6 +80,7 @@ class ScoreboardRenderer:
 
         if self.show_SOG:
             self.draw_SOG()
+            self.show_SOG = False
         else:
             # Draw the info
             self.matrix.draw_text_layout(
