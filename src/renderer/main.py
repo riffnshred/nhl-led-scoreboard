@@ -131,6 +131,7 @@ class MainRenderer:
 
             print("refreshing")
             self.data.refresh_data()
+            self.data.refresh_overview()
             if self.data.network_issues:
                 self.matrix.network_issue_indicator()
 

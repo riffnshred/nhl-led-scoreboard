@@ -380,9 +380,6 @@ class Data:
         # Get all the team's data
         self.get_teams_info()
 
-        # Refresh the main event
-        self.refresh_overview()
-
         # Fetch the games for today
         self.refresh_games()
 
