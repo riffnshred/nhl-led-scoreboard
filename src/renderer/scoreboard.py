@@ -54,18 +54,15 @@ class ScoreboardRenderer:
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
           self.layout.scheduled_date, 
-          'TODAY', 
-          font=self.font
+          'TODAY'
         )
         self.matrix.draw_text_layout(
           self.layout.scheduled_time, 
-          start_time,
-          font=self.font
+          start_time
         )
         self.matrix.draw_text_layout(
           self.layout.vs, 
-          'VS', 
-          font=self.font_large
+          'VS'
         )
 
         self.matrix.render()
@@ -111,8 +108,7 @@ class ScoreboardRenderer:
         # Draw the info
         self.matrix.draw_text_layout(
             self.layout.scheduled_date, 
-            date,
-            font=self.font
+            date
         )
 
         end_text = result
@@ -121,14 +117,12 @@ class ScoreboardRenderer:
 
         self.matrix.draw_text_layout(
             self.layout.period_final, 
-            end_text,
-            font=self.font
+            end_text
         )
 
         self.matrix.draw_text_layout(
             self.layout.score, 
-            score,
-            font=self.font_large
+            score
         )
 
         self.matrix.render()
