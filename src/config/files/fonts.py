@@ -4,8 +4,8 @@ from utils import get_file
 
 class FontsConfig:
   def __init__(self, size):
-    self.config = ConfigFile('config/layout/fonts.json')
-    self.dynamic_config = ConfigFile('config/layout/fonts_{}x{}.json'.format(size[0], size[1]), size)
+    self.config = ConfigFile('config/fonts/fonts.json')
+    self.dynamic_config = ConfigFile('config/fonts/fonts_{}x{}.json'.format(size[0], size[1]), size)
 
     self.config.combine(self.dynamic_config)
 

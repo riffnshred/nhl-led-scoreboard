@@ -74,15 +74,8 @@ class LogoRenderer:
         self.logo.save(filename)
 
     def render(self):
-        # Put the images on the canvas
-        offset = self.layout.offset
-        position = self.element_layout.position
-	
-        x = (self.logo.width * offset[0])
-        y = -((self.logo.height - self.matrix.height) / 2) + (self.logo.height * offset[1])
-
-        self.matrix.draw_image(
-            (position[0] + x, position[1] + y), 
+        self.matrix.draw_image_layout(
+            self.element_layout, 
             self.logo,
-            self.element_layout.align
+            self.layout.position
         )

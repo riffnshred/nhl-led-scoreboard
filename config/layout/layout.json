@@ -22,11 +22,13 @@
     },
     "vs": {
       "position": ["50%", "45%"],
-      "align": "center-top"
+      "align": "center-top",
+      "font": "medium"
     },
     "score": {
       "position": ["50%", "45%"],
-      "align": "center-top"
+      "align": "center-top",
+      "font": "medium"
     },
     "scheduled_date": {
       "position": ["50%", 0],

@@ -165,13 +165,9 @@ class ScoreboardRenderer:
         
         self.matrix.draw_text_layout(
             self.layout.SOG_label,
-            "SHOTS",
-            font=self.font,
-            multiline=True
+            "SHOTS"
         )
         self.matrix.draw_text_layout(
             self.layout.SOG,
-            SOG,
-            font=self.font,
-            multiline=True
+            SOG
         )

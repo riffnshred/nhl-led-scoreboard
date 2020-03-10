@@ -44,9 +44,10 @@ class LayoutConfig:
     logo = self.logo_config.data.scoreboard.logos._default.__copy__()
 
     logos = self.logo_config.data[board].logos
+    
     if (team in logos):
       logo.__merge__(logos[team])
       if (gameLocation != None and gameLocation in logos[team]):
-        logo.__merge__(logos[team][gameLocation])
+        logo.__merge__(logos[team][gameLocation], overwrite=True)
     
     return logo
