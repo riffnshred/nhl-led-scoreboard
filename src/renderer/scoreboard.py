@@ -60,8 +60,7 @@ class ScoreboardRenderer:
         self.matrix.draw_text_layout(
           self.layout.scheduled_time, 
           start_time,
-          font=self.font, 
-          multiline=True
+          font=self.font
         )
         self.matrix.draw_text_layout(
           self.layout.vs, 
@@ -82,20 +81,17 @@ class ScoreboardRenderer:
         self.matrix.draw_text_layout(
             self.layout.period,
             period,
-            font=self.font, 
-            multiline=True
+            font=self.font
         )
         self.matrix.draw_text_layout(
             self.layout.clock,
             clock,
-            font=self.font,
-            multiline=True
+            font=self.font
         )
         self.matrix.draw_text_layout(
             self.layout.score,
             score,
-            font=self.font_large,
-            multiline=True
+            font=self.font_large
         )
 
         self.matrix.render()
@@ -114,8 +110,7 @@ class ScoreboardRenderer:
         self.matrix.draw_text_layout(
             self.layout.scheduled_date, 
             date,
-            font=self.font,
-            multiline=True
+            font=self.font
         )
 
         end_text = result
@@ -125,15 +120,13 @@ class ScoreboardRenderer:
         self.matrix.draw_text_layout(
             self.layout.period_final, 
             end_text,
-            font=self.font,
-            multiline=True
+            font=self.font
         )
 
         self.matrix.draw_text_layout(
             self.layout.score, 
             score,
-            font=self.font_large,
-            multiline=True
+            font=self.font_large
         )
 
         self.matrix.render()

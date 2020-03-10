@@ -120,9 +120,9 @@ class MainRenderer:
     def __render_postgame(self, scoreboard):
         debug.info("Showing Post-Game")
         self.matrix.clear()
-        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        self.draw_end_of_game_indicator()
-        sleep(self.refresh_rate)
+        #ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        #self.draw_end_of_game_indicator()
+        #sleep(self.refresh_rate)
         self.boards._post_game(self.data, self.matrix)
         self.data.needs_refresh = True
 

@@ -1,5 +1,6 @@
 import json
 from utils import round_normal
+import copy
 
 class ConfigFile:
   def __init__(self, path, size=None):
@@ -69,7 +70,7 @@ class JSONData:
     return value
       
   def __copy__(self):
-    return JSONData(self.__dict__)
+    return JSONData(copy.deepcopy(self.__dict__))
 
   def __contains__(self, item):
     return item in self.__dict__

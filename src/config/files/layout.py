@@ -1,10 +1,11 @@
 from config.file import ConfigFile, JSONData
 
 class LayoutConfig:
-  def __init__(self, size):
+  def __init__(self, size, fonts):
     self.layout = ConfigFile('config/layout/layout.json', size)
     self.dynamic_layout = ConfigFile('config/layout/layout_{}x{}.json'.format(size[0], size[1]), size)
     self.colors = ConfigFile('config/colors/layout.json')
+    self.fonts = fonts
 
     # Combine layout for current size with the base layout, overwriting any values found
     self.layout.combine(self.dynamic_layout)
@@ -22,9 +23,11 @@ class LayoutConfig:
     layout.color = default_color
 
     if board in layouts:
-      layout = layouts[board]
+      layout = layouts[board].__copy__()
 
       for element, value in layout:
+        layout[element].font = self.fonts.get_font(value.font if hasattr(value, 'font') else None)
+
         if isinstance(value, JSONData):
           layout[element].__merge__(default_layout)
           layout[element].color = default_color

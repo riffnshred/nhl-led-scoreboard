@@ -1,11 +1,7 @@
 {
   "_default": {
     "position": [0, 0],
-    "align": "left-top",
-    "font": {
-      "file": "04B_24__.TTF",
-      "size": 8
-    }
+    "align": "left-top"
   },
   "team_summary": {
     "info": {
@@ -61,15 +57,12 @@
   },
   "clock": {
     "time": {
-      "position": ["50%", "55%"],
-      "font": {
-        "file": "04B_24__.TTF",
-        "size": 24
-      },
+      "position": ["50%", "50%"],
+      "font": "large",
       "align": "center-center"
     },
     "date": {
-      "position": [0, 0],
+      "position": [0, -2],
       "align": "left-bottom",
       "relative": {
         "to": "time",
@@ -77,8 +70,8 @@
       } 
     },
     "meridiem": {
-      "position": [1, 2],
-      "align": "center-top",
+      "position": [2, 0],
+      "align": "left-top",
       "relative": {
         "to": "time",
         "align": "right-top"

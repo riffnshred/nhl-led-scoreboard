@@ -12,9 +12,6 @@ class Clock:
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
         
-        self.font = data.config.layout.font
-        self.font_large = data.config.layout.font_large_2
-
         self.matrix = matrix
         self.time_format = data.config.time_format
         self.duration = duration
@@ -43,21 +40,17 @@ class Clock:
         
         self.matrix.draw_text_layout(
             self.layout.time,
-            self.time,
-            font=self.font_large
+            self.time
         )
         
         self.matrix.draw_text_layout(
             self.layout.date, 
-            self.date.strftime("%b %d %Y"),
-            font=self.font
+            self.date.strftime("%b %d %Y")
         )
 
         self.matrix.draw_text_layout(
             self.layout.meridiem,
-            "{}\n{}".format(self.meridiem[0], self.meridiem[1]),
-            font=self.font,
-            multiline=True
+            "{}\n{}".format(self.meridiem[0], self.meridiem[1])
         )
 
         self.matrix.render()

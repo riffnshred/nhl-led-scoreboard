@@ -34,6 +34,7 @@ sudo pip3 install requests
 sudo pip3 install geocoder python_tsl2591 ephem
 
 sudo apt-get install -y python3-cairosvg
+sudo apt-get install libraqm-dev
 
 make
 echo "If you didn't see any errors above, everything should be installed!"

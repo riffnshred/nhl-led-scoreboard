@@ -16,9 +16,6 @@
 
 	"states":{
 		"off_day": [
-			"team_summary",
-			"scoreticker",
-			"standings",
 			"clock"
 		],
 		"scheduled": [
@@ -28,9 +25,6 @@
 			"clock"
 		],
 		"post_game": [
-			"scoreticker",
-			"standings",
-			"team_summary",
 			"clock"
 		]
 	},
@@ -47,7 +41,7 @@
 			"conference": "western"
 		},
 		"clock": {
-			"duration": 60,
+			"duration": 1,
 			"hide_indicator": false
 		}
 	},

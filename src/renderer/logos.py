@@ -13,9 +13,9 @@ class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team, board, gameLocation=None):
         self.matrix = matrix
         self.layout = config.config.layout.get_scoreboard_logo(
-			team.abbrev, 
-			board, 
-			gameLocation
+            team.abbrev, 
+            board, 
+            gameLocation
         )
         
         self.element_layout = element_layout
