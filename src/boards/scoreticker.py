@@ -8,10 +8,13 @@ from renderer.scoreboard import ScoreboardRenderer
 from renderer.matrix import MatrixPixels
 
 class Scoreticker:
-    def __init__(self, data, matrix):
+    def __init__(self, data, matrix,sleepEvent):
         self.data = data
         self.rotation_rate = self.data.config.scoreticker_rotation_rate
         self.matrix = matrix
+        self.spacing = 3 # Number of pixel between each dot + 1
+        self.sleepEvent = sleepEvent
+        self.sleepEvent.clear()
         
         self.layout = self.data.config.config.layout.get_board_layout('scoreticker')
 
@@ -20,7 +23,7 @@ class Scoreticker:
         self.games = self.data.games
         self.num_games = len(self.games)
         try:
-            while True:
+            while not self.sleepEvent.is_set():
                 self.matrix.clear()
                 if self.index >= (len(self.games)):
                     return
@@ -32,7 +35,9 @@ class Scoreticker:
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
 
-                sleep(self.rotation_rate)
+                #sleep(self.rotation_rate)
+                self.sleepEvent.wait(self.rotation_rate)
+
                 self.index += 1
 
         except IndexError:

@@ -31,8 +31,11 @@ git reset --hard
 git fetch origin --prune
 git pull
 sudo pip3 install requests 
+# For dimmer
 sudo pip3 install geocoder python_tsl2591 ephem
 
+# For push button
+sudo apt install python3-gpiozero
 sudo apt-get install -y python3-cairosvg
 sudo apt-get install libraqm-dev
 

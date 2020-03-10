@@ -1,4 +1,3 @@
-import threading
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 import datetime
@@ -7,7 +6,7 @@ from utils import center_text
 
 
 class Clock:
-    def __init__(self, data, matrix, duration=None):
+    def __init__(self, data, matrix, sleepEvent,duration=None):
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
@@ -21,19 +20,24 @@ class Clock:
         
         self.layout = self.data.config.config.layout.get_board_layout('clock')
 
+        self.sleepEvent = sleepEvent
+        self.sleepEvent.clear()
+        
         display_time = 0
-        while display_time < self.duration:
+        while display_time < self.duration and not self.sleepEvent.is_set():
             self.time = datetime.datetime.now().strftime(self.time_format.replace(":", " "))
             self.meridiem = datetime.datetime.now().strftime("%P")
             display_time += 1
             self.draw_clock()
-            sleep(1)
+            #sleep(1)
+            self.sleepEvent.wait(1)
 
             self.time = datetime.datetime.now().strftime(self.time_format)
             self.meridiem = datetime.datetime.now().strftime("%P")
             self.draw_clock()
             display_time += 1
-            sleep(1)
+            #sleep(1)
+            self.sleepEvent.wait(1)
 
     def draw_clock(self):
         self.matrix.clear()
