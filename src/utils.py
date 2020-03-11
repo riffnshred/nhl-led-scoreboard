@@ -4,7 +4,7 @@ import argparse
 import os
 import debug
 from datetime import datetime, timezone
-
+import math
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
@@ -135,3 +135,8 @@ def center_obj(screen_w, lenght):
 def convert_date_format(date):
     d = datetime.strptime(date, '%Y-%m-%d')
     return d.strftime('%b %d')
+
+def round_normal(n, decimals=0):
+    multiplier = 10 ** decimals
+    value = math.floor(n * multiplier + 0.5) / multiplier
+    return int(value) if decimals == 0 else value

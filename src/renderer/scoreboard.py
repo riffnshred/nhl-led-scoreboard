@@ -54,19 +54,15 @@ class ScoreboardRenderer:
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
           self.layout.scheduled_date, 
-          'TODAY', 
-          font=self.font
+          'TODAY'
         )
         self.matrix.draw_text_layout(
           self.layout.scheduled_time, 
-          start_time,
-          font=self.font, 
-          multiline=True
+          start_time
         )
         self.matrix.draw_text_layout(
           self.layout.vs, 
-          'VS', 
-          font=self.font_large
+          'VS'
         )
 
         self.matrix.render()
@@ -86,21 +82,15 @@ class ScoreboardRenderer:
             self.matrix.draw_text_layout(
                 self.layout.period,
                 period,
-                font=self.font, 
-                multiline=True
             )
             self.matrix.draw_text_layout(
                 self.layout.clock,
-                clock,
-                font=self.font,
-                multiline=True
+                clock
             )
 
         self.matrix.draw_text_layout(
             self.layout.score,
-            score,
-            font=self.font_large,
-            multiline=True
+            score
         )
 
         self.matrix.render()
@@ -118,9 +108,7 @@ class ScoreboardRenderer:
         # Draw the info
         self.matrix.draw_text_layout(
             self.layout.scheduled_date, 
-            date,
-            font=self.font,
-            multiline=True
+            date
         )
 
         end_text = result
@@ -129,16 +117,12 @@ class ScoreboardRenderer:
 
         self.matrix.draw_text_layout(
             self.layout.period_final, 
-            end_text,
-            font=self.font,
-            multiline=True
+            end_text
         )
 
         self.matrix.draw_text_layout(
             self.layout.score, 
-            score,
-            font=self.font_large,
-            multiline=True
+            score
         )
 
         self.matrix.render()
@@ -175,13 +159,9 @@ class ScoreboardRenderer:
         
         self.matrix.draw_text_layout(
             self.layout.SOG_label,
-            "SHOTS",
-            font=self.font,
-            multiline=True
+            "SHOTS"
         )
         self.matrix.draw_text_layout(
             self.layout.SOG,
-            SOG,
-            font=self.font,
-            multiline=True
+            SOG
         )

@@ -1,12 +1,17 @@
 from PIL import Image, ImageDraw
 from rgbmatrix import graphics
 import math
+from utils import round_normal
+
+DEBUG = False
 
 class Matrix:
   def __init__(self, matrix):
     self.matrix = matrix
     self.graphics = graphics
     self.brightness = None
+
+    self.position_cache = {}
 
     # Create a new data image.
     self.width = matrix.width
@@ -29,7 +34,7 @@ class Matrix:
   def parse_location(self, value, dimension):
     # Check if number is percentage and calculate pixels
     if (isinstance(value, str) and value.endswith('%')):
-      return round((float(value[:-1]) / 100.0) * (dimension - 1))
+      return round_normal((float(value[:-1]) / 100.0) * (dimension - 1))
 
     return value
 
@@ -48,7 +53,7 @@ class Matrix:
 
     if (len(align) > 1):
       if (align[1] == "center"):
-        y -= size[1] / 2
+        y -= size[1] / 2 + 1
       elif (align[1] == "bottom"):
         y -= size[1]
 
@@ -57,34 +62,68 @@ class Matrix:
     else:
       x = math.floor(x)
 
-    return (x, round(y))
+    return (round_normal(x), round_normal(y))
 
-  def draw_text(self, position, text, font, fill=None, align="left", multiline=False):
-    if (multiline):
-      size = self.draw.multiline_textsize(text, font)
-    else:
-      size = self.draw.textsize(text, font)
+  def draw_text(self, position, text, font, fill=None, align="left"):
+    width = 0
+    height = 0
 
-    size = (size[0] - 1, size[1] - 1)
+    text_chars = text.split("\n")
+    offsets = []
+
+    for index, chars in enumerate(text_chars):
+      spacing = 0 if index == 0 else 1
+
+      offset = font.getoffset(chars)
+      offset_x = offset[0]
+      offset_y = offset[1] - height - spacing
+
+      offsets.append((offset_x, offset_y))
+
+      bounding_box = font.getmask(chars).getbbox()
+      if bounding_box is not None:
+        width = bounding_box[2] if bounding_box[2] > width else width
+        height += bounding_box[3] + spacing
+    
+    width -= 1
+    height -= 1
+    size = (width, height)
 
     x, y = self.align_position(align, position, size)
 
-    if (multiline):
-      self.draw.multiline_text(
-        (round(x) + 1, round(y) - 1), 
-        text, 
-        fill=fill,
-        font=font,
-        spacing=0,
-        align=align.split("-")[0]
-      )
-    else:
+    for index, chars in enumerate(text_chars):
+      offset = offsets[index]
+      chars_position = (x - offset[0], y - offset[1])
+
       self.draw.text(
-        (round(x) + 1, round(y) - 1), 
-        text, 
+        chars_position,
+        chars, 
         fill=fill, 
         font=font
       )
+      
+    if (DEBUG):
+      self.draw_pixel(
+        (x, y),
+        (0, 255, 0)
+      )
+      self.draw_pixel(
+        (x, y + height),
+        (0, 255, 0)
+      )
+      self.draw_pixel(
+        (x + width, y + height),
+        (0, 255, 0)
+      )
+      self.draw_pixel(
+        (x + width, y),
+        (0, 255, 0)
+      )
+    
+    return {
+      "position": (x, y),
+      "size": size
+    }
 
   def draw_image(self, position, image, align="left"):
     position = self.align_position(align, position, image.size)
@@ -93,6 +132,11 @@ class Matrix:
       self.image.paste(image, position, image)
     except:
       self.image.paste(image, position)
+
+    return {
+      "position": position,
+      "size": image.size
+    }
 
   def draw_pixel(self, position, color):
     try:
@@ -112,33 +156,84 @@ class Matrix:
         pixel.color
       )
 
-  def draw_text_layout(self, layout, text, font, align="left", multiline=False, fill=None):
-    self.draw_text(
-      layout.position,
-      text,
-      fill=layout.color,
-      font=font,
-      align=layout.align,
-      multiline=multiline
+  def draw_text_layout(self, layout, text, align="left"):
+    self.cache_position(
+      layout.id,
+      self.draw_text(
+        self.layout_position(layout),
+        text,
+        fill=layout.color,
+        font=layout.font,
+        align=layout.align
+      )
     )
 
   def draw_image_layout(self, layout, image, offset=(0, 0)):
-    self.draw_image(
-      (layout.position[0] + offset[0],
-      layout.position[1] + offset[1]),
-      image,
-      layout.align
+    self.cache_position(
+      layout.id,
+      self.draw_image(
+        self.layout_position(layout, offset),
+        image,
+        layout.align
+      )
     )
 
   def draw_pixels_layout(self, layout, pixels, size):
-    self.draw_pixels(
-      layout.position,
-      pixels,
-      size,
-      layout.align
+    self.cache_position(
+      layout.id,
+      self.draw_pixels(
+        self.layout_position(layout),
+        pixels,
+        size,
+        layout.align
+      )
     )
 
+  def layout_position(self, layout, offset=(0, 0)):
+    x = layout.position[0] + offset[0]
+    y = layout.position[1] + offset[1]
+
+    if (hasattr(layout, 'relative') and layout.relative.to in self.position_cache):
+      cached_position = self.position_cache[layout.relative.to]
+      position = self.align_position(
+        layout.relative.align,
+        cached_position["position"],
+        (
+          -cached_position["size"][0],
+          -cached_position["size"][1]
+        )
+      )
+
+      x += position[0]
+      y += position[1]
+
+    return (x, y)
+
+  def cache_position(self, id, position):
+    self.position_cache[id] = position
+
   def render(self):
+    if (DEBUG):
+      for x in range(self.height):
+        self.draw_pixel(
+          (self.width / 2 - 1, x),
+          (0, 255, 0)
+        )
+        self.draw_pixel(
+          (self.width / 2, x),
+          (0, 255, 0)
+        )
+
+      for x in range(self.width):
+        self.draw_pixel(
+          (x, self.height / 2 - 1),
+          (0, 255, 0)
+        )
+        self.draw_pixel(
+          (x, self.height / 2 ),
+          (0, 255, 0)
+        )
+
     if (self.use_canvas):
       self.canvas.SetImage(self.image.convert('RGB'), 0, 0)
       self.canvas = self.matrix.SwapOnVSync(self.canvas)

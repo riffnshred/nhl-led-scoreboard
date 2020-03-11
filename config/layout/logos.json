@@ -3,7 +3,7 @@
     "logos": {
       "_default": {
         "zoom": "100%",
-        "offset": [0, 0],
+        "position": [0, 0],
         "flip": 0,
         "rotate": 0,
         "crop": [0, 0, 0, 0]
@@ -14,17 +14,22 @@
     "logos": {
       "_default": {
         "zoom": "100%",
-        "offset": [0, 0],
+        "position": [0, 0],
         "flip": 0,
         "rotate": 0,
         "crop": [0, 0, 0, 0]
       },
-      "TOR": {
+      "LAK": {
         "home": {
-          "offset": [0.25, 0]
+          
         },
         "away": {
-          "offset": [0.25, 0]
+          
+        }
+      },
+      "COL": {
+        "away": {
+          
         }
       }
     }

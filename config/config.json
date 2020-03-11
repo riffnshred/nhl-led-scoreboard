@@ -7,6 +7,7 @@
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Canadiens",
+			"Kings",
 			"Oilers"
 		],
 		"sog_display_frequency": 4
@@ -18,9 +19,6 @@
 
 	"states":{
 		"off_day": [
-			"team_summary",
-			"scoreticker",
-			"standings",
 			"clock"
 		],
 		"scheduled": [
@@ -30,7 +28,7 @@
 			"clock"
 		],
 		"intermission": [
-			"scoreticker"
+			"clock"
 		],
 		"post_game": [
 			"scoreticker"
