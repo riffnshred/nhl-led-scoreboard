@@ -3,6 +3,7 @@ from utils import get_file
 from images.image_helper import ImageHelper
 import os
 import errno
+from utils import round_normal
 
 PATH = 'assets/logos'
 LOGO_NAME = 'light'
@@ -12,9 +13,9 @@ class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team, board, gameLocation=None):
         self.matrix = matrix
         self.layout = config.config.layout.get_scoreboard_logo(
-			team.abbrev, 
-			board, 
-			gameLocation
+            team.abbrev, 
+            board, 
+            gameLocation
         )
         
         self.element_layout = element_layout
@@ -23,8 +24,8 @@ class LogoRenderer:
 
     def get_size(self):
         return (
-            int(round(self.matrix.width * self.layout.zoom)), 
-            int(round(self.matrix.height * self.layout.zoom))
+            int(round_normal(self.matrix.width * self.layout.zoom)), 
+            int(round_normal(self.matrix.height * self.layout.zoom))
         )
 
     def get_path(self, team):
@@ -73,15 +74,8 @@ class LogoRenderer:
         self.logo.save(filename)
 
     def render(self):
-        # Put the images on the canvas
-        offset = self.layout.offset
-        position = self.element_layout.position
-	
-        x = (self.logo.width * offset[0])
-        y = -((self.logo.height - self.matrix.height) / 2) + (self.logo.height * offset[1])
-
-        self.matrix.draw_image(
-            (position[0] + x, position[1] + y), 
+        self.matrix.draw_image_layout(
+            self.element_layout, 
             self.logo,
-            self.element_layout.align
+            self.layout.position
         )
