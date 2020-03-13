@@ -26,7 +26,7 @@ class MainRenderer:
 
     def render(self):
         while self.data.network_issues:
-            Clock(self.data, self.matrix, sleepEvent, duration=60)
+            Clock(self.data, self.matrix, self.sleepEvent, duration=60)
             self.data.refresh_data()
 
         while True:
