@@ -128,7 +128,21 @@ class ScoreboardRenderer:
         self.matrix.render()
 
     def draw_irregular(self):
-        pass
+        status = self.scoreboard.status
+
+        # Draw the text on the Data image.
+        self.matrix.draw_text_layout(
+            self.layout.scheduled_date,
+            'TODAY'
+        )
+        self.matrix.draw_text_layout(
+            self.layout.scheduled_time,
+            status
+        )
+        self.matrix.draw_text_layout(
+            self.layout.vs,
+            'VS'
+        )
 
     def draw_power_play(self):
         away_number_skaters = self.scoreboard.away_team.num_skaters

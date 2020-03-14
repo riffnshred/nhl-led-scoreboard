@@ -26,7 +26,7 @@ class MainRenderer:
 
     def render(self):
         while self.data.network_issues:
-            Clock(self.data, self.matrix, sleepEvent,duration=60)
+            Clock(self.data, self.matrix, self.sleepEvent, duration=60)
             self.data.refresh_data()
 
         while True:
@@ -53,11 +53,10 @@ class MainRenderer:
                         self.__render_game_day()
 
             except AttributeError as e:
-                debug.log("ERROR WHILE RENDERING: "+e)
+                debug.log(f'"ERROR WHILE RENDERING: " + {e}')
                 debug.log("Refreshing data in a minute")
                 self.boards.fallback(self.data, self.matrix)
                 self.data.refresh_data()
-                self.status = self.data.status
 
 
     def __render_offday(self):
@@ -73,7 +72,7 @@ class MainRenderer:
         debug.info("Showing Game")
         # Initialize the scoreboard. get the current status at startup
         self.data.refresh_overview()
-        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+        self.scoreboard = Scoreboard(self.data.overview, self.data)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
         self.sleepEvent.clear()
@@ -94,7 +93,7 @@ class MainRenderer:
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
                 debug.info("Game is Live")                    
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
                 if self.scoreboard.intermission:
@@ -106,25 +105,30 @@ class MainRenderer:
                     self.boards._intermission(self.data, self.matrix,self.sleepEvent)
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
-                
+
+            elif self.status.is_game_over(self.data.overview.status):
+                debug.info("Game Over")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.__render_postgame(self.scoreboard)
+                # sleep(self.refresh_rate)
+                self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
-                debug.info("Game Over")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                debug.info("FINAL")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.__render_postgame(self.scoreboard)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
-                    
                 self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.__render_pregame(self.scoreboard)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
@@ -143,7 +147,6 @@ class MainRenderer:
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
 
-        
 
     def __render_postgame(self, scoreboard):
         debug.info("Showing Post-Game")

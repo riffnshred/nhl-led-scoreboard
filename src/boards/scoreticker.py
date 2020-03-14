@@ -8,7 +8,7 @@ from renderer.scoreboard import ScoreboardRenderer
 from renderer.matrix import MatrixPixels
 
 class Scoreticker:
-    def __init__(self, data, matrix,sleepEvent):
+    def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.rotation_rate = self.data.config.scoreticker_rotation_rate
         self.matrix = matrix
@@ -28,7 +28,7 @@ class Scoreticker:
                 if self.index >= (len(self.games)):
                     return
                     
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data.teams_info, self.data.config)).render()
+                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.games[self.index], self.data)).render()
                 self.show_indicator()
                 self.matrix.render()
 
