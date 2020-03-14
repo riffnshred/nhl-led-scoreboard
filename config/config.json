@@ -6,6 +6,7 @@
 		"end_of_day": "10:00",
 		"live_game_refresh_rate": 10,
 		"teams": [
+			"Jets",
 			"Canadiens",
 			"Kings",
 			"Oilers"
