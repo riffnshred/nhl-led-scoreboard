@@ -5,6 +5,7 @@
   },
   "scoreboard": {
     "period_final": [255, 0, 0],
-    "SOG_label": [255, 111, 0]
+    "SOG_label": [255, 111, 0],
+    "irregular_status":[255, 0, 0]
   }
 }
