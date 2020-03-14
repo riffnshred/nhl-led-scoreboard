@@ -107,7 +107,7 @@ class Boards:
                 if not data.pb_trigger:
                    bord_index += 1
 
-    def fallback(self, data, matrix):
+    def fallback(self, data, matrix, sleepEvent):
         Clock(data, matrix,sleepEvent)
 
     def scoreticker(self, data, matrix,sleepEvent):

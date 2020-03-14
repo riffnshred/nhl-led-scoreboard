@@ -55,7 +55,7 @@ class MainRenderer:
             except AttributeError as e:
                 debug.log(f'"ERROR WHILE RENDERING: " + {e}')
                 debug.log("Refreshing data in a minute")
-                self.boards.fallback(self.data, self.matrix)
+                self.boards.fallback(self.data, self.matrix, self.sleepEvent)
                 self.data.refresh_data()
 
 
@@ -133,8 +133,18 @@ class MainRenderer:
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
+            
+            elif self.status.is_irregular(self.data.overview.status):
+                """ Pre-game state """
+                debug.info("Game is irregular")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.__render_irregular(self.scoreboard)
+                #sleep(self.refresh_rate)
+                self.sleepEvent.wait(self.refresh_rate)
+                self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            print("refreshing")
+            print(self.data.overview.status)
+            sleep(5)
             self.data.refresh_data()
             self.data.refresh_overview()
             if self.data.network_issues:
@@ -146,6 +156,7 @@ class MainRenderer:
         debug.info("Showing Pre-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+        
 
 
     def __render_postgame(self, scoreboard):
@@ -163,6 +174,12 @@ class MainRenderer:
             show_SOG = True
         ScoreboardRenderer(self.data, self.matrix, scoreboard, show_SOG).render()
         self.alternate_data_counter += 1 
+
+    def __render_irregular(self, scoreboard):
+        debug.info("Showing Irregular")
+        self.matrix.clear()
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+
 
 
     def check_new_goals(self):
