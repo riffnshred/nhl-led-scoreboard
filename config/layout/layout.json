@@ -57,6 +57,10 @@
     "SOG": {
       "position": ["50%", 6],
       "align": "center-top"
+    },
+    "irregular_status": {
+      "position": ["50%", 6],
+      "align": "center-top"
     }
     
   },

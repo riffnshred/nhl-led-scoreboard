@@ -47,6 +47,8 @@ class TeamSummary:
             prev_game = team.previous_game
             next_game = team.next_game
 
+            
+
             logo_renderer = LogoRenderer(
                 self.matrix,
                 self.data.config,
@@ -58,7 +60,7 @@ class TeamSummary:
             try:
                 if prev_game:
                     prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
-                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.teams_info, self.data.config)
+                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.data)
                 else:
                     prev_game_scoreboard = False
 
@@ -70,7 +72,7 @@ class TeamSummary:
             try:
                 if next_game:
                     next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
-                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.teams_info, self.data.config)
+                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.data)
                 else:
                     next_game_scoreboard = False
 
@@ -157,7 +159,7 @@ class TeamSummary:
                 draw.text((0, 28), "VS {}".format(prev_game_scoreboard.away_team.abbrev), fill=(255, 255, 255),
                           font=self.font)
 
-            if prev_game_scoreboard.status.is_irregular():
+            if self.data.status.is_irregular(prev_game_scoreboard.status):
                 draw.text((0, 34), prev_game_scoreboard.status, fill=(255, 0, 0), font=self.font)
 
             else:
@@ -183,7 +185,8 @@ class TeamSummary:
         if next_game_scoreboard:
             date = convert_date_format(next_game_scoreboard.date)
             draw.text((0, 49), "{}".format(date), fill=(255, 255, 255), font=self.font)
-            if prev_game_scoreboard.status.is_irregular():
+
+            if self.data.status.is_irregular(next_game_scoreboard.status):
                 draw.text((0, 55), "{}".format(next_game_scoreboard.status), fill=(255, 0, 0), font=self.font)
             else:
                 draw.text((0, 55), "{}".format(next_game_scoreboard.start_time), fill=(255, 255, 255), font=self.font)

@@ -6,7 +6,7 @@ from utils import center_text
 
 
 class Clock:
-    def __init__(self, data, matrix, sleepEvent,duration=None):
+    def __init__(self, data, matrix, sleepEvent ,duration=None):
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
