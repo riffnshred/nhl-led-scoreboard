@@ -450,6 +450,8 @@ def main():
 
     use_dimmer = prompt(dimmer_enabled,style=custom_style_dope)
     if use_dimmer['enabled'] or not sbio_default:
+        sbio_config['sbio']['dimmer'].update(enabled = True)
+
         #Get all of the settings for the dimmer from the user
         dimmer_questions = [
             {
@@ -524,6 +526,7 @@ def main():
     ]
     use_pb = prompt(pb_enabled,style=custom_style_dope)
     if use_pb['enabled'] or not sbio_default:
+        sbio_config['sbio']['pushbutton'].update(enabled = True)
         #Get all of the settings for the pushbutton from the user
         pb_questions = [
             {

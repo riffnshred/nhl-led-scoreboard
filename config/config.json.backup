@@ -1,49 +1,77 @@
 {
-	"debug": true,
-	"live_mode": true,
-	"preferences": {
-		"live_game_refresh_rate": 15,
-		"end_of_day": "12:00",
-		"teams": [
-			"Canadiens",
-			"Blackhawks",
-			"Avalanche"
-		],
-		"standing_type": "conference",
-		"divisions": "central",
-		"conference": "eastern",
-			"dimmer": {
-				"source": "software",
-				"frequency": 5,
-				"light_level_lux": 400,
-				"mode": "always",
-				"sunset_brightness": 10,
-				"sunrise_brightness": 60
-			}
-	},
-	"boards": {
-		"off_day": [
-			"scoreticker",
-			"team_summary",
-			"standings"
-		],
-		"scheduled": [
-			"scoreticker",
-			"team_summary",
-			"standings"
-		],
-		"intermission": [
-			"scoreticker"
-		],
-		"post_game": [
-			"scoreticker"
-		],
-		"scoreticker": {
-			"preferred_teams_only": false,
-			"rotation_rate": 5
-		},
-		"standings": {
-			"preferred_standings_only": false
-		}
-	}
+    "debug": true,
+    "live_mode": true,
+    "preferences": {
+        "time_format": "12h",
+        "end_of_day": "08:00",
+        "live_game_refresh_rate": 15,
+        "teams": [
+            "Jets",
+            "Canadiens",
+            "Stars"
+        ],
+        "sog_display_frequency": 4
+    },
+    "goal_animations": {
+        "pref_team_only": true
+    },
+    "states": {
+        "off_day": [
+            "clock",
+            "scoreticker",
+            "standings",
+            "team_summary"
+        ],
+        "scheduled": [
+            "scoreticker",
+            "standings",
+            "clock",
+            "team_summary"
+        ],
+        "intermission": [
+            "scoreticker"
+        ],
+        "post_game": [
+            "team_summary",
+            "standings"
+        ]
+    },
+    "boards": {
+        "scoreticker": {
+            "preferred_teams_only": false,
+            "rotation_rate": 5
+        },
+        "standings": {
+            "preferred_standings_only": true,
+            "standing_type": "wild_card",
+            "divisions": "central",
+            "conference": "western"
+        },
+        "clock": {
+            "duration": 60,
+            "hide_indicator": false
+        }
+    },
+    "sbio": {
+        "dimmer": {
+            "source": "software",
+            "frequency": 5,
+            "light_level_lux": 300,
+            "mode": "always",
+            "sunset_brightness": 5,
+            "sunrise_brightness": 40
+        },
+        "pushbutton": {
+            "bonnet": true,
+            "pin": 25,
+            "reboot_duration": 2,
+            "reboot_override_process": "",
+            "display_reboot": true,
+            "poweroff_duration": 10,
+            "poweroff_override_process": "",
+            "display_halt": true,
+            "state_triggered1": "clock",
+            "state_triggered1_process": ""
+        }
+    }
 }
