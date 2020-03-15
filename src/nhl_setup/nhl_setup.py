@@ -127,6 +127,8 @@ def get_team(team_index,team_choices,pref_teams,qmark):
     if len(pref_teams) >= 0 and len(team_choices) > 0:
         #Combine lists with teams from team_choices first
         choices = [ele for ele in def_choices if ele not in team_choices]
+        if len(pref_teams) > 0:
+            choices = [ele for ele in def_choices if ele not in pref_teams]
         choices = team_choices + choices
     
     if len(pref_teams) > 0 and len(team_choices) == 0:
@@ -560,7 +562,7 @@ def main():
                 'type' : 'confirm',
                 'name' : 'display_reboot',
                 'qmark': qmark,
-                'message' : "Display a REBBOT screen when reboot triggered?",
+                'message' : "Display a REBOOT screen when reboot triggered?",
                 'default' : get_default_value(default_config,['sbio','pushbutton','display_reboot'],"bool") or True
             },
             {
