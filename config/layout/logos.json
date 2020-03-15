@@ -1,0 +1,40 @@
+{
+  "team_summary": {
+    "logos": {
+      "_default": {
+        "zoom": "100%",
+        "position": [0, 0],
+        "flip": 0,
+        "rotate": 0,
+        "crop": [0, 0, 0, 0]
+      }
+    }
+  },
+  "scoreboard": {
+    "logos": {
+      "_default": {
+        "zoom": "100%",
+        "position": [0, 0],
+        "flip": 0,
+        "rotate": 0,
+        "crop": [0, 0, 0, 0]
+      },
+      "DAL": {
+        "home": {
+          
+        },
+        "away": {
+          "position": [5, 0]
+        }
+      },
+      "CGY": {
+        "home": {
+          "position": [-2, 0]
+        },
+        "away": {
+          "position": [2, 0]
+        }
+      }
+    }
+  }
+}

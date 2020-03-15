@@ -1,0 +1,11 @@
+{
+  "_default": [255, 255, 255],
+  "clock": {
+    "time": [255, 50, 50]
+  },
+  "scoreboard": {
+    "period_final": [255, 0, 0],
+    "SOG_label": [255, 111, 0],
+    "irregular_status":[255, 0, 0]
+  }
+}

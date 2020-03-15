@@ -4,13 +4,13 @@ from utils import convert_time
 
 
 class Scoreboard:
-    def __init__(self, overview, teams_info, config):
-        time_format = config.time_format
+    def __init__(self, overview, data):
+        time_format = data.config.time_format
         linescore = overview.linescore
         away = linescore.teams.away
         home = linescore.teams.home
-        away_abbrev = teams_info[away.team.id].abbreviation
-        home_abbrev = teams_info[home.team.id].abbreviation
+        away_abbrev = data.teams_info[away.team.id].abbreviation
+        home_abbrev = data.teams_info[home.team.id].abbreviation
         self.away_team = Team(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
                               away.numSkaters, away.goaliePulled)
         self.home_team = Team(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
@@ -22,7 +22,7 @@ class Scoreboard:
         self.periods = Periods(overview)
         self.intermission = linescore.intermissionInfo.inIntermission
 
-        if self.status == "Final":
+        if data.status.is_final(overview.status):
             self.winning_team = overview.w_team
             self.loosing_team = overview.l_team
 

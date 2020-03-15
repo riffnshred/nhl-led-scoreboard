@@ -1,0 +1,14 @@
+{
+  "_default": {
+    "file": "04B_24__.TTF",
+    "size": 8
+  },
+  "medium": {
+    "file": "score_large.otf",
+    "size": 16
+  },
+  "large": {
+    "file": "04B_24__.TTF",
+    "size": 24
+  }
+}

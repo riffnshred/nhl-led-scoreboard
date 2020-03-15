@@ -1,5 +1,5 @@
 class Team:
-    def __init__(self, id, abbrev, name, goals, sog, powerplay, num_skaters, pulled_goalie):
+    def __init__(self, id, abbrev, name, goals=0, sog=0, powerplay=False, num_skaters=0, pulled_goalie=False):
         self.id = id
         self.abbrev = abbrev
         self.name = name

@@ -2,38 +2,40 @@
 	"debug": true,
 	"live_mode": true,
 	"preferences": {
-		"time_format": "12h",
-		"end_of_day": "12:00",
-		"live_game_refresh_rate": 15,
+		"time_format": "24h",
+		"end_of_day": "8:00",
+		"live_game_refresh_rate": 10,
 		"teams": [
-			"Avalanche"
-		]
+			"Flames",
+			"Oilers"
+		],
+		"sog_display_frequency": 4
 	},
 
 	"goal_animations": {
-		"pref_team_only": false
+		"pref_team_only": true
 	},
 
 	"states":{
 		"off_day": [
 			"team_summary",
-			"scoreticker",
 			"standings",
+			"scoreticker",
 			"clock"
 		],
 		"scheduled": [
 			"team_summary",
-			"scoreticker",
 			"standings",
+			"scoreticker",
 			"clock"
 		],
 		"intermission": [
 			"scoreticker"
 		],
 		"post_game": [
-			"scoreticker",
-			"standings",
 			"team_summary",
+			"standings",
+			"scoreticker",
 			"clock"
 		]
 	},
@@ -50,18 +52,34 @@
 			"conference": "western"
 		},
 		"clock": {
-			"duration": 60,
+			"duration": 15,
 			"hide_indicator": false
 		}
 	},
 
-	"dimmer": {
-		"enabled": true,
-		"source": "software",
-		"frequency": 5,
-		"light_level_lux": 400,
-		"mode": "always",
-		"sunset_brightness": 5,
-		"sunrise_brightness": 8
+	"sbio": {
+		"dimmer": {
+			"enabled": true,
+			"source": "software",
+			"frequency": 5,
+			"light_level_lux": 400,
+			"mode": "always",
+			"sunset_brightness": 5,
+			"sunrise_brightness": 40
+		},
+		"pushbutton": {
+			"enabled": true,
+			"bonnet": true,
+			"pin": 25,
+			"reboot_duration": 2,
+			"reboot_override_process": "",
+			"display_reboot": true,
+			"poweroff_duration": 10,
+			"poweroff_override_process": "",
+			"display_halt": true,
+			"state_triggered1": "clock",
+			"state_triggered1_process": ""
+		}
 	}
+	
 }

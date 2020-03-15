@@ -1,5 +1,4 @@
-import nhl_api.game
-import nhl_api.info
+import src.nhl_api as nhl_api
 
 def test_game():
     games = nhl_api.game.scoreboard(2019, 12, 17)
@@ -31,6 +30,9 @@ def test_standings():
     standings, wildcard = nhl_api.info.standings()
     standings = nhl_api.info.Standings(standings, wildcard)
     standings = standings.by_conference
+
+def test_playoff():
+    print(nhl_api.playoff.Playoff(nhl_api.playoff.playoff_info()))
 
     # for record in standings.eastern.wild_card:
     #     print(record)
@@ -121,4 +123,6 @@ def show_div_record(record):
 #test_status_info()
 
 # Test standings
-test_standings()
+#test_standings()
+
+test_playoff()

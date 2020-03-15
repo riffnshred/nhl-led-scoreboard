@@ -42,7 +42,16 @@ class Data:
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
+        
+        # Flag for if pushbutton has triggered
+        self.pb_trigger = False
 
+        # For pb state,  reboot or poweroff
+        self.pb_state = None
+
+        # Currently displayed board
+        self.curr_board = None
+        
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
@@ -76,6 +85,9 @@ class Data:
 
         # Fetch the games for today
         self.refresh_games()
+        
+        # Flag to indicate if all preferred games are Final
+        self.all_pref_games_final = False
 
         # Today's date
         self.today = self.date()
@@ -86,14 +98,13 @@ class Data:
         # Get refresh standings
         self.refresh_standings()
 
-
     #
     # Date
 
     def __parse_today(self):
         today = datetime.today()
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
-                                                                                day=today.day)
+                                                           day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
         if noon < end_of_day < datetime.now() and datetime.now() > noon:
@@ -114,6 +125,26 @@ class Data:
         self.refresh_current_date()
         if self.today != self.date():
             debug.info('It is a new day, refreshing Data')
+            
+            # Set the pointer to the first game in the list of Pref Games
+            self.current_game_index = 0
+
+            # Today's date
+            self.today = self.date()
+
+            # Get the status info from the API
+            self.get_status()
+
+            # Get the teams info
+            self.teams = self.get_teams()
+
+            # Get favorite team's id
+            self.pref_teams = self.get_pref_teams_id()
+
+            # Reset flag
+            self.all_pref_games_final = False
+
+            # Reset and refresh Data
             self.refresh_data()
             return True
         else:
@@ -138,7 +169,6 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
-
     def refresh_games(self):
         """
             Refresh the current list of games of the day.
@@ -160,7 +190,10 @@ class Data:
 
                 if not self.is_pref_team_offday():
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
+                    self.check_all_pref_games_final()
+
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
+                
 
                     # Remove the current game id (Main event) form the list of games.
                     if self.config.live_mode:
@@ -169,7 +202,6 @@ class Data:
                             if game.game_id != self.current_game_id:
                                 game_list.append(game)
                         self.games = game_list
-
 
                 self.network_issues = False
                 break
@@ -180,6 +212,21 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
+            except IndexError as error_message:
+                debug.error(error_message)
+                debug.info("All preferred games are Final, showing the top preferred game")
+                self.current_game_index = 0
+                self.all_pref_games_final = True
+                self.refresh_games()
+
+    def check_all_pref_games_final(self):
+        for game in self.pref_games:
+            if game.status != "Final":
+                return
+            else:
+                self.all_pref_games_final = True
+
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
@@ -196,6 +243,7 @@ class Data:
                 attempts_remaining -= 1
                 self.status = []
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+                
 
     #
     # Main game event data
@@ -222,23 +270,21 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
-    def advance_to_next_game(self):
+    def _next_game(self):
         """
-        TODO: Needs to be done after the V1 launch
-        function to show the next game of in the "games" list.
+        function to show the next game of in the "pref_games" list.
 
         Check the status of the current preferred game and if it's Final or between periods rotate to the next game on
         the game list.
 
         :return:
         """
-        pass
+        if self.all_pref_games_final:
+            return False
 
-    def __next_game_index(self):
-        counter = self.current_game_index + 1
-        if counter >= len(self.games):
-            counter = 0
-        return counter
+        self.current_game_index += 1
+        self.refresh_games()
+        return True
 
     #
     # Standings
@@ -256,6 +302,7 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
     #
     # Teams
 
@@ -299,7 +346,6 @@ class Data:
         except TypeError:
             return []
 
-
     #
     # Offdays
 
@@ -317,40 +363,26 @@ class Data:
 
     def refresh_data(self):
         """
-            This method is used when the software move to the next day. It reset all the main variables
+            This method is used when the software move to the next day or . It reset all the main variables
             and re-initialize the overall data.
         :return:
         """
-        print("refresing data")
+        debug.log("refresing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
         # Flag for network issues
         self.network_issues = False
 
-        # Get the teams info
-        self.teams = self.get_teams()
+        # Parse today's date and see if we should use today or yesterday
+        self.refresh_current_date()
 
         # Get all the team's data
         self.get_teams_info()
 
-        # Get favorite team's id
-        self.pref_teams = self.get_pref_teams_id()
-
-        # Parse today's date and see if we should use today or yesterday
-        self.refresh_current_date()
-
-        # Set the pointer to the first game in the list of Pref Games
-        self.current_game_index = 0
-
         # Fetch the games for today
         self.refresh_games()
 
-        # Today's date
-        self.today = self.date()
-
-        # Get the status from the API
-        self.get_status()
-
         # Get refresh standings
         self.refresh_standings()
+
