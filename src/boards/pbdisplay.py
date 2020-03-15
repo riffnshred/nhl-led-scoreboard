@@ -38,15 +38,16 @@ class pbDisplay:
 
             self.matrix.draw_text(["50%", "50%"], self.state,font=self.font_large,
                                 fill=(0, 255, 0),
-                                 align="center-center",multiline=False)
+                                 align="center-center")
 
             
         else:
+
             self.matrix.draw_image(["50%", "50%"] , self.pb_halt_icon,"center-center")
 
             self.matrix.draw_text(["50%", "50%"], self.state,font=self.font_large,
                               fill=(255, 0, 0),
-                              align="center-center",multiline=False)
+                              align="center-center")
 
 
 

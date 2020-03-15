@@ -1,14 +1,13 @@
 {
 	"debug": true,
-	"live_mode": true,
+	"live_mode": false,
 	"preferences": {
-		"time_format": "24h",
+		"time_format": "12h",
 		"end_of_day": "10:00",
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Jets",
 			"Canadiens",
-			"Kings",
 			"Oilers"
 		],
 		"sog_display_frequency": 4

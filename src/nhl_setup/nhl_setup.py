@@ -9,6 +9,7 @@ import regex
 import json
 import os
 import sys
+import shutil
 
 from time import sleep
 
@@ -65,6 +66,12 @@ def load_config(confdir):
 
 def save_config(nhl_config,confdir):
     savefile = json.dumps(nhl_config, sort_keys=False, indent=4)
+    #Make backup of original file if exists
+    try:
+        shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
+    except:
+        print("Error making backup of {}/config.json".format(confdir),RED)
+
     with open('{}/config.json'.format(confdir),'w') as f:
         f.write(savefile)
 
