@@ -3,11 +3,10 @@
 	"live_mode": true,
 	"preferences": {
 		"time_format": "24h",
-		"end_of_day": "10:00",
+		"end_of_day": "8:00",
 		"live_game_refresh_rate": 10,
 		"teams": [
-			"Canadiens",
-			"Kings",
+			"Flames",
 			"Oilers"
 		],
 		"sog_display_frequency": 4
@@ -19,6 +18,9 @@
 
 	"states":{
 		"off_day": [
+			"team_summary",
+			"standings",
+			"scoreticker",
 			"clock"
 		],
 		"scheduled": [
@@ -28,10 +30,13 @@
 			"clock"
 		],
 		"intermission": [
-			"clock"
+			"scoreticker"
 		],
 		"post_game": [
-			"scoreticker"
+			"team_summary",
+			"standings",
+			"scoreticker",
+			"clock"
 		]
 	},
 
