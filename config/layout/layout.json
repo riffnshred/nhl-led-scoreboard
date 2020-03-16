@@ -72,7 +72,7 @@
   },
   "clock": {
     "time": {
-      "position": ["50%", "50%"],
+      "position": ["50%", "60%"],
       "font": "large",
       "align": "center-center"
     },
