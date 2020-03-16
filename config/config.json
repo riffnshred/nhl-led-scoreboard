@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"live_mode": false,
+	"live_mode": true,
 	"preferences": {
 		"time_format": "24h",
 		"end_of_day": "8:00",
@@ -18,7 +18,7 @@
 
 	"states":{
 		"off_day": [
-			"covid_19"
+			"standings"
 			
 		],
 		"scheduled": [
@@ -47,7 +47,7 @@
 			"preferred_standings_only": true,
 			"standing_type": "wild_card",
 			"divisions": "central",
-			"conference": "western"
+			"conference": "eastern"
 		},
 		"clock": {
 			"duration": 15,
