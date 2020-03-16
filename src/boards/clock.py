@@ -52,10 +52,11 @@ class Clock:
             self.date.strftime("%b %d %Y")
         )
 
-        self.matrix.draw_text_layout(
-            self.layout.meridiem,
-            "{}\n{}".format(self.meridiem[0], self.meridiem[1])
-        )
+        if self.time_format == "12h":
+            self.matrix.draw_text_layout(
+                self.layout.meridiem,
+                "{}\n{}".format(self.meridiem[0], self.meridiem[1])
+            )
 
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
