@@ -125,7 +125,4 @@ class Boards:
         Clock(data, matrix, sleepEvent)  
 
     def pbdisplay(self, data, matrix,sleepEvent):
-        pbDisplay(data, matrix, sleepEvent)   
-
-    def covid_19(self, data, matrix,sleepEvent):
-        Covid_19(data, matrix, sleepEvent)   
+        pbDisplay(data, matrix, sleepEvent)

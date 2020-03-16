@@ -18,7 +18,10 @@
 
 	"states":{
 		"off_day": [
-			"standings"
+			"team_summary",
+			"standings",
+			"scoreticker",
+			"clock"
 			
 		],
 		"scheduled": [
