@@ -1,6 +1,10 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
+# Causes of NHL suspending the Season
+I did'n program the scoreboard to handle posponed games so far. I'm working on a fix and will release it ASAP. Join the discord channel for more details and futur updates.
+
+
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
 or you are curious about the development of the project, come join us by clicking on this button.

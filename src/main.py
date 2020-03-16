@@ -12,7 +12,9 @@ from renderer.matrix import Matrix
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
-SCRIPT_VERSION = "1.1.0 (BETA)"
+
+SCRIPT_VERSION = "1.1.0"
+
 
 def run():
     # Get supplied command line arguments
@@ -44,7 +46,7 @@ def run():
         dimmerThread = threading.Thread(target=dimmer.run, args=())
         dimmerThread.daemon = True
         dimmerThread.start()
-    
+
     if data.config.pushbutton_enabled:
         pushbutton = PushButton(data,matrix,sleepEvent)
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
