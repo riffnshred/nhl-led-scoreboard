@@ -67,10 +67,15 @@ def load_config(confdir):
 def save_config(nhl_config,confdir):
     savefile = json.dumps(nhl_config, sort_keys=False, indent=4)
     #Make backup of original file if exists
+    #Check if directory exists
+    if not os.path.exists(confdir):
+        #os.makedirs(confdir)
+        print("Directory {} does not exist.  Are you running in the right directory?".format(confdir),RED)
+        sys.exit()
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
-    except:
-        print("Error making backup of {}/config.json".format(confdir),RED)
+    except Exception as e:
+        print("Error making backup of {0}/config.json. Error: {1}".format(confdir,e),RED)
 
     with open('{}/config.json'.format(confdir),'w') as f:
         f.write(savefile)
@@ -177,6 +182,14 @@ def main():
     parser.add_argument('confdir', nargs='?',default="config", type=str, help='Input dir for config.json')
     args = parser.parse_args()
     
+    if not os.path.exists(args.confdir):
+        #os.makedirs(confdir)
+        # Get current working directory
+        setup_cwd = os.getcwd()
+        print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
+        #parser.print_usage()
+        sys.exit()
+
     default_config = load_config(args.confdir)
 
     if questionary.confirm("Do you see a net,stick and horn?",style=custom_style_dope,qmark='🥅🏒🚨').ask():
