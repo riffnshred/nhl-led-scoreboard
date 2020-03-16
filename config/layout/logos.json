@@ -19,17 +19,20 @@
         "rotate": 0,
         "crop": [0, 0, 0, 0]
       },
-      "LAK": {
+      "DAL": {
         "home": {
           
         },
         "away": {
-          
+          "position": [5, 0]
         }
       },
-      "CAL": {
+      "CGY": {
+        "home": {
+          "position": [-2, 0]
+        },
         "away": {
-          
+          "position": [2, 0]
         }
       }
     }
