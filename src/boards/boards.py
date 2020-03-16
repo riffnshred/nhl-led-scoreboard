@@ -8,6 +8,7 @@ from boards.scoreticker import Scoreticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
+from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from time import sleep
 
@@ -108,20 +109,23 @@ class Boards:
                    bord_index += 1
 
     def fallback(self, data, matrix, sleepEvent):
-        Clock(data, matrix,sleepEvent)
+        Clock(data, matrix, sleepEvent)
 
     def scoreticker(self, data, matrix,sleepEvent):
-        Scoreticker(data, matrix,sleepEvent).render()
+        Scoreticker(data, matrix, sleepEvent).render()
 
     def standings(self, data, matrix,sleepEvent):
         #Try making standings a thread
-        Standings(data, matrix,sleepEvent).render()
+        Standings(data, matrix, sleepEvent).render()
 
     def team_summary(self, data, matrix,sleepEvent):
-        TeamSummary(data, matrix,sleepEvent).render()
+        TeamSummary(data, matrix, sleepEvent).render()
 
     def clock(self, data, matrix,sleepEvent):
-        Clock(data, matrix,sleepEvent)  
+        Clock(data, matrix, sleepEvent)  
 
     def pbdisplay(self, data, matrix,sleepEvent):
-        pbDisplay(data, matrix,sleepEvent)    
+        pbDisplay(data, matrix, sleepEvent)   
+
+    def covid_19(self, data, matrix,sleepEvent):
+        Covid_19(data, matrix, sleepEvent)   

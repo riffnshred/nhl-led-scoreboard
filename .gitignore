@@ -129,4 +129,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
- 
+
+# ignore generated logos
+assets/logos/*

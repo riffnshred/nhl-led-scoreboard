@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"live_mode": true,
+	"live_mode": false,
 	"preferences": {
 		"time_format": "24h",
 		"end_of_day": "8:00",
@@ -18,10 +18,8 @@
 
 	"states":{
 		"off_day": [
-			"team_summary",
-			"standings",
-			"scoreticker",
-			"clock"
+			"covid_19"
+			
 		],
 		"scheduled": [
 			"team_summary",

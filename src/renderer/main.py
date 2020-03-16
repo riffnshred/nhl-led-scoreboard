@@ -30,33 +30,29 @@ class MainRenderer:
             self.data.refresh_data()
 
         while True:
-            try:
-                debug.info('Rendering...')
-                self.data.refresh_data()
-                if self.status.is_offseason(self.data.date()):
-                    # Offseason (Show offseason related stuff)
-                    debug.info("It's offseason")
+            
+            debug.info('Rendering...')
+            self.data.refresh_data()
+            if self.status.is_offseason(self.data.date()):
+                # Offseason (Show offseason related stuff)
+                debug.info("It's offseason")
+                self.__render_offday()
+            else:
+                # Season.
+                if not self.data.config.live_mode:
+                    debug.info("Live mode is off. Going through the boards")
+                    self.__render_offday()
+                elif self.data.is_pref_team_offday():
+                    debug.info("Your preferred teams are Off today")
+                    self.__render_offday()
+                elif self.data.is_nhl_offday():
+                    debug.info("There is no game in the NHL today")
                     self.__render_offday()
                 else:
-                    # Season.
-                    if not self.data.config.live_mode:
-                        debug.info("Live mode is off. Going through the boards")
-                        self.__render_offday()
-                    elif self.data.is_pref_team_offday():
-                        debug.info("Your preferred teams are Off today")
-                        self.__render_offday()
-                    elif self.data.is_nhl_offday():
-                        debug.info("There is no game in the NHL today")
-                        self.__render_offday()
-                    else:
-                        debug.info("Game Day Wooooo")
-                        self.__render_game_day()
+                    debug.info("Game Day Wooooo")
+                    self.__render_game_day()
 
-            except AttributeError as e:
-                debug.log(f'"ERROR WHILE RENDERING: " + {e}')
-                debug.log("Refreshing data in a minute")
-                self.boards.fallback(self.data, self.matrix, self.sleepEvent)
-                self.data.refresh_data()
+           
 
 
     def __render_offday(self):
