@@ -98,6 +98,14 @@
       "position": [0, "50%"],
       "font": "medium_2",
       "align": "left-center"
-    } 
+    },
+    "name":{
+      "position": [0, -2],
+      "align": "left-bottom",
+      "relative": {
+        "to": "count",
+        "align": "left-top"
+      }
+    }
   }
 }

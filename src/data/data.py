@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from time import sleep
 import debug
 import nhl_api
-import api.covid19 as covid19
+from api.covid19.data import Data as covid19_data
 from data.status import Status
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
@@ -100,9 +100,8 @@ class Data:
         self.refresh_standings()
 
         # Get Covid 19 Data
-        self.covid19_all = covid19.get_all_latest().all
+        self.covid19 = covid19_data()
 
-        print(self.covid19_all)
 
     #
     # Date
