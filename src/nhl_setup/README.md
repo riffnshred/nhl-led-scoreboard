@@ -48,5 +48,5 @@ The PyInstaller packed was used to created an executable app.  It was the only o
 pyinstaller --onefile --add-data '/usr/local/lib/python3.7/dist-packages/pyfiglet:./pyfiglet'  nhl_setup.py
 ```
 
-This will cretae a build and dist directory in the same directory as the nhl_setup.py.  Under the dist directory is the compiled executable.  The only downside to this is it's slower to run than runinng via python directly.
+This will create a build and dist directory in the same directory as the nhl_setup.py.  Under the dist directory is the compiled executable.  The only downside to this is it's slower to run than runinng via python directly.
 
