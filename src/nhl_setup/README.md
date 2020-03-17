@@ -1,4 +1,4 @@
-
+![nhl_setup](../../assets/images/nhl_setup.gif)
 In the score board root, there is a compiled version of the nhl_setup.py.  You can run this and it will look for a config.json or config.json.sample in the config directory (not the src/config directory).  If those files don't exist, it will present you with defaults and you can select what you want.  After answering all of the questions, the app will create a config.json in the config directory and you can then run your scoreboard.  If it finds a config.json or config.json.sample, it will use the values in those as defaults in the questions.
 
 To run the compiled app, do the following:
