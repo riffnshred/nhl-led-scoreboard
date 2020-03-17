@@ -42,3 +42,11 @@ Hit yes it you see them.  This means your terminal has nice fancy fonts installe
 
 Hit no because your terminal doesn't like fancy fonts.
 
+## Notes to create a compiled nhl_setup app
+The PyInstaller packed was used to created an executable app.  It was the only one that I could get to work properly.  Once you install pyinstaller, this is the command line that I used to create an compiled version:
+```
+pyinstaller --onefile --add-data '/usr/local/lib/python3.7/dist-packages/pyfiglet:./pyfiglet'  nhl_setup.py
+```
+
+This will cretae a build and dist directory in the same directory as the nhl_setup.py.  Under the dist directory is the compiled executable.  The only downside to this is it's slower to run than runinng via python directly.
+
