@@ -1,0 +1,44 @@
+
+In the score board root, there is a compiled version of the nhl_setup.py.  You can run this and it will look for a config.json or config.json.sample in the config directory (not the src/config directory).  If those files don't exist, it will present you with defaults and you can select what you want.  After answering all of the questions, the app will create a config.json in the config directory and you can then run your scoreboard.  If it finds a config.json or config.json.sample, it will use the values in those as defaults in the questions.
+
+To run the compiled app, do the following:
+
+```
+./nhl_setup
+```
+
+> **_NOTE:_** The compiled app will be slower than running the python code as it has to uncompress some libraries to disk first.  Running as the compiled app removes the need to do any type of package installs with pip.
+
+If you want to run this as pure python and not the app, you will need to install the following pip3 packages:
+
+```
+printtools==1.2
+questionary==1.5.1
+regex==2020.2.20
+```
+As the RGB matrix library needs to run as the root user, you will need to install using sudo.  
+
+```
+sudo pip3 install printtools
+sudo pip3 install questionary
+sudo pip3 install regex
+```
+
+If you run the python script from the src/nhl_setup directory you will need to give the full path of the config directory so it can find the config.json.  For example:
+
+```
+python3 src/nhl_setup/nhl_setup.py /home/pi/source/nhl-led-scoreboard/config
+```
+
+If the app can't find your config directory, it will error out and tell you it can't find it.
+
+The very first thing you will see is this:
+
+🥅🏒🚨 Do you see a net,stick and horn?  (Y/n)
+
+Hit yes it you see them.  This means your terminal has nice fancy fonts installed.  If you see something like:
+
+   Do you see a net,stick and horn?  (Y/n)
+
+Hit no because your terminal doesn't like fancy fonts.
+
