@@ -4,6 +4,9 @@ from time import sleep
 
 
 class Standings:
+    """
+        TODO: Change draw standings to use new matrix layout system
+    """
     def __init__(self, data, matrix,sleepEvent):
         self.conferences = ["eastern", "western"]
         self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
@@ -211,7 +214,7 @@ def draw_standing(data, name, records, img_height, width):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0
@@ -233,7 +236,10 @@ def draw_standing(data, name, records, img_height, width):
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-        draw.text((57, row_pos), points, font=layout.font)
+        if len(points) == 3:
+            draw.text((54, row_pos), points, font=layout.font)
+        else:
+            draw.text((57, row_pos), points, font=layout.font)
         draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
         row_pos += row_height
 
@@ -255,7 +261,7 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0
@@ -279,7 +285,10 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
             txt_color = team_colors.color("{}.text".format(team_id))
             draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
             draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-            draw.text((57, row_pos), points, font=layout.font)
+            if len(points) == 3:
+                draw.text((54, row_pos), points, font=layout.font)
+            else:
+                draw.text((57, row_pos), points, font=layout.font)
             draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
             row_pos += row_height
         # add a space of one row of 2 LED between each tables
@@ -299,7 +308,10 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-        draw.text((57, row_pos), points, font=layout.font)
+        if len(points) == 3:
+            draw.text((54, row_pos), points, font=layout.font)
+        else:
+            draw.text((57, row_pos), points, font=layout.font)
         draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
         row_pos += row_height
 
