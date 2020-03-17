@@ -129,4 +129,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
- 
+
+#nhl-led-scoreboard
+config/config.json
+config/config.json.backup 
