@@ -53,7 +53,7 @@ class MainRenderer:
                         self.__render_game_day()
 
             except AttributeError as e:
-                debug.log(f'"ERROR WHILE RENDERING: " + {e}')
+                debug.log(f"ERROR WHILE RENDERING: {e}")
                 debug.log("Refreshing data in a minute")
                 self.boards.fallback(self.data, self.matrix, self.sleepEvent)
                 self.data.refresh_data()
