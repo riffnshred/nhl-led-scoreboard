@@ -30,7 +30,7 @@ class MainRenderer:
             self.data.refresh_data()
 
         while True:
-            try:
+            # try:
                 debug.info('Rendering...')
                 self.data.refresh_data()
                 if self.status.is_offseason(self.data.date()):
@@ -52,11 +52,11 @@ class MainRenderer:
                         debug.info("Game Day Wooooo")
                         self.__render_game_day()
 
-            except AttributeError as e:
-                debug.log(f'"ERROR WHILE RENDERING: " + {e}')
-                debug.log("Refreshing data in a minute")
-                self.boards.fallback(self.data, self.matrix, self.sleepEvent)
-                self.data.refresh_data()
+            # except AttributeError as e:
+            #     debug.log(f'"ERROR WHILE RENDERING: " + {e}')
+            #     debug.log("Refreshing data in a minute")
+            #     self.boards.fallback(self.data, self.matrix, self.sleepEvent)
+            #     self.data.refresh_data()
 
 
     def __render_offday(self):

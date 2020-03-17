@@ -92,5 +92,12 @@
         "align": "right-top"
       } 
     }
+  },
+  "covid_19":{
+    "count":{
+      "position": [0, "50%"],
+      "font": "medium_2",
+      "align": "left-center"
+    } 
   }
 }
