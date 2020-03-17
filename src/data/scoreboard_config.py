@@ -18,6 +18,7 @@ class ScoreboardConfig:
         # Preferences
         self.end_of_day = json["preferences"]["end_of_day"]
         self.time_format = self.__get_time_format(json["preferences"]["time_format"])
+
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
@@ -70,10 +71,6 @@ class ScoreboardConfig:
         self.standing_type = json["boards"]["standings"]["standing_type"]
         self.preferred_divisions = json["boards"]["standings"]["divisions"]
         self.preferred_conference = json["boards"]["standings"]["conference"]
-
-        # Clock
-        self.clock_board_duration = json["boards"]["clock"]["duration"]
-        self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
 
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]

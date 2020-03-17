@@ -19,7 +19,6 @@ class Clock:
             self.duration = data.config.clock_board_duration
         
         self.layout = self.data.config.config.layout.get_board_layout('clock')
-
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
@@ -52,7 +51,7 @@ class Clock:
             self.date.strftime("%b %d %Y")
         )
 
-        if self.time_format == "12h":
+        if self.time_format == "%I:%M":
             self.matrix.draw_text_layout(
                 self.layout.meridiem,
                 "{}\n{}".format(self.meridiem[0], self.meridiem[1])

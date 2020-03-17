@@ -8,7 +8,6 @@ from boards.scoreticker import Scoreticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
-from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from time import sleep
 
