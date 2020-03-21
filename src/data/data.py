@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from time import sleep
 import debug
 import nhl_api
+from api.covid19.data import Data as covid19_data
 from data.status import Status
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
@@ -42,7 +43,7 @@ class Data:
                 - Make a Shootout layout with check boxes for each attempt
         :param config:
         """
-        
+
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
 
@@ -51,7 +52,7 @@ class Data:
 
         # Currently displayed board
         self.curr_board = None
-        
+
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
@@ -85,7 +86,7 @@ class Data:
 
         # Fetch the games for today
         self.refresh_games()
-        
+
         # Flag to indicate if all preferred games are Final
         self.all_pref_games_final = False
 
@@ -97,6 +98,9 @@ class Data:
 
         # Get refresh standings
         self.refresh_standings()
+
+        # Get Covid 19 Data
+        self.covid19 = covid19_data()
 
 
     #
@@ -126,7 +130,7 @@ class Data:
         self.refresh_current_date()
         if self.today != self.date():
             debug.info('It is a new day, refreshing Data')
-            
+
             # Set the pointer to the first game in the list of Pref Games
             self.current_game_index = 0
 
@@ -194,7 +198,7 @@ class Data:
                     self.check_all_pref_games_final()
 
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
-                
+
 
                     # Remove the current game id (Main event) form the list of games.
                     if self.config.live_mode:
@@ -244,7 +248,7 @@ class Data:
                 attempts_remaining -= 1
                 self.status = []
                 sleep(NETWORK_RETRY_SLEEP_TIME)
-                
+
 
     #
     # Main game event data

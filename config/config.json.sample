@@ -19,8 +19,8 @@
 
 	"states":{
 		"off_day": [
-			"clock"
-			
+			"clock",
+			"covid_19"
 		],
 		"scheduled": [
 			"team_summary",
@@ -55,7 +55,7 @@
 
 	"sbio": {
 		"dimmer": {
-			"enabled": true,
+			"enabled": false,
 			"source": "software",
 			"frequency": 5,
 			"light_level_lux": 400,
@@ -77,5 +77,5 @@
 			"state_triggered1_process": ""
 		}
 	}
-	
+
 }

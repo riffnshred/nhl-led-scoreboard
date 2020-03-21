@@ -8,6 +8,7 @@ from boards.scoreticker import Scoreticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
+from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from time import sleep
 
@@ -19,7 +20,7 @@ class Boards:
 
     # Board handler for PushButton
     def _pb_board(self, data, matrix,sleepEvent):
-        
+
         board = getattr(self, data.config.pushbutton_state_triggered1)
         board(data, matrix,sleepEvent)
 
@@ -36,7 +37,7 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
-    
+
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_off_day) - 1):
@@ -121,7 +122,10 @@ class Boards:
         TeamSummary(data, matrix, sleepEvent).render()
 
     def clock(self, data, matrix,sleepEvent):
-        Clock(data, matrix, sleepEvent)  
+        Clock(data, matrix, sleepEvent)
 
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)
+
+    def covid_19(self, data, matrix,sleepEvent):
+        Covid_19(data, matrix, sleepEvent)
