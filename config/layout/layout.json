@@ -97,15 +97,31 @@
     "count":{
       "position": [0, "50%"],
       "font": "medium_2",
-      "align": "left-center"
+      "align": "left-top"
     },
     "name":{
-      "position": [0, -2],
+      "position": [3, 0],
+      "align": "left-top",
+      "relative": {
+        "to": "location",
+        "align": "right"
+      }
+    },
+    "location":{
+      "position": [0, -3],
       "align": "left-bottom",
       "relative": {
         "to": "count",
         "align": "left-top"
       }
+    },
+    "lastupdate":{
+      "position": [0, "100%"],
+      "align": "left-bottom"
+    },
+    "board_title":{
+      "position": [1, 1],
+      "align": "left-top"
     }
   }
 }

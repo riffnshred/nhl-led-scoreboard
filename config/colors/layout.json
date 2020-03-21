@@ -7,5 +7,10 @@
     "period_final": [255, 0, 0],
     "SOG_label": [255, 111, 0],
     "irregular_status":[255, 0, 0]
+  },
+  "covid_19": {
+    "name": [0, 0, 0],
+    "location": [255, 255, 255],
+    "board_title":[0, 0, 0]
   }
 }
