@@ -331,7 +331,7 @@ def main():
     temp_dict = {}
 
     while state_index < len(states):
-        board_list = ['clock','scoreticker','standings','team_summary']
+        board_list = ['clock','scoreticker','standings','team_summary','covid_19']
         
         boards_selected = []
         board = None
@@ -524,8 +524,8 @@ def main():
         dimmer_answers = prompt(dimmer_questions,style=custom_style_dope)
         sbio_config['sbio']['dimmer'].update(dimmer_answers)
     else:
-        sbio_default['dimmer'].update(enabled = False)
-        sbio_config.update(sbio_default)
+        sbio_config['sbio']['dimmer'].update(enabled = False)
+        sbio_config['sbio'].update(sbio_default)
 
  
     pb_enabled = [
@@ -609,7 +609,7 @@ def main():
                 'name': 'state_triggered1',
                 'qmark': qmark,
                 'message': 'Pick board to display on button press: ',
-                'choices': ['clock','scoreticker','standings','team_summary'],
+                'choices': ['clock','scoreticker','standings','team_summary','covid_19'],
                 'default': get_default_value(default_config,['sbio','pushbutton','state_triggered1'],"string") or 'clock'
             },
             {
@@ -624,8 +624,8 @@ def main():
         pb_answers = prompt(pb_questions,style=custom_style_dope)
         sbio_config['sbio']['pushbutton'].update(pb_answers)
     else:
-        sbio_default['pushbutton'].update(enabled = False)
-        sbio_config.update(sbio_default)
+        sbio_config['sbio']['pushbutton'].update(enabled = False)
+        sbio_config['sbio'].update(sbio_default)
 
 
     nhl_config.update(sbio_config)
