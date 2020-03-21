@@ -51,6 +51,14 @@ class ScoreboardConfig:
         self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
         self.pushbutton_state_triggered1_process = json["sbio"]["pushbutton"]["state_triggered1_process"]
 
+        # Weather board preferences
+        self.weather_enabled = json["weather"]["enabled"]
+        self.weather_ds_apikey = json["weather"]["ds_apikey"]
+        self.weather_ds_iconset = json["weather"]["ds_iconset"]
+        self.weather_update_freq = json["weather"]["update_freq"]
+        #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
+        #Similar to how a pushbutton interrupts the flow
+        self.weather_show_alerts = json["weather"]["show_alerts"] 
 
         # States
         '''TODO: Put condition so that the user dont leave any board list empty'''

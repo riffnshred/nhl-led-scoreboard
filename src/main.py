@@ -8,6 +8,7 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
+from weather.darkskyWeather import weatherWorker
 from renderer.matrix import Matrix
 import debug
 
@@ -37,6 +38,7 @@ def run():
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
+    # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
     if data.config.dimmer_enabled:
@@ -50,6 +52,12 @@ def run():
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
+    
+    if data.config.weather_enabled:
+        dsweather = weatherWorker(data,sleepEvent)
+        dsweatherThread = threading.Thread(target=dsweather.run(),args=())
+        dsweatherThread.daemon = True
+        dsweatherThread.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
 
