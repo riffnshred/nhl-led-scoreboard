@@ -4,6 +4,9 @@ from time import sleep
 
 
 class Standings:
+    """
+        TODO: Change draw standings to use new matrix layout system
+    """
     def __init__(self, data, matrix,sleepEvent):
         self.conferences = ["eastern", "western"]
         self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
@@ -211,7 +214,7 @@ def draw_standing(data, name, records, img_height, width):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0
@@ -258,7 +261,7 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0

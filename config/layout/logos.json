@@ -34,6 +34,16 @@
         "away": {
           "position": [2, 0]
         }
+      },
+      "ANA": {
+        "home": {
+          "zoom": "70%",
+          "position": [-5, "15%"]
+        },
+        "away": {
+          "zoom": "80%",
+          "position": [5, "10%"]
+        }
       }
     }
   }

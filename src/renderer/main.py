@@ -30,7 +30,7 @@ class MainRenderer:
             self.data.refresh_data()
 
         while True:
-            try:
+            # try:
                 debug.info('Rendering...')
                 self.data.refresh_data()
                 if self.status.is_offseason(self.data.date()):
@@ -78,12 +78,12 @@ class MainRenderer:
         self.sleepEvent.clear()
 
         while not self.sleepEvent.is_set():
-                
+
             if self.data._is_new_day():
                 debug.log('This is a new day')
                 return
 
-            # Display the pushbutton board            
+            # Display the pushbutton board
             if self.data.pb_trigger:
                 debug.info('PushButton triggered in game day loop....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
                 self.data.pb_trigger = False
@@ -92,7 +92,7 @@ class MainRenderer:
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
-                debug.info("Game is Live")                    
+                debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
@@ -133,7 +133,7 @@ class MainRenderer:
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
-            
+
             elif self.status.is_irregular(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is irregular")
@@ -155,7 +155,7 @@ class MainRenderer:
         debug.info("Showing Pre-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-        
+
 
 
     def __render_postgame(self, scoreboard):
@@ -163,7 +163,7 @@ class MainRenderer:
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
         self.draw_end_of_game_indicator()
-        
+
 
     def __render_live(self, scoreboard):
         debug.info("Showing Main Event")
@@ -172,7 +172,7 @@ class MainRenderer:
         if self.alternate_data_counter % self.sog_display_frequency == 0:
             show_SOG = True
         ScoreboardRenderer(self.data, self.matrix, scoreboard, show_SOG).render()
-        self.alternate_data_counter += 1 
+        self.alternate_data_counter += 1
 
     def __render_irregular(self, scoreboard):
         debug.info("Showing Irregular")
@@ -210,7 +210,7 @@ class MainRenderer:
         # Get the list of gif's under the preferred and opposing directory
         preferred_gifs = glob.glob("assets/animations/preferred/*.gif")
         opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
-        
+
         # Set opposing team goal animation here
         filename = random.choice(opposing_gifs)
         debug.info("Opposing animation is: " + filename)

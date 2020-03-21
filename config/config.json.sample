@@ -19,7 +19,8 @@
 
 	"states":{
 		"off_day": [
-			"clock"
+			"clock",
+			"covid_19"
 		],
 		"scheduled": [
 			"team_summary",
@@ -44,20 +45,20 @@
 			"preferred_standings_only": true,
 			"standing_type": "wild_card",
 			"divisions": "central",
-			"conference": "western"
+			"conference": "eastern"
 		},
 		"clock": {
-			"duration": 15,
+			"duration": 60,
 			"hide_indicator": false
 		}
 	},
 
 	"sbio": {
 		"dimmer": {
-			"enabled": true,
+			"enabled": false,
 			"source": "software",
 			"frequency": 5,
-			"light_level_lux": 400,
+			"light_level_lux": 10,
 			"mode": "always",
 			"sunset_brightness": 5,
 			"sunrise_brightness": 40
@@ -76,5 +77,5 @@
 			"state_triggered1_process": ""
 		}
 	}
-	
+
 }
