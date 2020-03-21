@@ -34,17 +34,16 @@
         "away": {
           "position": [2, 0]
         }
-      }
-    }
-  },
-  "covid_19": {
-    "logos": {
-      "_default": {
-        "zoom": "100%",
-        "position": [0, 0],
-        "flip": 0,
-        "rotate": 0,
-        "crop": [0, 0, 0, 0]
+      },
+      "ANA": {
+        "home": {
+          "zoom": "70%",
+          "position": [-5, "15%"]
+        },
+        "away": {
+          "zoom": "80%",
+          "position": [5, "10%"]
+        }
       }
     }
   }
