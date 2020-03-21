@@ -132,3 +132,8 @@ dmypy.json
 
 # ignore generated logos
 assets/logos/*
+
+#nhl-led-scoreboard
+config/config.json
+config/config.json.backup
+
