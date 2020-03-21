@@ -274,7 +274,7 @@ def main():
     team = None
     team = get_team(team_index,selected_teams,preferences_teams,qmark)
 
-    if len(selected_teams) > 0:
+    if len(selected_teams) > 0 and (team in selected_teams):
         selected_teams.remove(team)
 
     preferences_teams.append(team)
@@ -283,7 +283,7 @@ def main():
     while team_select:
         team_index += 1
         team = get_team(team_index,selected_teams,preferences_teams,qmark)
-        if team in selected_teams:
+        if len(selected_teams) > 0 and (team in selected_teams):
             selected_teams.remove(team)
         preferences_teams.append(team)
         team_select = select_teams(qmark)
