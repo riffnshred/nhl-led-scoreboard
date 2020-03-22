@@ -189,8 +189,9 @@ Now let's show something on the screen. Get to the matrix submodule and run some
 
 ```
 cd nhl-led-scoreboard/submodules/matrix/bindings/python/samples
-sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60
+sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat --led-brightness=60
 ```
+If you've done the anti-flickering mod, use this flag instead `--led-gpio-mapping=adafruit-hat-pwm`
 You should see "Hello World" scroll on screen.
 
 
@@ -226,7 +227,8 @@ Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, h
 -   Disable the onboard sound. You can find how to do it from the [Troubleshooting sections](https://github.com/hzeller/rpi-rgb-led-matrix#troubleshooting)
 -   From the same section, run the command that removes the Bluetooth firmware, Unless you use any Bluetooth device with your Pi.
 
-Finally, these are the flag I use.
+Finally, these are the flag I use. (ONLY USE THESE FLAGS IF YOU'VE DONE THE HARDWARD ANTI-FLICKERING
+MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 
 ```
 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
@@ -339,8 +341,9 @@ Once you are done optimizing your setup and configuring the software, you are re
 
 Start by running your board and see if it runs properly. If you use the typical Pi 3b+ and HAT/Bonnet setup, here's the command I use.
 
+If you've done the anti-flickering mod, change the `--led-gpio-mapping=adafruit-hat` for `--led-gpio-mapping=adafruit-hat-pwm`
 ```
-sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
+sudo python3 src/main.py --led-gpio-mapping=adafruit-hat --led-brightness=60 --led-slowdown-gpio=2
 ```
 
 Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the 
