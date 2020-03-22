@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>Icon Preview</title>
+    <style>
+      body {
+        color: #FFFFFF;
+        background-color: #000000;
+        font-family: "Helvetica Neue","Helvetica","Arial",sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      img {
+        width: 100px;
+        height: 100px;
+      }
+
+      div {
+        /*border-top: solid 1px #333;*/
+        border-bottom: solid 1px #333;
+        /*margin-bottom: 1rem;*/
+        padding: 1rem;
+      }
+
+      div > h1 {
+        font-style: normal;
+        font-size: 20px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <script language="javascript">
+
+      var iconSets = [
+        "1c",
+        "1m",
+        "2c",
+        "2m",
+        "3c",
+        "3m",
+        "4c",
+        "4m",
+        "5c",
+        "5m"
+      ];
+
+      var icons = [
+        "clear-day",
+        "clear-night",
+        "cloudy",
+        "fog",
+        "hail",
+        "partly-cloudy-day",
+        "partly-cloudy-night",
+        "rain",
+        "sleet",
+        "snow",
+        "thunderstorm",
+        "tornado",
+        "wind"
+      ];
+
+      for (var i = 0; i < iconSets.length; i++) {
+        var iconSet = document.createElement("div");
+
+        var iconSetTitle = document.createElement("h1");
+        iconSetTitle.innerHTML = iconSets[i];
+        iconSet.appendChild(iconSetTitle);
+
+        for (var j = 0; j < icons.length; j++) {
+          var icon = document.createElement("img");
+          icon.src = iconSets[i] + "/" + icons[j] + ".svg";
+          iconSet.appendChild(icon)
+        }
+
+        document.body.appendChild(iconSet);
+      }
+
+    </script>
+  </body>
+</html> 

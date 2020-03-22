@@ -53,6 +53,11 @@ class Data:
         # Currently displayed board
         self.curr_board = None
 
+        # Weather Board Info
+        self.weather_current = []
+        self.weather_alerts = []
+        self.weather_alert_interrupt = False 
+
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
