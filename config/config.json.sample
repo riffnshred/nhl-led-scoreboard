@@ -48,7 +48,7 @@
 			"conference": "eastern"
 		},
 		"clock": {
-			"duration": 15,
+			"duration": 60,
 			"hide_indicator": false
 		}
 	},
@@ -58,7 +58,7 @@
 			"enabled": false,
 			"source": "software",
 			"frequency": 5,
-			"light_level_lux": 400,
+			"light_level_lux": 10,
 			"mode": "always",
 			"sunset_brightness": 5,
 			"sunrise_brightness": 40

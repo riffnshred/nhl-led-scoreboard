@@ -8,7 +8,7 @@ from subprocess import check_call
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 REBOOT_DEFAULT = 2
-AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock","pbdisplay"]
+AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock","covid_19","pbdisplay"]
 
 class PushButton(object):
     def __init__(self, data, matrix, sleepEvent):
