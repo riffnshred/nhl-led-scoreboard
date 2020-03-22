@@ -1,9 +1,12 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
-# Causes of NHL suspending the Season
-I did'n program the scoreboard to handle posponed games so far. I'm working on a fix and will release it ASAP. Join the discord channel for more details and futur updates.
+# (UPDATE) Causes of NHL suspending the Season
+The scoreboard now handles the postponed games.
 
+# V1.1.2 (Latest)
+- New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard
+- New Covid-19 stats board. Just add "covid_19" to any state of the board to see the latest worldwide cases, deaths and recovered cases of the virus.
 
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
@@ -86,6 +89,7 @@ There are currently three different boards available:
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
 -   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
 -   **Clock**: a basic clock.
+-   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
 
@@ -287,7 +291,7 @@ to have all the data possible shown during the day so I'll set the all the board
 
 | Settings                                            | Type  | Parameters                                    | Description                                               |
 |-----------------------------------------------------|-------|-----------------------------------------------|-----------------------------------------------------------|
-| `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings"]` | List of preferred boards to show for each specific state. |
+| `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings", "clock", "covid_19]` | List of preferred boards to show for each specific state. |
 
 ### Boards
 Boards are essentially like pages on a website. Each of them shows something specific and the user can decide which board to display
@@ -298,6 +302,8 @@ depending on the state of the scoreboard. Currently, there are only three boards
 -   result or the status of the other games in the league.
 -   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
 -   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
+-   **Clock**: Show the current time either in 24h or 12h format.
+-   **Covid_19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 | Boards        | Settings                   | Type   | Parameters                                       | Description                                                                                       |
 |---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
