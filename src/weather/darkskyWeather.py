@@ -2,9 +2,8 @@ from darksky.api import DarkSky
 from darksky.types import languages, units, weather
 import debug
 import geocoder
+import datetime
 from time import sleep
-
-API_KEY = '78c800007e066c9ccbd8162bcf5eb350'
 
 class weatherWorker(object):
     def __init__(self, data, sleepEvent):
@@ -20,6 +19,49 @@ class weatherWorker(object):
         self.weather_alert = 0
 
 
+    def degrees_to_direction(self, degrees):
+        try:
+            degrees = float(degrees)
+        except ValueError:
+            return None
+
+        if degrees < 0 or degrees > 360:
+            return None
+
+        if degrees <= 11.25 or degrees >= 348.76:
+            return "N"
+        elif degrees <= 33.75:
+            return "NNE"
+        elif degrees <= 56.25:
+            return "NE"
+        elif degrees <= 78.75:
+            return "ENE"
+        elif degrees <= 101.25:
+            return "E"
+        elif degrees <= 123.75:
+            return "ESE"
+        elif degrees <= 146.25:
+            return "SE"
+        elif degrees <= 168.75:
+            return "SSE"
+        elif degrees <= 191.25:
+            return "S"
+        elif degrees <= 213.75:
+            return "SSW"
+        elif degrees <= 236.25:
+            return "SW"
+        elif degrees <= 258.75:
+            return "WSW"
+        elif degrees <= 281.25:
+            return "W"
+        elif degrees <= 303.75:
+            return "WNW"
+        elif degrees <= 326.25:
+            return "NW"
+        elif degrees <= 348.75:
+            return "NNW"
+        else:
+            return None
 
     def run(self):# Synchronous way
         darksky = DarkSky(self.apikey)
@@ -37,43 +79,47 @@ class weatherWorker(object):
                 timezone=None # default None - will be set by DarkSky API automatically
             )
 
-            # Final wrapper identical for both ways
-            #print(forecast.latitude) # 42.3601
-            #print(forecast.longitude) # -71.0589
-            #print(forecast.timezone) # timezone for coordinates. For exmaple: `America/New_York`
-
-            # print(forecast.currently.time)
-            # print(forecast.currently.temperature)
-            # print(forecast.currently.apparent_temperature)
-            # print(forecast.currently.humidity)
-            # print(forecast.currently.pressure)
-            # print(forecast.currently.summary)
-            # print(forecast.currently.icon) # CurrentlyForecast. Can be found at darksky/forecast.py
-            #forecast.minutely # MinutelyForecast. Can be found at darksky/forecast.py
-            #print(forecast.hourly) # HourlyForecast. Can be found at darksky/forecast.py
-            #forecast.daily # DailyForecast. Can be found at darksky/forecast.py
-            #print(forecast.alerts) # [Alert]. Can be found at darksky/forecast.py
-
-            #Loop through forecast keys and display values.  Only for Currently
-            print(forecast.flags.units)
-            #for key in forecast.currently:
-            #    print(key)
-            self.data.weather_current = [forecast.currently.time,forecast.currently.icon,forecast.currently.summary,forecast.currently.temperature,forecast.currently.apparent_temperature,forecast.currently.humidity]
+            #Set up units [temp, wind speed,precip, storm distance]
+            if forecast.flags.units in ["ca","si"]:
+                self.data.wx_units = ["C","kph","mm","miles"]
+            elif forecast.flags.units == "uk2":
+                self.data.wx_units = ["C","mph","mm","miles"]
+            else:
+                self.data.wx_units = ["F","mph","in","miles"]
             
+            if forecast.currently.wind_speed> 0:
+                winddir = self.degrees_to_direction(forecast.currently.wind_bearing)
+            else:
+                winddir = self.degrees_to_direction(0)
+
+            wx_windspeed = str(round(forecast.currently.wind_speed,1)) + " " + self.data.wx_units[1]
+            wx_windgust = str(round(forecast.currently.wind_gust,1)) + " " + self.data.wx_units[1]
+
+            self.data.wx_curr_wind = [wx_windspeed,winddir,wx_windgust]
+
+            wx_timestamp = forecast.currently.time.strftime("%Y/%m/%d %H:%M:%S")
+            wx_temp = str(round(forecast.currently.temperature,1)) + self.data.wx_units[0]
+            wx_app_temp = str(round(forecast.currently.apparent_temperature,1)) + self.data.wx_units[0]
+            wx_humidity = str(round(forecast.currently.humidity,1)) + "%"
+
+            self.data.wx_current = [wx_timestamp,forecast.currently.icon,forecast.currently.summary,wx_temp ,wx_app_temp ,wx_humidity]
+
+            wx_precip_prob = str(round(forecast.currently.precip_probability,1)*100) + "%"
+            self.data.wx_curr_precip = [forecast.currently.precip_type,wx_precip_prob]
+
+            print(self.data.wx_curr_precip)
+
             if self.show_alerts and len(forecast.alerts) > 0:
-                self.data.weather_alerts = [forecast.alerts.title,forecast.alerts.severity,forecast.alerts.regions,forecast.alerts.time,forecast.alerts.expires,forecast.currently.nearest_storm_distance,forecast.currently.nearest_storm_bearing]
+                wx_alert_time = forecast.alerts.time.strftime("%Y/%m/%d %H:%M:%S")
+                wx_alert_expires = forecast.alerts.expires.strftime("%Y/%m/%d %H:%M:%S")
+                wx_storm_bearing = self.degrees_to_direction(forecast.currently.nearest_storm_bearing)
+                wx_storm_distance = str(forecast.currently.nearest_storm_distance) + " " + self.data.wx_units[3]
+                self.data.wx_alerts = [forecast.alerts.title,forecast.alerts.severity,forecast.alerts.regions,wx_alerts_time,wx_alert_expires,wx_storm_distance,wx_storm_bearing]
                 self.weather_alert += 1
                 self.sleepEvent.set()
                 
-                print(forecast.alerts.title)
-                print(forecast.alerts.regions)
-                print(forecast.alerts.severity)
-                print(forecast.alerts.time)
-                print(forecast.alerts.expires)
-                #print(akey.description)
-                #print(akey.uri)
             else:
-                self.data.weather_alert_interrupt = False
+                self.data.wx_alert_interrupt = False
                 self.weather_alert = 0
             
             # Run every 'x' minutes

@@ -54,6 +54,7 @@ class ScoreboardConfig:
 
         # Weather board preferences
         self.weather_enabled = json["weather"]["enabled"]
+        self.weather_duration = json["weather"]["duration"]
         self.weather_ds_apikey = json["weather"]["ds_apikey"]
         self.weather_ds_iconset = json["weather"]["ds_iconset"]
         self.weather_update_freq = json["weather"]["update_freq"]
