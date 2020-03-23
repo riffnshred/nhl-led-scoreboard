@@ -5,7 +5,8 @@
 The scoreboard now handles the postponed games.
 
 # V1.1.2 (Latest)
-- New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard
+- New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
+
 - New Covid-19 stats board. Just add "covid_19" to any state of the board to see the latest worldwide cases, deaths and recovered cases of the virus.
 
 ## Support and community
@@ -129,6 +130,10 @@ appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzell
 
 Please refer to the [Home page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Home) and [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need to order and build your scoreboard.
 
+#### Installing and configuring a button.
+To install and configure a button, please refer the well writen and detailed documentation in the SBIO section here: 
+[src/sbio/SBIO.md](https://github.com/riffnshred/nhl-led-scoreboard/blob/master/src/sbio/SBIO.md). 
+
 ### Software Installation
 #### Raspbian Buster Lite
 
@@ -158,6 +163,24 @@ sudo ./scripts/install.sh
 
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
+
+### *Important Step after installation.*
+If it's a first install of the software, there is not config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
+
+
+#### Updating your software.
+If you undate from any version that was released **before V1.0.0**, run these commands to update.
+`git reset --hard`
+`git checkout master`
+`sudo git pull`
+`sudo chmod +x scripts/install.sh`
+`sudo ./scripts/install.sh`.
+
+If your board runs **any V1 version**, simply run the install like so.
+`sudo chmod +x scripts/install.sh`
+`sudo ./scripts/install.sh`
+
+If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
 
 ## Testing and Optimization
@@ -191,7 +214,7 @@ Now let's show something on the screen. Get to the matrix submodule and run some
 cd nhl-led-scoreboard/submodules/matrix/bindings/python/samples
 sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat --led-brightness=60
 ```
-If you've done the anti-flickering mod, use this flag instead `--led-gpio-mapping=adafruit-hat-pwm`
+**If you've done the anti-flickering mod**, use this flag instead `--led-gpio-mapping=adafruit-hat-pwm`
 You should see "Hello World" scroll on screen.
 
 
@@ -235,7 +258,15 @@ MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 ```
 
 ## Configuration
-First thing first, Open the config.json file from the config directory to configure your scoreboard.
+~~First thing first, Open the config.json file from the config directory to configure your scoreboard.~~
+Since V1.1.2, you won't need to reconfigure your board everytime you update, **UNLESS** we add a major feature or we make a major update. There is 2 way to configure you board:
+
+#### Using the nhl_setup app (recommended) 
+from the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
+
+#### Configuring manualy.
+If you have no issue working with json files in a prompt, you can still configure manualy. 
+FIRST, you will need to make a copy of the config.json.sample and rename it config.json. Then open it and modify the options. 
 
 ### Modes
 These are options to set the scoreboard to run in a certain mode. This is where you enable the live game mode
