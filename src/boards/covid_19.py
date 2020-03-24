@@ -19,13 +19,22 @@ class Covid_19:
         self.layout = self.data.config.config.layout.get_board_layout('covid_19')
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
-        self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
+        #self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
+        self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")  
         for case in self.worldwide_data:
-            if case == "updated":
-                break
+            if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
+                continue
+            if case == "todayDeaths":
+                self.draw_count("Today's Deaths", self.worldwide_data[case],  self.last_update)
+                self.sleepEvent.wait(3)
+            elif case == "todayCases":
+                self.draw_count("Today's Cases", self.worldwide_data[case],  self.last_update)
+                self.sleepEvent.wait(3)
+            else:
+                self.draw_count(case, self.worldwide_data[case],  self.last_update)
+                self.sleepEvent.wait(3)
+
             
-            self.draw_count(case, self.worldwide_data[case],  self.last_update)
-            self.sleepEvent.wait(5)
 
     def draw_count(self, name, count, last_update):
 
@@ -41,6 +50,18 @@ class Covid_19:
             "recovered":{
                 "color":(0, 255, 0),
                 "width": 36
+            },
+            "Today's Cases":{
+                "color":(255, 165, 0),
+                "width":48
+            },
+            "Today's Deaths":{
+                "color":(255, 10, 10),
+                "width":52
+            },
+            "critical":{
+                "color":(255, 165, 0),
+                "width": 28
             }
         }
         
@@ -66,9 +87,9 @@ class Covid_19:
         
         self.matrix.draw_text_layout(
             self.layout.location,
-            "WW".upper()
+            "US".upper()
         )
-
+        
         self.matrix.draw_text_layout(
             self.layout.name,
             name.upper()
