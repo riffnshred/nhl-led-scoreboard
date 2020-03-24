@@ -61,7 +61,6 @@ def load_config(confdir):
             else:
                 fileindex += 1
                 
-        
         return j
 
 def save_config(nhl_config,confdir):
@@ -75,10 +74,17 @@ def save_config(nhl_config,confdir):
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
     except Exception as e:
-        print("Error making backup of {0}/config.json. Error: {1}".format(confdir,e),RED)
+        print("Could not make backup of {0}/config.json. This is normal for first run".format(confdir),CYAN)
+        print("Message: {0}".format(e),YELLOW)
 
-    with open('{}/config.json'.format(confdir),'w') as f:
-        f.write(savefile)
+    try:
+        with open('{}/config.json'.format(confdir),'w') as f:
+            try:
+                f.write(savefile)
+            except Exception as e:
+                print("Could not write {0}/config.json. Error Message: {1}".format(confdir,e),RED)
+    except Exception as e:
+        print("Could not open {0} directory, unable to save config.json. Error Message: {1}".format(confdir,e),RED)
 
 
 def get_default_value(def_config,def_key,def_type):
@@ -183,11 +189,9 @@ def main():
     args = parser.parse_args()
     
     if not os.path.exists(args.confdir):
-        #os.makedirs(confdir)
         # Get current working directory
         setup_cwd = os.getcwd()
         print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
-        #parser.print_usage()
         sys.exit()
 
     default_config = load_config(args.confdir)
@@ -218,6 +222,7 @@ def main():
     ]
 
     print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
+    print("V1.1",UNDERLINE,BLUE)
     nhl_config = {}
 
     answers = prompt(questions, style=custom_style_dope)
