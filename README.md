@@ -8,7 +8,7 @@ The scoreboard now handles the postponed games.
 
 Bug fix:
 - Updated the nhl_setup with a different message if not config.json file exist
-- Fixed Bug mentionned in Issue #82 about Off_day showing only 2 boards.
+- Fixed Bug mentioned in Issue #82 about Off_day showing only 2 boards.
 
 # V1.1.2 
 - New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
