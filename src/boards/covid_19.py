@@ -99,7 +99,7 @@ class Covid_19:
             },
             "Todays Deaths":{
                 "color":(255, 10, 10),
-                "width":52
+                "width":50
             },
             "critical":{
                 "color":(255, 165, 0),
@@ -164,8 +164,10 @@ class Covid_19:
             'Wisconsin': 'WI',
             'Wyoming': 'WY'
         }
-
-        location = us_state_abbrev[location]
+        try:
+            location = us_state_abbrev[location]
+        except:
+            location = location
         self.matrix.clear()
 
         self.matrix.draw.rectangle([0, 0, 30, 6], fill=(0,255,0))
