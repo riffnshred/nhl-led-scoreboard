@@ -8,35 +8,77 @@ class Covid_19:
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.matrix = matrix
-        try:
-            self.data.covid19.get_all()
-            self.data.network_issues = False
-        except ValueError as e:
-            print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
-            self.data.network_issues = True
+        self.data.covid19.get_all()
+        if data.config.covid_ww_board_enabled:
+            try:
+                self.worldwide_data = self.data.covid19.ww
+                self.data.network_issues = False
+            except ValueError as e:
+                print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
+                self.data.network_issues = True
 
-        self.worldwide_data = self.data.covid19.all
+        if data.config.covid_country_board_enabled:
+            self.country = data.config.covid_country
+            try:
+                self.data.network_issues = False
+                self.country_data = self.data.covid19.countrydict[self.country]
+            except ValueError as e:
+                print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
+                self.data.network_issues = True
+
+        if data.config.covid_us_state_board_enabled:
+            self.us_state = data.config.covid_us_state
+            try:
+                self.data.network_issues = False
+                self.us_state_data = self.data.covid19.us_state_dict[self.us_state]
+            except ValueError as e:
+                print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
+                self.data.network_issues = True
+           
+
         self.layout = self.data.config.config.layout.get_board_layout('covid_19')
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         #self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
         self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")  
-        for case in self.worldwide_data:
-            if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
-                continue
-            if case == "todayDeaths":
-                self.draw_count("Today's Deaths", self.worldwide_data[case],  self.last_update)
-                self.sleepEvent.wait(3)
-            elif case == "todayCases":
-                self.draw_count("Today's Cases", self.worldwide_data[case],  self.last_update)
-                self.sleepEvent.wait(3)
-            else:
-                self.draw_count(case, self.worldwide_data[case],  self.last_update)
-                self.sleepEvent.wait(3)
-
+        
+        if data.config.covid_ww_board_enabled:
+            for case in self.worldwide_data:
+                if case == "updated":
+                    break              
+                self.draw_count(case, self.worldwide_data[case],  self.last_update, "WW")
+                self.sleepEvent.wait(5)
             
 
-    def draw_count(self, name, count, last_update):
+        if data.config.covid_country_board_enabled:
+            for case in self.country_data:
+                if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
+                    continue
+                if case == "todayDeaths":
+                    self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country[0:2])
+                    self.sleepEvent.wait(3)
+                elif case == "todayCases":
+                    self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country[0:2])
+                    self.sleepEvent.wait(3)
+                else:
+                    self.draw_count(case, self.country_data[case],  self.last_update, self.country[0:2])
+                    self.sleepEvent.wait(3)
+
+        if data.config.covid_us_state_board_enabled:
+            for case in self.us_state_data:
+                if case not in ("cases", "todayCases", "deaths","todayDeaths"):
+                    continue
+                if case == "todayDeaths":
+                    self.draw_count("Today's Deaths", self.us_state_data[case],  self.last_update, self.us_state)
+                    self.sleepEvent.wait(3)
+                elif case == "todayCases":
+                    self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state)
+                    self.sleepEvent.wait(3)
+                else:
+                    self.draw_count(case, self.us_state_data[case],  self.last_update, self.us_state)
+                    self.sleepEvent.wait(3)           
+
+    def draw_count(self, name, count, last_update, location):
 
         banner = {
             "cases":{
@@ -87,7 +129,7 @@ class Covid_19:
         
         self.matrix.draw_text_layout(
             self.layout.location,
-            "US".upper()
+            location.upper()
         )
         
         self.matrix.draw_text_layout(
