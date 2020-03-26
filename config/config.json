@@ -50,8 +50,7 @@
             "worldwide_enabled": true,
             "country_enabled": true,
             "country": [
-                "USA",
-                "UK"
+                "USA"
             ],
             "us_state_enabled": true,
             "us_state": [

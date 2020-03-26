@@ -64,13 +64,13 @@ class Covid_19:
                         if case not in ("cases", "todayCases", "deaths","todayDeaths"):
                             continue
                         if case == "todayDeaths":
-                            self.draw_count("Todays Deaths", self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
+                            self.draw_count("Todays Deaths", self.us_state_data[case],  self.last_update, self.us_state[count])
                             self.sleepEvent.wait(3)
                         elif case == "todayCases":
-                            self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
+                            self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state[count])
                             self.sleepEvent.wait(3)
                         else:
-                            self.draw_count(case, self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
+                            self.draw_count(case, self.us_state_data[case],  self.last_update, self.us_state[count])
                             self.sleepEvent.wait(3)  
                 except ValueError as e:
                     print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
@@ -97,7 +97,7 @@ class Covid_19:
                 "color":(255, 165, 0),
                 "width":48
             },
-            "Today's Deaths":{
+            "Todays Deaths":{
                 "color":(255, 10, 10),
                 "width":52
             },
@@ -106,8 +106,66 @@ class Covid_19:
                 "width": 28
             }
         }
-        
+        us_state_abbrev = {
+            'Alabama': 'AL',
+            'Alaska': 'AK',
+            'American Samoa': 'AS',
+            'Arizona': 'AZ',
+            'Arkansas': 'AR',
+            'California': 'CA',
+            'Colorado': 'CO',
+            'Connecticut': 'CT',
+            'Delaware': 'DE',
+            'District of Columbia': 'DC',
+            'Florida': 'FL',
+            'Georgia': 'GA',
+            'Guam': 'GU',
+            'Hawaii': 'HI',
+            'Idaho': 'ID',
+            'Illinois': 'IL',
+            'Indiana': 'IN',
+            'Iowa': 'IA',
+            'Kansas': 'KS',
+            'Kentucky': 'KY',
+            'Louisiana': 'LA',
+            'Maine': 'ME',
+            'Maryland': 'MD',
+            'Massachusetts': 'MA',
+            'Michigan': 'MI',
+            'Minnesota': 'MN',
+            'Mississippi': 'MS',
+            'Missouri': 'MO',
+            'Montana': 'MT',
+            'Nebraska': 'NE',
+            'Nevada': 'NV',
+            'New Hampshire': 'NH',
+            'New Jersey': 'NJ',
+            'New Mexico': 'NM',
+            'New York': 'NY',
+            'North Carolina': 'NC',
+            'North Dakota': 'ND',
+            'Northern Mariana Islands':'MP',
+            'Ohio': 'OH',
+            'Oklahoma': 'OK',
+            'Oregon': 'OR',
+            'Pennsylvania': 'PA',
+            'Puerto Rico': 'PR',
+            'Rhode Island': 'RI',
+            'South Carolina': 'SC',
+            'South Dakota': 'SD',
+            'Tennessee': 'TN',
+            'Texas': 'TX',
+            'Utah': 'UT',
+            'Vermont': 'VT',
+            'Virgin Islands': 'VI',
+            'Virginia': 'VA',
+            'Washington': 'WA',
+            'West Virginia': 'WV',
+            'Wisconsin': 'WI',
+            'Wyoming': 'WY'
+        }
 
+        location = us_state_abbrev[location]
         self.matrix.clear()
 
         self.matrix.draw.rectangle([0, 0, 30, 6], fill=(0,255,0))
