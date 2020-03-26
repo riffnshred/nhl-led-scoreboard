@@ -55,13 +55,13 @@ class Covid_19:
                 if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
                     continue
                 if case == "todayDeaths":
-                    self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country[0:2])
+                    self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country)
                     self.sleepEvent.wait(3)
                 elif case == "todayCases":
-                    self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country[0:2])
+                    self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country)
                     self.sleepEvent.wait(3)
                 else:
-                    self.draw_count(case, self.country_data[case],  self.last_update, self.country[0:2])
+                    self.draw_count(case, self.country_data[case],  self.last_update, self.country)
                     self.sleepEvent.wait(3)
 
         if data.config.covid_us_state_board_enabled:
@@ -125,7 +125,9 @@ class Covid_19:
             self.layout.count,
             str(count)
         )      
-        self.matrix.draw.rectangle([8, 8, banner[name]["width"] + 8 , 14], fill=banner[name]["color"])
+        
+        loc_width = len(location) * 4
+        self.matrix.draw.rectangle([loc_width, 8, banner[name]["width"] + 8 , 14], fill=banner[name]["color"])
         
         self.matrix.draw_text_layout(
             self.layout.location,
