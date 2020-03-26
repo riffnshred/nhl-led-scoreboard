@@ -49,9 +49,15 @@
         "covid19": {
             "worldwide_enabled": true,
             "country_enabled": true,
-            "country": "USA",
-            "us_state_enabled": false,
-            "us_state": "Virginia" 
+            "country": [
+                "USA",
+                "UK"
+            ],
+            "us_state_enabled": true,
+            "us_state": [
+                "Virginia",
+                "New York"
+            ]
         }
     },
     "sbio": {
