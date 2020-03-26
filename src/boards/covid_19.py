@@ -127,7 +127,7 @@ class Covid_19:
         )      
         
         loc_width = len(location) * 4
-        self.matrix.draw.rectangle([loc_width, 8, banner[name]["width"] + 8 , 14], fill=banner[name]["color"])
+        self.matrix.draw.rectangle([loc_width, 8, banner[name]["width"] + loc_width , 14], fill=banner[name]["color"])
         
         self.matrix.draw_text_layout(
             self.layout.location,
