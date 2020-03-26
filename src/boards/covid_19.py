@@ -39,7 +39,7 @@ class Covid_19:
                         if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
                             continue
                         if case == "todayDeaths":
-                            self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country[count][0:3])
+                            self.draw_count("Todays Deaths", self.country_data[case],  self.last_update, self.country[count][0:3])
                             self.sleepEvent.wait(3)
                         elif case == "todayCases":
                             self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country[count][0:3])
@@ -64,7 +64,7 @@ class Covid_19:
                         if case not in ("cases", "todayCases", "deaths","todayDeaths"):
                             continue
                         if case == "todayDeaths":
-                            self.draw_count("Today's Deaths", self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
+                            self.draw_count("Todays Deaths", self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
                             self.sleepEvent.wait(3)
                         elif case == "todayCases":
                             self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state[count][0:3])
