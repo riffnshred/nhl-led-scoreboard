@@ -55,13 +55,13 @@ class Covid_19:
                 if case not in ("cases", "todayCases", "deaths","todayDeaths", "recovered","critical"):
                     continue
                 if case == "todayDeaths":
-                    self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country)
+                    self.draw_count("Today's Deaths", self.country_data[case],  self.last_update, self.country[0:3])
                     self.sleepEvent.wait(3)
                 elif case == "todayCases":
-                    self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country)
+                    self.draw_count("Today's Cases", self.country_data[case],  self.last_update, self.country[0:3])
                     self.sleepEvent.wait(3)
                 else:
-                    self.draw_count(case, self.country_data[case],  self.last_update, self.country)
+                    self.draw_count(case, self.country_data[case],  self.last_update, self.country[0:3])
                     self.sleepEvent.wait(3)
 
         if data.config.covid_us_state_board_enabled:
@@ -69,13 +69,13 @@ class Covid_19:
                 if case not in ("cases", "todayCases", "deaths","todayDeaths"):
                     continue
                 if case == "todayDeaths":
-                    self.draw_count("Today's Deaths", self.us_state_data[case],  self.last_update, self.us_state)
+                    self.draw_count("Today's Deaths", self.us_state_data[case],  self.last_update, self.us_state[0:3])
                     self.sleepEvent.wait(3)
                 elif case == "todayCases":
-                    self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state)
+                    self.draw_count("Today's Cases", self.us_state_data[case],  self.last_update, self.us_state[0:3])
                     self.sleepEvent.wait(3)
                 else:
-                    self.draw_count(case, self.us_state_data[case],  self.last_update, self.us_state)
+                    self.draw_count(case, self.us_state_data[case],  self.last_update, self.us_state[0:3])
                     self.sleepEvent.wait(3)           
 
     def draw_count(self, name, count, last_update, location):
