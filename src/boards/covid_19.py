@@ -13,7 +13,7 @@ class Covid_19:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
-        if data.config.covid_ww_board_enabled: 
+        if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled): 
             try:
                 self.worldwide_data = self.data.covid19.ww
                 self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
