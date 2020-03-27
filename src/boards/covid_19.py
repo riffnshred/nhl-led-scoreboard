@@ -127,7 +127,7 @@ class Covid_19:
             },
             "confirmed":{
                 "color":(255, 165, 0),
-                "width": 30
+                "width": 34
             }
         }
         us_state_abbrev = {

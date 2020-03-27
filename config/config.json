@@ -46,21 +46,21 @@
             "hide_indicator": false
         },
         "covid19": {
-            "worldwide_enabled": true,
-            "country_enabled": true,
+            "worldwide_enabled": false,
+            "country_enabled": false,
             "country": [
                 "USA",
                 "Canada"
             ],
-            "us_state_enabled": true,
+            "us_state_enabled": false,
             "us_state": [
                 "Virginia",
                 "New York"
             ],
             "canada_enabled": true,
             "canada_prov": [
-                "Ontario",
-                "Manitoba"
+                "New Brunswick",
+                "Saskatchewan"
             ]
         }
     },
