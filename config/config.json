@@ -46,13 +46,13 @@
             "hide_indicator": false
         },
         "covid19": {
-            "worldwide_enabled": false,
-            "country_enabled": false,
+            "worldwide_enabled": true,
+            "country_enabled": true,
             "country": [
                 "USA",
                 "Canada"
             ],
-            "us_state_enabled": false,
+            "us_state_enabled": true,
             "us_state": [
                 "Virginia",
                 "New York"
