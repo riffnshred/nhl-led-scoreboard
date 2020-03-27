@@ -50,8 +50,7 @@ class Data:
             self.canada_prov = data.json()
             self.canada_prov_dict = {}
             for prov in self.canada_prov:
-                print(prov)
-                self.canada_prov_dict[prov["country"]] = prov            
+                self.canada_prov_dict[prov["province"]] = prov            
         except requests.exceptions.RequestException as e:
             print(e)
             #raise ValueError(e)

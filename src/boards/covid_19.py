@@ -84,13 +84,13 @@ class Covid_19:
             for i in self.canada_prov: 
                 try:
                     self.data.network_issues = False
-                    self.canada_prov_data = self.data.covid19.canada_prov_dict[["province"][self.canada_prov[count]]]
-                    #print(self.canada_prov_data)
-                    for case in self.canada_prov_data:
+                    self.canada_prov_data = self.data.covid19.canada_prov_dict[self.canada_prov[count]]
+                    self.canada_location = self.canada_prov_data['province']
+                    for case in self.canada_prov_data['stats']:
                         if case not in ("confirmed", "deaths", "recovered"):
                             continue
                         else:
-                            self.draw_count(case, self.canada_prov_data[case],  self.last_update, self.canada_prov[count])
+                            self.draw_count(case, self.canada_prov_data['stats'][case],  self.last_update, self.canada_location)
                             self.sleepEvent.wait(3)  
                 except ValueError as e:
                     print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
@@ -124,6 +124,10 @@ class Covid_19:
             "critical":{
                 "color":(255, 165, 0),
                 "width": 28
+            },
+            "confirmed":{
+                "color":(255, 165, 0),
+                "width": 30
             }
         }
         us_state_abbrev = {
@@ -185,25 +189,29 @@ class Covid_19:
             'Wyoming': 'WY'
         }
         prov_terr = {
-            'AB': 'Alberta',
-            'BC': 'British Columbia',
-            'MB': 'Manitoba',
-            'NB': 'New Brunswick',
-            'NL': 'Newfoundland and Labrador',
-            'NT': 'Northwest Territories',
-            'NS': 'Nova Scotia',
-            'NU': 'Nunavut',
-            'ON': 'Ontario',
-            'PE': 'Prince Edward Island',
-            'QC': 'Quebec',
-            'SK': 'Saskatchewan',
-            'YT': 'Yukon'
+            'Alberta': 'AB',
+            'British Columbia':'BC',
+            'Manitoba': 'MB',
+            'New Brunswick': 'NB',
+            'Newfoundland and Labrador': 'NL',
+            'Northwest Territories': 'NT',
+            'Nova Scotia': 'NS',
+            'Nunavut': 'NU',
+            'Ontario': 'ON',
+            'Prince Edward Island': 'PE',
+            'Quebec': 'QC',
+            'Saskatchewan': 'SK',
+            'Yukon': 'YT'
         }
         try:
-            location = us_state_abbrev[location]
+            location = us_state_abbrev[location] 
+        except:
+            location = location
+        try:
             location = prov_terr[location]
         except:
             location = location
+
         self.matrix.clear()
 
         self.matrix.draw.rectangle([0, 0, 30, 6], fill=(0,255,0))
