@@ -5,6 +5,7 @@ BASE_URL = "https://corona.lmao.ninja/"
 WW_URL = BASE_URL + 'all'
 COUNTRY_URL = BASE_URL + 'countries'
 US_STATE_URL = BASE_URL + 'states'
+CANADA_URL = BASE_URL + 'v2/jhucsse'
 
 REQUEST_TIMEOUT = 5
 TIMEOUT_TESTING = 0.001  # TO DELETE
@@ -40,6 +41,17 @@ class Data:
             self.us_state_dict = {}
             for state in self.us_state:
                 self.us_state_dict[state["state"]] = state
+        except requests.exceptions.RequestException as e:
+            print(e)
+            #raise ValueError(e)
+        try:    
+            data = requests.get(CANADA_URL)
+            data.raise_for_status()
+            self.canada_prov = data.json()
+            self.canada_prov_dict = {}
+            for prov in self.canada_prov:
+                print(prov)
+                self.canada_prov_dict[prov["country"]] = prov            
         except requests.exceptions.RequestException as e:
             print(e)
             #raise ValueError(e)

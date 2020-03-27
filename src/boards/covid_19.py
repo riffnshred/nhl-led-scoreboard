@@ -13,7 +13,7 @@ class Covid_19:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
-        if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled): 
+        if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled): 
             try:
                 self.worldwide_data = self.data.covid19.ww
                 self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
@@ -76,6 +76,26 @@ class Covid_19:
                     print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                     self.data.network_issues = True
                 count += 1
+        
+        if data.config.covid_canada_board_enabled:
+            self.canada_prov = data.config.covid_canada_prov
+            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
+            count = 0
+            for i in self.canada_prov: 
+                try:
+                    self.data.network_issues = False
+                    self.canada_prov_data = self.data.covid19.canada_prov_dict[["province"][self.canada_prov[count]]]
+                    #print(self.canada_prov_data)
+                    for case in self.canada_prov_data:
+                        if case not in ("confirmed", "deaths", "recovered"):
+                            continue
+                        else:
+                            self.draw_count(case, self.canada_prov_data[case],  self.last_update, self.canada_prov[count])
+                            self.sleepEvent.wait(3)  
+                except ValueError as e:
+                    print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
+                    self.data.network_issues = True
+                count += 1        
              
 
     def draw_count(self, name, count, last_update, location):
@@ -164,8 +184,24 @@ class Covid_19:
             'Wisconsin': 'WI',
             'Wyoming': 'WY'
         }
+        prov_terr = {
+            'AB': 'Alberta',
+            'BC': 'British Columbia',
+            'MB': 'Manitoba',
+            'NB': 'New Brunswick',
+            'NL': 'Newfoundland and Labrador',
+            'NT': 'Northwest Territories',
+            'NS': 'Nova Scotia',
+            'NU': 'Nunavut',
+            'ON': 'Ontario',
+            'PE': 'Prince Edward Island',
+            'QC': 'Quebec',
+            'SK': 'Saskatchewan',
+            'YT': 'Yukon'
+        }
         try:
             location = us_state_abbrev[location]
+            location = prov_terr[location]
         except:
             location = location
         self.matrix.clear()
