@@ -15,19 +15,31 @@ class Data:
         pass
     
     def get_all(self):
+        debug.log("grabbing all data from API")
         try:
-            debug.log("grabbing all data from API")
             data = requests.get(WW_URL)
+            data.raise_for_status()
             self.ww = data.json()
+        except requests.exceptions.RequestException as e:
+            #raise ValueError(e)
+            print(e)
+        try:
             data = requests.get(COUNTRY_URL)
+            data.raise_for_status()
             self.country_data = data.json()
             self.countrydict = {}
             for country in self.country_data:
-                 self.countrydict[country["country"]] = country 
+                self.countrydict[country["country"]] = country 
+        except requests.exceptions.RequestException as e:
+            #raise ValueError(e)
+            print(e)
+        try:    
             data = requests.get(US_STATE_URL)
+            data.raise_for_status()
             self.us_state = data.json()
             self.us_state_dict = {}
             for state in self.us_state:
-                 self.us_state_dict[state["state"]] = state
+                self.us_state_dict[state["state"]] = state
         except requests.exceptions.RequestException as e:
-            raise ValueError(e)
+            print(e)
+            #raise ValueError(e)

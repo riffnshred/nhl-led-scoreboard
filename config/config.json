@@ -47,7 +47,7 @@
             "hide_indicator": false
         },
         "covid19": {
-            "worldwide_enabled": true,
+            "worldwide_enabled": false,
             "country_enabled": true,
             "country": [
                 "USA"
