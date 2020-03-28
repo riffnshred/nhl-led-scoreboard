@@ -72,7 +72,7 @@
   },
   "clock": {
     "time": {
-      "position": ["50%", "60%"],
+      "position": ["50%", "55%"],
       "font": "large",
       "align": "center-center"
     },
@@ -91,6 +91,10 @@
         "to": "time",
         "align": "right-top"
       }
+    },
+    "wx_display": {
+      "position": ["22%", "93%"],
+      "align": "bottom-center"
     }
   },
   "covid_19":{
@@ -123,5 +127,64 @@
       "position": [1, 1],
       "align": "left-top"
     }
+  },
+  "wx_curr_1":{
+    "condition":{
+      "position": ["69%", "3%"],
+      "font": "wxicons_lg",
+      "align": "top-right"
+    },
+    "summary":{
+      "position": ["5%", "80%"],
+      "font": "wx_medium",
+      "align": "bottom-center"
+    },
+    "temp":{
+      "position": ["2%", "4%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "temp_app": {
+      "position": ["30%", "0%"],
+      "font": "wx_medium",
+      "align": "top",
+      "relative": {
+        "to": "temp",
+        "align": "top"
+      }
+    },
+    "humidity": {
+      "position": [0,10],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "temp",
+        "align": "bottom-left"
+      }
+    }
+  },
+  "wx_curr_2":{
+    "condition":{
+      "position": ["69%", "3%"],
+      "font": "wxicons_md",
+      "align": "top-right"
+    },
+    "wind": {
+      "position": ["2%","2%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "gust": {
+      "position": [0,6],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "wind",
+        "align": "top"
+      }
+    }
+  },
+  "wx_alert":{
+
   }
 }

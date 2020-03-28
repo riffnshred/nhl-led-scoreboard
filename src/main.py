@@ -8,13 +8,13 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
-from weather.darkskyWeather import weatherWorker
+from api.weather.darkskyWeather import weatherWorker
 from renderer.matrix import Matrix
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.1.1"
+SCRIPT_VERSION = "1.1.4"
 
 
 def run():
@@ -57,7 +57,7 @@ def run():
     
     if data.config.weather_enabled:
         dsweather = weatherWorker(data,sleepEvent)
-        dsweatherThread = threading.Thread(target=dsweather.run(),args=())
+        dsweatherThread = threading.Thread(target=dsweather.run,args=())
         dsweatherThread.daemon = True
         dsweatherThread.start()
 

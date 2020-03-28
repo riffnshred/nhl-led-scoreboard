@@ -56,11 +56,13 @@ class ScoreboardConfig:
         self.weather_enabled = json["weather"]["enabled"]
         self.weather_duration = json["weather"]["duration"]
         self.weather_ds_apikey = json["weather"]["ds_apikey"]
-        self.weather_ds_iconset = json["weather"]["ds_iconset"]
         self.weather_update_freq = json["weather"]["update_freq"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
         self.weather_show_alerts = json["weather"]["show_alerts"] 
+        # Show temp and humidity on clock
+        self.weather_show_on_clock = json["weather"]["show_on_clock"]
+
 
         # States
         '''TODO: Put condition so that the user dont leave any board list empty'''

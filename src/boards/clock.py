@@ -57,6 +57,13 @@ class Clock:
                 "{}\n{}".format(self.meridiem[0], self.meridiem[1])
             )
 
+        # Display curr temp and humidity on clock, bottom
+        if self.data.config.weather_show_on_clock:
+            self.matrix.draw_text_layout(
+            self.layout.wx_display, 
+            self.data.wx_current[3] + " " +self.data.wx_current[5]
+            ) 
+
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()

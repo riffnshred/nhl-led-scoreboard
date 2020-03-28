@@ -81,9 +81,9 @@
 		"enabled": true,
 		"duration": 60,
 		"ds_apikey": "78c800007e066c9ccbd8162bcf5eb350",
-		"ds_iconset": "1m",
 		"update_freq": 5,
-		"show_alerts": true
+		"show_alerts": true,
+		"show_on_clock": true
 	}
 	
 }
