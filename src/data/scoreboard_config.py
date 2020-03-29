@@ -76,15 +76,6 @@ class ScoreboardConfig:
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
 
-        # COVID-19
-        self.covid_ww_board_enabled = json["boards"]["covid19"]["worldwide_enabled"]
-        self.covid_country_board_enabled = json["boards"]["covid19"]["country_enabled"]
-        self.covid_country = json["boards"]["covid19"]["country"]
-        self.covid_us_state_board_enabled = json["boards"]["covid19"]["us_state_enabled"]
-        self.covid_us_state = json["boards"]["covid19"]["us_state"]
-        self.covid_canada_board_enabled = json["boards"]["covid19"]["canada_enabled"]
-        self.covid_canada_prov = json["boards"]["covid19"]["canada_prov"]
-
         # Fonts
         self.layout = Layout()
 
@@ -128,4 +119,3 @@ class ScoreboardConfig:
             time_format = "%H:%M"
 
         return time_format
-
