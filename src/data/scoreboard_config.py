@@ -60,7 +60,7 @@ class ScoreboardConfig:
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
         self.weather_show_alerts = json["weather"]["show_alerts"] 
-        # Show temp and humidity on clock
+        # Show curr temp, humidity and any alerts on clock
         self.weather_show_on_clock = json["weather"]["show_on_clock"]
 
 

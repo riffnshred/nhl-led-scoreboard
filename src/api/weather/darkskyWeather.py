@@ -23,45 +23,45 @@ class weatherWorker(object):
         try:
             degrees = float(degrees)
         except ValueError:
-            return None
+            return [None,"\uf07b"]
 
         if degrees < 0 or degrees > 360:
-            return None
+            return [None,"\uf07b"]
 
         if degrees <= 11.25 or degrees >= 348.76:
-            return "N"
+            return ["N","\uf060"]
         elif degrees <= 33.75:
-            return "NNE"
+            return ["NNE","\uf05e"]
         elif degrees <= 56.25:
-            return "NE"
+            return ["NE","\uf05e"]
         elif degrees <= 78.75:
-            return "ENE"
+            return ["ENE","\uf05e"]
         elif degrees <= 101.25:
-            return "E"
+            return ["E","\uf061"]
         elif degrees <= 123.75:
-            return "ESE"
+            return ["ESE","\uf05b"]
         elif degrees <= 146.25:
-            return "SE"
+            return ["SE","\uf05b"]
         elif degrees <= 168.75:
-            return "SSE"
+            return ["SSE","\uf05b"]
         elif degrees <= 191.25:
-            return "S"
+            return ["S","\uf05c"]
         elif degrees <= 213.75:
-            return "SSW"
+            return ["SSW","\uf05a"]
         elif degrees <= 236.25:
-            return "SW"
+            return ["SW","\uf05a"]
         elif degrees <= 258.75:
-            return "WSW"
+            return ["WSW","\uf05a"]
         elif degrees <= 281.25:
-            return "W"
+            return ["W","\uf059"]
         elif degrees <= 303.75:
-            return "WNW"
+            return ["WNW","\uf05d"]
         elif degrees <= 326.25:
-            return "NW"
+            return ["NW","\uf05d"]
         elif degrees <= 348.75:
-            return "NNW"
+            return ["NNW","\uf05d"]
         else:
-            return None
+            return [None,"\uf07b"]
 
     def run(self):# Synchronous way
         darksky = DarkSky(self.apikey)
@@ -81,11 +81,11 @@ class weatherWorker(object):
 
             #Set up units [temp, wind speed,precip, storm distance]
             if forecast.flags.units in ["ca","si"]:
-                self.data.wx_units = ["C","kph","mm","miles"]
+                self.data.wx_units = ["C","kph","mm","miles","hPa","ca"]
             elif forecast.flags.units == "uk2":
-                self.data.wx_units = ["C","mph","mm","miles"]
+                self.data.wx_units = ["C","mph","mm","miles","hPa","uk2"]
             else:
-                self.data.wx_units = ["F","mph","in","miles"]
+                self.data.wx_units = ["F","mph","in","miles","mbar","us"]
             
             if forecast.currently.wind_speed> 0:
                 winddir = self.degrees_to_direction(forecast.currently.wind_bearing)
@@ -94,9 +94,10 @@ class weatherWorker(object):
 
             wx_windspeed = str(round(forecast.currently.wind_speed,1)) + " " + self.data.wx_units[1]
             wx_windgust = str(round(forecast.currently.wind_gust,1)) + " " + self.data.wx_units[1]
+            wx_pressure = str(round(forecast.currently.pressure,1)) + " " + self.data.wx_units[4]
 
-            self.data.wx_curr_wind = [wx_windspeed,winddir,wx_windgust]
-
+            self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure]
+            
             wx_timestamp = forecast.currently.time.strftime("%m/%d %H:%M:%S")
             wx_temp = str(round(forecast.currently.temperature,1)) + self.data.wx_units[0]
             #wx_temp = str(round(forecast.currently.temperature,1))
@@ -107,7 +108,7 @@ class weatherWorker(object):
             self.data.wx_current = [wx_timestamp,forecast.currently.icon,forecast.currently.summary,wx_temp ,wx_app_temp ,wx_humidity]
 
             wx_precip_prob = str(round(forecast.currently.precip_probability,1)*100) + "%"
-            self.data.wx_curr_precip = [forecast.currently.precip_type,wx_precip_prob]
+            self.data.wx_curr_precip = [forecast.currently.precip_type,wx_precip_prob,forecast.currently.precip_intensity,forecast.currently.precipAccumulation]
 
             if self.show_alerts and len(forecast.alerts) > 0:
                 wx_alert_time = forecast.alerts.time.strftime("%m/%d %H:%M:%S")

@@ -15,17 +15,25 @@
     "file": "04B_24__.TTF",
     "size": 24
   },
+  "wxicons_full": {
+    "file": "weathericons.ttf",
+    "size": 24
+  },
   "wxicons_lg": {
     "file": "weathericons.ttf",
-    "size": 18
+    "size": 20
   },
   "wxicons_md": {
     "file": "weathericons.ttf",
-    "size": 20
+    "size": 18
   },
   "wx_medium": {
     "file": "04B_03B_.TTF",
     "size": 8
+  },
+  "wx_large": {
+    "file": "04B_03B_.TTF",
+    "size": 14
   }
 
 }

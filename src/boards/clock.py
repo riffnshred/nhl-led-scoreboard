@@ -18,7 +18,11 @@ class Clock:
         if not self.duration:
             self.duration = data.config.clock_board_duration
         
-        self.layout = self.data.config.config.layout.get_board_layout('clock')
+        if self.data.config.weather_show_on_clock:
+            self.layout = self.data.config.config.layout.get_board_layout('wx_clock')
+        else:
+            self.layout = self.data.config.config.layout.get_board_layout('clock')
+
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
@@ -63,6 +67,17 @@ class Clock:
             self.layout.wx_display, 
             self.data.wx_current[3] + " " +self.data.wx_current[5]
             ) 
+            if len(self.data.wx_alerts) > 0:
+                # Draw Alert boxes and numbers? (warning,watch,advisory)
+                #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
+                self.matrix.draw.rectangle([49, 25, 53, 32], fill=(255,0,0)) # warning
+
+                if self.data.wx_units[5] == "us":
+                    self.matrix.draw.rectangle([54, 25, 58, 32], fill=(255,165,0)) # watch
+                    self.matrix.draw.rectangle([59, 25, 64, 32], fill=(255,255,0)) #advisory
+                else:
+                    self.matrix.draw.rectangle([54, 25, 58, 32], fill=(255,255,0)) # watch
+                    self.matrix.draw.rectangle([59, 25, 64, 32], fill=(169,169,169)) #advisory
 
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:

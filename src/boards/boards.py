@@ -11,6 +11,7 @@ from boards.clock import Clock
 from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from boards.dsWeather import dsWeather
+from boards.dsAlert import dsAlert
 from time import sleep
 
 
@@ -130,6 +131,9 @@ class Boards:
     
     def dsweather(self, data, matrix,sleepEvent):
         dsWeather(data, matrix, sleepEvent)
+    
+    def dsalert(self, data, matrix,sleepEvent):
+        dsAlert(data, matrix, sleepEvent)
 
     def covid_19(self, data, matrix,sleepEvent):
         Covid_19(data, matrix, sleepEvent)
