@@ -4,7 +4,13 @@
 # (UPDATE) Causes of NHL suspending the Season
 The scoreboard now handles the postponed games.
 
-# V1.1.2 (Latest)
+# V1.1.3 (Latest)
+
+Bug fix:
+- Updated the nhl_setup with a different message if not config.json file exist
+- Fixed Bug mentioned in Issue #82 about Off_day showing only 2 boards.
+
+# V1.1.2 
 - New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
 
 - New Covid-19 stats board. Just add "covid_19" to any state of the board to see the latest worldwide cases, deaths and recovered cases of the virus.
