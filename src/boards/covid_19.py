@@ -220,7 +220,7 @@ class Covid_19:
             location = location
 
         self.matrix.clear()
-      
+
         self.matrix.draw_text_layout(
             self.layout.board_title,
             "COVID-19".upper(),
