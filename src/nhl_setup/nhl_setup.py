@@ -147,7 +147,7 @@ def select_canada_prov(qmark):
             'type': 'confirm',
             'name': 'canada_prov_select',
             'qmark': qmark,
-            'message': 'Add another Country?',
+            'message': 'Add another Province?',
             'default': True
         }
     ]
