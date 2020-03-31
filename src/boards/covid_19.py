@@ -181,7 +181,7 @@ class Covid_19:
             'Texas': 'TX',
             'Utah': 'UT',
             'Vermont': 'VT',
-            'Virgin Islands': 'VI',
+            'United States Virgin Islands': 'VI',
             'Virginia': 'VA',
             'Washington': 'WA',
             'West Virginia': 'WV',
