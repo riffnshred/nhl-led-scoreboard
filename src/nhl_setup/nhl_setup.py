@@ -611,8 +611,8 @@ def main():
 
     boards_config['boards'].update(clock = clock_answers)
     
-    #COVID board questions
-    #COVID Worldwide Enabled Question
+    # COVID board questions
+    # COVID Worldwide Enabled Question
     covid_ww_question = [
         {
             'type': 'confirm',
@@ -625,7 +625,7 @@ def main():
     covid_ww_answer = prompt(covid_ww_question,style=custom_style_dope)
     boards_config['boards'].update(covid19 = covid_ww_answer)
     
-    # COVID country enabled Question
+    # COVID Country Enabled Question
     covid_country_question = [
         {
             'type': 'confirm',
@@ -664,7 +664,7 @@ def main():
         preferences_country_dict = {'country':preferences_countries}
         boards_config['boards']['covid19'].update(preferences_country_dict)
 
-    # COVIS US State enabled question
+    # COVID US State Enabled question
     covid_us_state_question = [
         {
             'type': 'confirm',
@@ -703,7 +703,7 @@ def main():
         preferences_us_state_dict = {'us_state':preferences_us_states}
         boards_config['boards']['covid19'].update(preferences_us_state_dict)
 
-    #COVID Canadian provinc enabled question
+    # COVID Canadian province enabled question
     covid_canada_prov_question = [
         {
             'type': 'confirm',
