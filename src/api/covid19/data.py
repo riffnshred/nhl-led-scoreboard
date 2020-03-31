@@ -16,7 +16,7 @@ class Data:
         pass
     
     def get_all(self):
-        debug.log("grabbing all data from API")
+        debug.log("Grabbing all COVID-19 data from API")
         try:
             data = requests.get(WW_URL)
             data.raise_for_status()

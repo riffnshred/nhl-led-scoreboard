@@ -28,9 +28,10 @@ class Covid_19:
                 print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                 self.data.network_issues = True
 
+        self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
+
         if data.config.covid_country_board_enabled:
             self.country = data.config.covid_country
-            self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
             count = 0 
             for i in self.country:
                 try:
@@ -55,7 +56,6 @@ class Covid_19:
 
         if data.config.covid_us_state_board_enabled:
             self.us_state = data.config.covid_us_state
-            self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
             count = 0
             for i in self.us_state: 
                 try:
@@ -80,7 +80,6 @@ class Covid_19:
         
         if data.config.covid_canada_board_enabled:
             self.canada_prov = data.config.covid_canada_prov
-            self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
             count = 0
             for i in self.canada_prov: 
                 try:
