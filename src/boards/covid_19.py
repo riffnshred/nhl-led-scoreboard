@@ -214,11 +214,10 @@ class Covid_19:
 
         self.matrix.clear()
 
-        self.matrix.draw.rectangle([0, 0, 30, 6], fill=(0,255,0))
-        
         self.matrix.draw_text_layout(
             self.layout.board_title,
-            "COVID-19".upper()
+            "COVID-19".upper(),
+            backgroundColor=(0, 255, 0)
         )
 
         self.matrix.draw_text_layout(
@@ -230,9 +229,6 @@ class Covid_19:
             str(count)
         )      
         
-        loc_width = len(location) * 4
-        self.matrix.draw.rectangle([loc_width, 8, banner[name]["width"] + loc_width , 14], fill=banner[name]["color"])
-        
         self.matrix.draw_text_layout(
             self.layout.location,
             location.upper()
@@ -240,7 +236,8 @@ class Covid_19:
         
         self.matrix.draw_text_layout(
             self.layout.name,
-            name.upper()
+            name.upper(),
+            backgroundColor=banner[name]["color"]
         )
         
         for i in range(30):
