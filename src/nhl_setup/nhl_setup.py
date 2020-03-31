@@ -385,7 +385,7 @@ def main():
     ]
 
     print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
-    print("V1.1",UNDERLINE,BLUE)
+    print("V1.2",UNDERLINE,BLUE)
     nhl_config = {}
 
     answers = prompt(questions, style=custom_style_dope)
