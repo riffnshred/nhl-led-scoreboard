@@ -232,11 +232,10 @@ def get_us_states(us_state_index,us_state_choices,pref_us_states,qmark):
     'Northern Mariana Islands','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee',
     'Texas','United States Virgin Islands','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 
-
     choices = []
 
     if len(pref_us_states) >= 0 and len(us_state_choices) > 0:
-        #Combine lists with teams from team_choices first
+        #Combine lists with US States from us_state_choices first
         choices = [ele for ele in def_choices if ele not in us_state_choices]
         if len(pref_us_states) > 0:
             choices = [ele for ele in def_choices if ele not in pref_us_states]
@@ -276,11 +275,10 @@ def get_countries(country_index,country_choices,pref_countries,qmark):
     'San Marino','Saudi Arabia','Senegal','Serbia','Seychelles','Singapore','Sint Maarten','Slovakia','Slovenia','Somalia','South Africa','Spain','Sri Lanka','St. Barth','St. Vincent Grenadines','Sudan','Suriname','Sweden','Switzerland','Syria','Taiwan','Tanzania','Thailand','Timor-Leste','Togo','Trinidad and Tobago','Tunisia','Turkey','Turks and Caicos','UAE','UK','Uganda',
     'Ukraine','Uruguay','Uzbekistan','Vatican City','Venezuela','Vietnam','Zambia','Zimbabwe']
 
-
     choices = []
 
     if len(pref_countries) >= 0 and len(country_choices) > 0:
-        #Combine lists with teams from team_choices first
+        #Combine lists with countries from country_choices first
         choices = [ele for ele in def_choices if ele not in country_choices]
         if len(pref_countries) > 0:
             choices = [ele for ele in def_choices if ele not in pref_countries]
@@ -317,7 +315,7 @@ def get_canada_prov(canada_prov_index,canada_prov_choices,pref_canada_prov,qmark
     choices = []
 
     if len(pref_canada_prov) >= 0 and len(canada_prov_choices) > 0:
-        #Combine lists with teams from team_choices first
+        #Combine lists with Canada provinces from canada_prov_choices first
         choices = [ele for ele in def_choices if ele not in canada_prov_choices]
         if len(pref_canada_prov) > 0:
             choices = [ele for ele in def_choices if ele not in pref_canada_prov]
@@ -386,8 +384,8 @@ def main():
         }
     ]
 
-    #print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
-    #print("V1.1",UNDERLINE,BLUE)
+    print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
+    print("V1.1",UNDERLINE,BLUE)
     nhl_config = {}
 
     answers = prompt(questions, style=custom_style_dope)
@@ -614,6 +612,7 @@ def main():
     boards_config['boards'].update(clock = clock_answers)
     
     #COVID board questions
+    #COVID Worldwide Enabled Question
     covid_ww_question = [
         {
             'type': 'confirm',
@@ -626,6 +625,7 @@ def main():
     covid_ww_answer = prompt(covid_ww_question,style=custom_style_dope)
     boards_config['boards'].update(covid19 = covid_ww_answer)
     
+    # COVID country enabled Question
     covid_country_question = [
         {
             'type': 'confirm',
@@ -638,7 +638,7 @@ def main():
     covid_country_answer = prompt(covid_country_question,style=custom_style_dope)
     boards_config['boards']['covid19'].update(covid_country_answer)
     
-    
+    # COVID country configuration
     if covid_country_answer['country_enabled']:
         selected_countries = get_default_value(default_config,['boards','covid19','country'],"string")
         preferences_countries = []
@@ -664,6 +664,7 @@ def main():
         preferences_country_dict = {'country':preferences_countries}
         boards_config['boards']['covid19'].update(preferences_country_dict)
 
+    # COVIS US State enabled question
     covid_us_state_question = [
         {
             'type': 'confirm',
@@ -676,9 +677,8 @@ def main():
     covid_us_state_answer = prompt(covid_us_state_question,style=custom_style_dope)
     boards_config['boards']['covid19'].update(covid_us_state_answer)
     
-
+    # COVID US State configuration
     if covid_us_state_answer['us_state_enabled']:
-        # COVID configuration
         selected_us_states = get_default_value(default_config,['boards','covid19','us_state'],"string")
         preferences_us_states = []
 
@@ -703,6 +703,7 @@ def main():
         preferences_us_state_dict = {'us_state':preferences_us_states}
         boards_config['boards']['covid19'].update(preferences_us_state_dict)
 
+    #COVID Canadian provinc enabled question
     covid_canada_prov_question = [
         {
             'type': 'confirm',
@@ -715,9 +716,8 @@ def main():
     covid_canada_answer = prompt(covid_canada_prov_question,style=custom_style_dope)
     boards_config['boards']['covid19'].update(covid_canada_answer)
     
-
+    # COVID Canadian province configuration
     if covid_canada_answer['canada_enabled']:
-        # COVID configuration
         selected_canada_prov = get_default_value(default_config,['boards','covid19','canada_prov'],"string")
         preferences_canada_prov = []
 
