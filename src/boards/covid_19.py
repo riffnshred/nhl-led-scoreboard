@@ -12,11 +12,12 @@ class Covid_19:
         self.layout = self.data.config.config.layout.get_board_layout('covid_19')
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
+        self.time_format = self.data.config.time_format
         
         if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled): 
             try:
                 self.worldwide_data = self.data.covid19.ww
-                self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
+                self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime(self.get_time_format(self.time_format))
                 self.data.network_issues = False
                 for case in self.worldwide_data:
                     if case == "updated":
@@ -27,9 +28,10 @@ class Covid_19:
                 print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                 self.data.network_issues = True
 
+        self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
+
         if data.config.covid_country_board_enabled:
             self.country = data.config.covid_country
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S") 
             count = 0 
             for i in self.country:
                 try:
@@ -54,7 +56,6 @@ class Covid_19:
 
         if data.config.covid_us_state_board_enabled:
             self.us_state = data.config.covid_us_state
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
             count = 0
             for i in self.us_state: 
                 try:
@@ -79,7 +80,6 @@ class Covid_19:
         
         if data.config.covid_canada_board_enabled:
             self.canada_prov = data.config.covid_canada_prov
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
             count = 0
             for i in self.canada_prov: 
                 try:
@@ -96,7 +96,14 @@ class Covid_19:
                     print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                     self.data.network_issues = True
                 count += 1        
-             
+
+
+    def get_time_format(self,time_flag):
+        if time_flag == "%H:%M":
+            time_flag = "%m/%d %H:%M:%S"
+        else:
+            time_flag = "%m/%d %I:%M:%S %P"
+        return time_flag
 
     def draw_count(self, name, count, last_update, location):
 
@@ -181,7 +188,7 @@ class Covid_19:
             'Texas': 'TX',
             'Utah': 'UT',
             'Vermont': 'VT',
-            'Virgin Islands': 'VI',
+            'United States Virgin Islands': 'VI',
             'Virginia': 'VA',
             'Washington': 'WA',
             'West Virginia': 'WV',

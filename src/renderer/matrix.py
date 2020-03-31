@@ -92,6 +92,13 @@ class Matrix:
         size = (width, height)
 
         x, y = self.align_position(align, position, size)
+        
+        if (backgroundColor != None):
+          self.draw_rectangle(
+            (x - backgroundOffset[0], y - backgroundOffset[1]),
+            (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
+            backgroundColor
+          )
 
         if (backgroundColor != None):
           self.draw_rectangle(
@@ -162,7 +169,7 @@ class Matrix:
             "position": position,
             "size": size
         }
-
+      
     def draw_pixel(self, position, color):
         try:
             self.pixels[position] = color

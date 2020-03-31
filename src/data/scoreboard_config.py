@@ -79,11 +79,14 @@ class ScoreboardConfig:
         # COVID-19
         self.covid_ww_board_enabled = json["boards"]["covid19"]["worldwide_enabled"]
         self.covid_country_board_enabled = json["boards"]["covid19"]["country_enabled"]
-        self.covid_country = json["boards"]["covid19"]["country"]
+        if self.covid_country_board_enabled:
+            self.covid_country = json["boards"]["covid19"]["country"]
         self.covid_us_state_board_enabled = json["boards"]["covid19"]["us_state_enabled"]
-        self.covid_us_state = json["boards"]["covid19"]["us_state"]
+        if self.covid_us_state_board_enabled:
+            self.covid_us_state = json["boards"]["covid19"]["us_state"]
         self.covid_canada_board_enabled = json["boards"]["covid19"]["canada_enabled"]
-        self.covid_canada_prov = json["boards"]["covid19"]["canada_prov"]
+        if self.covid_canada_board_enabled:
+            self.covid_canada_prov = json["boards"]["covid19"]["canada_prov"]
 
         # Fonts
         self.layout = Layout()
