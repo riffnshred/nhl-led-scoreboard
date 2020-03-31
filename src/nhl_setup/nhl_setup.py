@@ -312,7 +312,7 @@ def get_countries(country_index,country_choices,pref_countries,qmark):
 
 def get_canada_prov(canada_prov_index,canada_prov_choices,pref_canada_prov,qmark):
     
-    def_choices = ['Alberta','British Columbia','Manitoba','New Brunswick','Newfoundland and Labrador','Northwest Territories','Nova Scotia','Ontario','Prince Edward Island','Quebec','Recovered','Saskatchewan','Yukon']
+    def_choices = ['Alberta','British Columbia','Manitoba','New Brunswick','Newfoundland and Labrador','Northwest Territories','Nova Scotia','Ontario','Prince Edward Island','Quebec','Saskatchewan','Yukon']
 
     choices = []
 
