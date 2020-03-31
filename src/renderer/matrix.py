@@ -100,6 +100,13 @@ class Matrix:
             backgroundColor
           )
 
+        if (backgroundColor != None):
+          self.draw_rectangle(
+            (x - backgroundOffset[0], y - backgroundOffset[1]),
+            (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
+            backgroundColor
+          )
+
         for index, chars in enumerate(text_chars):
             offset = offsets[index]
             chars_position = (x - offset[0], y - offset[1])
@@ -162,7 +169,7 @@ class Matrix:
             "position": position,
             "size": size
         }
-    
+      
     def draw_pixel(self, position, color):
         try:
             self.pixels[position] = color
