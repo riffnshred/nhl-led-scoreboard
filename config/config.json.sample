@@ -63,12 +63,10 @@
             ],
             "us_state_enabled": false,
             "us_state": [
-                "Virginia",
                 "New York"
             ],
             "canada_enabled": false,
             "canada_prov": [
-                "New Brunswick",
                 "Quebec"
             ]
         }	
