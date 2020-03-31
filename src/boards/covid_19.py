@@ -12,11 +12,15 @@ class Covid_19:
         self.layout = self.data.config.config.layout.get_board_layout('covid_19')
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
+        self.time_format = self.data.config.time_format
         
         if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled): 
             try:
                 self.worldwide_data = self.data.covid19.ww
-                self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
+                if self.time_format == "%H:%M":
+                    self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
+                else:
+                    self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %I:%M:%S %P")
                 self.data.network_issues = False
                 for case in self.worldwide_data:
                     if case == "updated":
@@ -29,7 +33,10 @@ class Covid_19:
 
         if data.config.covid_country_board_enabled:
             self.country = data.config.covid_country
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S") 
+            if self.time_format == "%H:%M":
+                self.last_update = datetime.now().strftime("%m/%d %H:%M:%S") 
+            else:
+                self.last_update = datetime.now().strftime("%m/%d %I:%M:%S %P") 
             count = 0 
             for i in self.country:
                 try:
@@ -54,7 +61,10 @@ class Covid_19:
 
         if data.config.covid_us_state_board_enabled:
             self.us_state = data.config.covid_us_state
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
+            if self.time_format == "%H:%M":
+                self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
+            else:
+                self.last_update = datetime.now().strftime("%m/%d %I:%M:%S %P")
             count = 0
             for i in self.us_state: 
                 try:
@@ -79,7 +89,10 @@ class Covid_19:
         
         if data.config.covid_canada_board_enabled:
             self.canada_prov = data.config.covid_canada_prov
-            self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
+            if self.time_format == "%H:%M":
+                self.last_update = datetime.now().strftime("%m/%d %H:%M:%S")
+            else:
+                self.last_update = datetime.now().strftime("%m/%d %I:%M:%S %P")
             count = 0
             for i in self.canada_prov: 
                 try:
