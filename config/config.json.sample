@@ -58,8 +58,7 @@
             "worldwide_enabled": false,
             "country_enabled": true,
             "country": [
-                "USA",
-                "Canada"
+                "USA"
             ],
             "us_state_enabled": false,
             "us_state": [
