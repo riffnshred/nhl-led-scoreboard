@@ -306,7 +306,7 @@ For the `teams` parameters, only put the team's name. You can copy and paste you
 |------------------|-------------|
 | `Avalanche`      | `Jets`      |
 | `Blackhawks`     | `Kings`     |
-| `Blues`          | `Leafs`     |
+| `Blues`          | `Maple Leafs`     |
 | `Blue Jackets`   | `Lightning` |
 | `Bruins`         | `Oilers`    |
 | `Canadiens`      | `Panthers`  |
