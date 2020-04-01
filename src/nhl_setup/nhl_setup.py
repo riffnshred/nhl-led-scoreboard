@@ -173,7 +173,7 @@ def select_boards(qmark):
 def get_team(team_index,team_choices,pref_teams,qmark):
     
     def_choices = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
-    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
+    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
     'Rangers','Red Wings','Sabres','Senators','Sharks','Stars','Wild']
 
     choices = []
@@ -385,7 +385,7 @@ def main():
     ]
 
     print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
-    print("V1.2",UNDERLINE,BLUE)
+    print("V1.2.1",UNDERLINE,BLUE)
     nhl_config = {}
 
     answers = prompt(questions, style=custom_style_dope)
