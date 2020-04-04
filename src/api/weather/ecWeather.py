@@ -48,16 +48,18 @@ class ecWxWorker(object):
 
             #Get condition and icon from dictionary
             for row in range(len(self.icons)):
-                if self.icons[row]["Code"] == curr_cond["icon_code"]["value"]:
+                if int(self.icons[row]["Code"]) == int(curr_cond["icon_code"]["value"]):
                     wx_icon = self.icons[row]['font']
-                    #wx_summary = row['Description']
                     break
                 else:
                     wx_icon = '\uf07b'
                 
-                wx_summary = curr_cond["condition"]["value"]
+            wx_summary = curr_cond["condition"]["value"]
 
-            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity]
+            wx_dewpoint = curr_cond["dewpoint"]["value"] + self.data.wx_units[0]
+
+            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
+
 
             winddir = degrees_to_direction(float(curr_cond["wind_bearing"]["value"]))
             wx_windspeed = str(round(float(curr_cond["wind_speed"]["value"]),1)) + " " + self.data.wx_units[1]
@@ -68,18 +70,21 @@ class ecWxWorker(object):
 
             wx_pressure = str(round(float(curr_cond["pressure"]["value"]),1) * 10) + " " + self.data.wx_units[4]
 
-            self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure]
+            for row in range(len(self.icons)):
+                if self.icons[row]["Description"].lower() == curr_cond["tendency"]["value"]:
+                    wx_tendency = self.icons[row]['font']
+                    break
+                else:
+                    wx_tendency = '\uf07b'
+            
+            wx_visibility = curr_cond["visibility"]["value"] + " " + curr_cond["visibility"]["unit"]
 
-            #wx_precip_prob = str(round(forecast.currently.precip_probability,1)*100) + "%"
-            #self.data.wx_curr_precip = [forecast.currently.precip_type,wx_precip_prob,forecast.currently.precip_intensity,forecast.currently.precipAccumulation]
+            self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure,wx_tendency,wx_visibility]
 
             if self.show_alerts and len(curr_alerts) > 0:
                 # Only get the latest alert
                 i = -1
 
-                #wx_alert_time = forecast.alerts[-1].time.strftime("%m/%d %H:%M:%S")
-                
-                #self.data.wx_alerts = [forecast.alerts[-1].title,forecast.alerts[-1].severity,forecast.alerts[-1].regions,wx_alert_time,wx_alert_expires]
                 # Create the warnings, watches and advisory lists from curr_alerts but only take the most recent one
 
                 wx_num_endings = len(curr_alerts["endings"]["value"])
@@ -130,8 +135,6 @@ class ecWxWorker(object):
 
             debug.info(self.data.wx_current)
             debug.info(self.data.wx_curr_wind)
-            #debug.info(self.data.wx_curr_precip)
-
 
             # Run every 'x' minutes
             sleep(60 * self.weather_frequency)

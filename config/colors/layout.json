@@ -23,12 +23,15 @@
   "wx_curr_wind": {
     "wind": [255,255,0],
     "gust": [173,255,47],
-    "pressure": [218,165,32]
+    "pressure": [218,165,32],
+    "visibility": [218,165,32]
   },
   "wx_curr_precip": {
     "precipchance": [0,191,255],
     "humidity": [0,255,255],
-    "preciptype_na": [0,206,235]
+    "preciptype_na": [0,206,235],
+    "pressure": [218,165,32],
+    "dewpoint": [24,252,0]
   }
 
 }

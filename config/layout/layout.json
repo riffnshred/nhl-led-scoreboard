@@ -177,7 +177,7 @@
       }
     },
     "temp_app": {
-      "position": [0, 1],
+      "position": [0, 2],
       "font": "wx_large",
       "align": "right",
       "relative": {
@@ -214,6 +214,15 @@
         "to": "gust",
         "align": "left"
       }
+    },
+    "visibility": {
+      "position": [0,14],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "gust",
+        "align": "left"
+      }
     }
   },
   "wx_curr_precip":{
@@ -236,6 +245,25 @@
       "position": ["5%", "85%"],
       "font": "wx_medium",
       "align": "bottom-left"
+    },
+    "pressure": {
+      "position": ["5%","10%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "tendency": {
+      "position": ["90%", "10%"],
+      "font": "wxicons_lg",
+      "align": "right"
+    },
+    "dewpoint": {
+      "position": [0,"35%"],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "pressure",
+        "align": "bottom-left"
+      }
     }
   },
   "wx_alert":{
