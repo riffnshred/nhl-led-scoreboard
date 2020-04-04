@@ -10,8 +10,8 @@ from boards.team_summary import TeamSummary
 from boards.clock import Clock
 from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
-from boards.dsWeather import dsWeather
-from boards.dsAlert import dsAlert
+from boards.wxWeather import wxWeather
+from boards.wxAlert import wxAlert
 from time import sleep
 
 
@@ -129,11 +129,11 @@ class Boards:
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)
     
-    def dsweather(self, data, matrix,sleepEvent):
-        dsWeather(data, matrix, sleepEvent)
+    def wxweather(self, data, matrix,sleepEvent):
+        wxWeather(data, matrix, sleepEvent)
     
-    def dsalert(self, data, matrix,sleepEvent):
-        dsAlert(data, matrix, sleepEvent)
+    def wxalert(self, data, matrix,sleepEvent):
+        wxAlert(data, matrix, sleepEvent)
 
     def covid_19(self, data, matrix,sleepEvent):
         Covid_19(data, matrix, sleepEvent)

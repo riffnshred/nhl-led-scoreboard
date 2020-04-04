@@ -4,7 +4,7 @@ from time import sleep
 from utils import center_text,get_file
 import debug
 
-class dsWeather:
+class wxWeather:
     def __init__(self, data, matrix,sleepEvent):
         self.data = data
         
@@ -22,43 +22,30 @@ class dsWeather:
             debug.error("Duration is less than 30 seconds, defaulting to 30 seconds")
             self.duration = 30
 
-        # DarkSky weather icons for top left of board using the weatherfot.ttf
-        self.wx_cond = {"clear-day": '\uf00d',
-                        "clear-night": '\uf02e',
-                        "partly-cloudy-night": '\uf031',
-                        "partly-cloudy-day": '\uf002',
-                        "rain": '\uf019',
-                        "snow": '\uf01b',
-                        "sleet": '\uf0b5',
-                        "wind": '\uf050',
-                        "fog": '\uf014',
-                        "cloudy": '\uf013',
-                        "hail": '\uf015',
-                        "thunderstorm": '\uf01e',
-                        "tornado": '\uf056',
-                        None: '\uf07b'
-        }
 
         display_wx = 0
         display_sleep = self.duration/3
-        while display_wx < self.duration and not self.sleepEvent.is_set():
-            self.dsWxDrawTemp()
-            self.sleepEvent.wait(display_sleep)
-            display_wx += display_sleep
-            self.dsWxDrawWind()
-            self.sleepEvent.wait(display_sleep)
-            display_wx += display_sleep
-            self.dsWxDrawPrecip()
-            self.sleepEvent.wait(display_sleep)
-            display_wx += display_sleep
+        if self.data.wx_updated:
+            while display_wx < self.duration and not self.sleepEvent.is_set():
+                self.WxDrawTemp()
+                self.sleepEvent.wait(display_sleep)
+                display_wx += display_sleep
+                self.WxDrawWind()
+                self.sleepEvent.wait(display_sleep)
+                display_wx += display_sleep
+                self.WxDrawPrecip()
+                self.sleepEvent.wait(display_sleep)
+                display_wx += display_sleep
+        else:
+            debug.error("Weather feed has not updated yet....")
         
-    def dsWxDrawTemp(self):
+    def WxDrawTemp(self):
 
         self.matrix.clear()
 
         # Get the current weather icon
     
-        curr_wx_icontext = self.wx_cond[self.data.wx_current[1]]
+        curr_wx_icontext = self.data.wx_current[1]
 
         self.matrix.draw_text_layout(
             self.layout.condition,
@@ -67,7 +54,12 @@ class dsWeather:
 
         self.matrix.draw_text_layout(
             self.layout.summary,
-            self.data.wx_current[2] + "\n" +self.data.wx_current[0]
+            self.data.wx_current[2] 
+        )
+
+        self.matrix.draw_text_layout(
+            self.layout.update,
+            self.data.wx_current[0]
         )
 
         self.matrix.draw_text_layout(
@@ -86,7 +78,7 @@ class dsWeather:
         if self.data.network_issues:
             self.matrix.network_issue_indicator()
     
-    def dsWxDrawWind(self):
+    def WxDrawWind(self):
         
         self.matrix.clear()
 
@@ -117,29 +109,33 @@ class dsWeather:
         if self.data.network_issues:
             self.matrix.network_issue_indicator()
 
-    def dsWxDrawPrecip(self):
+    def WxDrawPrecip(self):
         
         self.matrix.clear()
 
-        precip_wx_icon = self.wx_cond[self.data.wx_curr_precip[0]]
+        precip_wx_icon = '\uf07b' #N/A
 
-        if self.data.wx_curr_precip[0] == None:
-            wx_curr_precip = "N/A"
+        if self.data.config.weather_data_feed.lower() == "ds":
+            if self.data.wx_curr_precip[0] == None:
+                wx_curr_precip = "N/A"
+                self.matrix.draw_text_layout(
+                    self.layout3.preciptype_na,
+                    precip_wx_icon
+                )
+            else:
+                wx_curr_precip = self.data.wx_curr_precip[0]
+                self.matrix.draw_text_layout(
+                    self.layout3.preciptype,
+                    precip_wx_icon
+                )  
+                
             self.matrix.draw_text_layout(
-                self.layout3.preciptype_na,
-                precip_wx_icon
-            )
-        else:
-            wx_curr_precip = self.data.wx_curr_precip[0]
-            self.matrix.draw_text_layout(
-                self.layout3.preciptype,
-                precip_wx_icon
-            )  
-            
-        self.matrix.draw_text_layout(
-             self.layout3.precipchance,
-             "Chance: " + wx_curr_precip + "\n" + self.data.wx_curr_precip[1]
-        ) 
+                self.layout3.precipchance,
+                "Chance: " + wx_curr_precip + "\n" + self.data.wx_curr_precip[1]
+            ) 
+        
+        #if self.data.config.weather_data_feed.lower() == "ec":
+
 
         self.matrix.draw_text_layout(
              self.layout3.humidity,
@@ -147,16 +143,22 @@ class dsWeather:
         )
     
         if len(self.data.wx_alerts) > 0:
-            # Draw Alert boxes and numbers (warning,watch,advisory) for 64x32 board
+            # Draw Alert boxes (warning,watch,advisory) for 64x32 board
+            # Only draw the highest 
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
-            self.matrix.draw.rectangle([58, 5, 64, 11], fill=(255,0,0)) # warning
-
-            if self.data.wx_units[5] == "us":
-                self.matrix.draw.rectangle([58, 12, 64, 18], fill=(255,165,0)) # watch
-                self.matrix.draw.rectangle([58, 19, 64, 25], fill=(255,255,0)) #advisory
+            if self.data.wx_alerts[1] == "warning": 
+                self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,0,0)) # warning
+            elif self.data.wx_alerts[1] == "watch":
+                if self.data.wx_units[5] == "us":
+                    self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,165,0)) # watch
+                else:
+                    self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,255,0)) # watch canada
             else:
-                self.matrix.draw.rectangle([58, 12, 64, 18], fill=(255,255,0)) # watch
-                self.matrix.draw.rectangle([58, 19, 64, 25], fill=(169,169,169)) #advisory
+                if self.data.wx_alerts[1] == "advisory":
+                    if self.data.wx_units[5] == "us":
+                        self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,255,0)) #advisory
+                    else:
+                        self.matrix.draw.rectangle([58, 10, 64, 20], fill=(169,169,169)) #advisory canada
 
         self.matrix.render()
 

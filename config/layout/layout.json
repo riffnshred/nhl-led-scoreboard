@@ -116,8 +116,8 @@
       }
     },
     "wx_display": {
-      "position": ["24%", "93%"],
-      "align": "bottom-center"
+      "position": ["50%", "95%"],
+      "align": "center-bottom"
     }
   },
   "covid_19":{
@@ -153,17 +153,22 @@
   },
   "wx_curr_temp":{
     "condition":{
-      "position": ["66%", "2%"],
+      "position": ["68%", "2%"],
       "font": "wxicons_md",
       "align": "top-right"
     },
     "summary":{
-      "position": ["1%", "82%"],
+      "position": ["1%", "77%"],
       "font": "wx_medium",
       "align": "bottom-center"
     },
+    "update":{
+      "position": ["50%", "100%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+    },
     "temp":{
-      "position": [-3, 0],
+      "position": [-2, 0],
       "font": "wx_large",
       "align": "right",
       "relative": {

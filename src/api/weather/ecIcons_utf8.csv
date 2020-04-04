@@ -1,0 +1,46 @@
+﻿encode,Code,Description,Represents,fontcode,font
+UTF8,0,Sunny,Day Conditions Only,f00d,
+UTF8,1,Mainly Sunny,Day Conditions Only,f00d,
+UTF8,2,Partly Cloudy,Day Conditions Only,f002,
+UTF8,3,Mostly Cloudy,Day Conditions Only,f013,
+UTF8,6,Light Rain Shower,Day Conditions Only,f008,
+UTF8,7,Light Rain Shower and Flurries,Day Conditions Only,f006,
+UTF8,8,Light Flurries,Day Conditions Only,f00a,
+UTF8,10,Cloudy,Day and Night Conditions,f013,
+UTF8,11,Precipitation,Day and Night Conditions,f01c,
+UTF8,12,Rain,Day and Night Conditions,f019,
+UTF8,13,Rain Shower,Day and Night Conditions,f01a,
+UTF8,14,Freezing Rain,Day and Night Conditions,f0b5,
+UTF8,15,Rain and Snow,Day and Night Conditions,f017,
+UTF8,16,Snow,Day and Night Conditions,f01b,
+UTF8,17,Snow,Day and Night Conditions,f01b,
+UTF8,18,Heavy Snow,Day and Night Conditions,f01b,
+UTF8,19,Thunderstorm,Day Conditions Only,f01e,
+UTF8,23,Haze,Day and Night Conditions,f0b6,
+UTF8,24,Fog,Day and Night Conditions,f014,
+UTF8,25,Drifting Snow,Day and Night Conditions,f064,
+UTF8,26,Ice Crystals,Day and Night Conditions,f076,
+UTF8,27,Hail,Day and Night Conditions,f015,
+UTF8,28,Drizzle,Day and Night Conditions,f01c,
+UTF8,30,Clear,Night Conditions Only,f02e,
+UTF8,31,Mainly Clear,Night Conditions Only,f02e,
+UTF8,32,Partly Cloudy,Night Conditions Only,f031,
+UTF8,33,Mostly Cloudy,Night Conditions Only,f041,
+UTF8,36,Light Rain Shower,Night Conditions Only,f02b,
+UTF8,37,Light Rain Shower and Flurries,Night Conditions Only,f026,
+UTF8,38,Light Flurries,Night Conditions Only,f02a,
+UTF8,39,Thunderstorm,Night Conditions Only,f02d,
+UTF8,40,Blowing Snow,Day and Night Conditions,f064,
+UTF8,41,Funnel Cloud,Day and Night Conditions,f056,
+UTF8,42,Tornado,Day and Night Conditions,f056,
+UTF8,43,Windy,Day and Night Conditions,f021,
+UTF8,44,Smoke,Day and Night Conditions,f062,
+UTF8,45,Blowing Dust,Day and Night Conditions,f063,
+UTF8,46,Thunderstorm with Hail,Day and Night Conditions,f01e,
+UTF8,47,Thunderstorm with Dust Storm,Day and Night Conditions,f01e,
+UTF8,48,Waterspout,Day and Night Conditions,f056,
+UTF8,90,N/A,Day and Night Conditions,f07b,
+UTF8,91,Humidity,Day and Night Conditions,f07a,
+UTF8,92,Rising,Day and Night Conditions,f057,
+UTF8,93,Falling,Day and Night Conditions,f088,
+UTF8,94,Steady,Day and Night Conditions,f04d,

@@ -8,7 +8,8 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
-from api.weather.darkskyWeather import weatherWorker
+from api.weather.darkskyWeather import dsWxWorker
+from api.weather.ecWeather import ecWxWorker
 from renderer.matrix import Matrix
 import debug
 
@@ -56,10 +57,18 @@ def run():
         pushbuttonThread.start()
     
     if data.config.weather_enabled:
-        dsweather = weatherWorker(data,sleepEvent)
-        dsweatherThread = threading.Thread(target=dsweather.run,args=())
-        dsweatherThread.daemon = True
-        dsweatherThread.start()
+        if data.config.weather_data_feed.lower() == "ds":
+            dsweather = dsWxWorker(data,sleepEvent)
+            dsweatherThread = threading.Thread(target=dsweather.run,args=())
+            dsweatherThread.daemon = True
+            dsweatherThread.start()
+        elif data.config.weather_data_feed.lower() == "ec":
+            ecweather = ecWxWorker(data,sleepEvent)
+            ecweatherThread = threading.Thread(target=ecweather.run,args=())
+            ecweatherThread.daemon = True
+            ecweatherThread.start()
+        #else:
+            # NWS/NOAA will go here
 
     MainRenderer(matrix, data, sleepEvent).render()
 

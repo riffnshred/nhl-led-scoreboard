@@ -5,6 +5,12 @@ import os
 import debug
 from datetime import datetime, timezone
 import math
+import geocoder
+
+def get_lat_lng():
+    g = geocoder.ip('me')
+    debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
+    return g.latlng
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
