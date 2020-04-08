@@ -12,23 +12,34 @@ class wxWeather:
         self.layout2 = self.data.config.config.layout.get_board_layout('wx_curr_wind')
         self.layout3 = self.data.config.config.layout.get_board_layout('wx_curr_precip')
 
+        self.wxfont = data.config.layout.wxfont
+
         self.matrix = matrix
 
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
+
+        #Get size of summary text for looping 
+        summary_info = self.matrix.draw_text(["1%", "77%"],self.data.wx_current[2],self.wxfont)
+
+        self.summary_width = summary_info["size"][0]
+        if self.summary_width > self.matrix.width:
+            self.scroll_summary = True
+        else:
+            self.scroll_summary = False
+    
 
         self.duration = data.config.weather_duration
         if self.duration < 30:
             debug.error("Duration is less than 30 seconds, defaulting to 30 seconds")
             self.duration = 30
 
-
         display_wx = 0
         display_sleep = self.duration/3
         if self.data.wx_updated:
             while display_wx < self.duration and not self.sleepEvent.is_set():
-                self.WxDrawTemp()
-                self.sleepEvent.wait(display_sleep)
+                self.WxDrawTemp(display_sleep)
+                #self.sleepEvent.wait(display_sleep)
                 display_wx += display_sleep
                 self.WxDrawWind()
                 self.sleepEvent.wait(display_sleep)
@@ -44,44 +55,64 @@ class wxWeather:
         else:
             debug.error("Weather feed has not updated yet....")
         
-    def WxDrawTemp(self):
+    def WxDrawTemp(self,display_loop):
 
-        self.matrix.clear()
+        x=0
+        pos = self.matrix.width
+        # If the summary is to scroll, change size of display loop
+        if self.scroll_summary:
+            display_loop = ((self.summary_width/self.matrix.width)/0.1)*display_loop
 
-        # Get the current weather icon
-    
-        curr_wx_icontext = self.data.wx_current[1]
+        while x < display_loop and not self.sleepEvent.is_set():
+            self.matrix.clear()
 
-        self.matrix.draw_text_layout(
-            self.layout.condition,
-            curr_wx_icontext
-        )  
+            # Get the current weather icon
+        
+            curr_wx_icontext = self.data.wx_current[1]
 
-        self.matrix.draw_text_layout(
-            self.layout.summary,
-            self.data.wx_current[2] 
-        )
+            self.matrix.draw_text_layout(
+                self.layout.condition,
+                curr_wx_icontext
+            )  
 
-        self.matrix.draw_text_layout(
-            self.layout.update,
-            self.data.wx_current[0]
-        )
-
-        self.matrix.draw_text_layout(
-            self.layout.temp,
-            self.data.wx_current[3]
-        )  
-
-        self.matrix.draw_text_layout(
-            self.layout.temp_app,
-            self.data.wx_current[4] 
-        )
+            if not self.scroll_summary:
+                self.matrix.draw_text_layout(
+                    self.layout.summary,
+                    self.data.wx_current[2] 
+                )
+            else:
+                self.matrix.draw_text([pos,"67%"],self.data.wx_current[2],self.wxfont)
+                if self.summary_width > pos:
+                    pos -= 1
+                    if pos + self.summary_width < 0:
+                        pos = self.matrix.width
 
 
-        self.matrix.render()
+            self.matrix.draw_text_layout(
+                self.layout.update,
+                self.data.wx_current[0]
+            )
 
-        if self.data.network_issues:
-            self.matrix.network_issue_indicator()
+            self.matrix.draw_text_layout(
+                self.layout.temp,
+                self.data.wx_current[3]
+            )  
+
+            self.matrix.draw_text_layout(
+                self.layout.temp_app,
+                self.data.wx_current[4] 
+            )
+
+            self.matrix.render()
+
+            if self.data.network_issues:
+                self.matrix.network_issue_indicator()
+
+            if not self.scroll_summary:
+                self.sleepEvent.wait(1)
+            else:
+                self.sleepEvent.wait(0.01)
+            x+=1
     
     def WxDrawWind(self):
         
