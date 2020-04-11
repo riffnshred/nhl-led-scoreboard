@@ -21,11 +21,11 @@ class Covid_19:
         self.sleepEvent.clear()
         self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
         for case in self.worldwide_data:
-            if case == "updated":
-                break
-            
-            self.draw_count(case, self.worldwide_data[case],  self.last_update)
-            self.sleepEvent.wait(5)
+            if case == "cases" or case == "deaths" or case == "recovered" :
+                print(case)
+                self.draw_count(case, self.worldwide_data[case],  self.last_update)
+                self.sleepEvent.wait(5)
+                
 
     def draw_count(self, name, count, last_update):
 

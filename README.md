@@ -4,6 +4,10 @@
 # (UPDATE) Causes of NHL suspending the Season
 The scoreboard now handles the postponed games.
 
+# V1.1.4 (Latest)
+Bug fix:
+- Fix the issue where the covid 19 board would not show because of changes in the API
+
 # V1.1.3 (Latest)
 
 Bug fix:
