@@ -8,7 +8,7 @@ The scoreboard now handles the postponed games.
 Bug fix:
 - Fix the issue where the covid 19 board would not show because of changes in the API
 
-# V1.1.3 (Latest)
+# V1.1.3
 
 Bug fix:
 - Updated the nhl_setup with a different message if not config.json file exist
