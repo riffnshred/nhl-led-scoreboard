@@ -38,6 +38,10 @@
   "wx_alert": {
     "file": "vcr_mono.ttf",
     "size": 14
+  },
+  "wx_alert_sm": {
+    "file": "press2p.ttf",
+    "size": 9
   }
 
 }

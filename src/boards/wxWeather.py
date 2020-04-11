@@ -257,6 +257,10 @@ class wxWeather:
                 self.layout4.warning,
                 self.data.wx_alerts[0]
             )  
+            self.matrix.draw_text_layout(
+                self.layout4.warning_date,
+                self.data.wx_alerts[2]
+            )
             self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,0,0)) # warning
             self.matrix.draw_text_layout(
                 self.layout4.title_top,

@@ -268,8 +268,13 @@
   },
   "wx_alert":{
     "warning": {
-      "position": ["50%","50%"],
-      "font": "wx_alert",
+      "position": ["50%","42%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "warning_date": {
+      "position": ["50%","65%"],
+      "font": "wx_medium",
       "align": "center-center"
     },
     "watch_us": {

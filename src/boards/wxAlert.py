@@ -14,7 +14,7 @@ class wxAlert:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         self.wxfont = data.config.layout.wxalert_font
-        self.data.wx_alerts = ["Tornado Warning","warning"]
+        #self.data.wx_alerts = ["Severe Thunderstorm","warning","04/11 13:47"]
         #Get size of summary text for looping 
         alert_info = self.matrix.draw_text(["50%", "50%"],self.data.wx_alerts[0],self.wxfont)
         self.alert_width = alert_info["size"][0]
@@ -33,20 +33,28 @@ class wxAlert:
             # Draw Alert boxes and numbers (warning,watch,advisory) for 64x32 board
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
             if self.data.wx_alerts[1] == "warning":
-                self.matrix.draw.rectangle([0, 0, 64, 32], fill=(255,0,0)) # warning
+                self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,0,0)) # warning
+                self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,0,0)) # warning
             elif self.data.wx_alerts[1] == "watch":
                 if self.data.wx_units[5] == "us":
-                    self.matrix.draw.rectangle([0, 0, 64, 32], fill=(255,165,0)) # watch
+                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,165,0)) # watch
+                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,165,0)) # watch
                 else:
-                    self.matrix.draw.rectangle([0, 0, 64, 32], fill=(255,255,0)) # watch canada
+                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,255,0)) # watch canada
+                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) # watch canada
             else:
                 if self.data.wx_alerts[1] == "advisory":
                     if self.data.wx_units[5] == "us":
-                        self.matrix.draw.rectangle([0, 0, 64,32], fill=(255,255,0)) #advisory
+                        self.matrix.draw.rectangle([0, 0, 64,8], fill=(255,255,0)) #advisory
+                        self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) #advisory
                     else:
-                        self.matrix.draw.rectangle([0, 0, 64, 32], fill=(169,169,169)) #advisory canada
+                        self.matrix.draw.rectangle([0, 0, 64, 8], fill=(169,169,169)) #advisory canada
+                        self.matrix.draw.rectangle([0, 24, 64, 32], fill=(169,169,169)) #advisory canada
         
-            self.matrix.draw_text([self.pos,8],self.data.wx_alerts[0],self.wxfont,fill=(0,0,0))
+            
+            self.matrix.draw_text([self.pos,9],self.data.wx_alerts[0],self.wxfont,fill=(255,255,255))
+            
+
             if self.alert_width > self.pos:
                 self.pos -= 1
                 if self.pos + self.alert_width == 0:

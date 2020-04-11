@@ -89,6 +89,13 @@ class MainRenderer:
                 self.data.pb_trigger = False
                 #Display the board from the config
                 self.boards._pb_board(self.data, self.matrix, self.sleepEvent)
+            
+            # Display the Weather Alert board
+            if self.data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in game day loop....will display weather alert board')
+                self.data.wx_alert_interrupt = False
+                #Display the board from the config
+                self.boards._wx_alert(self.data, self.matrix, self.sleepEvent)
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """

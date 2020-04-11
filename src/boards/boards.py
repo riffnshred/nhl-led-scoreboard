@@ -26,6 +26,12 @@ class Boards:
         board = getattr(self, data.config.pushbutton_state_triggered1)
         board(data, matrix,sleepEvent)
 
+    # Board handler for Weather Alert
+    def _wx_alert(self, data, matrix,sleepEvent):
+
+        board = getattr(self, "wxalert")
+        board(data, matrix,sleepEvent)
+
     # Board handler for Off day state
     def _off_day(self, data, matrix,sleepEvent):
         bord_index = 0
@@ -39,13 +45,22 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
+            
+            # Display the Weather Alert board
+            if data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in off day loop....will display weather alert board')
+                data.wx_alert_interrupt = False
+                #Display the board from the config
+                board = getattr(self,"wxalert")
+                data.curr_board = "wxalert"
+                bord_index -= 1
 
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_off_day) - 1):
                 return
             else:
-                if not data.pb_trigger:
+                if not data.pb_trigger or not data.wx_alert_interrupt:
                    bord_index += 1
 
     def _scheduled(self, data, matrix,sleepEvent):
@@ -59,13 +74,22 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
+            
+            # Display the Weather Alert board
+            if data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in off day loop....will display weather alert board')
+                data.wx_alert_interrupt = False
+                #Display the board from the config
+                board = getattr(self,"wxalert")
+                data.curr_board = "wxalert"
+                bord_index -= 1
 
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_scheduled) - 1):
                 return
             else:
-                if not data.pb_trigger:
+                if not data.pb_trigger or not data.wx_alert_interrupt:
                    bord_index += 1
 
     def _intermission(self, data, matrix,sleepEvent):
@@ -80,13 +104,22 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
+            
+            # Display the Weather Alert board
+            if data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in off day loop....will display weather alert board')
+                data.wx_alert_interrupt = False
+                #Display the board from the config
+                board = getattr(self,"wxalert")
+                data.curr_board = "wxalert"
+                bord_index -= 1
 
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_intermission) - 1):
                 return
             else:
-                if not data.pb_trigger:
+                if not data.pb_trigger or not data.wx_alert_interrupt:
                    bord_index += 1
 
     def _post_game(self, data, matrix,sleepEvent):
@@ -101,13 +134,22 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
+            
+            # Display the Weather Alert board
+            if data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in off day loop....will display weather alert board')
+                data.wx_alert_interrupt = False
+                #Display the board from the config
+                board = getattr(self,"wxalert")
+                data.curr_board = "wxalert"
+                bord_index -= 1
 
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_post_game) - 1):
                 return
             else:
-                if not data.pb_trigger:
+                if not data.pb_trigger or not data.wx_alert_interrupt:
                    bord_index += 1
 
     def fallback(self, data, matrix, sleepEvent):
