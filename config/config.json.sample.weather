@@ -81,7 +81,9 @@
 		"enabled": true,
 		"duration": 60,
 		"data_feed": "EC",
-		"ds_apikey": "78c800007e066c9ccbd8162bcf5eb350",
+		"alert_feed": "EC",
+		"ds_apikey": "",
+		"owm_apikey": "",
 		"update_freq": 5,
 		"show_alerts": true,
 		"show_on_clock": true

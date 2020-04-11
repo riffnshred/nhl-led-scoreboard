@@ -11,6 +11,7 @@ class wxWeather:
         self.layout = self.data.config.config.layout.get_board_layout('wx_curr_temp')
         self.layout2 = self.data.config.config.layout.get_board_layout('wx_curr_wind')
         self.layout3 = self.data.config.config.layout.get_board_layout('wx_curr_precip')
+        self.layout4 = self.data.config.config.layout.get_board_layout('wx_alert')
 
         self.wxfont = data.config.layout.wxfont
 
@@ -18,17 +19,7 @@ class wxWeather:
 
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
-
-        #Get size of summary text for looping 
-        summary_info = self.matrix.draw_text(["1%", "77%"],self.data.wx_current[2],self.wxfont)
-
-        self.summary_width = summary_info["size"][0]
-        if self.summary_width > self.matrix.width:
-            self.scroll_summary = True
-        else:
-            self.scroll_summary = False
     
-
         self.duration = data.config.weather_duration
         if self.duration < 30:
             debug.error("Duration is less than 30 seconds, defaulting to 30 seconds")
@@ -37,6 +28,18 @@ class wxWeather:
         display_wx = 0
         display_sleep = self.duration/3
         if self.data.wx_updated:
+            #Get size of summary text for looping 
+            if len(self.data.wx_current) > 0:
+                summary_info = self.matrix.draw_text(["1%", "77%"],self.data.wx_current[2],self.wxfont)
+                self.summary_width = summary_info["size"][0]
+            else:
+                self.summary_width = self.matrix.width
+
+            if self.summary_width > self.matrix.width:
+                self.scroll_summary = True
+            else:
+                self.scroll_summary = False
+
             while display_wx < self.duration and not self.sleepEvent.is_set():
                 self.WxDrawTemp(display_sleep)
                 #self.sleepEvent.wait(display_sleep)
@@ -51,6 +54,11 @@ class wxWeather:
                 else:
                     continue
                 self.sleepEvent.wait(display_sleep)
+
+                if len(self.data.wx_alerts) > 0:
+                    self.WxDrawAlert()
+                    self.sleepEvent.wait(display_sleep)
+
                 display_wx += display_sleep
         else:
             debug.error("Weather feed has not updated yet....")
@@ -232,18 +240,79 @@ class wxWeather:
              self.layout3.humidity,
               self.data.wx_current[5] + " Humidity"
         )
+
+        self.matrix.render()
+
+        if self.data.network_issues:
+            self.matrix.network_issue_indicator()
     
-        if len(self.data.wx_alerts) > 0:
-            # Draw Alert boxes (warning,watch,advisory) for 64x32 board
-            # Only draw the highest 
-            #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
-            if self.data.wx_alerts[1] == "warning": 
-                self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,0,0)) # warning
-            elif self.data.wx_alerts[1] == "watch":
-                self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,255,0)) # watch canada
+    def WxDrawAlert(self):
+        
+        self.matrix.clear()
+
+        if self.data.wx_alerts[1] == "warning": 
+            self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,0,0)) # warning
+
+            self.matrix.draw_text_layout(
+                self.layout4.warning,
+                self.data.wx_alerts[0]
+            )  
+            self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,0,0)) # warning
+            self.matrix.draw_text_layout(
+                self.layout4.title_top,
+                "Weather"
+            )  
+            self.matrix.draw_text_layout(
+                self.layout4.title_bottom,
+                "Warning"
+            )  
+        elif self.data.wx_alerts[1] == "watch":
+            if self.data.wx_units[5] == "us":
+                self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,165,0)) # watch
+                self.matrix.draw_text_layout(
+                    self.layout4.watch_us,
+                    self.data.wx_alerts[0]
+                )
+                self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,165,0)) # watch
             else:
-                if self.data.wx_alerts[1] == "advisory":
-                    self.matrix.draw.rectangle([58, 10, 64, 20], fill=(169,169,169)) #advisory canada
+                self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,255,0)) # watch canada
+                self.matrix.draw_text_layout(
+                    self.layout4.watch_ca,
+                    self.data.wx_alerts[0]
+                )
+                self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) # watch canada
+            self.matrix.draw_text_layout(
+                self.layout4.title_top,
+                "Weather"
+            )  
+            self.matrix.draw_text_layout(
+                self.layout4.title_bottom,
+                "Watch"
+            )  
+        else:
+            if self.data.wx_alerts[1] == "advisory":
+                if self.data.wx_units[5] == "us":
+                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,255,0)) #advisory
+                    self.matrix.draw_text_layout(
+                        self.layout4.advisory_us,
+                        self.data.wx_alerts[0]
+                    )
+                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) #advisory
+                else:
+                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(169,169,169)) #advisory canada
+                    self.matrix.draw_text_layout(
+                        self.layout4.advisory_ca,
+                        self.data.wx_alerts[0]
+                    )
+                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(169,169,169)) #advisory canada
+            self.matrix.draw_text_layout(
+                self.layout4.title_top,
+                "Weather"
+            )  
+            self.matrix.draw_text_layout(
+                self.layout4.title_bottom,
+                "Advisory"
+            )  
 
         self.matrix.render()
 

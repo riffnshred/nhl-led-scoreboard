@@ -56,7 +56,9 @@ class ScoreboardConfig:
         self.weather_enabled = json["weather"]["enabled"]
         self.weather_duration = json["weather"]["duration"]
         self.weather_data_feed = json["weather"]["data_feed"]
+        self.weather_alert_feed = json["weather"]["alert_feed"]
         self.weather_ds_apikey = json["weather"]["ds_apikey"]
+        self.weather_owm_apikey = json["weather"]["owm_apikey"]
         self.weather_update_freq = json["weather"]["update_freq"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow

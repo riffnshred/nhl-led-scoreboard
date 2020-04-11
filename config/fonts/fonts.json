@@ -34,6 +34,10 @@
   "wx_large": {
     "file": "04B_03B_.TTF",
     "size": 14
+  },
+  "wx_alert": {
+    "file": "vcr_mono.ttf",
+    "size": 14
   }
 
 }

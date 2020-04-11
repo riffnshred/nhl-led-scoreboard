@@ -158,9 +158,9 @@
       "align": "top-right"
     },
     "summary":{
-      "position": ["1%", "77%"],
+      "position": ["50%", "85%"],
       "font": "wx_medium",
-      "align": "bottom-center"
+      "align": "center-bottom"
     },
     "update":{
       "position": ["50%", "100%"],
@@ -267,6 +267,40 @@
     }
   },
   "wx_alert":{
-
+    "warning": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },
+    "watch_us": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },
+    "watch_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    }, 
+    "advisory_us": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },   
+    "advisory_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },
+    "title_top": {
+      "position": ["50%","5%"],
+      "font": "wx_medium",
+      "align": "center-top"
+      },
+    "title_bottom": {
+      "position": ["50%","97%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+      }
   }
 }

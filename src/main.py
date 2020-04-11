@@ -10,6 +10,7 @@ from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
 from api.weather.darkskyWeather import dsWxWorker
 from api.weather.ecWeather import ecWxWorker
+from api.weather.ecAlerts import ecWxAlerts
 from renderer.matrix import Matrix
 import debug
 
@@ -69,6 +70,14 @@ def run():
             ecweatherThread.start()
         #else:
             # NWS/NOAA will go here
+    
+    if data.config.weather_show_alerts and data.config.weather_enabled:
+        if data.config.weather_alert_feed.lower() == "ec":
+            ecalert = ecWxAlerts(data,sleepEvent)
+            ecalertThread = threading.Thread(target=ecalert.run,args=())
+            ecalertThread.daemon = True
+            ecalertThread.start()
+
 
     MainRenderer(matrix, data, sleepEvent).render()
 

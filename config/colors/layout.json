@@ -32,6 +32,15 @@
     "preciptype_na": [0,206,235],
     "pressure": [218,165,32],
     "dewpoint": [24,252,0]
+  },
+  "wx_alert": {
+    "watch_us": [255,165,0],
+    "watch_ca": [255,255,0],
+    "advisory_us": [255,255,0],
+    "advisory_ca": [169,169,169],
+    "warning": [255,0,0],
+    "title_top": [0,0,0],
+    "title_bottom": [0,0,0]
   }
 
 }

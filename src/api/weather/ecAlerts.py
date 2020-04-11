@@ -5,14 +5,14 @@ import datetime
 from time import sleep
 
 
-def ecWxAlerts(object):
+class ecWxAlerts(object):
     def __init__(self, data, sleepEvent):
         
         self.data = data
         self.sleepEvent = sleepEvent
 
         self.weather_frequency = data.config.weather_update_freq
-        self.show_alerts = data.config.weather_show_alerts
+        #self.show_alerts = data.config.weather_show_alerts
         self.weather_alert = 0
 
     def run(self):
@@ -20,8 +20,8 @@ def ecWxAlerts(object):
         while True:
             ecData = ECData(coordinates=(self.data.latlng))
             curr_alerts = ecData.alerts
-            
-            if self.show_alerts and len(curr_alerts) > 0:
+
+            if len(curr_alerts) > 0:
                 # Only get the latest alert
                 i = -1
 
@@ -72,3 +72,6 @@ def ecWxAlerts(object):
             else:
                 self.data.wx_alert_interrupt = False
                 self.weather_alert = 0
+            
+            # Run every 'x' minutes
+            sleep(60 * self.weather_frequency)
