@@ -40,10 +40,13 @@ class ecWxWorker(object):
             curr_temp = curr_cond.get("temperature").get("value",{})
             if curr_temp != None:
                 curr_temp = float(curr_cond["temperature"]["value"])
+                check_windchill = 10.0
                 if self.data.config.weather_units == "imperial":
                     curr_temp = temp_f(curr_temp)
+                    check_windchill = 50.0
 
-                if curr_temp < 0:
+
+                if curr_temp < check_windchill:
                     windchill = round(wind_chill(float(curr_cond["temperature"]["value"]),float(curr_cond["wind_speed"]["value"]),self.data.wx_units[1]),1)
                     wx_app_temp = str(windchill) + self.data.wx_units[0]
                 else:
