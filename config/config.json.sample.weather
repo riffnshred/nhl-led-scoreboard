@@ -79,10 +79,10 @@
 	
 	"weather": {
 		"enabled": true,
+		"units": "metric"
 		"duration": 60,
 		"data_feed": "EC",
 		"alert_feed": "EC",
-		"ds_apikey": "",
 		"owm_apikey": "",
 		"update_freq": 5,
 		"show_alerts": true,

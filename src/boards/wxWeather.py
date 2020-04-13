@@ -47,12 +47,7 @@ class wxWeather:
                 self.WxDrawWind()
                 self.sleepEvent.wait(display_sleep)
                 display_wx += display_sleep
-                if self.data.config.weather_data_feed.lower() == "ds":
-                    self.WxDrawPrecip_DS()
-                elif self.data.config.weather_data_feed.lower() == "ec":
-                    self.WxDrawPrecip_EC()
-                else:
-                    continue
+                self.WxDrawPrecip_EC()
                 self.sleepEvent.wait(display_sleep)
 
                 if len(self.data.wx_alerts) > 0:
@@ -143,72 +138,11 @@ class wxWeather:
             "Gusts to:\n" + self.data.wx_curr_wind[3]
         )  
 
-        if self.data.config.weather_data_feed.lower() == "ds":
-            self.matrix.draw_text_layout(
-                self.layout2.pressure,
-                self.data.wx_curr_wind[4]
-            )
-        
-        if self.data.config.weather_data_feed.lower() == "ec":
-            self.matrix.draw_text_layout(
-                self.layout2.visibility,
-                "Vis: " + self.data.wx_curr_wind[6]
-            )
-          
-
-        self.matrix.render()
-
-        if self.data.network_issues:
-            self.matrix.network_issue_indicator()
-
-    def WxDrawPrecip_DS(self):
-        
-        self.matrix.clear()
-
-        precip_wx_icon = '\uf07b' #N/A
-
-        
-        if self.data.wx_curr_precip[0] == None:
-            wx_curr_precip = "N/A"
-            self.matrix.draw_text_layout(
-                self.layout3.preciptype_na,
-                precip_wx_icon
-            )
-        else:
-            wx_curr_precip = self.data.wx_curr_precip[0]
-            self.matrix.draw_text_layout(
-                self.layout3.preciptype,
-                precip_wx_icon
-            )  
-            
         self.matrix.draw_text_layout(
-            self.layout3.precipchance,
-            "Chance: " + wx_curr_precip + "\n" + self.data.wx_curr_precip[1]
-        ) 
-        
-
-        self.matrix.draw_text_layout(
-             self.layout3.humidity,
-              self.data.wx_current[5] + " Humidity"
+            self.layout2.visibility,
+            "Vis: " + self.data.wx_curr_wind[6]
         )
-    
-        if len(self.data.wx_alerts) > 0:
-            # Draw Alert boxes (warning,watch,advisory) for 64x32 board
-            # Only draw the highest 
-            #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
-            if self.data.wx_alerts[1] == "warning": 
-                self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,0,0)) # warning
-            elif self.data.wx_alerts[1] == "watch":
-                if self.data.wx_units[5] == "us":
-                    self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,165,0)) # watch
-                else:
-                    self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,255,0)) # watch canada
-            else:
-                if self.data.wx_alerts[1] == "advisory":
-                    if self.data.wx_units[5] == "us":
-                        self.matrix.draw.rectangle([58, 10, 64, 20], fill=(255,255,0)) #advisory
-                    else:
-                        self.matrix.draw.rectangle([58, 10, 64, 20], fill=(169,169,169)) #advisory canada
+          
 
         self.matrix.render()
 
@@ -249,6 +183,13 @@ class wxWeather:
     def WxDrawAlert(self):
         
         self.matrix.clear()
+
+        if self.data.wx_alerts[0] == "Severe Thunderstorm":
+            self.data.wx_alerts[0] = "Svr T-Storm"
+        if self.data.wx_alerts[0] == "Freezing Rain":
+            self.data.wx_alerts[0] = "Frzn Rain"
+        if self.data.wx_alerts[0] == "Freezing Drizzle":
+            self.data.wx_alerts[0] = "Frzn Drzl"
 
         if self.data.wx_alerts[1] == "warning": 
             self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,0,0)) # warning

@@ -1,6 +1,5 @@
 from env_canada import ECData
 import debug
-import geocoder
 import datetime
 from time import sleep
 
@@ -23,7 +22,11 @@ class ecWxAlerts(object):
             ecData = ECData(coordinates=(self.data.latlng))
             curr_alerts = ecData.alerts
 
-            if len(curr_alerts) > 0:
+            # Check if there's more than a length of 5 returned back as if there's
+            # No alerts, the dictionary still comes back with empty values for 
+            # warning, watch, advisory, statements and endings
+            # Currently don't do anything with a statement
+            if len(curr_alerts) > 5:
                 # Only get the latest alert
                 i = -1
                 # Create the warnings, watches and advisory lists from curr_alerts but only take the most recent one
@@ -32,6 +35,8 @@ class ecWxAlerts(object):
                 wx_num_warning = len(curr_alerts.get("warnings").get("value","0"))
                 wx_num_watch = len(curr_alerts.get("watches").get("value","0"))
                 wx_num_advisory = len(curr_alerts.get("advisories").get("value","0"))
+
+                wx_total_alerts = wx_num_endings + wx_num_warnings + wx_num_watch + wx_num_advisory
                 
                 if wx_num_warning > 0:
                     warn_date = curr_alerts["warnings"]["value"][i]["date"]
@@ -95,6 +100,5 @@ class ecWxAlerts(object):
             else:
                 self.data.wx_alert_interrupt = False
                 self.weather_alert = 0
-            
             # Run every 'x' minutes
             sleep(60 * self.weather_frequency)

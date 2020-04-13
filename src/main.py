@@ -8,8 +8,8 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
-from api.weather.darkskyWeather import dsWxWorker
 from api.weather.ecWeather import ecWxWorker
+from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from renderer.matrix import Matrix
 import debug
@@ -58,19 +58,20 @@ def run():
         pushbuttonThread.start()
     
     if data.config.weather_enabled:
-        if data.config.weather_data_feed.lower() == "ds":
-            dsweather = dsWxWorker(data,sleepEvent)
-            dsweatherThread = threading.Thread(target=dsweather.run,args=())
-            dsweatherThread.daemon = True
-            dsweatherThread.start()
+        if data.config.weather_data_feed.lower() == "owm":
+            owmweather = owmWxWorker(data,sleepEvent)
+            owmweatherThread = threading.Thread(target=owmweather.run,args=())
+            owmweatherThread.daemon = True
+            owmweatherThread.start()
         elif data.config.weather_data_feed.lower() == "ec":
             ecweather = ecWxWorker(data,sleepEvent)
             ecweatherThread = threading.Thread(target=ecweather.run,args=())
             ecweatherThread.daemon = True
             ecweatherThread.start()
-        #else:
-            # NWS/NOAA will go here
-    
+        else:
+            debug.error("No valid weather providers selected, skipping weather feed")
+            data.config.weather_enabled = False
+
     if data.config.weather_show_alerts and data.config.weather_enabled:
         if data.config.weather_alert_feed.lower() == "ec":
             ecalert = ecWxAlerts(data,sleepEvent)
