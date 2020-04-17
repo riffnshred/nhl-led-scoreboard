@@ -1,7 +1,7 @@
 import requests
 import debug as debug
 
-BASE_URL = "https://corona.lmao.ninja/all"
+BASE_URL = "https://corona.lmao.ninja/v2/all"
 
 REQUEST_TIMEOUT = 5
 TIMEOUT_TESTING = 0.001  # TO DELETE
