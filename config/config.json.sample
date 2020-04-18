@@ -53,9 +53,23 @@
 		"clock": {
 			"duration": 15,
 			"hide_indicator": false
-		}
+		},
+        "covid19": {
+            "worldwide_enabled": false,
+            "country_enabled": true,
+            "country": [
+                "USA"
+            ],
+            "us_state_enabled": false,
+            "us_state": [
+                "New York"
+            ],
+            "canada_enabled": false,
+            "canada_prov": [
+                "Quebec"
+            ]
+        }	
 	},
-
 	"sbio": {
 		"dimmer": {
 			"enabled": false,

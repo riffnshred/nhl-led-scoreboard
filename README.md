@@ -4,6 +4,19 @@
 # (UPDATE) Causes of NHL suspending the Season
 As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
 
+
+# V1.1.6
+New Features:
+- Covid 19 Board:
+  * You can now choose to see stats of specific countries and States of the US or Province of Canada. Simply pick the countries and/or states and province you want to see when you use the setup app `./nhl_setup`.
+
+- nhl_setup App
+  * New options added to configure the new options on the Covid 19 Boards.
+
+Bug Fix:
+- Fix the District Of Columbia not rendering properly on the covid 19 board.
+
+
 # V1.1.5 (Latest)
 Big fix:
 - Changed the api link for covid 19 as the old one was depricated.

@@ -56,8 +56,15 @@ One side of your PushButton connects to a ground pin on your bonnet or HAT and t
 
 If you are using a bonnet and connect your PushButton to pin #3, you also get a bonus that your PushButton will act as a true power button for your Raspberry Pi when it's shutdown.
 
+## Troubleshooting (Button)
 
+If you have issues with your buttons, please run the `test_button_gpio.py` file. From the root of the nhl-led-scoreboard run: 
 
+```
+sudo python3 src/sbio/testing/test_button_gpio.py
+```
+
+It will ask you to enter which pin your button is connected and then will run a loop that will log if the button is pressed or not. Simply press your button and if you see `"Button is pressed"`, this means the button is functional. Do CTRL + C to end the test.
 
 
 ## Preferences
