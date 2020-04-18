@@ -17,7 +17,7 @@ Bug Fix:
 - Fix the District Of Columbia not rendering properly on the covid 19 board.
 
 
-# V1.1.5 (Latest)
+# V1.1.5
 Big fix:
 - Changed the api link for covid 19 as the old one was depricated.
 
