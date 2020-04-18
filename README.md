@@ -6,6 +6,9 @@ As you know, the NHL suspended the season. Currently some of the data are still 
 
 
 # V1.1.6
+
+NOTE: If you face issues while running the nhl_setup app, delete your config.json file in the config directory and try again.
+
 New Features:
 - Covid 19 Board:
   * You can now choose to see stats of specific countries and States of the US or Province of Canada. Simply pick the countries and/or states and province you want to see when you use the setup app `./nhl_setup`.
@@ -17,7 +20,7 @@ Bug Fix:
 - Fix the District Of Columbia not rendering properly on the covid 19 board.
 
 
-# V1.1.5 (Latest)
+# V1.1.5
 Big fix:
 - Changed the api link for covid 19 as the old one was depricated.
 
