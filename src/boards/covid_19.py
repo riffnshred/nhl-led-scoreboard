@@ -14,14 +14,14 @@ class Covid_19:
         self.sleepEvent.clear()
         self.time_format = self.data.config.time_format
         
-        if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled): 
+        if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled):
             try:
                 self.worldwide_data = self.data.covid19.ww
                 self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime(self.get_time_format(self.time_format))
                 self.data.network_issues = False
                 for case in self.worldwide_data:
-                    if case == "updated":
-                     break              
+                    if case not in ("cases", "deaths", "recovered"):
+                        continue              
                     self.draw_count(case, self.worldwide_data[case],  self.last_update, "WW")
                     self.sleepEvent.wait(5)
             except ValueError as e:
