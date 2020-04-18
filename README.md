@@ -2,18 +2,23 @@
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
 # (UPDATE) Causes of NHL suspending the Season
-The scoreboard now handles the postponed games.
+As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
 
-# V1.1.3 (Latest)
+# V1.1.6
+New Features:
+- Covid 19 Board:
+  * You can now choose to see stats of specific countries and States of the US or Province of Canada. Simply pick the countries and/or states and province you want to see when you use the setup app `./nhl_setup`.
 
-Bug fix:
-- Updated the nhl_setup with a different message if not config.json file exist
-- Fixed Bug mentioned in Issue #82 about Off_day showing only 2 boards.
+- nhl_setup App
+  * New options added to configure the new options on the Covid 19 Boards.
 
-# V1.1.2 
-- New setup app. no more need to fiddle with the config.json file. Just run `./nhl_setup` once you finished installing the software to config your scoreboard. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
+Bug Fix:
+- Fix the District Of Columbia not rendering properly on the covid 19 board.
 
-- New Covid-19 stats board. Just add "covid_19" to any state of the board to see the latest worldwide cases, deaths and recovered cases of the virus.
+
+# V1.1.5 (Latest)
+Big fix:
+- Changed the api link for covid 19 as the old one was depricated.
 
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
@@ -306,7 +311,7 @@ For the `teams` parameters, only put the team's name. You can copy and paste you
 |------------------|-------------|
 | `Avalanche`      | `Jets`      |
 | `Blackhawks`     | `Kings`     |
-| `Blues`          | `Leafs`     |
+| `Blues`          | `Maple Leafs`     |
 | `Blue Jackets`   | `Lightning` |
 | `Bruins`         | `Oilers`    |
 | `Canadiens`      | `Panthers`  |
