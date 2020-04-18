@@ -1,15 +1,11 @@
 import requests
 import debug as debug
 
-<<<<<<< HEAD
-BASE_URL = "https://corona.lmao.ninja/v2/all"
-=======
 BASE_URL = "https://corona.lmao.ninja/v2/"
 WW_URL = BASE_URL + 'all'
 COUNTRY_URL = BASE_URL + 'countries'
 US_STATE_URL = BASE_URL + 'states'
 CANADA_URL = BASE_URL + 'jhucsse'
->>>>>>> dev
 
 REQUEST_TIMEOUT = 5
 TIMEOUT_TESTING = 0.001  # TO DELETE

@@ -12,15 +12,6 @@ class Covid_19:
         self.layout = self.data.config.config.layout.get_board_layout('covid_19')
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
-<<<<<<< HEAD
-        self.last_update = convert_time((datetime(1970, 1, 1) + timedelta(milliseconds=self.worldwide_data['updated'])).strftime("%Y-%m-%dT%H:%M:%SZ")).strftime("%m/%d %H:%M:%S")
-        for case in self.worldwide_data:
-            if case == "cases" or case == "deaths" or case == "recovered" :
-                print(case)
-                self.draw_count(case, self.worldwide_data[case],  self.last_update)
-                self.sleepEvent.wait(5)
-                
-=======
         self.time_format = self.data.config.time_format
         
         if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled): 
@@ -36,7 +27,6 @@ class Covid_19:
             except ValueError as e:
                 print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                 self.data.network_issues = True
->>>>>>> dev
 
         self.last_update = datetime.now().strftime(self.get_time_format(self.time_format))
 
