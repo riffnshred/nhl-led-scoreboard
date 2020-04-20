@@ -86,6 +86,9 @@
 		"owm_apikey": "",
 		"update_freq": 5,
 		"show_alerts": true,
+		"alert_title": true,
+		"scroll_alert": true,
+		"alert_duration": 5,
 		"show_on_clock": true
 	}
 	

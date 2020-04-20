@@ -19,7 +19,13 @@ class ecWxAlerts(object):
     def run(self):
 
         while True:
-            ecData = ECData(coordinates=(self.data.latlng))
+            try:
+                ecData = ECData(coordinates=(self.data.latlng))
+            except requests.exceptions.RequestException as e:
+                raise ValueError(e)
+                debug.error("Unable to get EC data")
+                pass
+            
             curr_alerts = ecData.alerts
 
             # Check if there's more than a length of 5 returned back as if there's

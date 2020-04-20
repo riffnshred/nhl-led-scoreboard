@@ -18,13 +18,19 @@ class ecWxWorker(object):
     def run(self):
 
         while True:
-            ecData = ECData(coordinates=(self.data.latlng))
+            try:
+                ecData = ECData(coordinates=(self.data.latlng))
+            except requests.exceptions.RequestException as e:
+                raise ValueError(e)
+                debug.error("Unable to get EC data")
+                pass
+
             #Set up units [temp, wind speed,precip, storm distance]
             #Use these eventhough some are included in data feed
             if self.data.config.weather_units == "metric":
                 self.data.wx_units = ["C","kph","mm","miles","hPa","ca"]
             else:
-                self.data.wx_units = ["F","mph","in","miles","mbar","us"]
+                self.data.wx_units = ["F","mph","in","miles","MB","us"]
 
             curr_cond = ecData.conditions
 

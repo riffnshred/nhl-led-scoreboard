@@ -11,12 +11,13 @@ from sbio.pushbutton import PushButton
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
+from api.weather.nwsAlerts import nwsWxAlerts
 from renderer.matrix import Matrix
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.1.4"
+SCRIPT_VERSION = "1.2.0 - Wx version"
 
 
 def run():
@@ -78,6 +79,14 @@ def run():
             ecalertThread = threading.Thread(target=ecalert.run,args=())
             ecalertThread.daemon = True
             ecalertThread.start()
+        elif data.config.weather_alert_feed.lower() == "nws":
+            nwsalert = nwsWxAlerts(data,sleepEvent)
+            nwsalertThread = threading.Thread(target=nwsalert.run,args=())
+            nwsalertThread.daemon = True
+            nwsalertThread.start()
+        else:
+            debug.error("No valid weather alerts providers selected, skipping alerts feed")
+            data.config.weather_show_alerts = False
 
 
     MainRenderer(matrix, data, sleepEvent).render()

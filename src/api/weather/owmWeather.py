@@ -3,7 +3,7 @@ import debug
 import geocoder
 import datetime
 from time import sleep
-from api.weather.wx_utils import wind_chill, get_icons, degrees_to_direction, dew_point, wind_kmph
+from api.weather.wx_utils import wind_chill, get_icons, degrees_to_direction, dew_point, wind_kmph, usaheatindex, temp_f
 
 class owmWxWorker(object):
     def __init__(self, data, sleepEvent):
@@ -22,12 +22,15 @@ class owmWxWorker(object):
         if self.data.config.weather_units == "metric":
                 self.data.wx_units = ["C","kph","mm","miles","hPa","ca"]
         else:
-                self.data.wx_units = ["F","mph","in","miles","mbar","us"]
+                self.data.wx_units = ["F","mph","in","miles","MB","us"]
 
         while True:
 
             lat = self.data.latlng[0]
             lon = self.data.latlng[1]
+            #Testing
+            lat = 31.32
+            lon = -88.24
             obs = self.owm.weather_at_coords(lat,lon)
             wx = obs.get_weather()
 
@@ -83,7 +86,9 @@ class owmWxWorker(object):
                 owm_windgust = wind_kmph(owm_windgust)
             
             # Get icon and text wind direction
-            winddir = degrees_to_direction(float(wx.get_wind()['deg']))
+        
+            owm_winddir = wx.get_wind().get("deg",0.0)
+            winddir = degrees_to_direction(owm_winddir)
             
             wx_windgust = str(round(owm_windgust,1))+ self.data.wx_units[1] 
             wx_windspeed = str(round(owm_windspeed,1)) + self.data.wx_units[1]
@@ -105,6 +110,9 @@ class owmWxWorker(object):
                     wx_app_temp = wx.get_humidex()
                 else:
                     wx_app_temp = wx.get_heat_index()
+                    if wx_app_temp == None:
+                        app_temp = usaheatindex(float(wx.get_temperature(unit="celsius")['temp']),wx.get_humidity())
+                        wx_app_temp = str(round(temp_f(app_temp),1)) + self.data.wx_units[0]
 
                 wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
 
@@ -118,11 +126,15 @@ class owmWxWorker(object):
 
             wx_tendency = '\uf07b'
 
+            vis_distance = wx.get_visibility_distance()
+            if vis_distance == None:
+                vis_distance = 24100
+
             if self.data.config.weather_units == "metric":
-                owm_visibility = round(wx.get_visibility_distance()/1000,1)
+                owm_visibility = round(vis_distance/1000,1)
                 wx_visibility = str(owm_visibility) + " km"
             else:
-                owm_visibility = round(wx.get_visibility_distance()*0.000621371,1)
+                owm_visibility = round(vis_distance*0.000621371,1)
                 wx_visibility = str(owm_visibility) + " mi"
 
             self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
