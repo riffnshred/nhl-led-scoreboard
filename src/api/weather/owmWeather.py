@@ -29,8 +29,8 @@ class owmWxWorker(object):
             lat = self.data.latlng[0]
             lon = self.data.latlng[1]
             #Testing
-            lat = 31.32
-            lon = -88.24
+            #lat = 36.50
+            #lon = -94.62
             obs = self.owm.weather_at_coords(lat,lon)
             wx = obs.get_weather()
 

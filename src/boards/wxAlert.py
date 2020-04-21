@@ -50,6 +50,13 @@ class wxAlert:
                 self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,0,0)) # warning
                 
                 if self.drawtitle:
+                    if self.data.wx_alerts[0] == "Severe Thunderstorm":
+                        self.data.wx_alerts[0] = "Svr T-Storm"
+                    if self.data.wx_alerts[0] == "Freezing Rain":
+                        self.data.wx_alerts[0] = "Frzn Rain"
+                    if self.data.wx_alerts[0] == "Freezing Drizzle":
+                        self.data.wx_alerts[0] = "Frzn Drzl"
+                        
                     self.matrix.draw_text_layout(
                         self.layout4.title_top,
                         top_title

@@ -22,8 +22,8 @@ class nwsWxAlerts(object):
         self.lon = self.data.latlng[1]
 
         #Testing
-        self.lat = 31.32
-        self.lon = -88.24
+        #self.lat = 36.50
+        #self.lon = -94.62
         debug.info("Testing for " + str(self.lat) + "," + str(self.lon))
     
     def sortedbyurgencyandseverity(self,prop):
@@ -103,7 +103,8 @@ class nwsWxAlerts(object):
                     wx_type = "statement"
                 
 
-                # Only create an alert for Immediate and Expected? WWHMD?
+                # Only create an alert for Immediate and Expected?
+
                 self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity']]
                 # Only interrupt the first time
                 if self.weather_alert == 0 and self.data.wx_updated:
