@@ -1,6 +1,6 @@
 {
   "_default": {
-    "file": "04B_24__.TTF",
+    "file": "04b24.otf",
     "size": 8
   },
   "medium": {
@@ -8,11 +8,11 @@
     "size": 16
   },
   "medium_2": {
-    "file": "04B_24__.TTF",
+    "file": "04b24.otf",
     "size": 16
   },
   "large": {
-    "file": "04B_24__.TTF",
+    "file": "04b24.otf",
     "size": 24
   },
   "wxicons_full": {
