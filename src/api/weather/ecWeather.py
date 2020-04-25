@@ -44,6 +44,15 @@ class ecWxWorker(object):
             #Check current temperature to determine if using windchill or heat for apparent temperature
             #Make sure we have a value.  Sometimes, the feed will not contain a value
             curr_temp = curr_cond.get("temperature").get("value",{})
+            curr_humidity = curr_cond.get("humidity").get("value",{})
+            if curr_humidity == None:
+                curr_humidity = "0"
+                wx_humidity = "N/A"
+            else:
+                wx_humidity = curr_humidity + "%"
+
+            
+
             if curr_temp != None:
                 curr_temp = float(curr_cond["temperature"]["value"])
                 check_windchill = 10.0
@@ -56,16 +65,14 @@ class ecWxWorker(object):
                     windchill = round(wind_chill(float(curr_cond["temperature"]["value"]),float(curr_cond["wind_speed"]["value"]),self.data.wx_units[1]),1)
                     wx_app_temp = str(windchill) + self.data.wx_units[0]
                 else:
-                    humidex = round(cadhumidex(curr_temp,int(curr_cond["humidity"]["value"])),1)
+                    humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
                     wx_app_temp = str(humidex) + self.data.wx_units[0]
                 wx_temp = str(round(curr_temp,1)) + self.data.wx_units[0]
 
             else:
                 wx_temp = "N/A"
                 wx_app_temp = "N/A"
-            
-            
-            wx_humidity = curr_cond.get("humidity").get("value","N/A") + "%"
+        
 
             #Get condition and icon from dictionary
             for row in range(len(self.icons)):
@@ -77,12 +84,20 @@ class ecWxWorker(object):
                 
             wx_summary = curr_cond.get("condition").get("value","N/A")
 
-            curr_dewpoint = float(curr_cond.get("dewpoint").get("value","0.0"))
+            curr_dewpoint = curr_cond.get("dewpoint").get("value","0.0")
+
+            if curr_dewpoint == None:
+                curr_dewpoint = 0.0
+            else:
+                curr_dewpoint = float(curr_dewpoint)
 
             if self.data.config.weather_units == "imperial":
                 curr_dewpoint = round(temp_f(curr_dewpoint),1)
 
-            wx_dewpoint = str(curr_dewpoint) + self.data.wx_units[0]
+            if curr_dewpoint == 0.0:
+                wx_dewpoint = "N/A"
+            else:
+                wx_dewpoint = str(curr_dewpoint) + self.data.wx_units[0]
 
             self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
 

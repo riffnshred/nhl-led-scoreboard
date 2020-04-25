@@ -13,6 +13,7 @@ import shutil
 
 from time import sleep
 
+SCRIPT_VERSION = "1.3.0 - Wx version"
 
 class Clock24hValidator(Validator):
     def validate(self, document):
@@ -349,6 +350,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('confdir', nargs='?',default="config", type=str, help='Input dir for config.json')
+    parser.add_argument('--version','-v', action='version', version='%(prog)s ' + SCRIPT_VERSION)
     args = parser.parse_args()
     
     if not os.path.exists(args.confdir):
