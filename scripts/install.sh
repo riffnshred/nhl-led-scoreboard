@@ -26,22 +26,22 @@ sudo pip3 install -e python/
 
 cd ../../../
 
-echo "Installing required dependencies. This may take some time (10-20 minutes-ish)..."
-git reset --hard
-git fetch origin --prune
-git pull
+# echo "Installing required dependencies. This may take some time (10-20 minutes-ish)..."
+# git reset --hard
+# git fetch origin --prune
+# git pull
 
-sudo pip3 install requests 
+# sudo pip3 install requests 
 
-# For dimmer
-sudo pip3 install geocoder python_tsl2591 ephem
+# # For dimmer
+# sudo pip3 install geocoder python_tsl2591 ephem
 
-# For push button
-sudo apt-get -y install python3-gpiozero
+# # For push button
+# sudo apt-get -y install python3-gpiozero
 
-# For svgs
-sudo apt-get -y install python3-cairosvg
-sudo apt-get -y install libraqm-dev
+# # For svgs
+# sudo apt-get -y install python3-cairosvg
+# sudo apt-get -y install libraqm-dev
 
 make
 echo "If you didn't see any errors above, everything should be installed!"
