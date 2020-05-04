@@ -276,7 +276,7 @@ class wxWeather:
 
         self.matrix.render()
 
-        if self.data.network_issues:
+        if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
 
 

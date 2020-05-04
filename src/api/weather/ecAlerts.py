@@ -14,6 +14,9 @@ class ecWxAlerts(object):
         self.weather_alert = 0
         # Date format Friday April 03, 2020 at 04:36 CDT
         self.alert_date_format = "%A %B %d, %Y at %H:%M %Z"
+        self.network_issues = data.network_issues
+
+
 
 
     def run(self):
@@ -21,12 +24,16 @@ class ecWxAlerts(object):
         while True:
             try:
                 ecData = ECData(coordinates=(self.data.latlng))
-            except requests.exceptions.RequestException as e:
+                curr_alerts = ecData.alerts
+                self.network_issues = False
+            except (urllib3.exceptions,requests.exceptions) as e:
                 raise ValueError(e)
-                debug.error("Unable to get EC data")
+                debug.error("Unable to get EC data error:{0}".format(e))
+                curr_alerts = 0
+                self.network_issues = True
                 pass
             
-            curr_alerts = ecData.alerts
+            
 
             # Check if there's more than a length of 5 returned back as if there's
             # No alerts, the dictionary still comes back with empty values for 
@@ -46,7 +53,7 @@ class ecWxAlerts(object):
                 
                 if wx_num_warning > 0:
                     warn_date = curr_alerts["warnings"]["value"][i]["date"]
-                    #Convert to date for display
+                     #Convert to date for display
                     warn_datetime = datetime.datetime.strptime(warn_date,self.alert_date_format)
                     if self.time_format == "%H:%M":
                         wx_alert_time = warn_datetime.strftime("%m/%d %H:%M")
