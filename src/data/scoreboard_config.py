@@ -2,6 +2,7 @@ from utils import get_file
 from data.layout import Layout
 from data.colors import Color
 from config.main import Config  
+from nhl_setup.validate_json import validateConf
 import json
 import os
 import sys
@@ -124,21 +125,42 @@ class ScoreboardConfig:
         j = {}
         path = get_file("config/{}".format(filename))
         if os.path.isfile(path):
-            j = json.load(open(path))
-        return j
+            try:
+                j = json.load(open(path))
+                msg = "json loaded OK"
+            except json.decoder.JSONDecodeError as e:
+                msg = "Unable to load json: {0}".format(e)
+                j = {}
+        return j, msg
 
     def __get_config(self, base_filename, error=None):
         # Look and return config.json file
 
         filename = "{}.json".format(base_filename)
 
-        reference_config = self.read_json(filename)
+        (reference_config, error) = self.read_json(filename)
         if not reference_config:
             if (error):
                 debug.error(error)
             else:
                 debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
             sys.exit(1)
+        
+        if base_filename == "config":
+            # Validate against the config.json
+            debug.info("Now validating config......")
+            conffile = "config/config.json"
+            schemafile = "config/config.schema.json"
+
+            confpath = get_file(conffile)
+            schemapath = get_file(schemafile)
+            (valid,msg) = validateConf(confpath,schemapath)
+            if valid:
+                debug.info("config.json passes validation")
+            else:
+                debug.error("config.json fails validation: error: [{0}]".format(msg))
+                debug.error("Rerun the nhl_setup app to created a valid config.json")
+                sys.exit(1)
 
         return reference_config
 

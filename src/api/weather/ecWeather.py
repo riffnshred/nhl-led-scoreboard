@@ -20,15 +20,16 @@ class ecWxWorker(object):
 
         while True:
             try:
+                debug.info("Refreshing EC current observations weather")
                 ecData = ECData(coordinates=(self.data.latlng))
                 self.data.wx_updated = True
                 self.network_issues = False
             except (urllib3.exceptions,requests.exceptions) as e:
-                raise ValueError(e)
+                #raise ValueError(e)
                 debug.error("Unable to get EC data error:{0}".format(e))
                 self.data.wx_updated = False
                 self.network_issues = True
-                pass
+                break
             
             if self.data.wx_updated:
                 #Set up units [temp, wind speed,precip, storm distance]

@@ -32,15 +32,17 @@ class owmWxWorker(object):
             #lat = 36.50
             #lon = -94.62
             try:
+                debug.info("Refreshing OWM current observations weather")
                 obs = self.owm.weather_at_coords(lat,lon)
                 self.network_issues = False
                 self.data.wx_updated = True
 
             except pyown.exceptions as e:
-                raise ValueError(e)
+                #raise ValueError(e)
                 debug.error("Unable to get OWM data error:{0}".format(e))
                 self.data.wx_updated = False
                 self.network_issues = True
+                break
 
             if not self.network_issues:
                 wx = obs.get_weather()

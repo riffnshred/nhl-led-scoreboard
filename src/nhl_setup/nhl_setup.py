@@ -1,8 +1,7 @@
 import questionary
 from questionary import Validator, ValidationError, prompt
 from styles import custom_style_dope
-from validate import validateConf
-
+from validate_json import validateConf
 from print import *
 import argparse
 import functools
@@ -11,7 +10,6 @@ import json
 import os
 import sys
 import shutil
-import fastjsonschema
 
 
 from time import sleep
@@ -39,36 +37,6 @@ class NumberValidator(Validator):
                 message='Please enter a number',
                 cursor_position=len(document.text))  # Move cursor to end
        
-def validateConf(confdir):
-
-    # Validate a JSON config file (config.json) with JSON scema (config.schema.json).
-    conf = {}
-    schema = {}
-
-    conffile = "{0}/config.json".format(confdir)
-    schemafile = "{0}/config.schema.json".format(confdir)
-
-    confpath = get_file(conffile)
-    schemapath = get_file(schemafile)
-    
-    if os.path.isfile(confpath) and os.path.isfile(schemapath):
-        try:
-            conf = json.load(open(confpath))
-            schema = json.load(open(schemapath))
-        except json.decoder.JSONDecodeError as e:
-            return False,"invalid json error: {0}".format(e)
-
-    else:
-        return False,"unable to load {0} or {1}".format(confpath,schemapath)
-
-    validator = fastjsonschema.compile(schema)
-    try:
-        validator(conf)
-    except fastjsonschema.JsonSchemaException as e:
-        msg = e.message
-        return False, msg
-    else:
-        return True, "validate %s pass" % confpath
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
@@ -107,7 +75,7 @@ def load_config(confdir,simple=False):
                     div.div('*')
                     print("Unable to load json: {0}".format(e),BOLD,RED)
                     div.div('*')
-                    sys.exit()
+                    sys.exit(0)
             else:
                 fileindex += 1
                 
@@ -120,7 +88,7 @@ def save_config(nhl_config,confdir):
     if not os.path.exists(confdir):
         #os.makedirs(confdir)
         print("Directory {} does not exist.  Are you running in the right directory?".format(confdir),RED)
-        sys.exit()
+        sys.exit(0)
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
     except Exception as e:
@@ -409,20 +377,25 @@ def main():
         # Get current working directory
         setup_cwd = os.getcwd()
         print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
-        sys.exit()
+        sys.exit(0)
 
     #Check to see if the user wants to validate an existing config.json against the schema
     #Only from command line
 
     if args.check:
+        conffile = "{0}/config.json".format(args.confdir)
+        schemafile = "{0}/config.schema.json".format(args.confdir)
+
+        confpath = get_file(conffile)
+        schemapath = get_file(schemafile)
         print("Now validating config......")
-        (valid,msg) = validateConf(args.confdir)
+        (valid,msg) = validateConf(confpath,schemapath)
         if valid:
             print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
         else:
-            print("Your config.json fails validation: error is {0}".format(msg),RED)
-        sys.exit()
-        
+            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+        sys.exit(0)
+
     #Check to see if there was a team name on the command line, if so, create a new config.json from
     #config.json.sample
     if args.team != None:
@@ -433,7 +406,7 @@ def main():
             save_config(default_config,args.confdir)
         else:
             print("Your team {0} is not in {1}.  Check the spelling and try again".format(args.team[0],TEAMS),RED)
-        sys.exit()
+        sys.exit(0)
     else:
         default_config = load_config(args.confdir)
 
@@ -460,7 +433,7 @@ def main():
         
         if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():
             save_config(default_config,args.confdir)
-        sys.exit()
+        sys.exit(0)
 
     questions = [
 

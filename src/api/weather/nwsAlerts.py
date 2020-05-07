@@ -53,12 +53,13 @@ class nwsWxAlerts(object):
         
         while True:
             try:
+                debug.info("Checking NWS weather alerts")
                 nws = noaa.NOAA().alerts(active=1, **params)
                 self.network_issues = False
             except Exception as err:
                 debug.error(err)
                 self.network_issues = True
-                pass
+                break
             #print (nws)
             if not self.network_issues:
                 nwsalerts = []
@@ -122,7 +123,7 @@ class nwsWxAlerts(object):
                     self.data.wx_alert_interrupt = False
                     self.weather_alert = 0
                     self.data.wx_alerts = []
-                    debug.info("No active alerts in your area")
+                    debug.info("No active NWS alerts in your area")
 
                 
                 # Run every 'x' minutes

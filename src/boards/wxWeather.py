@@ -108,7 +108,7 @@ class wxWeather:
 
             self.matrix.render()
 
-            if self.data.network_issues:
+            if self.data.network_issues and not self.data.config.clock_hide_indicators:
                 self.matrix.network_issue_indicator()
 
             if not self.scroll_summary:
@@ -146,7 +146,7 @@ class wxWeather:
 
         self.matrix.render()
 
-        if self.data.network_issues:
+        if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
     
     def WxDrawPrecip_EC(self):
@@ -177,7 +177,7 @@ class wxWeather:
 
         self.matrix.render()
 
-        if self.data.network_issues:
+        if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
     
     def WxDrawAlert(self):
