@@ -16,7 +16,11 @@ class screenConfig:
         j = {}
         path = get_file(filename)
         if os.path.isfile(path):
-            j = json.load(open(path))
+            try:
+                j = json.load(open(path))
+            except json.decoder.JSONDecodeError as e:
+                debug.error("Unable to load json: {0}".format(e))
+                j = {}
         return j
 
     def __get_config(self, base_filename):
@@ -24,6 +28,7 @@ class screenConfig:
 
         filename = "renderer/{}.json".format(base_filename)
         reference_config = self.read_json(filename)
+    
 
         return reference_config
 
