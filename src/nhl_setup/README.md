@@ -116,4 +116,6 @@ python3 src/nhl_setup/nhl_setup.py /home/pi/source/nhl-led-scoreboard/config
 
 If the app can't find your config directory, it will error out and tell you it can't find it.
 
+### Generating JSON schema
+The nhl_setup app can now validate a config.json against a JSON schema.  If you add sections to the config.json, you must update the config.schema.json.  You can do this by hand, or you can take your new config.json and upload it to https://jsonschema.net/home and then get the updated config.schema.json.  
 
