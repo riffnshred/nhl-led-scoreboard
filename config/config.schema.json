@@ -1064,7 +1064,7 @@
                     "$id": "#/properties/weather/properties/alert_duration",
                     "type": "integer",
                     "title": "alert_duration",
-                    "description": "How often in minutes to check for alerts.",
+                    "description": "How long to display alert board (in seconds)",
                     "default": 5,
                     "examples": [
                         5
