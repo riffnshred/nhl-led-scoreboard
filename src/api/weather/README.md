@@ -3,6 +3,12 @@
 ## DISCLAIMER
 Whenever lives or financial decisions may be impacted by weather events, professional advice and forecasts should be sought from qualified meteorologists.  The weather information is provided by 3rd parties and we are not responsible for the accuracy or content of information contained in those sites provided.
 
+## Python Requirements
+The weather and alert boards require certain python libraries in order to function properly.   These python packages can be installed using pip3:
+env-canada>=0.0.35
+noaa-sdk>=0.1.18
+pyowm>=2.10.0
+
 
 ## Description
 
