@@ -33,36 +33,36 @@ The weather board will consist of 3 pages normally with a 4th page when there ar
 
 #### First Page
 
-![1stpage](../../assets/images/wx1stpage.jpg)
+![1stpage](../../../assets/images/wx1stpage.jpg)
 
 The green temperature is actual temperature while the red is the &quot;feels like&quot; temperature. The icon on the right is the graphical representation of the current condition which is shown in text below the &quot;feels like&quot; temperature. The bottom line is the last updated time
 
 #### Second Page
 
-![2ndpage](../../assets/images/wx2ndpage.jpg)
+![2ndpage](../../../assets/images/wx2ndpage.jpg)
 
 This page consists of the wind direction and speed, wind gusts and visibility. The icon shows the direction that the wind is blowing from.
 
 #### Third Page
 
-![3rdpage](../../assets/images/wx3rdpage.jpg)
+![3rdpage](../../../assets/images/wx3rdpage.jpg)
 
 This page consists of the pressure, dew point (the temperature where water can condense) and humidity. For EC feed, the arrow in the top right will show the pressure tendency (rising, falling or level). For OWM, this will show NA.
 
 #### Fourth Page
 
-![4thpage](../../assets/images/wx4thpage.png)
+![4thpage](../../../assets/images/wx4thpage.png)
 
 The 4th page will consist of the type of alert (warning, watch or advisory) on the bottom of the screen, the type of alert in the middle (in white lettering and smaller as well as the time the alert was issued) and the word weather on the top. The top 1/3 and bottom 1/3 of the screen will also have colored bars that reflect the type of alert based on if it&#39;s a warning, watch or advisory. The colors are the same as the local weather provider uses. For EC, a warning is red, watch yellow and advisory is grey. For NWS, warning is red, watch is orange and advisory is yellow.
 
 #### Clock w/ temperature and humidity
 
-![wxClock](../../assets/images/wxClock.jpg)
+![wxClock](../../../assets/images/wxClock.jpg)
 
 
 ### The Alert Board
 
 The alert board can be static (which will be identical to the 4th page on the weather board) or have scrolling. The scrolling version will be similar to the image below.
 
-![AlertScroll](../../assets/images/wxAlertscroll.jpg)
+![AlertScroll](../../../assets/images/wxAlertscroll.jpg)
 
