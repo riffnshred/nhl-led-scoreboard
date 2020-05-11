@@ -68,7 +68,7 @@ The 4th page will consist of the type of alert (warning, watch or advisory) on t
 
 ### The Alert Board
 
-The alert board can be static (which will be identical to the 4th page on the weather board) or have scrolling. The scrolling version will be similar to the image below.
+The alert board can be static (which will be identical to the 4th page on the weather board) or have scrolling. The scrolling version will be similar to the image below.  The board will only display the latest and highest level alert issued.  This is a design choice due to the massive amounts of alerts that the NWS will issue that overlap.  It is too cumbersome to have a screen displayed for each one.
 
 ![AlertScroll](../../../assets/images/wxAlertscroll.jpg)
 
