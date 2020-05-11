@@ -567,7 +567,7 @@ def main():
     temp_dict = {}
 
     while state_index < len(states):
-        board_list = ['clock','scoreticker','standings','team_summary','covid_19']
+        board_list = ['clock','wxweather','scoreticker','standings','team_summary','covid_19']
         
         boards_selected = []
         board = None
