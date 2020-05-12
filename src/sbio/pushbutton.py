@@ -113,7 +113,7 @@ class PushButton(object):
         held_for = release_time - self.__press_time
         
   
-        if (held_for >= self.reboot_duration):
+        if held_for >= self.reboot_duration and held_for < self.poweroff_duration:
             self.__press_count = 0
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
             self.data.pb_state = "REBOOT"
@@ -122,6 +122,7 @@ class PushButton(object):
                 self.data.pb_trigger = True
                 self.data.config.pushbutton_state_triggered1 = "pbdisplay"
                 self.sleepEvent.set()
+                time.sleep(2)
             try:
                 check_call([self.reboot_process])
             except CalledProcessError as e:
@@ -152,6 +153,7 @@ class PushButton(object):
             self.data.pb_trigger = True
             self.data.config.pushbutton_state_triggered1 = "pbdisplay"
             self.sleepEvent.set()    
+            time.sleep(2)
 
         try:
             check_call([self.poweroff_process])
