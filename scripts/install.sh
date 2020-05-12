@@ -38,6 +38,8 @@ sudo pip3 install geocoder python_tsl2591 ephem
 
 # For weather
 sudo pip3 install env_canada pyowm noaa_sdk fastjsonschema
+sudo apt-get install libatlas-base-dev
+
 # For push button
 sudo apt-get -y install python3-gpiozero
 
