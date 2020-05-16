@@ -68,7 +68,21 @@
             "canada_prov": [
                 "Quebec"
             ]
-        }	
+		},
+		"weather": {
+			"enabled": true,
+			"units": "metric",
+			"duration": 60,
+			"data_feed": "EC",
+			"alert_feed": "EC",
+			"owm_apikey": "",
+			"update_freq": 5,
+			"show_alerts": true,
+			"alert_title": true,
+			"scroll_alert": true,
+			"alert_duration": 5,
+			"show_on_clock": true
+		}	
 	},
 	"sbio": {
 		"dimmer": {
@@ -90,23 +104,8 @@
 			"poweroff_duration": 10,
 			"poweroff_override_process": "",
 			"display_halt": true,
-			"state_triggered1": "wxweather",
+			"state_triggered1": "weather",
 			"state_triggered1_process": ""
 		}
-	},
-	
-	"weather": {
-		"enabled": true,
-		"units": "metric",
-		"duration": 60,
-		"data_feed": "EC",
-		"alert_feed": "EC",
-		"owm_apikey": "",
-		"update_freq": 5,
-		"show_alerts": true,
-		"alert_title": true,
-		"scroll_alert": true,
-		"alert_duration": 5,
-		"show_on_clock": true
 	}
 }

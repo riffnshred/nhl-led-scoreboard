@@ -68,6 +68,9 @@ class Data:
         # Weather Alert Info
         self.wx_alerts = []
         self.wx_alert_interrupt = False 
+
+        # For update checker, True means new update available from github
+        self.newUpdate = False
         
 
         # Flag to determine when to refresh data

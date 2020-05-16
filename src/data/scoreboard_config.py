@@ -54,24 +54,24 @@ class ScoreboardConfig:
         self.pushbutton_state_triggered1_process = json["sbio"]["pushbutton"]["state_triggered1_process"]
 
         # Weather board preferences
-        self.weather_enabled = json["weather"]["enabled"]
-        self.weather_units = json["weather"]["units"]
-        self.weather_duration = json["weather"]["duration"]
-        self.weather_data_feed = json["weather"]["data_feed"]
-        self.weather_alert_feed = json["weather"]["alert_feed"]
-        self.weather_owm_apikey = json["weather"]["owm_apikey"]
-        self.weather_update_freq = json["weather"]["update_freq"]
+        self.weather_enabled = json["boards"]["weather"]["enabled"]
+        self.weather_units = json["boards"]["weather"]["units"]
+        self.weather_duration = json["boards"]["weather"]["duration"]
+        self.weather_data_feed = json["boards"]["weather"]["data_feed"]
+        self.weather_alert_feed = json["boards"]["weather"]["alert_feed"]
+        self.weather_owm_apikey = json["boards"]["weather"]["owm_apikey"]
+        self.weather_update_freq = json["boards"]["weather"]["update_freq"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
-        self.weather_show_alerts = json["weather"]["show_alerts"] 
+        self.weather_show_alerts = json["boards"]["weather"]["show_alerts"] 
         # Display on top and bottom bar the severity (for US) and type
-        self.weather_alert_title = json["weather"]["alert_title"]
+        self.weather_alert_title = json["boards"]["weather"]["alert_title"]
         # Display static alert or scrolling
-        self.weather_scroll_alert = json["weather"]["scroll_alert"]
+        self.weather_scroll_alert = json["boards"]["weather"]["scroll_alert"]
         # How long to display static alert in seconds
-        self.weather_alert_duration = json["weather"]["alert_duration"]
+        self.weather_alert_duration = json["boards"]["weather"]["alert_duration"]
         # Show curr temp, humidity and any alerts on clock
-        self.weather_show_on_clock = json["weather"]["show_on_clock"]
+        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
 
 
         # States

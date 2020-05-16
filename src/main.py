@@ -13,6 +13,8 @@ from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
 from renderer.matrix import Matrix
+from update_checker import UpdateChecker
+from apscheduler.schedulers.background import BackgroundScheduler
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
@@ -87,9 +89,19 @@ def run():
         else:
             debug.error("No valid weather alerts providers selected, skipping alerts feed")
             data.config.weather_show_alerts = False
-
+    
+    #
+    # Run check for updates against github on a background thread on a scheduler
+    #     
+    updateCheck= True
+     
+    if updateCheck:
+        scheduler = BackgroundScheduler()
+        checkupdate = UpdateChecker(data,scheduler)
+        scheduler.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
+
 
 if __name__ == "__main__":
     try:

@@ -171,7 +171,7 @@ class Boards:
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)
     
-    def wxweather(self, data, matrix,sleepEvent):
+    def weather(self, data, matrix,sleepEvent):
         wxWeather(data, matrix, sleepEvent)
     
     def wxalert(self, data, matrix,sleepEvent):

@@ -13,8 +13,7 @@
         "goal_animations",
         "states",
         "boards",
-        "sbio",
-        "weather"
+        "sbio"
     ],
     "properties": {
         "debug": {
@@ -340,7 +339,8 @@
                 "scoreticker",
                 "standings",
                 "clock",
-                "covid19"
+                "covid19",
+                "weather"
             ],
             "properties": {
                 "scoreticker": {
@@ -632,6 +632,166 @@
                         }
                     }
                 }
+            },
+            "weather": {
+                "$id": "#/properties/weather",
+                "type": "object",
+                "title": "weather",
+                "description": "Settings for the weather data provider",
+                "default": {},
+                "examples": [
+                    {
+                        "scroll_alert": true,
+                        "enabled": true,
+                        "alert_feed": "EC",
+                        "alert_duration": 5,
+                        "data_feed": "EC",
+                        "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
+                        "alert_title": true,
+                        "units": "metric",
+                        "update_freq": 5,
+                        "duration": 30,
+                        "show_alerts": true,
+                        "show_on_clock": true
+                    }
+                ],
+                "additionalProperties": true,
+                "required": [
+                    "enabled",
+                    "units",
+                    "duration",
+                    "data_feed",
+                    "alert_feed",
+                    "owm_apikey",
+                    "update_freq",
+                    "show_alerts",
+                    "alert_title",
+                    "scroll_alert",
+                    "alert_duration",
+                    "show_on_clock"
+                ],
+                "properties": {
+                    "enabled": {
+                        "$id": "#/properties/weather/properties/enabled",
+                        "type": "boolean",
+                        "title": "enabled",
+                        "description": "Enable the weather thread to get your local weather.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "units": {
+                        "$id": "#/properties/weather/properties/units",
+                        "type": "string",
+                        "title": "units ",
+                        "description": "Units to use for displaying the weather(mtric or imperial)",
+                        "default": "",
+                        "examples": [
+                            "metric"
+                        ]
+                    },
+                    "duration": {
+                        "$id": "#/properties/weather/properties/duration",
+                        "type": "integer",
+                        "title": "duration ",
+                        "description": "The time to flip through the pages in the weather board.  If there are no alerts, this will be 3 pages, if there are alerts a 4th is added.  Minimum 30 seconds duration",
+                        "default": 30,
+                        "examples": [
+                            30
+                        ]
+                    },
+                    "data_feed": {
+                        "$id": "#/properties/weather/properties/data_feed",
+                        "type": "string",
+                        "title": "data_feed",
+                        "description": "Where is the observation data coming from. You can use EC for Environment Canada, OWM for Open Weather Map (requires API KEY from https://openweathermap.org/api)",
+                        "default": "",
+                        "examples": [
+                            "EC"
+                        ]
+                    },
+                    "alert_feed": {
+                        "$id": "#/properties/weather/properties/alert_feed",
+                        "type": "string",
+                        "title": "alert_feed",
+                        "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
+                        "default": "",
+                        "examples": [
+                            "EC"
+                        ]
+                    },
+                    "owm_apikey": {
+                        "$id": "#/properties/weather/properties/owm_apikey",
+                        "type": "string",
+                        "title": "owm_apikey",
+                        "description": "API key required for when you use OpenWeatherMAP.  https://openweathermap.org/api",
+                        "default": "",
+                        "examples": [
+                            "9ffxd195ax52a315xaed823xfcf4cdxf"
+                        ]
+                    },
+                    "update_freq": {
+                        "$id": "#/properties/weather/properties/update_freq",
+                        "type": "integer",
+                        "title": "update_freq ",
+                        "description": "How often in minutes to refresh the weather and alerts feeds.",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "show_alerts": {
+                        "$id": "#/properties/weather/properties/show_alerts",
+                        "type": "boolean",
+                        "title": "show_alerts",
+                        "description": "Get weather alerts and display them",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "alert_title": {
+                        "$id": "#/properties/weather/properties/alert_title",
+                        "type": "boolean",
+                        "title": "alert_title",
+                        "description": "On the initial alert page that will interrupt the normal board rotation, display on the top and bottom board the type of alert (WARNING, WATCH or ADVISORY)",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "scroll_alert": {
+                        "$id": "#/properties/weather/properties/scroll_alert",
+                        "type": "boolean",
+                        "title": "Scroll_alert",
+                        "description": "Scroll the text of the alert on the initial alert page.  If you select false, a static page will be displayed that is the same as the 4th page on the weather board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "alert_duration": {
+                        "$id": "#/properties/weather/properties/alert_duration",
+                        "type": "integer",
+                        "title": "alert_duration",
+                        "description": "How long to display alert board (in seconds)",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "show_on_clock": {
+                        "$id": "#/properties/weather/properties/show_on_clock",
+                        "type": "boolean",
+                        "title": "show_on_clock",
+                        "description": "Add the last observed temperature and humidity to the bottom of the clock board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    }
+                }
             }
         },
         "sbio": {
@@ -652,7 +812,7 @@
                         "mode": "always"
                     },
                     "pushbutton": {
-                        "state_triggered1": "wxweather",
+                        "state_triggered1": "weather",
                         "bonnet": true,
                         "pin": 25,
                         "display_reboot": true,
@@ -921,166 +1081,7 @@
                     }
                 }
             }
-        },
-        "weather": {
-            "$id": "#/properties/weather",
-            "type": "object",
-            "title": "weather",
-            "description": "Settings for the weather data provider",
-            "default": {},
-            "examples": [
-                {
-                    "scroll_alert": true,
-                    "enabled": true,
-                    "alert_feed": "EC",
-                    "alert_duration": 5,
-                    "data_feed": "EC",
-                    "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
-                    "alert_title": true,
-                    "units": "metric",
-                    "update_freq": 5,
-                    "duration": 30,
-                    "show_alerts": true,
-                    "show_on_clock": true
-                }
-            ],
-            "additionalProperties": true,
-            "required": [
-                "enabled",
-                "units",
-                "duration",
-                "data_feed",
-                "alert_feed",
-                "owm_apikey",
-                "update_freq",
-                "show_alerts",
-                "alert_title",
-                "scroll_alert",
-                "alert_duration",
-                "show_on_clock"
-            ],
-            "properties": {
-                "enabled": {
-                    "$id": "#/properties/weather/properties/enabled",
-                    "type": "boolean",
-                    "title": "enabled",
-                    "description": "Enable the weather thread to get your local weather.",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                },
-                "units": {
-                    "$id": "#/properties/weather/properties/units",
-                    "type": "string",
-                    "title": "units ",
-                    "description": "Units to use for displaying the weather(mtric or imperial)",
-                    "default": "",
-                    "examples": [
-                        "metric"
-                    ]
-                },
-                "duration": {
-                    "$id": "#/properties/weather/properties/duration",
-                    "type": "integer",
-                    "title": "duration ",
-                    "description": "The time to flip through the pages in the weather board.  If there are no alerts, this will be 3 pages, if there are alerts a 4th is added.  Minimum 30 seconds duration",
-                    "default": 30,
-                    "examples": [
-                        30
-                    ]
-                },
-                "data_feed": {
-                    "$id": "#/properties/weather/properties/data_feed",
-                    "type": "string",
-                    "title": "data_feed",
-                    "description": "Where is the observation data coming from. You can use EC for Environment Canada, OWM for Open Weather Map (requires API KEY from https://openweathermap.org/api)",
-                    "default": "",
-                    "examples": [
-                        "EC"
-                    ]
-                },
-                "alert_feed": {
-                    "$id": "#/properties/weather/properties/alert_feed",
-                    "type": "string",
-                    "title": "alert_feed",
-                    "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
-                    "default": "",
-                    "examples": [
-                        "EC"
-                    ]
-                },
-                "owm_apikey": {
-                    "$id": "#/properties/weather/properties/owm_apikey",
-                    "type": "string",
-                    "title": "owm_apikey",
-                    "description": "API key required for when you use OpenWeatherMAP.  https://openweathermap.org/api",
-                    "default": "",
-                    "examples": [
-                        "9ffxd195ax52a315xaed823xfcf4cdxf"
-                    ]
-                },
-                "update_freq": {
-                    "$id": "#/properties/weather/properties/update_freq",
-                    "type": "integer",
-                    "title": "update_freq ",
-                    "description": "How often in minutes to refresh the weather and alerts feeds.",
-                    "default": 5,
-                    "examples": [
-                        5
-                    ]
-                },
-                "show_alerts": {
-                    "$id": "#/properties/weather/properties/show_alerts",
-                    "type": "boolean",
-                    "title": "show_alerts",
-                    "description": "Get weather alerts and display them",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                },
-                "alert_title": {
-                    "$id": "#/properties/weather/properties/alert_title",
-                    "type": "boolean",
-                    "title": "alert_title",
-                    "description": "On the initial alert page that will interrupt the normal board rotation, display on the top and bottom board the type of alert (WARNING, WATCH or ADVISORY)",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                },
-                "scroll_alert": {
-                    "$id": "#/properties/weather/properties/scroll_alert",
-                    "type": "boolean",
-                    "title": "Scroll_alert",
-                    "description": "Scroll the text of the alert on the initial alert page.  If you select false, a static page will be displayed that is the same as the 4th page on the weather board",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                },
-                "alert_duration": {
-                    "$id": "#/properties/weather/properties/alert_duration",
-                    "type": "integer",
-                    "title": "alert_duration",
-                    "description": "How long to display alert board (in seconds)",
-                    "default": 5,
-                    "examples": [
-                        5
-                    ]
-                },
-                "show_on_clock": {
-                    "$id": "#/properties/weather/properties/show_on_clock",
-                    "type": "boolean",
-                    "title": "show_on_clock",
-                    "description": "Add the last observed temperature and humidity to the bottom of the clock board",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                }
-            }
         }
+        
     }
 }
