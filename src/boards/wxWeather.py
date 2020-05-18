@@ -110,6 +110,8 @@ class wxWeather:
 
             if self.data.network_issues and not self.data.config.clock_hide_indicators:
                 self.matrix.network_issue_indicator()
+            if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                self.matrix.update_indicator()
 
             if not self.scroll_summary:
                 self.sleepEvent.wait(1)
@@ -121,7 +123,7 @@ class wxWeather:
         
         self.matrix.clear()
 
-       #wind_wx_diricon = u'\uf05b'
+        #wind_wx_diricon = u'\uf05b'
         self.matrix.draw_text_layout(
             self.layout2.condition,
             #wind_wx_diricon
@@ -142,12 +144,15 @@ class wxWeather:
             self.layout2.visibility,
             "Vis: " + self.data.wx_curr_wind[6]
         )
-          
+        
 
         self.matrix.render()
 
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
+
+        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+            self.matrix.update_indicator()
     
     def WxDrawPrecip_EC(self):
 
@@ -171,14 +176,17 @@ class wxWeather:
         )
 
         self.matrix.draw_text_layout(
-             self.layout3.humidity,
-              self.data.wx_current[5] + " Humidity"
+            self.layout3.humidity,
+            self.data.wx_current[5] + " Humidity"
         )
 
         self.matrix.render()
 
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
+
+        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+            self.matrix.update_indicator()
     
     def WxDrawAlert(self):
         
@@ -279,6 +287,5 @@ class wxWeather:
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
 
-
-
-    
+        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+            self.matrix.update_indicator()

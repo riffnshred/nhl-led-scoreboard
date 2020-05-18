@@ -7,6 +7,7 @@ from utils import center_text
 
 class Clock:
     def __init__(self, data, matrix, sleepEvent ,duration=None):
+
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
@@ -90,3 +91,6 @@ class Clock:
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
             self.matrix.network_issue_indicator()
+
+        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+            self.matrix.update_indicator()

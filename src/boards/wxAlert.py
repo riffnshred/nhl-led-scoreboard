@@ -129,3 +129,6 @@ class wxAlert:
             if self.data.network_issues and not self.data.config.clock_hide_indicators:
                 self.matrix.network_issue_indicator()
             
+            if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                self.matrix.update_indicator()
+            

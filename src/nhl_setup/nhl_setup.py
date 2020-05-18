@@ -36,7 +36,7 @@ class NumberValidator(Validator):
             raise ValidationError(
                 message='Please enter a number',
                 cursor_position=len(document.text))  # Move cursor to end
-       
+
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
@@ -707,8 +707,9 @@ def main():
     boards_config['boards']['covid19'].update(covid_country_answer)
     
     # COVID country configuration
+    selected_countries = get_default_value(default_config,['boards','covid19','country'],"string")
     if covid_country_answer['country_enabled']:
-        selected_countries = get_default_value(default_config,['boards','covid19','country'],"string")
+        
         preferences_countries = []
 
         country_index=0
@@ -731,6 +732,9 @@ def main():
 
         preferences_country_dict = {'country':preferences_countries}
         boards_config['boards']['covid19'].update(preferences_country_dict)
+    else:
+        preferences_country_dict = {'country':selected_countries}
+        boards_config['boards']['covid19'].update(preferences_country_dict)
 
     # COVID US State Enabled question
     covid_us_state_question = [
@@ -746,8 +750,8 @@ def main():
     boards_config['boards']['covid19'].update(covid_us_state_answer)
     
     # COVID US State configuration
+    selected_us_states = get_default_value(default_config,['boards','covid19','us_state'],"string")
     if covid_us_state_answer['us_state_enabled']:
-        selected_us_states = get_default_value(default_config,['boards','covid19','us_state'],"string")
         preferences_us_states = []
 
         us_state_index=0
@@ -770,7 +774,9 @@ def main():
 
         preferences_us_state_dict = {'us_state':preferences_us_states}
         boards_config['boards']['covid19'].update(preferences_us_state_dict)
-
+    else:
+        preferences_us_state_dict = {'us_state':selected_us_states}
+        boards_config['boards']['covid19'].update(preferences_us_state_dict)
     # COVID Canadian province enabled question
     covid_canada_prov_question = [
         {
@@ -785,8 +791,9 @@ def main():
     boards_config['boards']['covid19'].update(covid_canada_answer)
     
     # COVID Canadian province configuration
+    selected_canada_prov = get_default_value(default_config,['boards','covid19','canada_prov'],"string")
     if covid_canada_answer['canada_enabled']:
-        selected_canada_prov = get_default_value(default_config,['boards','covid19','canada_prov'],"string")
+        
         preferences_canada_prov = []
 
         canada_prov_index=0
@@ -808,6 +815,9 @@ def main():
             canada_prov_select = select_canada_prov(qmark)
 
         preferences_canada_prov_dict = {'canada_prov':preferences_canada_prov}
+        boards_config['boards']['covid19'].update(preferences_canada_prov_dict)
+    else:
+        preferences_canada_prov_dict = {'canada_prov':selected_canada_prov}
         boards_config['boards']['covid19'].update(preferences_canada_prov_dict)
 
     #Add weather info
@@ -843,7 +853,7 @@ def main():
                 'qmark': qmark,
                 'validate': lambda val: True if val.isdecimal() and int(val) >= 30 else 'Must be at least 30 seconds',
                 'filter': lambda val: int(val),
-                'message': 'How long to show weather board (minimum 30 seconds)? (Shows live game data of favorite team)',
+                'message': 'How long to show weather board (minimum 30 seconds)?',
                 'default': get_default_value(default_config,['boards','weather','duration'],"int") or '30'
             },
             {
@@ -921,7 +931,6 @@ def main():
         wx_default['enabled'].update(enabled = False)
         boards_config['boards'].update(weather = wx_default)
 
-    
     nhl_config.update(boards_config)
 
     # SBIO configuration
@@ -1006,7 +1015,7 @@ def main():
         sbio_config['sbio']['dimmer'].update(enabled = False)
         sbio_config['sbio'].update(sbio_default)
 
- 
+
     pb_enabled = [
         {
             'type': 'confirm',
@@ -1088,7 +1097,7 @@ def main():
                 'name': 'state_triggered1',
                 'qmark': qmark,
                 'message': 'Pick board to display on button press: ',
-                'choices': ['clock','scoreticker','standings','team_summary','covid_19'],
+                'choices': ['clock','weather','scoreticker','standings','team_summary','covid_19'],
                 'default': get_default_value(default_config,['sbio','pushbutton','state_triggered1'],"string") or 'clock'
             },
             {
@@ -1116,3 +1125,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
