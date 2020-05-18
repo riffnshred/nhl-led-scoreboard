@@ -94,7 +94,6 @@ def run():
     # Run check for updates against github on a background thread on a scheduler
     #     
     updateCheck= True
-     
     if updateCheck:
         scheduler = BackgroundScheduler()
         checkupdate = UpdateChecker(data,scheduler)

@@ -43,6 +43,9 @@ sudo apt-get install libatlas3-base
 sudo pip3 install env_canada pyowm noaa_sdk fastjsonschema
 sudo apt-get install libatlas-base-dev
 
+# For update checker
+sudo pip3 install apscheduler
+
 # For push button
 sudo apt-get -y install python3-gpiozero
 
