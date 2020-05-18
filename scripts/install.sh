@@ -45,6 +45,7 @@ sudo apt-get install libatlas-base-dev
 
 # For update checker
 sudo pip3 install apscheduler
+sudo pip3 install sh
 
 # For push button
 sudo apt-get -y install python3-gpiozero
