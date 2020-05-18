@@ -835,7 +835,9 @@ def main():
     ]
 
     use_wx = prompt(wx_enabled,style=custom_style_dope)
-    
+
+    boards_config['boards'].update(weather = use_wx)
+
     if use_wx['enabled']:
 
         wx_questions = [
@@ -924,12 +926,11 @@ def main():
             'default': get_default_value(default_config,['boards','weather','show_on_clock'],"bool") or True
             },
         ]
-
+        
         wx_answers = prompt(wx_questions,style=custom_style_dope)
-        boards_config['boards'].update(weather = wx_answers)
+        boards_config['boards']['weather'].update(wx_answers)
     else:
-        wx_default['enabled'].update(enabled = False)
-        boards_config['boards'].update(weather = wx_default)
+        boards_config['boards']['weather'].update(wx_default)
 
     nhl_config.update(boards_config)
 
