@@ -30,8 +30,10 @@ class wxWeather:
         if self.data.wx_updated:
             #Get size of summary text for looping 
             if len(self.data.wx_current) > 0:
+                #Testing only
+                #self.data.wx_current[2] = "Light Rainshower"
                 summary_info = self.matrix.draw_text(["1%", "77%"],self.data.wx_current[2],self.wxfont)
-                self.summary_width = summary_info["size"][0]
+                self.summary_width = summary_info["size"][0] + 20
             else:
                 self.summary_width = self.matrix.width
 
@@ -89,6 +91,8 @@ class wxWeather:
                     pos -= 1
                     if pos + self.summary_width < 0:
                         pos = self.matrix.width
+                    self.sleepEvent.wait(0.1)
+                
 
 
             self.matrix.draw_text_layout(
