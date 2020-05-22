@@ -33,11 +33,12 @@ class wxWeather:
                 #Testing only
                 #self.data.wx_current[2] = "Light Rainshower"
                 summary_info = self.matrix.draw_text(["1%", "77%"],self.data.wx_current[2],self.wxfont)
-                self.summary_width = summary_info["size"][0] + 20
+                self.summary_width = summary_info["size"][0]
             else:
                 self.summary_width = self.matrix.width
 
             if self.summary_width > self.matrix.width:
+                self.summary_width += 20 #To place string off of screen
                 self.scroll_summary = True
             else:
                 self.scroll_summary = False
