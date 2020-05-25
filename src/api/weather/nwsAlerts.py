@@ -59,7 +59,7 @@ class nwsWxAlerts(object):
             except Exception as err:
                 debug.error(err)
                 self.network_issues = True
-                break
+                pass
             #print (nws)
             if not self.network_issues:
                 nwsalerts = []

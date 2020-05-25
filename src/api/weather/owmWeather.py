@@ -42,7 +42,12 @@ class owmWxWorker(object):
                 debug.error("Unable to get OWM data error:{0}".format(e))
                 self.data.wx_updated = False
                 self.network_issues = True
-                break
+                pass
+            except Exception as e:
+                debug.error("Unable to get OWM data error:{0}".format(e))
+                self.data.wx_updated = False
+                self.network_issues = True
+                pass
 
             if not self.network_issues:
                 wx = obs.get_weather()

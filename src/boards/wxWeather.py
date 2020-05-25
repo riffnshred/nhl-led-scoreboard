@@ -38,7 +38,7 @@ class wxWeather:
                 self.summary_width = self.matrix.width
 
             if self.summary_width > self.matrix.width:
-                self.summary_width += 20 #To place string off of screen
+                self.summary_width += 20 #To place string off of screen, the font is width of 8 pixels
                 self.scroll_summary = True
             else:
                 self.scroll_summary = False
