@@ -44,6 +44,7 @@
             "default": {},
             "examples": [
                 {
+                    "location": "Winnipeg, MB",
                     "sog_display_frequency": 4,
                     "end_of_day": "10:00",
                     "live_game_refresh_rate": 10,
@@ -59,6 +60,7 @@
             "required": [
                 "time_format",
                 "end_of_day",
+                "location",
                 "live_game_refresh_rate",
                 "teams",
                 "sog_display_frequency"
@@ -82,6 +84,16 @@
                     "default": "12:00",
                     "examples": [
                         "10:00"
+                    ]
+                },
+                "location": {
+                    "$id": "#/properties/preferences/properties/location",
+                    "type": "string",
+                    "title": "location",
+                    "description": "Overrides latitude and longitude lookup by IP address.  Used by dimmer and weather",
+                    "default": "",
+                    "examples": [
+                        "Winnipeg, MB"
                     ]
                 },
                 "live_game_refresh_rate": {

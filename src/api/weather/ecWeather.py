@@ -24,12 +24,12 @@ class ecWxWorker(object):
                 ecData = ECData(coordinates=(self.data.latlng))
                 self.data.wx_updated = True
                 self.network_issues = False
-            except (requests.exceptions) as e:
-                #raise ValueError(e)
-                debug.error("Unable to get EC data error:{0}".format(e))
-                self.data.wx_updated = False
-                self.network_issues = True
-                pass
+            # except (requests.exceptions) as e:
+            #     #raise ValueError(e)
+            #     debug.error("Unable to get EC data error:{0}".format(e))
+            #     self.data.wx_updated = False
+            #     self.network_issues = True
+            #     pass
             except Exception as e:
                 debug.error("Unable to get EC data error:{0}".format(e))
                 self.data.wx_updated = False
@@ -149,7 +149,8 @@ class ecWxWorker(object):
 
 
                 self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure,wx_tendency,wx_visibility]
-
+            else:
+                debug.error("Unable to get EC data error")
 
             debug.info(self.data.wx_current)
             debug.info(self.data.wx_curr_wind)

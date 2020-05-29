@@ -488,6 +488,18 @@ def main():
     get_eod = prompt(end_of_day,style=custom_style_dope)
     preferences['preferences'].update(get_eod)
 
+    location = [
+        {
+            'type': 'input',
+            'name': 'location',
+            'qmark': qmark,
+            'message': 'Your location to override latitude and longitude lookup via IP (City, State or City, Province)',
+            'default': get_default_value(default_config,['preferences','location'],"string") or 'Winnipeg, MB'
+        }
+    ]
+    get_location = prompt(location,style=custom_style_dope)
+    preferences['preferences'].update(get_location)
+
     refresh_rate = [
         {
             'type': 'input',

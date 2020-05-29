@@ -7,9 +7,16 @@ from datetime import datetime, timezone
 import math
 import geocoder
 
-def get_lat_lng():
-    g = geocoder.ip('me')
-    debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
+def get_lat_lng(location):
+
+    if len(location) > 0:
+        g = geocoder.osm(location)
+        debug.info("location is: " + location + " " + str(g.latlng))
+    else:
+        g = geocoder.ip('me')
+        debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
+
+     
     return g.latlng
 
 def get_file(path):

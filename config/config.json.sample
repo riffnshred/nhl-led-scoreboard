@@ -4,6 +4,7 @@
 	"preferences": {
 		"time_format": "24h",
 		"end_of_day": "8:00",
+		"location": "Winnipeg, MB",
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Flames",

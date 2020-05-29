@@ -27,14 +27,15 @@ class ecWxAlerts(object):
                 ecData = ECData(coordinates=(self.data.latlng))
                 curr_alerts = ecData.alerts
                 self.network_issues = False
-            except (requests.exceptions) as e:
-                #raise ValueError(e)
-                debug.error("Unable to get EC data error:{0}".format(e))
-                curr_alerts = 0
-                self.network_issues = True
-                pass
+            # except (requests.exceptions) as e:
+            #     #raise ValueError(e)
+            #     debug.error("Unable to get EC data error:{0}".format(e))
+            #     curr_alerts = 0
+            #     self.network_issues = True
+            #     pass
             except Exception as e:
                 debug.error("Unable to get EC data error:{0}".format(e))
+                curr_alerts = 0
                 self.network_issues = True
                 pass
             

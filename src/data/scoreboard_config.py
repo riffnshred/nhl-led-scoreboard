@@ -19,6 +19,7 @@ class ScoreboardConfig:
         # Preferences
         self.end_of_day = json["preferences"]["end_of_day"]
         self.time_format = self.__get_time_format(json["preferences"]["time_format"])
+        self.location = json["preferences"]["location"]
 
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
