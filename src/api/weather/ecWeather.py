@@ -85,14 +85,17 @@ class ecWxWorker(object):
                     wx_temp = "N/A"
                     wx_app_temp = "N/A"
             
-
-                #Get condition and icon from dictionary
-                for row in range(len(self.icons)):
-                    if int(self.icons[row]["Code"]) == int(curr_cond.get("icon_code").get("value","90")):
-                        wx_icon = self.icons[row]['font']
-                        break
-                    else:
-                        wx_icon = '\uf07b'
+                
+                if curr_cond.get("icon_code").get("value","90") == None:
+                    wx_icon = '\uf07b'
+                else:
+                    #Get condition and icon from dictionary
+                    for row in range(len(self.icons)):
+                        if int(self.icons[row]["Code"]) == int(curr_cond.get("icon_code").get("value","90")):
+                            wx_icon = self.icons[row]['font']
+                            break
+                        else:
+                            wx_icon = '\uf07b'
                     
                 wx_summary = curr_cond.get("condition").get("value","N/A")
 
@@ -141,11 +144,17 @@ class ecWxWorker(object):
                     else:
                         wx_tendency = '\uf07b'
                 
-                if self.data.config.weather_units == "imperial":
-                    imp_visibility = round(float(curr_cond.get("visibility").get("value","24"))*0.621371,1)
-                    wx_visibility = str(imp_visibility) + " mi"
+                if curr_cond.get("visibility").get("value","24") == None:
+                    if self.data.config.weather_units == "imperial":
+                        wx_visibility = "14.9 mi"
+                    else:
+                        wx_visibility = "24 km"
                 else:
-                    wx_visibility = curr_cond.get("visibility").get("value","24") + " " + curr_cond.get("visibility").get("unit","km")
+                    if self.data.config.weather_units == "imperial":
+                        imp_visibility = round(float(curr_cond.get("visibility").get("value","24"))*0.621371,1)
+                        wx_visibility = str(imp_visibility) + " mi"
+                    else:
+                        wx_visibility = curr_cond.get("visibility").get("value","24") + " " + curr_cond.get("visibility").get("unit","km")
 
 
                 self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure,wx_tendency,wx_visibility]
