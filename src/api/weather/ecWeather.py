@@ -14,7 +14,6 @@ class ecWxWorker(object):
         self.icons = get_icons("ecIcons_utf8.csv")
         self.network_issues = data.network_issues
         
-        
 
     def run(self):
 
@@ -46,7 +45,8 @@ class ecWxWorker(object):
 
                 curr_cond = ecData.conditions
 
-                
+                #Uncomment next line if you want to see what is being returned back from EC
+                #debug.info(curr_cond)
 
                 if self.time_format == "%H:%M":
                     wx_timestamp = datetime.datetime.now().strftime("%m/%d %H:%M")
@@ -85,7 +85,6 @@ class ecWxWorker(object):
                     wx_temp = "N/A"
                     wx_app_temp = "N/A"
             
-                
                 if curr_cond.get("icon_code").get("value","90") == None:
                     wx_icon = '\uf07b'
                 else:
@@ -98,6 +97,9 @@ class ecWxWorker(object):
                             wx_icon = '\uf07b'
                     
                 wx_summary = curr_cond.get("condition").get("value","N/A")
+
+                if wx_summary == None:
+                    wx_summary = "Curr Cond N/A"
 
                 curr_dewpoint = curr_cond.get("dewpoint").get("value","0.0")
 
@@ -148,7 +150,7 @@ class ecWxWorker(object):
                     if self.data.config.weather_units == "imperial":
                         wx_visibility = "14.9 mi"
                     else:
-                        wx_visibility = "24 km"
+                        wx_visibility = "24.1 km"
                 else:
                     if self.data.config.weather_units == "imperial":
                         imp_visibility = round(float(curr_cond.get("visibility").get("value","24"))*0.621371,1)
