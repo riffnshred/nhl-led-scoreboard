@@ -48,7 +48,7 @@ class Data:
         # Get lat/long for dimmer and weather
         self.latlng = get_lat_lng(config.location)
         # Test for alerts
-        self.latlng = [49.8955367, -97.1384584]
+        #self.latlng = [49.8955367, -97.1384584]
         
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
