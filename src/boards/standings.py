@@ -119,6 +119,10 @@ class Standings:
                     self.matrix.render()
                     if self.data.network_issues:
                         self.matrix.network_issue_indicator()
+                    
+                    if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                        self.matrix.update_indicator()
+
                     #sleep(5)
                     self.sleepEvent.wait(5)
 
@@ -129,6 +133,10 @@ class Standings:
                         self.matrix.render()
                         if self.data.network_issues:
                             self.matrix.network_issue_indicator()
+
+                        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                            self.matrix.update_indicator()
+                            
                         #sleep(0.2)
                         self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.

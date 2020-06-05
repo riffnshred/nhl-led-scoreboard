@@ -8,12 +8,18 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
+from api.weather.ecWeather import ecWxWorker
+from api.weather.owmWeather import owmWxWorker
+from api.weather.ecAlerts import ecWxAlerts
+from api.weather.nwsAlerts import nwsWxAlerts
 from renderer.matrix import Matrix
+from update_checker import UpdateChecker
+from apscheduler.schedulers.background import BackgroundScheduler
 import debug
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.1.5"
+SCRIPT_VERSION = "1.2.0 - Wx version"
 
 
 def run():
@@ -39,6 +45,7 @@ def run():
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
+    # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
     if data.config.dimmer_enabled:
@@ -52,8 +59,48 @@ def run():
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
+    
+    if data.config.weather_enabled:
+        if data.config.weather_data_feed.lower() == "owm":
+            owmweather = owmWxWorker(data,sleepEvent)
+            owmweatherThread = threading.Thread(target=owmweather.run,args=())
+            owmweatherThread.daemon = True
+            owmweatherThread.start()
+        elif data.config.weather_data_feed.lower() == "ec":
+            ecweather = ecWxWorker(data,sleepEvent)
+            ecweatherThread = threading.Thread(target=ecweather.run,args=())
+            ecweatherThread.daemon = True
+            ecweatherThread.start()
+        else:
+            debug.error("No valid weather providers selected, skipping weather feed")
+            data.config.weather_enabled = False
+
+    if data.config.weather_show_alerts and data.config.weather_enabled:
+        if data.config.weather_alert_feed.lower() == "ec":
+            ecalert = ecWxAlerts(data,sleepEvent)
+            ecalertThread = threading.Thread(target=ecalert.run,args=())
+            ecalertThread.daemon = True
+            ecalertThread.start()
+        elif data.config.weather_alert_feed.lower() == "nws":
+            nwsalert = nwsWxAlerts(data,sleepEvent)
+            nwsalertThread = threading.Thread(target=nwsalert.run,args=())
+            nwsalertThread.daemon = True
+            nwsalertThread.start()
+        else:
+            debug.error("No valid weather alerts providers selected, skipping alerts feed")
+            data.config.weather_show_alerts = False
+    
+    #
+    # Run check for updates against github on a background thread on a scheduler
+    #     
+    updateCheck= True
+    if updateCheck:
+        scheduler = BackgroundScheduler()
+        checkupdate = UpdateChecker(data,scheduler)
+        scheduler.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
+
 
 if __name__ == "__main__":
     try:

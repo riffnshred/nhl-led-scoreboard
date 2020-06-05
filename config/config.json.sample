@@ -4,6 +4,7 @@
 	"preferences": {
 		"time_format": "24h",
 		"end_of_day": "8:00",
+		"location": "Winnipeg, MB",
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Flames",
@@ -68,7 +69,21 @@
             "canada_prov": [
                 "Quebec"
             ]
-        }	
+		},
+		"weather": {
+			"enabled": true,
+			"units": "metric",
+			"duration": 60,
+			"data_feed": "EC",
+			"alert_feed": "EC",
+			"owm_apikey": "",
+			"update_freq": 5,
+			"show_alerts": true,
+			"alert_title": true,
+			"scroll_alert": true,
+			"alert_duration": 5,
+			"show_on_clock": true
+		}	
 	},
 	"sbio": {
 		"dimmer": {
@@ -90,7 +105,7 @@
 			"poweroff_duration": 10,
 			"poweroff_override_process": "",
 			"display_halt": true,
-			"state_triggered1": "clock",
+			"state_triggered1": "weather",
 			"state_triggered1_process": ""
 		}
 	}

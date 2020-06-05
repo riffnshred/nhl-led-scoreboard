@@ -82,6 +82,29 @@
       "relative": {
         "to": "time",
         "align": "left-top"
+      } 
+    },
+    "meridiem": {
+      "position": [2, 0],
+      "align": "left-top",
+      "relative": {
+        "to": "time",
+        "align": "right-top"
+      } 
+    }
+  },
+  "wx_clock": {
+    "time": {
+      "position": ["50%", "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "date": {
+      "position": [0, -2],
+      "align": "left-bottom",
+      "relative": {
+        "to": "time",
+        "align": "left-top"
       }
     },
     "meridiem": {
@@ -91,6 +114,10 @@
         "to": "time",
         "align": "right-top"
       }
+    },
+    "wx_display": {
+      "position": ["50%", "95%"],
+      "align": "center-bottom"
     }
   },
   "covid_19":{
@@ -123,5 +150,162 @@
       "position": [1, 1],
       "align": "left-top"
     }
+  },
+  "wx_curr_temp":{
+    "condition":{
+      "position": ["68%", "2%"],
+      "font": "wxicons_md",
+      "align": "top-right"
+    },
+    "summary":{
+      "position": ["50%", "81%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+    },
+    "update":{
+      "position": ["50%", "100%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+    },
+    "temp":{
+      "position": [-2, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "left"
+      }
+    },
+    "temp_app": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    }
+  },
+  "wx_curr_wind":{
+    "condition":{
+      "position": ["75%", "29%"],
+      "font": "wxicons_lg",
+      "align": "top-right"
+    },
+    "wind": {
+      "position": ["3%","6%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "gust": {
+      "position": [0,8],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "wind",
+        "align": "top"
+      }
+    },
+    "pressure": {
+      "position": [0,14],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "gust",
+        "align": "left"
+      }
+    },
+    "visibility": {
+      "position": [0,14],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "gust",
+        "align": "left"
+      }
+    }
+  },
+  "wx_curr_precip":{
+    "preciptype":{
+      "position": ["75%", "22%"],
+      "font": "wxicons_lg",
+      "align": "right"
+    },
+    "preciptype_na":{
+      "position": ["65%", "30%"],
+      "font": "wxicons_full",
+      "align": "right"
+    },
+    "precipchance":{
+      "position": ["5%", "2%"],
+      "font": "wx_medium",
+      "align": "left-top"
+    },
+    "humidity":{
+      "position": ["5%", "85%"],
+      "font": "wx_medium",
+      "align": "bottom-left"
+    },
+    "pressure": {
+      "position": ["5%","10%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "tendency": {
+      "position": ["90%", "10%"],
+      "font": "wxicons_lg",
+      "align": "right"
+    },
+    "dewpoint": {
+      "position": [0,"35%"],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "pressure",
+        "align": "bottom-left"
+      }
+    }
+  },
+  "wx_alert":{
+    "warning": {
+      "position": ["50%","42%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "warning_date": {
+      "position": ["50%","65%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "watch_us": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },
+    "watch_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    }, 
+    "advisory_us": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },   
+    "advisory_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_alert",
+      "align": "center-center"
+    },
+    "title_top": {
+      "position": ["50%","5%"],
+      "font": "wx_medium",
+      "align": "center-top"
+      },
+    "title_bottom": {
+      "position": ["50%","97%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+      }
   }
 }
