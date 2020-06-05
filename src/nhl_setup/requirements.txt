@@ -1,0 +1,5 @@
+fastjsonschema==2.14.4
+printtools==1.2
+PyInstaller==3.6
+questionary==1.5.2
+regex==2020.4.4

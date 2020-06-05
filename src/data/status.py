@@ -8,6 +8,7 @@ class Status:
         self.season_info = current_season_info()['seasons'][0]
         self.Preview = []
         self.Live = []
+        self.GameOver = []
         self.Final = []
         self.Irregular = []
 
@@ -19,13 +20,19 @@ class Status:
             elif status['abstractGameState'] == 'Live':
                 self.Live.append(status['detailedState'])
             elif status['abstractGameState'] == 'Final':
-                self.Final.append(status['detailedState'])
+                if status['code'] == '5' or status['code'] == '6':
+                    self.GameOver.append(status['detailedState'])
+                else:
+                    self.Final.append(status['detailedState'])
 
     def is_scheduled(self, status):
         return status in self.Preview
 
     def is_live(self, status):
         return status in self.Live
+
+    def is_game_over(self, status):
+        return status in self.GameOver
 
     def is_final(self, status):
         return status in self.Final

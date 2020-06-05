@@ -4,12 +4,17 @@ from time import sleep
 
 
 class Standings:
-    def __init__(self, data, matrix):
+    """
+        TODO: Change draw standings to use new matrix layout system
+    """
+    def __init__(self, data, matrix,sleepEvent):
         self.conferences = ["eastern", "western"]
         self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
         self.data = data
         self.matrix = matrix
         self.team_colors = data.config.team_colors
+        self.sleepEvent= sleepEvent
+        self.sleepEvent.clear()
 
     def render(self):
         type = self.data.config.standing_type
@@ -24,15 +29,18 @@ class Standings:
                 image = draw_standing(self.data, conference, records, im_height, self.matrix.width)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
                 # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height):
+                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
                 # Show the bottom before we change to the next table.
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
             elif type == 'division':
                 division = self.data.config.preferred_divisions
@@ -44,16 +52,19 @@ class Standings:
                 image = draw_standing(self.data, division, records, im_height, self.matrix.width)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
                 # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height):
+                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
                 # Show the bottom before we change to the next table.
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
 
             elif type == 'wild_card':
                 wildcard_records = {}
@@ -84,14 +95,17 @@ class Standings:
                 image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
                 self.matrix.draw_image((0, i), image)
                 self.matrix.render()
-                sleep(5)
+                #sleep(5)
+                self.sleepEvent.wait(5)
                 # Move the image up until we hit the bottom.
-                while i > -(img_height - self.matrix.height):
+                while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
                     i -= 1
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(0.2)
-                sleep(5)
+                    #sleep(0.2)
+                    self.sleepEvent.wait(0.2)
+                #sleep(5)
+                self.sleepEvent.wait(5)
         else:
             if type == 'conference':
                 for conference in self.conferences:
@@ -105,18 +119,29 @@ class Standings:
                     self.matrix.render()
                     if self.data.network_issues:
                         self.matrix.network_issue_indicator()
-                    sleep(5)
+                    
+                    if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                        self.matrix.update_indicator()
+
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
                     # Move the image up until we hit the bottom.
-                    while i > -(im_height - self.matrix.height):
+                    while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
                         if self.data.network_issues:
                             self.matrix.network_issue_indicator()
-                        sleep(0.2)
+
+                        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                            self.matrix.update_indicator()
+                            
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
             elif type == 'division':
                 for division in self.divisions:
@@ -128,16 +153,19 @@ class Standings:
                     image = draw_standing(self.data, division, records, im_height, self.matrix.width)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
                     # Move the image up until we hit the bottom.
-                    while i > -(im_height - self.matrix.height):
+                    while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
-                        sleep(0.2)
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
             elif type == 'wild_card':
                 wildcard_records = {}
                 for conf_name, conf_data in vars(self.data.standings.by_wildcard).items():
@@ -166,14 +194,17 @@ class Standings:
                     image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    sleep(5)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
                     # Move the image up until we hit the bottom.
-                    while i > -(img_height - self.matrix.height):
+                    while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
-                        sleep(0.2)
-                    sleep(5)
+                        #sleep(0.2)
+                        self.sleepEvent.wait(0.2)
+                    #sleep(5)
+                    self.sleepEvent.wait(5)
 
 
 def draw_standing(data, name, records, img_height, width):
@@ -191,7 +222,7 @@ def draw_standing(data, name, records, img_height, width):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0
@@ -213,7 +244,10 @@ def draw_standing(data, name, records, img_height, width):
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-        draw.text((57, row_pos), points, font=layout.font)
+        if len(points) == 3:
+            draw.text((54, row_pos), points, font=layout.font)
+        else:
+            draw.text((57, row_pos), points, font=layout.font)
         draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
         row_pos += row_height
 
@@ -235,7 +269,7 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
 
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
-        team's record we add an other row and increment the row position by the height of a row plus the 
+        team's record we add an other row and increment the row position by the height of a row plus the
         incrementation "i".
     """
     row_pos = 0
@@ -259,7 +293,10 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
             txt_color = team_colors.color("{}.text".format(team_id))
             draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
             draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-            draw.text((57, row_pos), points, font=layout.font)
+            if len(points) == 3:
+                draw.text((54, row_pos), points, font=layout.font)
+            else:
+                draw.text((57, row_pos), points, font=layout.font)
             draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
             row_pos += row_height
         # add a space of one row of 2 LED between each tables
@@ -279,7 +316,10 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
-        draw.text((57, row_pos), points, font=layout.font)
+        if len(points) == 3:
+            draw.text((54, row_pos), points, font=layout.font)
+        else:
+            draw.text((57, row_pos), points, font=layout.font)
         draw.text((19, row_pos), "{}-{}-{}".format(wins, losses, ot), font=layout.font)
         row_pos += row_height
 
