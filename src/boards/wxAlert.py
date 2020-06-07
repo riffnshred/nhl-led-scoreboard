@@ -37,7 +37,7 @@ class wxAlert:
             self.matrix.clear()
             #offscreen_canvas = self.matrix.CreateFrameCanvas()
 
-            if self.data.wx_units[5] == "us":
+            if self.data.config.weather_units == "imperial":
                 top_title = self.data.wx_alerts[4]
             else:
                 top_title = "Weather"
@@ -67,7 +67,7 @@ class wxAlert:
                     )  
 
             elif self.data.wx_alerts[1] == "watch":
-                if self.data.wx_units[5] == "us":
+                if self.data.config.weather_units == "imperial":
                     self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,165,0)) # watch
                     self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,165,0)) # watch
                 else:
@@ -84,7 +84,7 @@ class wxAlert:
                     )  
             else:
                 if self.data.wx_alerts[1] == "advisory":
-                    if self.data.wx_units[5] == "us":
+                    if self.data.config.weather_units == "imperial":
                         self.matrix.draw.rectangle([0, 0, 64,8], fill=(255,255,0)) #advisory
                         self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) #advisory
                     else:
