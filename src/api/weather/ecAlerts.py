@@ -45,7 +45,7 @@ class ecWxAlerts(object):
             # No alerts, the dictionary still comes back with empty values for 
             # warning, watch, advisory, statements and endings
             # Currently don't do anything with a statement
-            debug.info(curr_alerts)
+            # debug.info(curr_alerts)
 
             len_warn = len(curr_alerts.get("warnings").get("value"))
             len_watch = len(curr_alerts.get("watches").get("value"))
