@@ -47,7 +47,7 @@ class wxAlert:
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
             if self.data.wx_alerts[1] == "warning":
                 self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,0,0)) # warning
-                self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,0,0)) # warning
+                self.matrix.draw.rectangle([0, self.matrix.height, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
                 
                 if self.drawtitle:
                     if self.data.wx_alerts[0] == "Severe Thunderstorm":
@@ -69,10 +69,10 @@ class wxAlert:
             elif self.data.wx_alerts[1] == "watch":
                 if self.data.config.weather_units == "imperial":
                     self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,165,0)) # watch
-                    self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,165,0)) # watch
+                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,165,0)) # watch
                 else:
                     self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,255,0)) # watch canada
-                    self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,255,0)) # watch canada
+                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,255,0)) # watch canada
                 if self.drawtitle:   
                     self.matrix.draw_text_layout(
                         self.layout4.title_top,
@@ -86,10 +86,10 @@ class wxAlert:
                 if self.data.wx_alerts[1] == "advisory":
                     if self.data.config.weather_units == "imperial":
                         self.matrix.draw.rectangle([0, 0, self.matrix.width,8], fill=(255,255,0)) #advisory
-                        self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,255,0)) #advisory
+                        self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,255,0)) #advisory
                     else:
                         self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(169,169,169)) #advisory canada
-                        self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(169,169,169)) #advisory canada
+                        self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(169,169,169)) #advisory canada
                     
                     if self.drawtitle:
                         self.matrix.draw_text_layout(
