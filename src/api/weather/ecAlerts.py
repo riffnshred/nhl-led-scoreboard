@@ -27,12 +27,6 @@ class ecWxAlerts(object):
                 ecData = ECData(coordinates=(self.data.latlng))
                 curr_alerts = ecData.alerts
                 self.network_issues = False
-            # except (requests.exceptions) as e:
-            #     #raise ValueError(e)
-            #     debug.error("Unable to get EC data error:{0}".format(e))
-            #     curr_alerts = 0
-            #     self.network_issues = True
-            #     pass
             except Exception as e:
                 debug.error("Unable to get EC data error:{0}".format(e))
                 num_alerts = 0
@@ -127,6 +121,7 @@ class ecWxAlerts(object):
             else:
                 debug.info("No active EC weather alerts in your area")
                 self.data.wx_alert_interrupt = False
+                self.data.wx_alerts.clear()
                 self.weather_alert = 0
             # Run every 'x' minutes
             sleep(60 * self.weather_frequency)
