@@ -73,20 +73,20 @@ class Clock:
             ) 
             if len(self.data.wx_alerts) > 0:
                 # Draw Alert box (warning,watch,advisory)
-                #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
+                #self.matrix.draw.rectangle([60, 25, self.matrix.width, 32], fill=(255,0,0)) # warning
                 if self.data.wx_alerts[1] == "warning":  
-                    self.matrix.draw.rectangle([57, 25, 64, 32], fill=(255,0,0)) # warning
+                    self.matrix.draw.rectangle([57, 25, self.matrix.width, 32], fill=(255,0,0)) # warning
                 elif self.data.wx_alerts[1] == "watch":
                     if self.data.wx_units[5] == "us":
-                        self.matrix.draw.rectangle([57, 25, 64, 32], fill=(255,165,0)) # watch
+                        self.matrix.draw.rectangle([57, 25, self.matrix.width, 32], fill=(255,165,0)) # watch
                     else:
-                        self.matrix.draw.rectangle([57, 25, 64, 32], fill=(255,255,0)) # watch canada
+                        self.matrix.draw.rectangle([57, 25, self.matrix.width, 32], fill=(255,255,0)) # watch canada
                 else:
                     if self.data.wx_alerts[1] == "advisory":
                         if self.data.wx_units[5] == "us":
-                            self.matrix.draw.rectangle([57, 25, 64, 32], fill=(255,255,0)) #advisory
+                            self.matrix.draw.rectangle([57, 25, self.matrix.width, 32], fill=(255,255,0)) #advisory
                         else:
-                            self.matrix.draw.rectangle([57, 25, 64, 32], fill=(169,169,169)) #advisory canada
+                            self.matrix.draw.rectangle([57, 25, self.matrix.width, 32], fill=(169,169,169)) #advisory canada
 
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:
