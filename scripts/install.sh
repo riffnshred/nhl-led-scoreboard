@@ -39,6 +39,10 @@ sudo pip3 install geocoder python_tsl2591 ephem
 # For push button
 sudo apt-get -y install python3-gpiozero
 
+# For terminal mode
+sudo apt-get install libatlas-base-dev
+sudo pip3 install numpy
+
 # For svgs
 sudo apt-get -y install python3-cairosvg
 sudo apt-get -y install libraqm-dev
