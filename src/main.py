@@ -8,8 +8,9 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
-from renderer.matrix import Matrix
+from renderer.matrix import Matrix, TermMatrix
 import debug
+import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
@@ -20,12 +21,19 @@ def run():
     # Get supplied command line arguments
     commandArgs = args()
 
-    # Check for led configuration arguments
-    matrixOptions = led_matrix_options(commandArgs)
-    matrixOptions.drop_privileges = False
+    if commandArgs.terminal_mode:
+        height, width = os.popen('stty size', 'r').read().split()
+        termMatrix = TermMatrix()
+        termMatrix.width = int(width)
+        termMatrix.height = int(height)
+        matrix = Matrix(termMatrix)
+    else:
+        # Check for led configuration arguments
+        matrixOptions = led_matrix_options(commandArgs)
+        matrixOptions.drop_privileges = False
 
-    # Initialize the matrix
-    matrix = Matrix(RGBMatrix(options = matrixOptions))
+        # Initialize the matrix
+        matrix = Matrix(RGBMatrix(options = matrixOptions))
 
     # Print some basic info on startup
     debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
