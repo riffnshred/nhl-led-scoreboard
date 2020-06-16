@@ -327,7 +327,11 @@ def show_image(img):
     for x in range(h):
         for y in range(w):
             pix = img_arr[x][y]
-            color = get_color(pix[0], pix[1], pix[2])
+            color = ' '
+            # 90% of our image is black, and the pi sometimes has trouble writing to the terminal
+            # quickly. So default the color to blank, and only fill in the color if it's not black
+            if sum(pix) > 0:
+                color = get_color(pix[0], pix[1], pix[2])
             mona_lisa += color
     sys.stdout.write(mona_lisa)
     sys.stdout.flush()
