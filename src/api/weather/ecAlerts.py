@@ -27,15 +27,9 @@ class ecWxAlerts(object):
                 ecData = ECData(coordinates=(self.data.latlng))
                 curr_alerts = ecData.alerts
                 self.network_issues = False
-            # except (requests.exceptions) as e:
-            #     #raise ValueError(e)
-            #     debug.error("Unable to get EC data error:{0}".format(e))
-            #     curr_alerts = 0
-            #     self.network_issues = True
-            #     pass
             except Exception as e:
                 debug.error("Unable to get EC data error:{0}".format(e))
-                curr_alerts = 0
+                num_alerts = 0
                 self.network_issues = True
                 pass
             
@@ -45,7 +39,15 @@ class ecWxAlerts(object):
             # No alerts, the dictionary still comes back with empty values for 
             # warning, watch, advisory, statements and endings
             # Currently don't do anything with a statement
-            if len(curr_alerts) > 5:
+            # debug.info(curr_alerts)
+
+            len_warn = len(curr_alerts.get("warnings").get("value"))
+            len_watch = len(curr_alerts.get("watches").get("value"))
+            len_advisory = len(curr_alerts.get("advisories").get("value"))
+
+            num_alerts = len_warn + len_watch + len_advisory
+
+            if num_alerts > 0:
                 # Only get the latest alert
                 i = -1
                 # Create the warnings, watches and advisory lists from curr_alerts but only take the most recent one
@@ -55,7 +57,7 @@ class ecWxAlerts(object):
                 wx_num_watch = len(curr_alerts.get("watches").get("value","0"))
                 wx_num_advisory = len(curr_alerts.get("advisories").get("value","0"))
 
-                wx_total_alerts = wx_num_endings + wx_num_warnings + wx_num_watch + wx_num_advisory
+                wx_total_alerts = wx_num_endings + wx_num_warning + wx_num_watch + wx_num_advisory
                 
                 if wx_num_warning > 0:
                     warn_date = curr_alerts["warnings"]["value"][i]["date"]
@@ -119,6 +121,7 @@ class ecWxAlerts(object):
             else:
                 debug.info("No active EC weather alerts in your area")
                 self.data.wx_alert_interrupt = False
+                self.data.wx_alerts.clear()
                 self.weather_alert = 0
             # Run every 'x' minutes
             sleep(60 * self.weather_frequency)

@@ -204,7 +204,7 @@ class wxWeather:
             self.data.wx_alerts[0] = "Frzn Drzl"
 
         if self.data.wx_alerts[1] == "warning": 
-            self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,0,0)) # warning
+            self.matrix.draw.rectangle([0, 0, self.matrix.wodth, 8], fill=(255,0,0)) # warning
 
             self.matrix.draw_text_layout(
                 self.layout4.warning,
@@ -214,7 +214,7 @@ class wxWeather:
                 self.layout4.warning_date,
                 self.data.wx_alerts[2]
             )
-            self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,0,0)) # warning
+            self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,0,0)) # warning
             self.matrix.draw_text_layout(
                 self.layout4.title_top,
                 "Weather"
@@ -225,7 +225,7 @@ class wxWeather:
             )  
         elif self.data.wx_alerts[1] == "watch":
             if self.data.wx_units[5] == "us":
-                self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,165,0)) # watch
+                self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,165,0)) # watch
                 self.matrix.draw_text_layout(
                     self.layout4.warning,
                     self.data.wx_alerts[0]
@@ -234,9 +234,9 @@ class wxWeather:
                     self.layout4.warning_date,
                     self.data.wx_alerts[2]
                 )
-                self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,165,0)) # watch
+                self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,165,0)) # watch
             else:
-                self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,255,0)) # watch canada
+                self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,255,0)) # watch canada
                 self.matrix.draw_text_layout(
                     self.layout4.warning,
                     self.data.wx_alerts[0]
@@ -245,7 +245,7 @@ class wxWeather:
                     self.layout4.warning_date,
                     self.data.wx_alerts[2]
                 )
-                self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) # watch canada
+                self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,255,0)) # watch canada
             self.matrix.draw_text_layout(
                 self.layout4.title_top,
                 "Weather"
@@ -257,7 +257,7 @@ class wxWeather:
         else:
             if self.data.wx_alerts[1] == "advisory":
                 if self.data.wx_units[5] == "us":
-                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(255,255,0)) #advisory
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,255,0)) #advisory
                     self.matrix.draw_text_layout(
                         self.layout4.advisory_us,
                         self.data.wx_alerts[0]
@@ -266,9 +266,9 @@ class wxWeather:
                         self.layout4.warning_date,
                         self.data.wx_alerts[2]
                     )
-                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(255,255,0)) #advisory
+                    self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(255,255,0)) #advisory
                 else:
-                    self.matrix.draw.rectangle([0, 0, 64, 8], fill=(169,169,169)) #advisory canada
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(169,169,169)) #advisory canada
                     self.matrix.draw_text_layout(
                         self.layout4.advisory_ca,
                         self.data.wx_alerts[0]
@@ -277,7 +277,7 @@ class wxWeather:
                         self.layout4.warning_date,
                         self.data.wx_alerts[2]
                     )
-                    self.matrix.draw.rectangle([0, 24, 64, 32], fill=(169,169,169)) #advisory canada
+                    self.matrix.draw.rectangle([0, 24, self.matrix.width, 32], fill=(169,169,169)) #advisory canada
             self.matrix.draw_text_layout(
                 self.layout4.title_top,
                 "Weather"
