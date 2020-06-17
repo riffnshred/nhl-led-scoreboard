@@ -428,8 +428,9 @@ def main():
         team_index=0
         team = None
         team = get_team(team_index,selected_teams,preferences_teams,qmark)
+        preferences_teams.append(team)
         
-        default_config['preferences']['teams'] = team
+        default_config['preferences']['teams'] = preferences_teams
         
         if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():
             save_config(default_config,args.confdir)
