@@ -204,7 +204,7 @@ class wxWeather:
             self.data.wx_alerts[0] = "Frzn Drzl"
 
         if self.data.wx_alerts[1] == "warning": 
-            self.matrix.draw.rectangle([0, 0, self.matrix.wodth, 8], fill=(255,0,0)) # warning
+            self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,0,0)) # warning
 
             self.matrix.draw_text_layout(
                 self.layout4.warning,
