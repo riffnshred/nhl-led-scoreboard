@@ -17,6 +17,9 @@ class wxAlert:
         #Set the width, add 3 to allow for text to scroll completely off screen
         self.alert_width = alert_info["size"][0] + 3
 
+        if self.alert_width < self.pos:
+            self.alert_width = self.pos + 1
+
         self.scroll = self.data.config.weather_scroll_alert
         if not self.scroll:
             # Force to display the top and bottom titles on static display
@@ -47,7 +50,7 @@ class wxAlert:
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
             if self.data.wx_alerts[1] == "warning":
                 self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,0,0)) # warning
-                self.matrix.draw.rectangle([0, self.matrix.height, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
+                self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
                 
                 if self.drawtitle:
                     if self.data.wx_alerts[0] == "Severe Thunderstorm":
@@ -100,7 +103,7 @@ class wxAlert:
                             self.layout4.title_bottom,
                             "Advisory"
                         )  
-            
+
             if self.scroll:
                 self.matrix.draw_text([self.pos,9],self.data.wx_alerts[0],self.wxfont,fill=(255,255,255))
                 
