@@ -76,7 +76,7 @@ class Matrix:
         return (round_normal(x), round_normal(y))
 
     def draw_text(self, position, text, font, fill=None, align="left", 
-                  backgroundColor=None, backgroundOffset=[1, 1, 1, 1]):
+                backgroundColor=None, backgroundOffset=[1, 1, 1, 1]):
         width = 0
         height = 0
 
@@ -104,18 +104,18 @@ class Matrix:
         x, y = self.align_position(align, position, size)
         
         if (backgroundColor != None):
-          self.draw_rectangle(
+            self.draw_rectangle(
             (x - backgroundOffset[0], y - backgroundOffset[1]),
             (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
             backgroundColor
-          )
+        )
 
         if (backgroundColor != None):
-          self.draw_rectangle(
+            self.draw_rectangle(
             (x - backgroundOffset[0], y - backgroundOffset[1]),
             (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
             backgroundColor
-          )
+        )
 
         for index, chars in enumerate(text_chars):
             offset = offsets[index]
@@ -166,20 +166,20 @@ class Matrix:
 
     def draw_rectangle(self, position, size, color):
         self.draw.rectangle(
-          [
+            [
             position[0], 
             position[1], 
             position[0] + size[0], 
             position[1] + size[1]
-          ], 
-          fill=color
+            ], 
+            fill=color
         )
 
         return {
             "position": position,
             "size": size
         }
-      
+    
     def draw_pixel(self, position, color):
         try:
             self.pixels[position] = color
@@ -289,6 +289,10 @@ class Matrix:
     def network_issue_indicator(self):
         red = self.graphics.Color(255, 0, 0)
         self.graphics.DrawLine(self.matrix, 0, self.matrix.height - 1, self.matrix.width, self.matrix.height - 1, red)
+
+    def update_indicator(self):
+        green = self.graphics.Color(0, 255, 0)
+        self.graphics.DrawLine(self.matrix, 0, 0, self.matrix.width,0, green)
 
 
 class MatrixPixels:

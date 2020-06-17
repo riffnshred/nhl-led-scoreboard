@@ -5,6 +5,9 @@
     "date": [255, 255, 255],
     "meridiem": [255, 255, 255]
   },
+  "wx_clock": {
+    "time": [255, 50, 50]
+  },
   "scoreboard": {
     "period_final": [255, 0, 0],
     "SOG_label": [255, 111, 0],
@@ -14,5 +17,33 @@
     "name": [0, 0, 0],
     "location": [255, 255, 255],
     "board_title":[0, 0, 0]
+  },
+  "wx_curr_temp": {
+    "temp": [0,255,0],
+    "temp_app": [255,0,0]
+  },
+  "wx_curr_wind": {
+    "wind": [255,255,0],
+    "gust": [173,255,47],
+    "pressure": [218,165,32],
+    "visibility": [218,165,32]
+  },
+  "wx_curr_precip": {
+    "precipchance": [0,191,255],
+    "humidity": [0,255,255],
+    "preciptype_na": [0,206,235],
+    "pressure": [218,165,32],
+    "dewpoint": [24,252,0]
+  },
+  "wx_alert": {
+    "watch_us": [255,165,0],
+    "watch_ca": [255,255,0],
+    "advisory_us": [255,255,0],
+    "advisory_ca": [169,169,169],
+    "warning": [255,255,255],
+    "warning_date": [255,255,255],
+    "title_top": [0,0,0],
+    "title_bottom": [0,0,0]
   }
+
 }

@@ -1,4 +1,3 @@
-
 from PIL import Image
 from time import sleep
 from datetime import datetime
@@ -89,6 +88,13 @@ class MainRenderer:
                 self.data.pb_trigger = False
                 #Display the board from the config
                 self.boards._pb_board(self.data, self.matrix, self.sleepEvent)
+            
+            # Display the Weather Alert board
+            if self.data.wx_alert_interrupt:
+                debug.info('Weather Alert triggered in game day loop....will display weather alert board')
+                self.data.wx_alert_interrupt = False
+                #Display the board from the config
+                self.boards._wx_alert(self.data, self.matrix, self.sleepEvent)
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
@@ -148,6 +154,9 @@ class MainRenderer:
             self.data.refresh_overview()
             if self.data.network_issues:
                 self.matrix.network_issue_indicator()
+            
+            if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                self.matrix.update_indicator()
 
 
 

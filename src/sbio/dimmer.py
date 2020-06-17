@@ -1,6 +1,5 @@
 import ephem
 import debug
-import geocoder
 from python_tsl2591 import tsl2591
 from time import sleep
 
@@ -10,15 +9,12 @@ class Dimmer(object):
         self._observer.pressure = 0
         self._observer.horizon = '-6'
 
-        # Use geocoder library to get lat/lon
-        g = geocoder.ip('me')
-        debug.info("location for sunrise/sunset is: " + str(g.latlng))
-        self._observer.lat = str(g.lat)
-        self._observer.lon = str(g.lng)
-
         self.brightness = 1
         self.matrix = matrix
         self.data = data
+
+        self._observer.lat = str(self.data.latlng[0])
+        self._observer.lon = str(self.data.latlng[1])
        
         if data.config.dimmer_mode == "always":
            self.mode = True
