@@ -53,34 +53,49 @@ sudo apt install git python3-pip
 
 
 ## Table of Contents
-- [Features](#features)
-  * [States](#states)
-  * [New Board System](#new-board-system)
-  * [Goal animation](#goal-animation)
-  * [Dimmer](#dimmer)
-  * [Network Indicator](#network-indicator)
-- [Time and data accuracy](#time-and-data-accuracy)
-- [Installation](#installation)
-  * [Hardware Assembly](#hardware-assembly)
-  * [Software Installation](#software-installation)
-    + [Raspbian Buster Lite](#raspbian-buster-lite)
-    + [Time Zones](#time-zones)
-    + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
-- [Testing and Optimization](#testing-and-optimization)
-  * [Flags](#flags)
-  * [Best Performance](#best-performance)
-- [Configuration](#configuration)
-  * [Modes](#modes)
-  * [Preferences](#preferences)
-  * [Teams](#teams)
-  * [States](#states-1)
-  * [Boards](#boards)
-  * [Dimmer](#dimmer-1)
-- [Usage](#usage)
-  * [Method 1 Using Supervisor](#method-1-using-supervisor)
-  * [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
-- [Shout-out](#shout-out)
-- [Licensing](#licensing)
+- [NHL-LED-scoreboard](#nhl-led-scoreboard)
+- [(UPDATE) Causes of NHL suspending the Season](#update-causes-of-nhl-suspending-the-season)
+- [V1.1.6](#v116)
+- [V1.1.5](#v115)
+  - [Support and community](#support-and-community)
+  - [Tutorials from other source](#tutorials-from-other-source)
+  - [Requirements (START HERE)](#requirements-start-here)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+    - [States](#states)
+    - [New Board System](#new-board-system)
+    - [Goal animation](#goal-animation)
+    - [Dimmer](#dimmer)
+    - [Indicators](#indicators)
+  - [Time and data accuracy](#time-and-data-accuracy)
+  - [Installation](#installation)
+    - [Hardware Assembly](#hardware-assembly)
+      - [Installing and configuring a button.](#installing-and-configuring-a-button)
+    - [Software Installation](#software-installation)
+      - [Raspbian Buster Lite](#raspbian-buster-lite)
+      - [Time Zones](#time-zones)
+      - [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
+    - [*Important Step after installation.*](#important-step-after-installation)
+      - [Updating your software.](#updating-your-software)
+  - [Testing and Optimization](#testing-and-optimization)
+    - [Flags](#flags)
+    - [Best Performance](#best-performance)
+  - [Configuration](#configuration)
+      - [Using the nhl_setup app (recommended)](#using-the-nhl_setup-app-recommended)
+      - [Configuring manualy.](#configuring-manualy)
+    - [Modes](#modes)
+    - [Preferences](#preferences)
+    - [Goal Animations](#goal-animations)
+    - [Teams](#teams)
+    - [States](#states-1)
+    - [Boards](#boards)
+    - [Dimmer](#dimmer-1)
+  - [Usage](#usage)
+    - [Terminal Mode](#terminal-mode)
+    - [Method 1 Using Supervisor](#method-1-using-supervisor)
+    - [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
+  - [Shout-out](#shout-out)
+  - [Licensing](#licensing)
   
 
 
@@ -397,6 +412,18 @@ python script stopped.
 
 There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
 board automatically (and even restart in case of a crash).
+
+### Terminal Mode
+
+Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
+
+`sudo python3 src/main.py --terminal-mode=true`
+
+Note:
+
+* Set `pushbutton.enabled` to false
+* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
+* If you are using a touchscreen instead of an HDMI output, make sure the proper drivers are installed
 
 ### Method 1 Using Supervisor
 ![supervisor](assets/images/supervisor.PNG)

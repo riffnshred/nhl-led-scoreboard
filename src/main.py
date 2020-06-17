@@ -8,6 +8,7 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
+from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
@@ -16,6 +17,7 @@ from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
 import debug
+import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
@@ -26,12 +28,19 @@ def run():
     # Get supplied command line arguments
     commandArgs = args()
 
-    # Check for led configuration arguments
-    matrixOptions = led_matrix_options(commandArgs)
-    matrixOptions.drop_privileges = False
+    if commandArgs.terminal_mode:
+        height, width = os.popen('stty size', 'r').read().split()
+        termMatrix = TermMatrix()
+        termMatrix.width = int(width)
+        termMatrix.height = int(height)
+        matrix = Matrix(termMatrix)
+    else:
+        # Check for led configuration arguments
+        matrixOptions = led_matrix_options(commandArgs)
+        matrixOptions.drop_privileges = False
 
-    # Initialize the matrix
-    matrix = Matrix(RGBMatrix(options = matrixOptions))
+        # Initialize the matrix
+        matrix = Matrix(RGBMatrix(options = matrixOptions))
 
     # Print some basic info on startup
     debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))

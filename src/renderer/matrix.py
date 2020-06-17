@@ -2,9 +2,19 @@ from PIL import Image, ImageDraw
 from rgbmatrix import graphics
 import math
 from utils import round_normal
+import sys
+import numpy as np
 
 DEBUG = False
 
+
+# A fake class to fill in the __init__ of Matrix
+class TermMatrix:
+    def __init__(self):
+        self.width = 0
+        self.height = 0
+    def SetImage(self, img):
+        show_image(img)
 
 class Matrix:
     def __init__(self, matrix):
@@ -289,3 +299,43 @@ class MatrixPixels:
     def __init__(self, position, color):
         self.position = position
         self.color = color
+
+
+def get_ansi_color_code(r, g, b):
+    if r == g and g == b:
+        if r < 8:
+            return 16
+        if r > 248:
+            return 231
+        return round(((r - 8) / 247) * 24) + 232
+    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
+
+
+def get_color(r, g, b):
+    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+
+
+def show_image(img):
+    h = img.height
+    w = img.width
+
+    # Get image
+    img = img.resize((w,h), Image.ANTIALIAS)
+    # Set to array
+    img_arr = np.asarray(img)
+    # Get the shape so we know x,y coords
+    h,w,c = img_arr.shape
+
+    # Then draw our mona lisa
+    mona_lisa = ''
+    for x in range(h):
+        for y in range(w):
+            pix = img_arr[x][y]
+            color = ' '
+            # 90% of our image is black, and the pi sometimes has trouble writing to the terminal
+            # quickly. So default the color to blank, and only fill in the color if it's not black
+            if sum(pix) > 0:
+                color = get_color(pix[0], pix[1], pix[2])
+            mona_lisa += color
+    sys.stdout.write(mona_lisa)
+    sys.stdout.flush()

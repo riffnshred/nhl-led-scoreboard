@@ -65,6 +65,7 @@ def args():
     parser.add_argument("--led-multiplexing", action="store",
                         help="Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)",
                         default=0, type=int)
+    parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
 
     return parser.parse_args()
 
