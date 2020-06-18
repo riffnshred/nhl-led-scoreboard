@@ -53,7 +53,7 @@ class ecWxAlerts(object):
 
             if num_alerts > 0:
                 # Only get the latest alert
-                i = -1
+                i = 0
                 # Create the warnings, watches and advisory lists from curr_alerts but only take the most recent one
 
                 wx_num_endings = len(curr_alerts.get("endings").get("value","0"))
