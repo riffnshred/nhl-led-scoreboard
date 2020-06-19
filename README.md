@@ -421,9 +421,8 @@ Maybe you want to debug, or you have a small screen nearby that you want to use 
 
 Note:
 
-* Set `pushbutton.enabled` to false
 * If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
-* If you are using a touchscreen instead of an HDMI output, make sure the proper drivers are installed
+* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
 
 ### Method 1 Using Supervisor
 ![supervisor](assets/images/supervisor.PNG)
