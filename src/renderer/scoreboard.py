@@ -46,7 +46,7 @@ class ScoreboardRenderer:
 
         if self.status.is_irregular(self.scoreboard.status):
             '''TODO: Need to figure out the irregular status'''
-            pass
+            self.draw_irregular()
 
     def draw_scheduled(self):
         start_time = self.scoreboard.start_time
@@ -128,7 +128,24 @@ class ScoreboardRenderer:
         self.matrix.render()
 
     def draw_irregular(self):
-        pass
+        status = self.scoreboard.status
+        if status == "Postponed":
+            status = "PPD"
+
+        # Draw the text on the Data image.
+        self.matrix.draw_text_layout(
+            self.layout.scheduled_date,
+            'TODAY'
+        )
+        self.matrix.draw_text_layout(
+            self.layout.irregular_status,
+            status
+        )
+        self.matrix.draw_text_layout(
+            self.layout.vs,
+            'VS'
+        )
+        self.matrix.render()
 
     def draw_power_play(self):
         away_number_skaters = self.scoreboard.away_team.num_skaters

@@ -26,7 +26,7 @@ class MainRenderer:
 
     def render(self):
         while self.data.network_issues:
-            Clock(self.data, self.matrix, sleepEvent,duration=60)
+            Clock(self.data, self.matrix, self.sleepEvent, duration=60)
             self.data.refresh_data()
 
         while True:
@@ -53,11 +53,10 @@ class MainRenderer:
                         self.__render_game_day()
 
             except AttributeError as e:
-                debug.log("ERROR WHILE RENDERING: "+e)
+                debug.log(f"ERROR WHILE RENDERING: {e}")
                 debug.log("Refreshing data in a minute")
-                self.boards.fallback(self.data, self.matrix)
+                self.boards.fallback(self.data, self.matrix, self.sleepEvent)
                 self.data.refresh_data()
-                self.status = self.data.status
 
 
     def __render_offday(self):
@@ -73,18 +72,18 @@ class MainRenderer:
         debug.info("Showing Game")
         # Initialize the scoreboard. get the current status at startup
         self.data.refresh_overview()
-        self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+        self.scoreboard = Scoreboard(self.data.overview, self.data)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
         self.sleepEvent.clear()
 
         while not self.sleepEvent.is_set():
-                
+
             if self.data._is_new_day():
                 debug.log('This is a new day')
                 return
 
-            # Display the pushbutton board            
+            # Display the pushbutton board
             if self.data.pb_trigger:
                 debug.info('PushButton triggered in game day loop....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
                 self.data.pb_trigger = False
@@ -93,8 +92,8 @@ class MainRenderer:
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
-                debug.info("Game is Live")                    
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                debug.info("Game is Live")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
                 self.__render_live(self.scoreboard)
                 if self.scoreboard.intermission:
@@ -106,31 +105,45 @@ class MainRenderer:
                     self.boards._intermission(self.data, self.matrix,self.sleepEvent)
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
-                
+
+            elif self.status.is_game_over(self.data.overview.status):
+                debug.info("Game Over")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.__render_postgame(self.scoreboard)
+                # sleep(self.refresh_rate)
+                self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
-                debug.info("Game Over")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                debug.info("FINAL")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.__render_postgame(self.scoreboard)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
-                    
                 self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                self.scoreboard = Scoreboard(self.data.overview, self.data.teams_info, self.data.config)
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.__render_pregame(self.scoreboard)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            print("refreshing")
+            elif self.status.is_irregular(self.data.overview.status):
+                """ Pre-game state """
+                debug.info("Game is irregular")
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.__render_irregular(self.scoreboard)
+                #sleep(self.refresh_rate)
+                self.sleepEvent.wait(self.refresh_rate)
+                self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
+
+            sleep(5)
             self.data.refresh_data()
             self.data.refresh_overview()
             if self.data.network_issues:
@@ -143,14 +156,14 @@ class MainRenderer:
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
 
-        
+
 
     def __render_postgame(self, scoreboard):
         debug.info("Showing Post-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
         self.draw_end_of_game_indicator()
-        
+
 
     def __render_live(self, scoreboard):
         debug.info("Showing Main Event")
@@ -159,7 +172,13 @@ class MainRenderer:
         if self.alternate_data_counter % self.sog_display_frequency == 0:
             show_SOG = True
         ScoreboardRenderer(self.data, self.matrix, scoreboard, show_SOG).render()
-        self.alternate_data_counter += 1 
+        self.alternate_data_counter += 1
+
+    def __render_irregular(self, scoreboard):
+        debug.info("Showing Irregular")
+        self.matrix.clear()
+        ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
+
 
 
     def check_new_goals(self):
@@ -191,7 +210,7 @@ class MainRenderer:
         # Get the list of gif's under the preferred and opposing directory
         preferred_gifs = glob.glob("assets/animations/preferred/*.gif")
         opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
-        
+
         # Set opposing team goal animation here
         filename = random.choice(opposing_gifs)
         debug.info("Opposing animation is: " + filename)

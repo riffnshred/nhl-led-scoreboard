@@ -6,7 +6,7 @@ from utils import center_text
 
 
 class Clock:
-    def __init__(self, data, matrix, sleepEvent,duration=None):
+    def __init__(self, data, matrix, sleepEvent ,duration=None):
         self.data = data
         self.date = datetime.datetime.today()
         self.time = datetime.datetime.now()
@@ -19,7 +19,6 @@ class Clock:
             self.duration = data.config.clock_board_duration
         
         self.layout = self.data.config.config.layout.get_board_layout('clock')
-
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
@@ -52,10 +51,11 @@ class Clock:
             self.date.strftime("%b %d %Y")
         )
 
-        self.matrix.draw_text_layout(
-            self.layout.meridiem,
-            "{}\n{}".format(self.meridiem[0], self.meridiem[1])
-        )
+        if self.time_format == "%I:%M":
+            self.matrix.draw_text_layout(
+                self.layout.meridiem,
+                "{}\n{}".format(self.meridiem[0], self.meridiem[1])
+            )
 
         self.matrix.render()
         if self.data.network_issues and not self.data.config.clock_hide_indicators:

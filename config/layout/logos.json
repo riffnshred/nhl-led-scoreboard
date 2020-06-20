@@ -19,17 +19,30 @@
         "rotate": 0,
         "crop": [0, 0, 0, 0]
       },
-      "LAK": {
+      "DAL": {
         "home": {
           
         },
         "away": {
-          
+          "position": [5, 0]
         }
       },
-      "COL": {
+      "CGY": {
+        "home": {
+          "position": [-2, 0]
+        },
         "away": {
-          
+          "position": [2, 0]
+        }
+      },
+      "ANA": {
+        "home": {
+          "zoom": "70%",
+          "position": [-5, "15%"]
+        },
+        "away": {
+          "zoom": "80%",
+          "position": [5, "10%"]
         }
       }
     }
