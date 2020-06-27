@@ -5,24 +5,27 @@
 As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
 
 
-# V1.1.6
+# V1.2.0
 
 NOTE: If you face issues while running the nhl_setup app, delete your config.json file in the config directory and try again.
 
 New Features:
-- Covid 19 Board:
-  * You can now choose to see stats of specific countries and States of the US or Province of Canada. Simply pick the countries and/or states and province you want to see when you use the setup app `./nhl_setup`.
+- Now with 100% more weather features (Thanks to [falkyre](https://github.com/falkyre))
+  * Weather and alerts boards.
+  * Weather observations data provided by Environment Canada (no api key) or OpenWeatherMap (api key)
+  * Alerts data provided by EC (Canada Only) or National Weather Service (US only)
+  * See README.md under [src/api/weather](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather) for more information
 
-- nhl_setup App
-  * New options added to configure the new options on the Covid 19 Boards.
+- New Terminal mode. (Thanks to [ELepolt](https://github.com/ELepolt))
+	* Allows you to run the scoreboard and see the scoreboard image in a terminal. Useful for debugging. 
+	* More info [Here](#terminal-mode)
 
-Bug Fix:
-- Fix the District Of Columbia not rendering properly on the covid 19 board.
-
-
-# V1.1.5
-Big fix:
-- Changed the api link for covid 19 as the old one was depricated.
+Bug Fixes and updates:
+-   json validation against json schema (both in main script and also in nhl_setup)
+-   nhl_setup updated to do validation of config.json and create simple config with a single team from command line. Also can create a simple config from within the app.
+-   nhl_setup app updated to add new weather configuration entries
+-   Updated nhl_setup README.md to document changes
+-   Updated json.load calls to catch errors and not print full trace. Will exit app on bad json (both typo errors and validation errors)
 
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
@@ -53,14 +56,6 @@ sudo apt install git python3-pip
 
 
 ## Table of Contents
-- [NHL-LED-scoreboard](#nhl-led-scoreboard)
-- [(UPDATE) Causes of NHL suspending the Season](#update-causes-of-nhl-suspending-the-season)
-- [V1.1.6](#v116)
-- [V1.1.5](#v115)
-  - [Support and community](#support-and-community)
-  - [Tutorials from other source](#tutorials-from-other-source)
-  - [Requirements (START HERE)](#requirements-start-here)
-  - [Table of Contents](#table-of-contents)
   - [Features](#features)
     - [States](#states)
     - [New Board System](#new-board-system)
@@ -91,9 +86,9 @@ sudo apt install git python3-pip
     - [Boards](#boards)
     - [Dimmer](#dimmer-1)
   - [Usage](#usage)
-    - [Terminal Mode](#terminal-mode)
     - [Method 1 Using Supervisor](#method-1-using-supervisor)
     - [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
+    - [Terminal Mode](#terminal-mode)
   - [Shout-out](#shout-out)
   - [Licensing](#licensing)
   
@@ -119,7 +114,8 @@ There are currently three different boards available:
 -   **Score Ticker**: A carousel that cycles through the games of the day.
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
 -   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
--   **Clock**: a basic clock.
+-   **Clock**: a basic clock. (***NEW***: Now with the option to show basic weather information and weather alert. More details [here](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather))
+-   **Weather**: Display weather information and also provide weather alerts. 
 -   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
@@ -413,17 +409,6 @@ python script stopped.
 There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
 board automatically (and even restart in case of a crash).
 
-### Terminal Mode
-
-Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
-
-`sudo python3 src/main.py --terminal-mode=true`
-
-Note:
-
-* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
-* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
-
 ### Method 1 Using Supervisor
 ![supervisor](assets/images/supervisor.PNG)
 
@@ -495,6 +480,17 @@ NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
 
 To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
 This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
+
+### Terminal Mode
+
+Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
+
+`sudo python3 src/main.py --terminal-mode=true`
+
+Note:
+
+* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
+* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
 
 
 ## Shout-out
