@@ -5,7 +5,7 @@ fastjsonschema==2.14.4
 geocoder==1.38.1
 gpiozero==1.5.1
 noaa-sdk==0.1.18
-Pillow==5.4.1
+pillow>=6.2.2
 printtools==1.2
 PyInstaller==3.6
 pyowm==2.10.0
