@@ -54,8 +54,9 @@ class wxWeather:
                 self.sleepEvent.wait(display_sleep)
 
                 if len(self.data.wx_alerts) > 0:
-                    self.WxDrawAlert()
-                    self.sleepEvent.wait(display_sleep)
+                    if self.data.wx_alerts[1]!="ended":
+                        self.WxDrawAlert()
+                        self.sleepEvent.wait(display_sleep)
 
                 display_wx += display_sleep
         else:

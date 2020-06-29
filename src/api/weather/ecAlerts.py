@@ -129,9 +129,11 @@ class ecWxAlerts(object):
                     else:
                         wx_alert_time = ending_datetime.strftime("%m/%d %I:%M %p")
 
-                    self.data.wx_alerts = [curr_alerts["endings"]["value"][i]["title"],"ended",wx_alert_time]
+                    endings = [curr_alerts["endings"]["value"][i]["title"],"ended",wx_alert_time]
                     self.data.wx_alert_interrupt = False
                     self.weather_alert = 0
+                    self.data.wx_alerts = []
+                    debug.info(endings)
                 # else:
                 #     self.data.wx_alert_interrupt = False
                 #     self.weather_alert = 0

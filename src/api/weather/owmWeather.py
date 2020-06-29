@@ -1,4 +1,4 @@
-from pyowm import OWM
+from pyowm.owm import OWM
 import debug
 import geocoder
 import datetime
@@ -16,6 +16,7 @@ class owmWxWorker(object):
         self.apikey = data.config.weather_owm_apikey
         self.network_issues = False
         self.owm = OWM(self.apikey)
+        self.owm_manager = self.owm.weather_manager()
 
     def run(self):
 
@@ -29,20 +30,21 @@ class owmWxWorker(object):
             lat = self.data.latlng[0]
             lon = self.data.latlng[1]
             #Testing
-            #lat = 36.50
-            #lon = -94.62
+            #lat = 32.653
+            #lon = -83.7596
             try:
                 debug.info("Refreshing OWM current observations weather")
-                obs = self.owm.weather_at_coords(lat,lon)
+
+                obs = self.owm_manager.weather_at_coords(lat,lon)
                 self.network_issues = False
                 self.data.wx_updated = True
 
-            except pyown.exceptions as e:
-                #raise ValueError(e)
-                debug.error("Unable to get OWM data error:{0}".format(e))
-                self.data.wx_updated = False
-                self.network_issues = True
-                pass
+            #except PyOWMError as e:
+            #    #raise ValueError(e)
+            #    debug.error("Unable to get OWM data error:{0}".format(e))
+            #    self.data.wx_updated = False
+            #    self.network_issues = True
+            #    pass
             except Exception as e:
                 debug.error("Unable to get OWM data error:{0}".format(e))
                 self.data.wx_updated = False
@@ -50,14 +52,14 @@ class owmWxWorker(object):
                 pass
 
             if not self.network_issues:
-                wx = obs.get_weather()
-
+                wx = obs.weather.to_dict()
+               
                 if self.time_format == "%H:%M":
                     wx_timestamp = datetime.datetime.now().strftime("%m/%d %H:%M")
                 else:
                     wx_timestamp = datetime.datetime.now().strftime("%m/%d %I:%M %p")
 
-                owm_wxcode = wx.get_weather_code()
+                owm_wxcode = int(wx.get("weather_code"))
 
                 if owm_wxcode in range(200,299):
                     # Thunderstorm Class
@@ -87,23 +89,25 @@ class owmWxWorker(object):
                     else:
                         wx_icon = '\uf07b' 
                 
-                wx_summary = wx.get_detailed_status().title()
+                wx_summary = wx.get("detailed_status")
 
                 # Get wind information.  
-                owm_windspeed = wx.get_wind()['speed']
-                owm_windgust = wx.get_wind().get("gust",0.0)
-
                 if self.data.config.weather_units != "metric":
-                    owm_windspeed = wx.get_wind(unit='miles_hour')['speed'] 
-                    owm_windgust = wx.get_wind(unit='miles_hour').get("gust",0.0)
+                    wx_wind = obs.weather.wind(unit='miles_hour')
                 else:
+                    wx_wind = obs.weather.wind()
+
+                owm_windspeed = wx_wind['speed']
+                owm_windgust = wx_wind['gust']
+
+                if self.data.config.weather_units == "metric":
                     # Convert m/s to km/h
                     owm_windspeed = wind_kmph(owm_windspeed)
                     owm_windgust = wind_kmph(owm_windgust)
                 
                 # Get icon and text wind direction
             
-                owm_winddir = wx.get_wind().get("deg",0.0)
+                owm_winddir = wx_wind.get("deg",0.0)
                 winddir = degrees_to_direction(owm_winddir)
                 
                 wx_windgust = str(round(owm_windgust,1))+ self.data.wx_units[1] 
@@ -111,38 +115,38 @@ class owmWxWorker(object):
 
                 # Get temperature and apparent temperature based on weather units
                 if self.data.config.weather_units == "metric":
-                    owm_temp = wx.get_temperature(unit="celsius")['temp']
+                    owm_temp = obs.weather.temperature('celsius')['temp']
                     check_windchill = 10.0
                 else:
-                    owm_temp = wx.get_temperature(unit="fahrenheit")['temp']
+                    owm_temp = obs.weather.temperature('fahrenheit')['temp']
                     check_windchill = 50.0
-
+                
                 if float(owm_temp) < check_windchill:
                     windchill = round(wind_chill(float(owm_temp),float(owm_windspeed),"mps"),1)
                     wx_app_temp = str(windchill) + self.data.wx_units[0]
                     wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
                 else:
                     if self.data.config.weather_units == "metric":
-                        wx_app_temp = wx.get_humidex()
+                        wx_app_temp = wx.get('humidity')
                     else:
-                        wx_app_temp = wx.get_heat_index()
+                        wx_app_temp = wx.get('heat_index')
                         if wx_app_temp == None:
-                            app_temp = usaheatindex(float(wx.get_temperature(unit="celsius")['temp']),wx.get_humidity())
+                            app_temp = usaheatindex(float(owm_temp),wx.get_humidity())
                             wx_app_temp = str(round(temp_f(app_temp),1)) + self.data.wx_units[0]
 
                     wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
 
-                wx_humidity = str(wx.get_humidity()) + "%"
+                wx_humidity = str(wx.get('humidity')) + "%"
 
-                wx_dewpoint = str(round(dew_point(float(owm_temp),wx.get_humidity()),1))+ self.data.wx_units[0]
+                wx_dewpoint = str(round(dew_point(float(owm_temp),wx.get('humidity')),1))+ self.data.wx_units[0]
 
-                wx_pressure = str(wx.get_pressure()['press']) + " " +self.data.wx_units[4]
+                wx_pressure = str(wx.get('pressure')['press']) + " " +self.data.wx_units[4]
 
                 # Always set icon to N/A as owm doesn't return tendency for pressure
 
                 wx_tendency = '\uf07b'
 
-                vis_distance = wx.get_visibility_distance()
+                vis_distance = wx.get('visibility_distance')
                 if vis_distance == None:
                     vis_distance = 24100
 
