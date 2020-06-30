@@ -7,7 +7,7 @@ Whenever lives or financial decisions may be impacted by weather events, profess
 The weather and alert boards require certain python libraries in order to function properly.   These python packages can be installed using pip3:
 env-canada>=0.0.35
 noaa-sdk>=0.1.18
-pyowm>=2.10.0
+pyowm>=3.0.0
 
 
 ## Description
