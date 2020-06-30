@@ -7,12 +7,16 @@ Whenever lives or financial decisions may be impacted by weather events, profess
 The weather and alert boards require certain python libraries in order to function properly.   These python packages can be installed using pip3:
 env-canada>=0.0.35
 noaa-sdk>=0.1.18
-pyowm>=2.10.0
+pyowm>=3.0.0
 
 
 ## Description
 
-There are 2 boards that have been created to provide current weather observations and weather alerts. For the observations, there are two data feeds used: Environment Canada (EC) (no api key required) and Open Weather Map (OWM) (API key required). OWM can be used worldwide for observations while EC is for Canada only. For weather alerts, there are also two feeds: EC (Canada only) and National Weather Service (NWS) (US Only). The Weather observation board (called wxweather) can be added to any of the states (off\_day, scheduled, intermission or post\_game) while the Alerts board will &quot;interrupt&quot; any currently displayed board once and then the alert will be added as an extra page in the main weather board. Both the weather and alert boards use your latitude and longitude based on the IP address of your Raspberry Pi to get the weather information.
+There are 2 boards that have been created to provide current weather observations and weather alerts. For the observations, there are two data feeds used: Environment Canada (EC) (no api key required) and Open Weather Map (OWM) (API key required). OWM can be used worldwide for observations while EC is for Canada only. For weather alerts, there are also two feeds: EC (Canada only) and National Weather Service (NWS) (US Only). The Weather observation board (called weather) can be added to any of the states (off\_day, scheduled, intermission or post\_game) while the Alerts board will &quot;interrupt&quot; any currently displayed board once and then the alert will be added as an extra page in the main weather board. Both the weather and alert boards use your latitude and longitude based on the IP address of your Raspberry Pi to get the weather information.
+
+## Board Name
+
+The name of the board that can be added to the different states is : **weather**
 
 ### Weather Configuration in config.json
 
