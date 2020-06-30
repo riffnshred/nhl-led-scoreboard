@@ -16,7 +16,6 @@ def get_lat_lng(location):
         g = geocoder.ip('me')
         debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
 
-     
     return g.latlng
 
 def get_file(path):
