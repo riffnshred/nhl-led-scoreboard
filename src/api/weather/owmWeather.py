@@ -98,7 +98,10 @@ class owmWxWorker(object):
                     wx_wind = obs.weather.wind()
 
                 owm_windspeed = wx_wind['speed']
-                owm_windgust = wx_wind['gust']
+                if 'gust' in wx_wind:
+                    owm_windgust = wx_wind['gust']
+                else:
+                    owm_windgust = 0
 
                 if self.data.config.weather_units == "metric":
                     # Convert m/s to km/h
@@ -116,25 +119,30 @@ class owmWxWorker(object):
                 # Get temperature and apparent temperature based on weather units
                 if self.data.config.weather_units == "metric":
                     owm_temp = obs.weather.temperature('celsius')['temp']
+                    owm_app_temp = obs.weather.temperature('celsius')['feels_like']
                     check_windchill = 10.0
                 else:
                     owm_temp = obs.weather.temperature('fahrenheit')['temp']
+                    owm_app_temp = obs.weather.temperature('fahrenheit')['feels_like']
                     check_windchill = 50.0
                 
-                if float(owm_temp) < check_windchill:
-                    windchill = round(wind_chill(float(owm_temp),float(owm_windspeed),"mps"),1)
-                    wx_app_temp = str(windchill) + self.data.wx_units[0]
-                    wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
-                else:
-                    if self.data.config.weather_units == "metric":
-                        wx_app_temp = wx.get('humidity')
+                if owm_app_temp == None:
+                    if float(owm_temp) < check_windchill:
+                        windchill = round(wind_chill(float(owm_temp),float(owm_windspeed),"mps"),1)
+                        wx_app_temp = str(windchill) + self.data.wx_units[0]
+                        wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
                     else:
-                        wx_app_temp = wx.get('heat_index')
-                        if wx_app_temp == None:
-                            app_temp = usaheatindex(float(owm_temp),wx.get_humidity())
-                            wx_app_temp = str(round(temp_f(app_temp),1)) + self.data.wx_units[0]
-
-                    wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
+                        if self.data.config.weather_units == "metric":
+                            wx_app_temp = wx.get('humidity')
+                        else:
+                            wx_app_temp = wx.get('heat_index')
+                            if wx_app_temp == None:
+                                app_temp = usaheatindex(float(owm_temp),wx.get_humidity())
+                                wx_app_temp = str(round(temp_f(app_temp),1)) + self.data.wx_units[0]
+                else:
+                    wx_app_temp = str(round(owm_app_temp,1)) + self.data.wx_units[0]
+                
+                wx_temp = str(round(owm_temp,1)) + self.data.wx_units[0]
 
                 wx_humidity = str(wx.get('humidity')) + "%"
 
