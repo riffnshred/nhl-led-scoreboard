@@ -41,7 +41,7 @@ sudo pip3 uninstall numpy
 sudo apt-get install python3-numpy
 sudo apt-get install libatlas3-base
 sudo pip3 install env-canada==0.0.35
-sudo pip3 install pyowm>=3
+sudo pip3 install pyowm>=3.0.0
 sudo pip3 install noaa_sdk fastjsonschema
 sudo apt-get install libatlas-base-dev
 
