@@ -4,6 +4,8 @@
 # (UPDATE) Causes of NHL suspending the Season
 As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
 
+# V1.2.1 (Bug fix)
+- Fixed issues caused buy installing the lastest version.
 
 # V1.2.0
 
