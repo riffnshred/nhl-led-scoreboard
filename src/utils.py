@@ -86,7 +86,7 @@ def led_matrix_options(args):
     options.brightness = args.led_brightness
     options.pwm_lsb_nanoseconds = args.led_pwm_lsb_nanoseconds
     options.led_rgb_sequence = args.led_rgb_sequence
-    options.panel_type = self.args.led_panel_type
+    options.panel_type = args.led_panel_type
     try:
         options.pixel_mapper_config = args.led_pixel_mapper
     except AttributeError:
