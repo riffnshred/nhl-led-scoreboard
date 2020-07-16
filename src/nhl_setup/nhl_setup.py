@@ -1,7 +1,7 @@
 import questionary
 from questionary import Validator, ValidationError, prompt
 from styles import custom_style_dope
-
+from validate_json import validateConf
 from print import *
 import argparse
 import functools
@@ -11,8 +11,14 @@ import os
 import sys
 import shutil
 
+
 from time import sleep
 
+SCRIPT_VERSION = "1.3.0 - Wx version"
+
+TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
+    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
+    'Rangers','Red Wings','Sabres','Senators','Sharks','Stars','Wild']
 
 class Clock24hValidator(Validator):
     def validate(self, document):
@@ -30,7 +36,6 @@ class NumberValidator(Validator):
             raise ValidationError(
                 message='Please enter a number',
                 cursor_position=len(document.text))  # Move cursor to end
-       
 
 
 def get_file(path):
@@ -38,15 +43,22 @@ def get_file(path):
     return os.path.join(dir, path)
 
 # Attempt to load a configuration file from config directory to use as defaults for prompts
-# If config.json exists (user already created one, or this app has already been ran) user it,
+# If config.json exists (user already created one, or this app has already been ran) use it,
 # If no config.json exists, look for config.json.sample and if that doesn't exist, create a new config.json
-def load_config(confdir):
+# If simple = True, force the config file to be the config.json.sample as we are setting up with defaults
+
+def load_config(confdir,simple=False):
     # Find and return a json file
 
         filename = ["config.json","config.json.sample"]
         j = {}
+
         jloaded = False
-        fileindex = 0
+
+        if simple:
+            fileindex = 1
+        else:
+            fileindex = 0
 
         while not jloaded:
 
@@ -56,8 +68,14 @@ def load_config(confdir):
                 path = get_file("{0}/{1}".format(confdir,filename[fileindex]))
 
             if os.path.isfile(path):
-                j = json.load(open(path))
-                jloaded = True
+                try:
+                    j = json.load(open(path))
+                    jloaded = True
+                except json.decoder.JSONDecodeError as e:
+                    div.div('*')
+                    print("Unable to load json: {0}".format(e),BOLD,RED)
+                    div.div('*')
+                    sys.exit(0)
             else:
                 fileindex += 1
                 
@@ -70,7 +88,7 @@ def save_config(nhl_config,confdir):
     if not os.path.exists(confdir):
         #os.makedirs(confdir)
         print("Directory {} does not exist.  Are you running in the right directory?".format(confdir),RED)
-        sys.exit()
+        sys.exit(0)
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
     except Exception as e:
@@ -172,9 +190,7 @@ def select_boards(qmark):
 
 def get_team(team_index,team_choices,pref_teams,qmark):
     
-    def_choices = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
-    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
-    'Rangers','Red Wings','Sabres','Senators','Sharks','Stars','Wild']
+    def_choices = TEAMS
 
     choices = []
 
@@ -348,16 +364,53 @@ def get_canada_prov(canada_prov_index,canada_prov_choices,pref_canada_prov,qmark
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('confdir', nargs='?',default="config", type=str, help='Input dir for config.json')
+    parser.add_argument('confdir', nargs='?',default="config", type=str, help='Input dir for config.json (defaults to config)')
+    parser.add_argument('--version','-v', action='version', version='%(prog)s ' + SCRIPT_VERSION)
+    parser.add_argument('--team','-t',nargs=1, action='store',type=str,help="Create simple config.json with defaults and one team")
+    parser.add_argument('--check','-c',action='store_true',help="Check config.json against schema, used to see if config is out of date")
     args = parser.parse_args()
     
+    print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
+    print(SCRIPT_VERSION,UNDERLINE,BLUE)
+
     if not os.path.exists(args.confdir):
         # Get current working directory
         setup_cwd = os.getcwd()
         print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
-        sys.exit()
+        sys.exit(0)
 
-    default_config = load_config(args.confdir)
+    #Check to see if the user wants to validate an existing config.json against the schema
+    #Only from command line
+
+    if args.check:
+        conffile = "{0}/config.json".format(args.confdir)
+        schemafile = "{0}/config.schema.json".format(args.confdir)
+
+        confpath = get_file(conffile)
+        schemapath = get_file(schemafile)
+        print("Now validating config......")
+        (valid,msg) = validateConf(confpath,schemapath)
+        if valid:
+            print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+        else:
+            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+        sys.exit(0)
+
+    #Check to see if there was a team name on the command line, if so, create a new config.json from
+    #config.json.sample
+    if args.team != None:
+        default_config = load_config(args.confdir,True)
+        # Make sure that the argument for the team supplied is valid
+        if args.team[0] in TEAMS:
+            default_config['preferences']['teams'] = args.team
+            save_config(default_config,args.confdir)
+        else:
+            print("Your team {0} is not in {1}.  Check the spelling and try again".format(args.team[0],TEAMS),RED)
+        sys.exit(0)
+    else:
+        default_config = load_config(args.confdir)
+
+
 
     if questionary.confirm("Do you see a net,stick and horn?",style=custom_style_dope,qmark='🥅🏒🚨').ask():
         qmark = '🥅'
@@ -365,6 +418,23 @@ def main():
     else:
         qmark = '?'
         qmarksave = '===>'
+
+    if questionary.confirm("Do you want a simple default setup with one team selection (Y) or full setup (N)?",style=custom_style_dope,qmark=qmark).ask():
+        #Load the config.json.sample
+        default_config = load_config(args.confdir,True)
+        selected_teams = get_default_value(default_config,['preferences','teams'],"string")
+        preferences_teams = []
+
+        team_index=0
+        team = None
+        team = get_team(team_index,selected_teams,preferences_teams,qmark)
+        preferences_teams.append(team)
+        
+        default_config['preferences']['teams'] = preferences_teams
+        
+        if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():
+            save_config(default_config,args.confdir)
+        sys.exit(0)
 
     questions = [
 
@@ -384,8 +454,7 @@ def main():
         }
     ]
 
-    print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
-    print("V1.2.1",UNDERLINE,BLUE)
+    
     nhl_config = {}
 
     answers = prompt(questions, style=custom_style_dope)
@@ -419,6 +488,18 @@ def main():
     ]
     get_eod = prompt(end_of_day,style=custom_style_dope)
     preferences['preferences'].update(get_eod)
+
+    location = [
+        {
+            'type': 'input',
+            'name': 'location',
+            'qmark': qmark,
+            'message': 'Your location to override latitude and longitude lookup via IP (City, State or City, Province)',
+            'default': get_default_value(default_config,['preferences','location'],"string") or 'Winnipeg, MB'
+        }
+    ]
+    get_location = prompt(location,style=custom_style_dope)
+    preferences['preferences'].update(get_location)
 
     refresh_rate = [
         {
@@ -499,7 +580,7 @@ def main():
     temp_dict = {}
 
     while state_index < len(states):
-        board_list = ['clock','scoreticker','standings','team_summary','covid_19']
+        board_list = ['clock','weather','scoreticker','standings','team_summary','covid_19']
         
         boards_selected = []
         board = None
@@ -639,8 +720,9 @@ def main():
     boards_config['boards']['covid19'].update(covid_country_answer)
     
     # COVID country configuration
+    selected_countries = get_default_value(default_config,['boards','covid19','country'],"string")
     if covid_country_answer['country_enabled']:
-        selected_countries = get_default_value(default_config,['boards','covid19','country'],"string")
+        
         preferences_countries = []
 
         country_index=0
@@ -663,6 +745,9 @@ def main():
 
         preferences_country_dict = {'country':preferences_countries}
         boards_config['boards']['covid19'].update(preferences_country_dict)
+    else:
+        preferences_country_dict = {'country':selected_countries}
+        boards_config['boards']['covid19'].update(preferences_country_dict)
 
     # COVID US State Enabled question
     covid_us_state_question = [
@@ -678,8 +763,8 @@ def main():
     boards_config['boards']['covid19'].update(covid_us_state_answer)
     
     # COVID US State configuration
+    selected_us_states = get_default_value(default_config,['boards','covid19','us_state'],"string")
     if covid_us_state_answer['us_state_enabled']:
-        selected_us_states = get_default_value(default_config,['boards','covid19','us_state'],"string")
         preferences_us_states = []
 
         us_state_index=0
@@ -702,7 +787,9 @@ def main():
 
         preferences_us_state_dict = {'us_state':preferences_us_states}
         boards_config['boards']['covid19'].update(preferences_us_state_dict)
-
+    else:
+        preferences_us_state_dict = {'us_state':selected_us_states}
+        boards_config['boards']['covid19'].update(preferences_us_state_dict)
     # COVID Canadian province enabled question
     covid_canada_prov_question = [
         {
@@ -717,8 +804,9 @@ def main():
     boards_config['boards']['covid19'].update(covid_canada_answer)
     
     # COVID Canadian province configuration
+    selected_canada_prov = get_default_value(default_config,['boards','covid19','canada_prov'],"string")
     if covid_canada_answer['canada_enabled']:
-        selected_canada_prov = get_default_value(default_config,['boards','covid19','canada_prov'],"string")
+        
         preferences_canada_prov = []
 
         canada_prov_index=0
@@ -741,6 +829,121 @@ def main():
 
         preferences_canada_prov_dict = {'canada_prov':preferences_canada_prov}
         boards_config['boards']['covid19'].update(preferences_canada_prov_dict)
+    else:
+        preferences_canada_prov_dict = {'canada_prov':selected_canada_prov}
+        boards_config['boards']['covid19'].update(preferences_canada_prov_dict)
+
+    #Add weather info
+    #Get default config
+    wx_default = get_default_value(default_config,['boards','weather'],"string")
+
+    wx_enabled = [
+        {
+            'type': 'confirm',
+            'name': 'enabled',
+            'qmark': qmark,
+            'message': 'Use weather board?',
+            'default': get_default_value(default_config,['boards','weather','enabled'],"bool") or True
+        }
+    ]
+
+    use_wx = prompt(wx_enabled,style=custom_style_dope)
+
+    boards_config['boards'].update(weather = use_wx)
+
+    if use_wx['enabled']:
+
+        wx_questions = [
+
+            {
+                'type': 'input',
+                'name': 'units',
+                'qmark': qmark,
+                'message': 'Units to display? (mertic or imperial)',
+                'default': get_default_value(default_config,['boards','weather','units'],"string") or "metric"
+            },
+            {
+                'type': 'input',
+                'name': 'duration',
+                'qmark': qmark,
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 30 else 'Must be at least 30 seconds',
+                'filter': lambda val: int(val),
+                'message': 'How long to show weather board (minimum 30 seconds)?',
+                'default': get_default_value(default_config,['boards','weather','duration'],"int") or '30'
+            },
+            {
+                'type': 'input',
+                'name': 'data_feed',
+                'qmark': qmark,
+                'message': 'Which weather data feed for current observations? (EC or OWM)\nEC=Environment Canada\nOWM=Open Weather Map (requires a key: works for all locations)',
+                'default': get_default_value(default_config,['boards','weather','data_feed'],"string") or 'EC'
+            },
+            {
+                'type': 'input',
+                'name': 'alert_feed',
+                'qmark': qmark,
+                'message': 'Which weather feed for alerts? (EC or NWS)\nEC=Environment Canada\nNWS=National Weather Service (US only)',
+                'default': get_default_value(default_config,['boards','weather','alert_feed'],"string") or 'EC'
+            },
+            {
+                'type': 'input',
+                'name': 'owm_apikey',
+                'qmark': qmark,
+                'message': 'OpenWeatherMap API key if using OWM as data feed: (get key from https://openweathermap.org/appid)',
+                'default': get_default_value(default_config,['boards','weather','owm_apikey'],"string") or ''
+            },
+            {
+                'type': 'input',
+                'name': 'update_freq',
+                'qmark': qmark,
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 5 else 'Must be a number and greater or equal than 5',
+                'filter': lambda val: int(val),
+                'message': 'How often to update weather in minutes?(minimum 5)',
+                'default': get_default_value(default_config,['boards','weather','update_freq'],"int") or '5'
+            },
+            {
+            'type': 'confirm',
+            'name': 'show_alerts',
+            'qmark': qmark,
+            'message': 'Show weather alerts?',
+            'default': get_default_value(default_config,['boards','weather','show_alerts'],"bool") or True
+            },
+            {
+            'type': 'confirm',
+            'name': 'alert_title',
+            'qmark': qmark,
+            'message': 'On alert board, display title of alert (warning, watch, advisory)?',
+            'default': get_default_value(default_config,['boards','weather','alert_title'],"bool") or True
+            },
+            {
+            'type': 'confirm',
+            'name': 'scroll_alert',
+            'qmark': qmark,
+            'message': 'On alert board, scroll alert?',
+            'default': get_default_value(default_config,['boards','weather','scroll_alert'],"bool") or True
+            },
+            {
+                'type': 'input',
+                'name': 'alert_duration',
+                'qmark': qmark,
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 5 else 'Must be a number and greater or equal than 5',
+                'filter': lambda val: int(val),
+                'message': 'How long (in seconds) to show the alert board',
+                'default': get_default_value(default_config,['boards','weather','alert_duration'],"int") or '5'
+            },
+            {
+            'type': 'confirm',
+            'name': 'show_on_clock',
+            'qmark': qmark,
+            'message': 'Display temperature and humidity on clock?',
+            'default': get_default_value(default_config,['boards','weather','show_on_clock'],"bool") or True
+            },
+        ]
+        
+        wx_answers = prompt(wx_questions,style=custom_style_dope)
+        boards_config['boards']['weather'].update(wx_answers)
+    else:
+        boards_config['boards']['weather'].update(wx_default)
 
     nhl_config.update(boards_config)
 
@@ -826,7 +1029,7 @@ def main():
         sbio_config['sbio']['dimmer'].update(enabled = False)
         sbio_config['sbio'].update(sbio_default)
 
- 
+
     pb_enabled = [
         {
             'type': 'confirm',
@@ -908,7 +1111,7 @@ def main():
                 'name': 'state_triggered1',
                 'qmark': qmark,
                 'message': 'Pick board to display on button press: ',
-                'choices': ['clock','scoreticker','standings','team_summary','covid_19'],
+                'choices': ['clock','weather','scoreticker','standings','team_summary','covid_19'],
                 'default': get_default_value(default_config,['sbio','pushbutton','state_triggered1'],"string") or 'clock'
             },
             {
@@ -929,9 +1132,11 @@ def main():
 
     nhl_config.update(sbio_config)
 
+
     #Prepare to output to config.json file
     if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():
         save_config(nhl_config,args.confdir)
 
 if __name__ == '__main__':
     main()
+    

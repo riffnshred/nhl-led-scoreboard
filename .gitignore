@@ -136,3 +136,17 @@ assets/logos/*
 #nhl-led-scoreboard
 config/config.json
 config/config.json.backup
+
+# VScode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# Testing file for the nhl api
+src/nhl_api_testing.py

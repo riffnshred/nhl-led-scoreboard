@@ -4,25 +4,30 @@
 # (UPDATE) Causes of NHL suspending the Season
 As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
 
+# V1.2.1 (Bug fix)
+- Fixed issues caused buy installing the lastest version.
 
-# V1.1.6
+# V1.2.0
 
 NOTE: If you face issues while running the nhl_setup app, delete your config.json file in the config directory and try again.
 
 New Features:
-- Covid 19 Board:
-  * You can now choose to see stats of specific countries and States of the US or Province of Canada. Simply pick the countries and/or states and province you want to see when you use the setup app `./nhl_setup`.
+- Now with 100% more weather features (Thanks to [falkyre](https://github.com/falkyre))
+  * Weather and alerts boards.
+  * Weather observations data provided by Environment Canada (no api key) or OpenWeatherMap (api key)
+  * Alerts data provided by EC (Canada Only) or National Weather Service (US only)
+  * See README.md under [src/api/weather](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather) for more information
 
-- nhl_setup App
-  * New options added to configure the new options on the Covid 19 Boards.
+- New Terminal mode. (Thanks to [ELepolt](https://github.com/ELepolt))
+	* Allows you to run the scoreboard and see the scoreboard image in a terminal. Useful for debugging. 
+	* More info [Here](#terminal-mode)
 
-Bug Fix:
-- Fix the District Of Columbia not rendering properly on the covid 19 board.
-
-
-# V1.1.5
-Big fix:
-- Changed the api link for covid 19 as the old one was depricated.
+Bug Fixes and updates:
+-   json validation against json schema (both in main script and also in nhl_setup)
+-   nhl_setup updated to do validation of config.json and create simple config with a single team from command line. Also can create a simple config from within the app.
+-   nhl_setup app updated to add new weather configuration entries
+-   Updated nhl_setup README.md to document changes
+-   Updated json.load calls to catch errors and not print full trace. Will exit app on bad json (both typo errors and validation errors)
 
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
@@ -53,34 +58,41 @@ sudo apt install git python3-pip
 
 
 ## Table of Contents
-- [Features](#features)
-  * [States](#states)
-  * [New Board System](#new-board-system)
-  * [Goal animation](#goal-animation)
-  * [Dimmer](#dimmer)
-  * [Network Indicator](#network-indicator)
-- [Time and data accuracy](#time-and-data-accuracy)
-- [Installation](#installation)
-  * [Hardware Assembly](#hardware-assembly)
-  * [Software Installation](#software-installation)
-    + [Raspbian Buster Lite](#raspbian-buster-lite)
-    + [Time Zones](#time-zones)
-    + [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
-- [Testing and Optimization](#testing-and-optimization)
-  * [Flags](#flags)
-  * [Best Performance](#best-performance)
-- [Configuration](#configuration)
-  * [Modes](#modes)
-  * [Preferences](#preferences)
-  * [Teams](#teams)
-  * [States](#states-1)
-  * [Boards](#boards)
-  * [Dimmer](#dimmer-1)
-- [Usage](#usage)
-  * [Method 1 Using Supervisor](#method-1-using-supervisor)
-  * [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
-- [Shout-out](#shout-out)
-- [Licensing](#licensing)
+  - [Features](#features)
+    - [States](#states)
+    - [New Board System](#new-board-system)
+    - [Goal animation](#goal-animation)
+    - [Dimmer](#dimmer)
+    - [Indicators](#indicators)
+  - [Time and data accuracy](#time-and-data-accuracy)
+  - [Installation](#installation)
+    - [Hardware Assembly](#hardware-assembly)
+      - [Installing and configuring a button.](#installing-and-configuring-a-button)
+    - [Software Installation](#software-installation)
+      - [Raspbian Buster Lite](#raspbian-buster-lite)
+      - [Time Zones](#time-zones)
+      - [Installing the NHL scoreboard software](#installing-the-nhl-scoreboard-software)
+    - [*Important Step after installation.*](#important-step-after-installation)
+      - [Updating your software.](#updating-your-software)
+  - [Testing and Optimization](#testing-and-optimization)
+    - [Flags](#flags)
+    - [Best Performance](#best-performance)
+  - [Configuration](#configuration)
+      - [Using the nhl_setup app (recommended)](#using-the-nhl_setup-app-recommended)
+      - [Configuring manualy.](#configuring-manualy)
+    - [Modes](#modes)
+    - [Preferences](#preferences)
+    - [Goal Animations](#goal-animations)
+    - [Teams](#teams)
+    - [States](#states-1)
+    - [Boards](#boards)
+    - [Dimmer](#dimmer-1)
+  - [Usage](#usage)
+    - [Method 1 Using Supervisor](#method-1-using-supervisor)
+    - [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
+    - [Terminal Mode](#terminal-mode)
+  - [Shout-out](#shout-out)
+  - [Licensing](#licensing)
   
 
 
@@ -104,7 +116,8 @@ There are currently three different boards available:
 -   **Score Ticker**: A carousel that cycles through the games of the day.
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
 -   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
--   **Clock**: a basic clock.
+-   **Clock**: a basic clock. (***NEW***: Now with the option to show basic weather information and weather alert. More details [here](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather))
+-   **Weather**: Display weather information and also provide weather alerts. 
 -   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
@@ -298,8 +311,10 @@ All the data related options.
 | `live_game_refresh_rate` | INT    | `15`                                             | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
 | `time_format`            | String | `"12h"` or `"24h"`                               | The format in which the game start time will be displayed.                                                                                                                           |
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
-| `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode                                                    |                                                                                                                                                      |                                                                                                                                                          |
-
+| `location`             | String | `"City,State/Province"`                            | Location at which you would like to get weather updates. (Ex  `"Ottawa,ON"`) 
+| `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode|
+| `sog_display_frequency`                  | INT| `4`        | On data update frequency at which the Shots on goal stats appear while showing the scoreboard during a game. (Ex: the shots on goal will show every 4th data update)|      
+                                                                                                                                             
 ### Goal Animations
 The goal animations can be set for both teams of just the preferred teams. MORE OPTIONS COMING SOON
 
@@ -353,14 +368,17 @@ depending on the state of the scoreboard. Currently, there are only three boards
 -   **Clock**: Show the current time either in 24h or 12h format.
 -   **Covid_19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
-| Boards        | Settings                   | Type   | Parameters                                       | Description                                                                                       |
+| Boards        | Settings                   | Type   | Parameters | Description|
 |---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | `scoreticker` | `preferred_teams_only`     | Bool   | `true`, `false`                                  | Choose between showing all the games of the day or just the ones your preferred teams are playing |
 |               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each games are shown on screen.                                                 |
 | `standings`   | `preferred_standings_only` | Bool   | `true`, `false`                                  | Choose between showing all the standings or only the the preferred division and conference.       |
 |               | `standing_type`            | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                |
-|               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division                                                                           |
-|               | `conference`               | String | `eastern`, `western`                             | Your preferred conference                                                                         |
+|               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division |
+|               | `conference`               | String | `eastern`, `western` | Your preferred conference  |
+| `Clock`   | `Duration` | INT| `15`| The duration that the clock will be shown in Seconds  |
+| 		    | `hide_indicator` | Bool   | `true`, `false`| Show top green bar if there is a new update available.  |
+
 
 
 ### Dimmer
@@ -469,6 +487,17 @@ NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
 
 To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
 This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
+
+### Terminal Mode
+
+Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
+
+`sudo python3 src/main.py --terminal-mode=true`
+
+Note:
+
+* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
+* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
 
 
 ## Shout-out

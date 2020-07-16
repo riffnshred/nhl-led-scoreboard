@@ -36,8 +36,25 @@ sudo pip3 install requests
 # For dimmer
 sudo pip3 install geocoder python_tsl2591 ephem
 
+# For weather
+sudo pip3 uninstall numpy
+sudo apt-get install python3-numpy
+sudo apt-get install libatlas3-base
+sudo pip3 install env-canada==0.0.35
+sudo pip3 install --upgrade pyowm
+sudo pip3 install noaa_sdk fastjsonschema
+sudo apt-get install libatlas-base-dev
+
+# For update checker
+sudo pip3 install apscheduler
+sudo pip3 install sh
+
 # For push button
 sudo apt-get -y install python3-gpiozero
+
+# For terminal mode
+sudo apt-get install libatlas-base-dev
+sudo pip3 install numpy
 
 # For svgs
 sudo apt-get -y install python3-cairosvg

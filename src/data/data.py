@@ -4,6 +4,7 @@ import debug
 import nhl_api
 from api.covid19.data import Data as covid19_data
 from data.status import Status
+from utils import get_lat_lng
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
@@ -44,6 +45,11 @@ class Data:
         :param config:
         """
 
+        # Get lat/long for dimmer and weather
+        self.latlng = get_lat_lng(config.location)
+        # Test for alerts
+        #self.latlng = [32.653,-83.7596]
+        
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
 
@@ -52,6 +58,20 @@ class Data:
 
         # Currently displayed board
         self.curr_board = None
+
+        # Weather Board Info
+        self.wx_updated = False
+        self.wx_units = []
+        self.wx_current = []
+        self.wx_curr_wind = []
+        self.wx_curr_precip = []
+        # Weather Alert Info
+        self.wx_alerts = []
+        self.wx_alert_interrupt = False 
+
+        # For update checker, True means new update available from github
+        self.newUpdate = False
+        
 
         # Flag to determine when to refresh data
         self.needs_refresh = True

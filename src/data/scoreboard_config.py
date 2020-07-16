@@ -2,6 +2,7 @@ from utils import get_file
 from data.layout import Layout
 from data.colors import Color
 from config.main import Config  
+from nhl_setup.validate_json import validateConf
 import json
 import os
 import sys
@@ -18,6 +19,7 @@ class ScoreboardConfig:
         # Preferences
         self.end_of_day = json["preferences"]["end_of_day"]
         self.time_format = self.__get_time_format(json["preferences"]["time_format"])
+        self.location = json["preferences"]["location"]
 
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
@@ -51,6 +53,26 @@ class ScoreboardConfig:
         self.pushbutton_display_halt = json["sbio"]["pushbutton"]["display_halt"]
         self.pushbutton_state_triggered1 = json["sbio"]["pushbutton"]["state_triggered1"]
         self.pushbutton_state_triggered1_process = json["sbio"]["pushbutton"]["state_triggered1_process"]
+
+        # Weather board preferences
+        self.weather_enabled = json["boards"]["weather"]["enabled"]
+        self.weather_units = json["boards"]["weather"]["units"]
+        self.weather_duration = json["boards"]["weather"]["duration"]
+        self.weather_data_feed = json["boards"]["weather"]["data_feed"]
+        self.weather_alert_feed = json["boards"]["weather"]["alert_feed"]
+        self.weather_owm_apikey = json["boards"]["weather"]["owm_apikey"]
+        self.weather_update_freq = json["boards"]["weather"]["update_freq"]
+        #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
+        #Similar to how a pushbutton interrupts the flow
+        self.weather_show_alerts = json["boards"]["weather"]["show_alerts"] 
+        # Display on top and bottom bar the severity (for US) and type
+        self.weather_alert_title = json["boards"]["weather"]["alert_title"]
+        # Display static alert or scrolling
+        self.weather_scroll_alert = json["boards"]["weather"]["scroll_alert"]
+        # How long to display static alert in seconds
+        self.weather_alert_duration = json["boards"]["weather"]["alert_duration"]
+        # Show curr temp, humidity and any alerts on clock
+        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
 
 
         # States
@@ -104,21 +126,42 @@ class ScoreboardConfig:
         j = {}
         path = get_file("config/{}".format(filename))
         if os.path.isfile(path):
-            j = json.load(open(path))
-        return j
+            try:
+                j = json.load(open(path))
+                msg = "json loaded OK"
+            except json.decoder.JSONDecodeError as e:
+                msg = "Unable to load json: {0}".format(e)
+                j = {}
+        return j, msg
 
     def __get_config(self, base_filename, error=None):
         # Look and return config.json file
 
         filename = "{}.json".format(base_filename)
 
-        reference_config = self.read_json(filename)
+        (reference_config, error) = self.read_json(filename)
         if not reference_config:
             if (error):
                 debug.error(error)
             else:
                 debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
             sys.exit(1)
+        
+        if base_filename == "config":
+            # Validate against the config.json
+            debug.info("Now validating config.json.....")
+            conffile = "config/config.json"
+            schemafile = "config/config.schema.json"
+
+            confpath = get_file(conffile)
+            schemapath = get_file(schemafile)
+            (valid,msg) = validateConf(confpath,schemapath)
+            if valid:
+                debug.info("config.json passes validation")
+            else:
+                debug.error("config.json fails validation: error: [{0}]".format(msg))
+                debug.error("Rerun the nhl_setup app to create a valid config.json")
+                sys.exit(1)
 
         return reference_config
 

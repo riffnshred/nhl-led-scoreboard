@@ -34,6 +34,9 @@ class Scoreticker:
 
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
+                
+                if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                    self.matrix.update_indicator()
 
                 #sleep(self.rotation_rate)
                 self.sleepEvent.wait(self.rotation_rate)

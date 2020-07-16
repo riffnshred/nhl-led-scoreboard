@@ -5,6 +5,18 @@ import os
 import debug
 from datetime import datetime, timezone
 import math
+import geocoder
+
+def get_lat_lng(location):
+
+    if len(location) > 0:
+        g = geocoder.osm(location)
+        debug.info("location is: " + location + " " + str(g.latlng))
+    else:
+        g = geocoder.ip('me')
+        debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
+
+    return g.latlng
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
@@ -52,6 +64,8 @@ def args():
     parser.add_argument("--led-multiplexing", action="store",
                         help="Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)",
                         default=0, type=int)
+    parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
+    parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
 
     return parser.parse_args()
 
@@ -72,6 +86,7 @@ def led_matrix_options(args):
     options.brightness = args.led_brightness
     options.pwm_lsb_nanoseconds = args.led_pwm_lsb_nanoseconds
     options.led_rgb_sequence = args.led_rgb_sequence
+    options.panel_type = args.led_panel_type
     try:
         options.pixel_mapper_config = args.led_pixel_mapper
     except AttributeError:

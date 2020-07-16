@@ -97,19 +97,20 @@ class TeamSummary:
                     txt_color,
                     im_height
                 )
+                self.matrix.clear()
 
-            self.matrix.clear()
-
-            logo_renderer.render()
+                logo_renderer.render()
             
-            self.matrix.draw_image_layout(
-                self.layout.info, 
-                image,
-            )
+                self.matrix.draw_image_layout(
+                    self.layout.info, 
+                    image,
+                )
+                self.matrix.render()
+                if self.data.network_issues:
+                    self.matrix.network_issue_indicator()
+                if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                    self.matrix.update_indicator()
 
-            self.matrix.render()
-            if self.data.network_issues:
-                self.matrix.network_issue_indicator()
             self.sleepEvent.wait(5)
 
             # Move the image up until we hit the bottom.
@@ -120,14 +121,17 @@ class TeamSummary:
 
                 logo_renderer.render()
                 self.matrix.draw_image_layout(
-                  self.layout.info, 
-                  image, 
-                  (0, i)
+                self.layout.info, 
+                image, 
+                (0, i)
                 )
 
                 self.matrix.render()
                 if self.data.network_issues:
                     self.matrix.network_issue_indicator()
+                if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                    self.matrix.update_indicator()
+                    
                 self.sleepEvent.wait(0.3)
                 
             # Show the bottom before we change to the next table.
@@ -139,25 +143,25 @@ class TeamSummary:
 
         draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
-                  font=self.font)
+                font=self.font)
         if stats:
             draw.text((0, 7), "GP: {} P: {}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
-                  font=self.font)
+                font=self.font)
             draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
-                  font=self.font)
+                font=self.font)
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
 
         draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 21), "LAST GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
-                  font=self.font)
+                font=self.font)
         if prev_game_scoreboard:
             if prev_game_scoreboard.away_team.id == self.team_id:
                 draw.text((0, 28), "@ {}".format(prev_game_scoreboard.home_team.abbrev), fill=(255, 255, 255),
-                          font=self.font)
+                        font=self.font)
             if prev_game_scoreboard.home_team.id == self.team_id:
                 draw.text((0, 28), "VS {}".format(prev_game_scoreboard.away_team.abbrev), fill=(255, 255, 255),
-                          font=self.font)
+                        font=self.font)
 
             if self.data.status.is_irregular(prev_game_scoreboard.status):
                 draw.text((0, 34), prev_game_scoreboard.status, fill=(255, 0, 0), font=self.font)
@@ -166,27 +170,29 @@ class TeamSummary:
                 if prev_game_scoreboard.winning_team == self.team_id:
                     draw.text((0, 34), "W", fill=(50, 255, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
-                                                          prev_game_scoreboard.home_team.goals),
-                              fill=(255, 255, 255), font=self.font)
+                                                        prev_game_scoreboard.home_team.goals),
+                            fill=(255, 255, 255), font=self.font)
 
                 if prev_game_scoreboard.loosing_team == self.team_id:
                     draw.text((0, 34), "L", fill=(255, 50, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
-                                                          prev_game_scoreboard.home_team.goals),
-                              fill=(255, 255, 255), font=self.font)
+                                                        prev_game_scoreboard.home_team.goals),
+                            fill=(255, 255, 255), font=self.font)
 
         else:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
         draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
-                  font=self.font)
+                font=self.font)
 
         if next_game_scoreboard:
             date = convert_date_format(next_game_scoreboard.date)
             draw.text((0, 49), "{}".format(date), fill=(255, 255, 255), font=self.font)
 
             if self.data.status.is_irregular(next_game_scoreboard.status):
+                if next_game_scoreboard.status == "Scheduled (Time TBD)":
+                    next_game_scoreboard.status = "TBD"
                 draw.text((0, 55), "{}".format(next_game_scoreboard.status), fill=(255, 0, 0), font=self.font)
             else:
                 draw.text((0, 55), "{}".format(next_game_scoreboard.start_time), fill=(255, 255, 255), font=self.font)
