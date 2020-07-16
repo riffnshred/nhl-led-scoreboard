@@ -147,3 +147,6 @@ config/config.json.backup
 
 # Local History for Visual Studio Code
 .history/
+
+# Testing file for the nhl api
+src/nhl_api_testing.py

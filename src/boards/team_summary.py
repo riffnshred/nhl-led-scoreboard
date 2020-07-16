@@ -97,21 +97,19 @@ class TeamSummary:
                     txt_color,
                     im_height
                 )
+                self.matrix.clear()
 
-            self.matrix.clear()
-
-            logo_renderer.render()
+                logo_renderer.render()
             
-            self.matrix.draw_image_layout(
-                self.layout.info, 
-                image,
-            )
-
-            self.matrix.render()
-            if self.data.network_issues:
-                self.matrix.network_issue_indicator()
-            if self.data.newUpdate and not self.data.config.clock_hide_indicators:
-                self.matrix.update_indicator()
+                self.matrix.draw_image_layout(
+                    self.layout.info, 
+                    image,
+                )
+                self.matrix.render()
+                if self.data.network_issues:
+                    self.matrix.network_issue_indicator()
+                if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                    self.matrix.update_indicator()
 
             self.sleepEvent.wait(5)
 
@@ -193,6 +191,8 @@ class TeamSummary:
             draw.text((0, 49), "{}".format(date), fill=(255, 255, 255), font=self.font)
 
             if self.data.status.is_irregular(next_game_scoreboard.status):
+                if next_game_scoreboard.status == "Scheduled (Time TBD)":
+                    next_game_scoreboard.status = "TBD"
                 draw.text((0, 55), "{}".format(next_game_scoreboard.status), fill=(255, 0, 0), font=self.font)
             else:
                 draw.text((0, 55), "{}".format(next_game_scoreboard.start_time), fill=(255, 255, 255), font=self.font)

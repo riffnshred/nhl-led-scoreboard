@@ -1,7 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
 from time import sleep
-
+import debug
 
 class Standings:
     """
@@ -67,6 +67,7 @@ class Standings:
                 self.sleepEvent.wait(5)
 
             elif type == 'wild_card':
+                print("hello")
                 wildcard_records = {}
                 conf_name = self.data.config.preferred_conference
                 conf_data = getattr(self.data.standings.by_wildcard, conf_name)
@@ -167,7 +168,8 @@ class Standings:
                     #sleep(5)
                     self.sleepEvent.wait(5)
             elif type == 'wild_card':
-                wildcard_records = {}
+                debug.info("wild card standings not available, please change the type of standings to 'conference' or 'division' in your config")
+                """ wildcard_records = {}
                 for conf_name, conf_data in vars(self.data.standings.by_wildcard).items():
                     wildcard_records["conference"] = conf_name
                     division_leaders = {}
@@ -204,7 +206,7 @@ class Standings:
                         #sleep(0.2)
                         self.sleepEvent.wait(0.2)
                     #sleep(5)
-                    self.sleepEvent.wait(5)
+                    self.sleepEvent.wait(5) """
 
 
 def draw_standing(data, name, records, img_height, width):
