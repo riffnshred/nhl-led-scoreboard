@@ -1,47 +1,45 @@
+from nhl_api.object import MultiLevelObject
 import nhl_api.data
-import nhl_api.object
 import debug
 
+"""
+    TODO: For some reason the playoff data became to heavy and the recursion loop to transform the data into a single class
+      - Change the playoff class to multiple subclass and distribute different types of data into different types of object.
+
+    For now it only pickup what the software need from the API.
+"""
 
 def playoff_info():
     data = nhl_api.data.get_playoff_data()
     parsed = data.json()
-    playoff_data = parsed["rounds"]
+    playoff_rounds = parsed["rounds"]
 
     season = parsed["season"]
     default_round = parsed["defaultRound"]
-    rounds = {}
+    output = {'season':season, 'default_round':default_round}
+    rounds = []
 
-    for round in playoff_data:
-        number = round['number']
-        name = round['names']['name']
-        series = round['series']
-        output = {
-            'season': season,
-            'default_round': default_round,
-            'rounds': rounds
-        }
-        rounds[number] = output
-    return rounds
+    for index in range(len(playoff_rounds)):
+      for x in playoff_rounds[index]:
+          rounds.append(MultiLevelObject(playoff_rounds[index]))
+
+    output['rounds'] = rounds
+    return output
 
 
-
-class Playoff(object):
+class Playoff():
     def __init__(self, data):
-        # loop through data
-        for x in data:
-            # set information as correct data type
-            try:
-                setattr(self, x, int(data[x]))
-            except ValueError:
-                try:
-                    setattr(self, x, float(data[x]))
-                except ValueError:
-                    # string if not number
-                    setattr(self, x, str(data[x]))
-            except TypeError:
-                obj = nhl_api.object.Object(data[x])
-                setattr(self, x, obj)
+        self.season = data['season']
+        self.default_round = data['default_round']
+        self.rounds = data['rounds']
+    
+    def __str__(self):
+        return (f"{self.rounds[0].series[0].matchupTeams[0].seed.rank}")
+
+    def __repr__(self):
+        return self.__str__()
+
+
 
 
 """
