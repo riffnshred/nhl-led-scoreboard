@@ -1,5 +1,5 @@
 import nhl_api.data
-import nhl_api.object
+from nhl_api.object import Object, MultiLevelObject
 import debug
 
 
@@ -78,6 +78,32 @@ def status():
 def current_season():
     data = nhl_api.data.get_current_season().json()
     return data
+
+
+"""
+    TODO: For some reason the playoff data became to heavy and the recursion loop to transform the data into a single class
+      - Change the playoff class to multiple subclass and distribute different types of data into different types of object.
+
+    For now it only pickup what the software need from the API.
+"""
+
+def playoff_info():
+    data = nhl_api.data.get_playoff_data()
+    parsed = data.json()
+    playoff_rounds = parsed["rounds"]
+
+    season = parsed["season"]
+    default_round = parsed["defaultRound"]
+    output = {'season':season, 'default_round':default_round}
+    rounds = []
+
+    for index in range(len(playoff_rounds)):
+      for x in playoff_rounds[index]:
+          rounds.append(MultiLevelObject(playoff_rounds[index]))
+
+    output['rounds'] = rounds
+    return output
+
 
 
 def standings():
@@ -251,6 +277,18 @@ class Wildcard:
         self.wild_card = wild
         self.division_leaders = div
 
+
+class Playoff():
+    def __init__(self, data):
+        self.season = data['season']
+        self.default_round = data['default_round']
+        self.rounds = data['rounds']
+    
+    def __str__(self):
+        return (f"Season: {self.season}, Current round: {self.default_round}")
+
+    def __repr__(self):
+        return self.__str__()
 
 class Info(nhl_api.object.Object):
     pass

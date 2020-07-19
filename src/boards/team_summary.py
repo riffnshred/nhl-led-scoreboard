@@ -47,8 +47,6 @@ class TeamSummary:
             prev_game = team.previous_game
             next_game = team.next_game
 
-            
-
             logo_renderer = LogoRenderer(
                 self.matrix,
                 self.data.config,

@@ -1,4 +1,4 @@
-from data.team import Team
+from data.team import TeamScore
 from data.periods import Periods
 from utils import convert_time
 
@@ -11,9 +11,9 @@ class Scoreboard:
         home = linescore.teams.home
         away_abbrev = data.teams_info[away.team.id].abbreviation
         home_abbrev = data.teams_info[home.team.id].abbreviation
-        self.away_team = Team(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
+        self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
                               away.numSkaters, away.goaliePulled)
-        self.home_team = Team(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
+        self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
                               home.numSkaters, home.goaliePulled)
 
         self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")

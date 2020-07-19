@@ -1,6 +1,5 @@
 import nhl_api.game
 import nhl_api.info
-import nhl_api.playoff
 import calendar
 
 
@@ -42,5 +41,5 @@ def standings():
     return nhl_api.info.Standings(standings, wildcard)
 
 
-def playoff_data():
-    return nhl_api.playoff.Playoff(nhl_api.playoff.playoff_info())
+def playoff():
+    return nhl_api.info.Playoff(nhl_api.info.playoff_info())

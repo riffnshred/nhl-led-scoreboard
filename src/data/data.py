@@ -15,6 +15,15 @@ def filter_list_of_games(games, teams):
     """
     return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
 
+def filter_list_of_series(series, teams):
+    """
+    Filter the list 'single_series' and keep only the ones which the teams in the list 'teams' are part of.
+
+        TODO: make a filter_list function that works for both list of games and list of series. need to add lost of attribute to look for and compare (intersection)
+    """
+
+    return list(single_series for single_series in set(series) if {single_series.matchupTeams[0].team.id, single_series.matchupTeams[1].team.id}.intersection(set(teams)))
+
 
 def prioritize_pref_games(games, teams):
     """
@@ -32,6 +41,16 @@ def prioritize_pref_games(games, teams):
     cleaned_game_list = list(filter(None, list(dict.fromkeys(ordered_game_list))))
     return cleaned_game_list
 
+def prioritize_pref_series(series, teams):
+    """
+        Ordered list of preferred series to match the order of their corresponding team and clean the 'None' element
+        produced by the'map' function.
+    """
+    ordered_series_list = map(lambda team: next(
+        (single_series for single_series in series if single_series.matchupTeams[0].team.id == team or single_series.matchupTeams[1].team.id == team), None),
+                            teams)
+    cleaned_series_list = list(filter(None, list(dict.fromkeys(ordered_series_list))))
+    return cleaned_series_list
 
 class Data:
     def __init__(self, config):
@@ -118,6 +137,9 @@ class Data:
 
         # Get refresh standings
         self.refresh_standings()
+
+        # Fetch the playoff data
+        self.refresh_playoff()
 
         # Get Covid 19 Data
         self.covid19 = covid19_data()
@@ -372,6 +394,27 @@ class Data:
             return []
 
     #
+    # Playoffs
+    def refresh_playoff(self):
+        attempts_remaining = 5
+        while attempts_remaining > 0:
+            try:
+                self.playoffs = nhl_api.playoff()
+                self.current_round =  3 #self.playoffs.default_round
+                self.pref_series = filter_list_of_series(self.playoffs.rounds[0].series, self.pref_teams)
+                self.pref_series = prioritize_pref_series(self.pref_series, self.pref_teams)
+                for i in range(len(self.pref_series)):
+                    print(self.pref_series[i].names.matchupShortName)
+                break
+
+            except ValueError as error_message:
+                self.network_issues = True
+                debug.error("Failed to refresh the Standings. {} attempt remaining.".format(attempts_remaining))
+                debug.error(error_message)
+                attempts_remaining -= 1
+                sleep(NETWORK_RETRY_SLEEP_TIME)
+                
+    #
     # Offdays
 
     def is_pref_team_offday(self):
@@ -402,12 +445,15 @@ class Data:
         # Parse today's date and see if we should use today or yesterday
         self.refresh_current_date()
 
-        # Get all the team's data
+        # Update team's data
         self.get_teams_info()
 
-        # Fetch the games for today
+        # Update games for today
         self.refresh_games()
 
-        # Get refresh standings
+        # Update standings
         self.refresh_standings()
+        
+        # Update Playoff data
+        self.refresh_playoff()
 

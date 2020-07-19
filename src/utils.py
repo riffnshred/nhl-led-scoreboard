@@ -50,6 +50,9 @@ def args():
     parser.add_argument("--led-pwm-lsb-nanoseconds", action="store",
                         help="Base time-unit for the on-time in the lowest significant bit in nanoseconds. (Default: 130)",
                         default=130, type=int)
+    parser.add_argument("--led-pwm-dither-bits", action="store",
+                        help="Time dithering of lower bits (Default: 0)",
+                        default=0, type=int)
     parser.add_argument("--led-show-refresh", action="store_true",
                         help="Shows the current refresh rate of the LED panel.")
     parser.add_argument("--led-slowdown-gpio", action="store",
