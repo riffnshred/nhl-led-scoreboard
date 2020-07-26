@@ -24,7 +24,9 @@ class Scoreboard:
 
         if data.status.is_final(overview.status):
             self.winning_team = overview.w_team
+            self.winning_score = overview.w_score
             self.loosing_team = overview.l_team
+            self.loosing_score = overview.l_score
 
     def __str__(self):
         output = "<{} {}> {} (G {}, SOG {}) @ {} (G {}, SOG {}); Status: {}; Period : {} {};".format(

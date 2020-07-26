@@ -80,29 +80,39 @@ def current_season():
     return data
 
 
-"""
-    TODO: For some reason the playoff data became to heavy and the recursion loop to transform the data into a single class
-      - Change the playoff class to multiple subclass and distribute different types of data into different types of object.
-
-    For now it only pickup what the software need from the API.
-"""
-
-def playoff_info():
-    data = nhl_api.data.get_playoff_data()
+def playoff_info(season):
+    data = nhl_api.data.get_playoff_data(season)
     parsed = data.json()
-    playoff_rounds = parsed["rounds"]
+    try: 
+        playoff_rounds = parsed["rounds"]
+    except NameError:
+        debug.error("No data for {} Playoff".format(season))
+        playoff_rounds = []
+    except KeyError:
+        debug.error("No data for {} Playoff".format(season))
+        playoff_rounds = []
+    
+
+    try:
+        default_round = parsed["defaultRound"]
+    except KeyError:
+        debug.error("No default round for {} Playoff. Setting it to 0".format(season))
+        default_round = 0
 
     season = parsed["season"]
-    default_round = parsed["defaultRound"]
     output = {'season':season, 'default_round':default_round}
     rounds = []
-
+    
     for index in range(len(playoff_rounds)):
-      for x in playoff_rounds[index]:
-          rounds.append(MultiLevelObject(playoff_rounds[index]))
+        rounds.append(MultiLevelObject(playoff_rounds[index]))
 
     output['rounds'] = rounds
     return output
+
+def series_record(seriesCode, season):
+    data = data = nhl_api.data.get_series_record(seriesCode, season)
+    parsed = data.json()
+    return parsed["data"]
 
 
 

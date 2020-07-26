@@ -143,7 +143,7 @@ class TeamSummary:
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if stats:
-            draw.text((0, 7), "GP: {} P: {}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
+            draw.text((0, 7), "GP:{} P:{}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
                 font=self.font)
             draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
                 font=self.font)

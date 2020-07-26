@@ -5,6 +5,7 @@ A Board is simply a display object with specific parameters made to be shown on 
 """
 import debug
 from boards.scoreticker import Scoreticker
+from boards.seriesticker import Seriesticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
@@ -157,6 +158,9 @@ class Boards:
 
     def scoreticker(self, data, matrix,sleepEvent):
         Scoreticker(data, matrix, sleepEvent).render()
+
+    def seriesticker(self, data, matrix,sleepEvent):
+        Seriesticker(data, matrix, sleepEvent).render()
 
     def standings(self, data, matrix,sleepEvent):
         #Try making standings a thread

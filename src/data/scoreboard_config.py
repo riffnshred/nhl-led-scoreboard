@@ -88,6 +88,10 @@ class ScoreboardConfig:
         self.preferred_teams_only = json["boards"]["scoreticker"]["preferred_teams_only"]
         self.scoreticker_rotation_rate = json["boards"]["scoreticker"]["rotation_rate"]
 
+        # Seriesticker
+        self.seriesticker_preferred_teams_only = json["boards"]["seriesticker"]["preferred_teams_only"]
+        self.seriesticker_rotation_rate = json["boards"]["seriesticker"]["rotation_rate"]
+
         # Standings
         self.preferred_standings_only = json["boards"]["standings"]["preferred_standings_only"]
         self.standing_type = json["boards"]["standings"]["standing_type"]

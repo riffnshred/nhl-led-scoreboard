@@ -93,6 +93,11 @@
       } 
     }
   },
+  "seriesticker":{
+    "table":{
+      "position":[0,22]
+    }
+  },
   "wx_clock": {
     "time": {
       "position": ["50%", "55%"],
