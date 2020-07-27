@@ -115,7 +115,7 @@ There are currently three different boards available:
 
 -   **Score Ticker**: A carousel that cycles through the games of the day.
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
--   **Standings**: Display the standings either by conference or by division. The Wildcard is a work in progress and will be available soon.
+-   **Standings**: Display the standings either by conference or by division. The Wildcard is currently not available, due to the NHL API not providing the info, this will probably be back for next season.
 -   **Clock**: a basic clock. (***NEW***: Now with the option to show basic weather information and weather alert. More details [here](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather))
 -   **Weather**: Display weather information and also provide weather alerts. 
 -   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
@@ -373,7 +373,7 @@ depending on the state of the scoreboard. Currently, there are only three boards
 | `scoreticker` | `preferred_teams_only`     | Bool   | `true`, `false`                                  | Choose between showing all the games of the day or just the ones your preferred teams are playing |
 |               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each games are shown on screen.                                                 |
 | `standings`   | `preferred_standings_only` | Bool   | `true`, `false`                                  | Choose between showing all the standings or only the the preferred division and conference.       |
-|               | `standing_type`            | String | `conference`, `division` , `wild_card`           | Option to choose the type of standings to display. `conference` if set by default.                |
+|               | `standing_type`            | String | `conference`, `division` , `wild_card`(Currently not available)           | Option to choose the type of standings to display. `conference` if set by default.                |
 |               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division |
 |               | `conference`               | String | `eastern`, `western` | Your preferred conference  |
 | `Clock`   | `Duration` | INT| `15`| The duration that the clock will be shown in Seconds  |
