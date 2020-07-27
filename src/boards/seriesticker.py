@@ -36,15 +36,24 @@ class Seriesticker:
             self.matrix.clear()
             series = Series(s,self.data)
             
-            banner_text = "Stanley Cup Final"
+            banner_text = "Stanley Cup"
             color_banner_bg = (200,200,200)
             color_banner_text = (0,0,0)
+            round_name = "Final" 
+
             if not self.data.current_round.number == 4:
                 color_conf = self.team_colors.color("{}.primary".format(series.conference))
                 banner_text = series.conference
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
-                self.matrix.draw_text((1, 7), self.data.current_round_name, font=self.font, fill=(255,255,255))
-                
+                round_name = self.data.current_round_name
+                self.show_indicator(self.index, self.num_series)
+            
+            self.matrix.draw_text(
+                (1, 7),
+                round_name,
+                font=self.font,
+                fill=(255,255,255)
+            )
             # Conference banner, Round Title
             self.matrix.draw_text(
                 (1, 1), 
@@ -56,7 +65,7 @@ class Seriesticker:
             )
             
             self.draw_series_table(series)
-            self.show_indicator(self.index, self.num_series)
+            
             self.matrix.render()
             self.index += 1
             self.sleepEvent.wait(10)
