@@ -160,7 +160,8 @@ class Boards:
         Scoreticker(data, matrix, sleepEvent).render()
 
     def seriesticker(self, data, matrix,sleepEvent):
-        Seriesticker(data, matrix, sleepEvent).render()
+        if data.status.is_playoff(data.today, data.playoffs):
+            Seriesticker(data, matrix, sleepEvent).render()
 
     def standings(self, data, matrix,sleepEvent):
         #Try making standings a thread

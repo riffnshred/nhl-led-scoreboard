@@ -83,38 +83,34 @@ def current_season():
 def playoff_info(season):
     data = nhl_api.data.get_playoff_data(season)
     parsed = data.json()
-    try: 
-        playoff_rounds = parsed["rounds"]
-    except NameError:
-        debug.error("No data for {} Playoff".format(season))
-        playoff_rounds = []
-    except KeyError:
-        debug.error("No data for {} Playoff".format(season))
-        playoff_rounds = []
-    
-
-    try:
-        default_round = parsed["defaultRound"]
-    except KeyError:
-        debug.error("No default round for {} Playoff. Setting it to 0".format(season))
-        default_round = 0
-
     season = parsed["season"]
-    output = {'season':season, 'default_round':default_round}
-    rounds = []
-    
-    for index in range(len(playoff_rounds)):
-        rounds.append(MultiLevelObject(playoff_rounds[index]))
+    output = {'season': season}
+    if parsed["rounds"]:
+        playoff_rounds = parsed["rounds"]
+        
+        try:
+            default_round = parsed["defaultRound"]
+            output['default_round'] = default_round
+        except KeyError:
+            debug.error("No default round for {} Playoff.".format(season))
+            default_round = 0
+            output['default_round'] = default_round
+        
+        rounds = {}
+        for r in range(len(playoff_rounds)):
+            rounds[str(playoff_rounds[r]["number"])] = MultiLevelObject(playoff_rounds[r])
+        
+        output['rounds'] = rounds
+    else:
+        debug.error("No data for {} Playoff".format(season))
+        playoff_rounds = False
 
-    output['rounds'] = rounds
     return output
 
 def series_record(seriesCode, season):
     data = data = nhl_api.data.get_series_record(seriesCode, season)
     parsed = data.json()
     return parsed["data"]
-
-
 
 def standings():
     standing_records = {}
@@ -293,7 +289,7 @@ class Playoff():
         self.season = data['season']
         self.default_round = data['default_round']
         self.rounds = data['rounds']
-    
+
     def __str__(self):
         return (f"Season: {self.season}, Current round: {self.default_round}")
 

@@ -39,8 +39,7 @@ class Seriesticker:
             banner_text = "Stanley Cup Final"
             color_banner_bg = (200,200,200)
             color_banner_text = (0,0,0)
-            
-            if not self.data.current_round == 4:
+            if not self.data.current_round.number == 4:
                 color_conf = self.team_colors.color("{}.primary".format(series.conference))
                 banner_text = series.conference
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
@@ -118,7 +117,6 @@ class Seriesticker:
                     winning_team_color = color_bottom_team
                     winning_bg_color = color_bottom_bg
 
-                
                 # Look loosing score text needs an offset
                 if len(str(scoreboard.winning_score)) == 2 and len(str(scoreboard.winning_score)) == 1:
                     offset_correction = 1

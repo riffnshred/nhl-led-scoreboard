@@ -98,7 +98,6 @@ class Data:
 
         # For update checker, True means new update available from github
         self.newUpdate = False
-        
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
@@ -407,32 +406,21 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                self.playoffs = nhl_api.playoff("20192020")
-                try:
-                    """ TODO:
-                            - Add figure playoff status for the Status module. 
-                    """
-
-                    self.current_round = self.playoffs.rounds[self.playoffs.default_round-1]
+                self.playoffs = nhl_api.playoff(self.status.season_id)
+                if self.playoffs.rounds:
+                    print(self.playoffs.rounds)
+                    self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
-                    print(self.playoffs.default_round)
-                except AttributeError:
-                    self.current_round = False
-                except IndexError:
-                    self.current_round = False
                 
                 try:
                     self.series = self.current_round.series
                     self.pref_series = prioritize_pref_series(filter_list_of_series(self.series, self.pref_teams), self.pref_teams)
                     if self.config.seriesticker_preferred_teams_only and self.pref_series:
                         self.series = self.pref_series
-                    
-                    
                 except AttributeError:
                     debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
-                
                 
                 break
 

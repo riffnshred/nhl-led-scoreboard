@@ -6,6 +6,7 @@ class Status:
     def __init__(self):
         game_status = game_status_info()
         self.season_info = current_season_info()['seasons'][0]
+        self.season_id = self.season_info["seasonId"]
         self.Preview = []
         self.Live = []
         self.GameOver = []
@@ -49,11 +50,15 @@ class Status:
             debug.error('The Argument provided for status.is_offseason is missing or not right.')
             return False
 
-    def is_playoff(self, date):
+    def is_playoff(self, date, playoff_obj):
         try:
+            # Get dates of the planned end of regular season and end of season
             regular_season_enddate = datetime.strptime(self.season_info['regularSeasonEndDate'], "%Y-%m-%d").date()
             end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
-            return regular_season_enddate < date <= end_of_season
+
+            return regular_season_enddate < date <= end_of_season and playoff_obj.rounds
         except TypeError:
             debug.error('The Argument provided for status.is_playoff is missing or not right.')
             return False
+
+    
