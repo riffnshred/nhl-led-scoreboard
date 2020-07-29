@@ -70,8 +70,12 @@ def team_info():
 
     return teams
 
-def player_info():
-    pass
+def player_info(playerId):
+    data = nhl_api.data.get_player(playerId)
+    parsed = data.json()
+    player = parsed["people"][0]
+
+    return MultiLevelObject(player)
 
 def status():
     data = nhl_api.data.get_game_status().json()

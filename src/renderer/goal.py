@@ -9,3 +9,4 @@ from utils import center_text, convert_date_format
 
 class GoalRenderer:
     def __init__(self, data, matrix, scoreboard):
+        pass

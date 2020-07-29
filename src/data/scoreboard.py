@@ -3,14 +3,33 @@ from data.periods import Periods
 from utils import convert_time
 
 
+def filter_scoring_plays(plays, away_id, home_id):
+    all_plays = plays.allPlays
+    scoring_plays_id = plays.scoringPlays
+    scoring_plays = []
+    away = []
+    home = []
+
+    # Filter the scoring plays out of all the plays
+    for i in scoring_plays_id:
+        scoring_plays.append(all_plays[i])
+
+    away = [ x for x in scoring_plays if x['team']['id'] == away_id]
+    home = [ x for x in scoring_plays if x['team']['id'] == home_id]
+
+    return away, home
+
+
 class Scoreboard:
     def __init__(self, overview, data):
         time_format = data.config.time_format
         linescore = overview.linescore
+        plays = overview.plays
         away = linescore.teams.away
         home = linescore.teams.home
         away_abbrev = data.teams_info[away.team.id].abbreviation
         home_abbrev = data.teams_info[home.team.id].abbreviation
+        away_scoring_plays, home_scoring_plays = self.filter_scoring_plays(plays,away.teams.id,home.teams.id)
         self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
                               away.numSkaters, away.goaliePulled)
         self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,

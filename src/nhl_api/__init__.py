@@ -22,6 +22,10 @@ def teams():
     """Return list of Info objects for each team"""
     return [nhl_api.info.Info(x) for x in nhl_api.info.team_info()]
 
+def player(playerId):
+    """Return an Info object of a player information"""
+    return nhl_api.info.player_info(playerId)
+
 
 def overview(game_id):
     """Return Overview object that contains game information."""
