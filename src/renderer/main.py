@@ -129,6 +129,7 @@ class MainRenderer:
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
+                print('hello?')
                 self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
@@ -206,14 +207,14 @@ class MainRenderer:
             self.away_score = away_goals
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
-            self._draw_goal(away_id, away_name)
+            self._draw_goal_animation(away_id, away_name)
         if home_score < home_goals:
             self.home_score = home_goals
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
-            self._draw_goal(home_id, home_name)
+            self._draw_goal_animation(home_id, home_name)
 
-    def _draw_goal(self, id, name):
+    def _draw_goal_animation(self, id, name):
         debug.info('Score by team: ' + name)
 
         # Get the list of gif's under the preferred and opposing directory
@@ -246,7 +247,7 @@ class MainRenderer:
                 frame_nub = 0
                 im.seek(frame_nub)
 
-            self.matrix.draw_image((0, 0), im,"center")
+            self.matrix.draw_image((0, 0), im)
             self.matrix.render()
 
             frame_nub += 1

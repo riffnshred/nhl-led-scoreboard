@@ -70,6 +70,9 @@ def team_info():
 
     return teams
 
+def player_info():
+    pass
+
 def status():
     data = nhl_api.data.get_game_status().json()
     return data
