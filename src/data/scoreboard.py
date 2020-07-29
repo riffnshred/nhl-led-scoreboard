@@ -24,16 +24,23 @@ class Scoreboard:
     def __init__(self, overview, data):
         time_format = data.config.time_format
         linescore = overview.linescore
-        plays = overview.plays
         away = linescore.teams.away
         home = linescore.teams.home
         away_abbrev = data.teams_info[away.team.id].abbreviation
         home_abbrev = data.teams_info[home.team.id].abbreviation
-        away_scoring_plays, home_scoring_plays = self.filter_scoring_plays(plays,away.teams.id,home.teams.id)
+
+        away_goals_details = []
+        home_goals_details = []
+
+        if hasattr(overview,"plays"):
+            plays = overview.plays
+            away_scoring_plays, home_scoring_plays = filter_scoring_plays(plays,away.team.id,home.team.id)
+
+
         self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
-                              away.numSkaters, away.goaliePulled)
+                              away.numSkaters, away.goaliePulled, away_goals_details)
         self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
-                              home.numSkaters, home.goaliePulled)
+                              home.numSkaters, home.goaliePulled, home_goals_details)
 
         self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")
         self.start_time = convert_time(overview.game_date).strftime(time_format)
@@ -57,3 +64,7 @@ class Scoreboard:
             self.periods.clock
         )
         return output
+
+class Goals:
+    def __init__(self, goal):
+        pass

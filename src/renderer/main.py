@@ -129,7 +129,6 @@ class MainRenderer:
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
-                print('hello?')
                 self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
@@ -214,17 +213,22 @@ class MainRenderer:
                 return
             self._draw_goal_animation(home_id, home_name)
 
-    def _draw_goal_animation(self, id, name):
+    def _draw_goal_animation(self, id=14, name="test"):
         debug.info('Score by team: ' + name)
 
         # Get the list of gif's under the preferred and opposing directory
         preferred_gifs = glob.glob("assets/animations/preferred/*.gif")
         opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
 
-        # Set opposing team goal animation here
-        filename = random.choice(opposing_gifs)
-        debug.info("Opposing animation is: " + filename)
-        if id in self.data.pref_teams:
+        filename = "assets/animations/goal_light_animation.gif"
+        
+        # Use alternate animations if there is any in the respective folder
+        if opposing_gifs:
+            # Set opposing team goal animation here
+            filename = random.choice(opposing_gifs)
+            debug.info("Opposing animation is: " + filename)
+
+        if id in self.data.pref_teams and preferred_gifs:
             # Set your preferred team goal animation here
             filename = random.choice(preferred_gifs)
             debug.info("Preferred animation is: " + filename)
@@ -247,7 +251,7 @@ class MainRenderer:
                 frame_nub = 0
                 im.seek(frame_nub)
 
-            self.matrix.draw_image((0, 0), im)
+            self.matrix.draw_image(("50%", 0), im, "center")
             self.matrix.render()
 
             frame_nub += 1
