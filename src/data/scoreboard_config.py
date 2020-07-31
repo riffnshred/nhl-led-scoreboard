@@ -78,6 +78,7 @@ class ScoreboardConfig:
         self.wxalert_alert_duration = json["boards"]["wxalert"]["alert_duration"]
         # Show any alerts on clock
         self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
+        self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
         
 
 
