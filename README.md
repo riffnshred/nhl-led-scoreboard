@@ -50,7 +50,7 @@ Depending on the situation, the scoreboard will operate in a different state. Fo
 -   **Post-game**: Once the game is over, the scoreboard will rotate through a list of boards set for the Post-game state by the user in the config file.
 
 ### Board System
-<img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_scoreticker.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_team_summary.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/board_standings.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/clock.png">
+<img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_scoreticker.png"> <img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_team_summary.png"> <img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/board_standings.png"> <img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/clock.png">
 
 The board system allows the user to choose what to display depending on the state of the scoreboard. For example: While the game I'm watching is in the intermission state, I like to see the score ticker, which is showing the score of the other games.
 
@@ -82,7 +82,7 @@ to use it to adjust the brightness.
 ### Indicators
 Because of its size, I programmed some indicators to display more information without filling up the screen and create an information overload issue. Please read the [Indicators](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Indicators) page in the Wiki section for more details.
 
-<img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="210" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
+<img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="200" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="200" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
 
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.

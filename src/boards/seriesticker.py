@@ -55,7 +55,7 @@ class Seriesticker:
                 fill=(255,255,255)
             )
             # Conference banner, Round Title
-            self.matrix.draw.rectangle([0,0,64,6], fill=color_banner_bg)
+            self.matrix.draw.rectangle([0,0,64,5], fill=color_banner_bg)
             self.matrix.draw_text(
                 (1, 1), 
                 banner_text, 
