@@ -14,7 +14,7 @@ class nwsWxAlerts(object):
         self.data = data
         self.sleepEvent = sleepEvent
         self.time_format = data.config.time_format
-        self.weather_frequency = data.config.weather_update_freq
+        self.alert_frequency = data.config.wxalert_update_freq
         self.weather_alert = 0
         # Date format 2020-04-19T13:56:00-05:00
         self.alert_date_format = "%Y-%m-%dT%H:%M:%S%z"
@@ -110,14 +110,20 @@ class nwsWxAlerts(object):
 
                     # Only create an alert for Immediate and Expected?
 
-                    self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity']]
-                    # Only interrupt the first time
-                    if self.weather_alert == 0 and self.data.wx_updated:
-                        self.data.wx_alert_interrupt = True
-                        self.sleepEvent.set()
-                    self.weather_alert += 1
+                    if wx_type != "statement":
+                        self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity']]
+                        # Only interrupt the first time
+                        if self.weather_alert == 0 and self.data.wx_updated:
+                            self.data.wx_alert_interrupt = True
+                            self.sleepEvent.set()
+                        self.weather_alert += 1
 
-                    debug.info(self.data.wx_alerts)
+                        debug.info(self.data.wx_alerts)
+                    else:
+                        self.data.wx_alert_interrupt = False
+                        self.weather_alert = 0
+                        self.data.wx_alerts = []
+                        debug.info("No active NWS alerts in your area")
                 
                 else:
                     self.data.wx_alert_interrupt = False
@@ -127,4 +133,4 @@ class nwsWxAlerts(object):
 
                 
                 # Run every 'x' minutes
-            sleep(60 * self.weather_frequency)
+            sleep(60 * self.alert_frequency)

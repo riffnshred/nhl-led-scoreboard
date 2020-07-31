@@ -10,7 +10,7 @@ class ecWxAlerts(object):
         self.data = data
         self.sleepEvent = sleepEvent
         self.time_format = data.config.time_format
-        self.weather_frequency = data.config.weather_update_freq
+        self.alert_frequency = data.config.wxalert_update_freq
         self.weather_alert = 0
         # Date format Friday April 03, 2020 at 04:36 CDT
         self.alert_date_format = "%A %B %d, %Y at %H:%M %Z"
@@ -34,7 +34,7 @@ class ecWxAlerts(object):
                 pass
             
             
-
+            debug.info("Last Alert: {0}".format(self.data.wx_alerts))
             # Check if there's more than a length of 5 returned back as if there's
             # No alerts, the dictionary still comes back with empty values for 
             # warning, watch, advisory, statements and endings
@@ -117,8 +117,20 @@ class ecWxAlerts(object):
                 #Find the latest alert time to set what the alert should be shown
                 #debug.info(alerts)
                 alerts.sort(key = lambda x: x[2],reverse=True)
+                
+
+                if alerts[0][0] == "Severe Thunderstorm":
+                    alerts[0][0] = "Svr T-Storm"
+                if alerts[0][0] == "Freezing Rain":
+                    alerts[0][0] = "Frzn Rain"
+                if alerts[0][0] == "Freezing Drizzle":
+                    alerts[0][0] = "Frzn Drzl"
+                
                 #debug.info(alerts)
-                self.data.wx_alerts = alerts[0]
+
+                if self.data.wx_alerts != alerts[0]:
+                    self.data.wx_alerts = alerts[0]
+                    self.weather_alert = 0
 
                 if wx_num_endings > 0:
                     ending_date = curr_alerts["endings"]["value"][i]["date"]
@@ -139,7 +151,7 @@ class ecWxAlerts(object):
                 #     self.weather_alert = 0
 
                 if len(self.data.wx_alerts) > 0:
-                    debug.info(self.data.wx_alerts)
+                    debug.info("Current Alert: {0}".format(self.data.wx_alerts))
 
                 if wx_num_endings == 0:
                     if self.weather_alert == 0:
@@ -154,4 +166,4 @@ class ecWxAlerts(object):
                 self.data.wx_alerts.clear()
                 self.weather_alert = 0
             # Run every 'x' minutes
-            sleep(60 * self.weather_frequency)
+            sleep(60 * self.alert_frequency)

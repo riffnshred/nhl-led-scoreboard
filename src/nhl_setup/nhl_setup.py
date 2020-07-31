@@ -14,7 +14,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.3.0 - Wx version"
+SCRIPT_VERSION = "1.3.1"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -495,7 +495,7 @@ def main():
             'name': 'location',
             'qmark': qmark,
             'message': 'Your location to override latitude and longitude lookup via IP (City, State or City, Province)',
-            'default': get_default_value(default_config,['preferences','location'],"string") or 'Winnipeg, MB'
+            'default': get_default_value(default_config,['preferences','location'],"string")
         }
     ]
     get_location = prompt(location,style=custom_style_dope)
@@ -580,7 +580,7 @@ def main():
     temp_dict = {}
 
     while state_index < len(states):
-        board_list = ['clock','weather','scoreticker','seriesticker','standings','team_summary','covid_19']
+        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19']
         
         boards_selected = []
         board = None
@@ -877,6 +877,7 @@ def main():
     boards_config['boards'].update(weather = use_wx)
 
     if use_wx['enabled']:
+        wx = True
 
         wx_questions = [
 
@@ -884,38 +885,8 @@ def main():
                 'type': 'input',
                 'name': 'units',
                 'qmark': qmark,
-                'message': 'Units to display? (mertic or imperial)',
+                'message': 'Units to display? (metric or imperial)',
                 'default': get_default_value(default_config,['boards','weather','units'],"string") or "metric"
-            },
-            {
-                'type': 'input',
-                'name': 'duration',
-                'qmark': qmark,
-                'validate': lambda val: True if val.isdecimal() and int(val) >= 30 else 'Must be at least 30 seconds',
-                'filter': lambda val: int(val),
-                'message': 'How long to show weather board (minimum 30 seconds)?',
-                'default': get_default_value(default_config,['boards','weather','duration'],"int") or '30'
-            },
-            {
-                'type': 'input',
-                'name': 'data_feed',
-                'qmark': qmark,
-                'message': 'Which weather data feed for current observations? (EC or OWM)\nEC=Environment Canada\nOWM=Open Weather Map (requires a key: works for all locations)',
-                'default': get_default_value(default_config,['boards','weather','data_feed'],"string") or 'EC'
-            },
-            {
-                'type': 'input',
-                'name': 'alert_feed',
-                'qmark': qmark,
-                'message': 'Which weather feed for alerts? (EC or NWS)\nEC=Environment Canada\nNWS=National Weather Service (US only)',
-                'default': get_default_value(default_config,['boards','weather','alert_feed'],"string") or 'EC'
-            },
-            {
-                'type': 'input',
-                'name': 'owm_apikey',
-                'qmark': qmark,
-                'message': 'OpenWeatherMap API key if using OWM as data feed: (get key from https://openweathermap.org/appid)',
-                'default': get_default_value(default_config,['boards','weather','owm_apikey'],"string") or ''
             },
             {
                 'type': 'input',
@@ -927,34 +898,36 @@ def main():
                 'default': get_default_value(default_config,['boards','weather','update_freq'],"int") or '5'
             },
             {
-            'type': 'confirm',
-            'name': 'show_alerts',
-            'qmark': qmark,
-            'message': 'Show weather alerts?',
-            'default': get_default_value(default_config,['boards','weather','show_alerts'],"bool") or True
-            },
-            {
-            'type': 'confirm',
-            'name': 'alert_title',
-            'qmark': qmark,
-            'message': 'On alert board, display title of alert (warning, watch, advisory)?',
-            'default': get_default_value(default_config,['boards','weather','alert_title'],"bool") or True
-            },
-            {
-            'type': 'confirm',
-            'name': 'scroll_alert',
-            'qmark': qmark,
-            'message': 'On alert board, scroll alert?',
-            'default': get_default_value(default_config,['boards','weather','scroll_alert'],"bool") or True
+                'type': 'list',
+                'name': 'view',
+                'qmark': qmark,
+                'message': 'Weather observation display',
+                'choices': ['full','summary'],
+                'default': get_default_value(default_config,['boards','weather','view'],"string") or "full"
             },
             {
                 'type': 'input',
-                'name': 'alert_duration',
+                'name': 'duration',
                 'qmark': qmark,
-                'validate': lambda val: True if val.isdecimal() and int(val) >= 5 else 'Must be a number and greater or equal than 5',
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 30 else 'Must be at least 30 seconds',
                 'filter': lambda val: int(val),
-                'message': 'How long (in seconds) to show the alert board',
-                'default': get_default_value(default_config,['boards','weather','alert_duration'],"int") or '5'
+                'message': 'How long to show weather board (minimum 30 seconds)?',
+                'default': get_default_value(default_config,['boards','weather','duration'],"int") or '30'
+            },
+            {
+                'type': 'list',
+                'name': 'data_feed',
+                'qmark': qmark,
+                'choices': ['EC','OWM'],
+                'message': 'Which weather data feed for current observations? EC=Environment Canada\nOWM=Open Weather Map (requires a key: works for all locations)',
+                'default': get_default_value(default_config,['boards','weather','data_feed'],"string") or 'EC'
+            },
+            {
+                'type': 'input',
+                'name': 'owm_apikey',
+                'qmark': qmark,
+                'message': 'OpenWeatherMap API key if using OWM as data feed: (get key from https://openweathermap.org/appid)',
+                'default': get_default_value(default_config,['boards','weather','owm_apikey'],"string") or ''
             },
             {
             'type': 'confirm',
@@ -967,8 +940,91 @@ def main():
         
         wx_answers = prompt(wx_questions,style=custom_style_dope)
         boards_config['boards']['weather'].update(wx_answers)
+        
     else:
+        wx = False
         boards_config['boards']['weather'].update(wx_default)
+        boards_config['boards']['weather'].update(enabled = wx)
+
+
+    #Get default config
+    alerts_default = get_default_value(default_config,['boards','wxalert'],"string")
+
+    alerts_enabled = [
+        {
+            'type': 'confirm',
+            'name': 'show_alerts',
+            'qmark': qmark,
+            'message': 'Show weather alerts?',
+            'default': get_default_value(default_config,['boards','wxalert','show_alerts'],"bool") or True
+            }
+    ]
+
+    use_alerts = prompt(alerts_enabled,style=custom_style_dope)
+
+    boards_config['boards'].update(wxalert = use_alerts)
+
+    if use_alerts['show_alerts']:
+        alerts = True
+        alerts_questions = [
+            {
+                'type': 'list',
+                'name': 'alert_feed',
+                'qmark': qmark,
+                'choices': ['EC','NWS'],
+                'message': 'Which weather feed for alerts? EC=Environment Canada\nNWS=National Weather Service (US only)',
+                'default': get_default_value(default_config,['boards','wxalert','alert_feed'],"string") or 'EC'
+            },
+            {
+            'type': 'confirm',
+            'name': 'alert_title',
+            'qmark': qmark,
+            'message': 'On alert board, display title of alert (warning, watch, advisory)?',
+            'default': get_default_value(default_config,['boards','wxalert','alert_title'],"bool") or True
+            },
+            {
+            'type': 'confirm',
+            'name': 'scroll_alert',
+            'qmark': qmark,
+            'message': 'On alert board, scroll alert?',
+            'default': get_default_value(default_config,['boards','wxalert','scroll_alert'],"bool") or True
+            },
+            {
+                'type': 'input',
+                'name': 'alert_duration',
+                'qmark': qmark,
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 5 else 'Must be a number and greater or equal than 5',
+                'filter': lambda val: int(val),
+                'message': 'How long (in seconds) to show the alert board',
+                'default': get_default_value(default_config,['boards','wxalert','alert_duration'],"int") or '5'
+            },
+            {
+                'type': 'input',
+                'name': 'update_freq',
+                'qmark': qmark,
+                'validate': lambda val: True if val.isdecimal() and int(val) >= 5 else 'Must be a number and greater or equal than 5',
+                'filter': lambda val: int(val),
+                'message': 'How often to update alert feed in minutes?(minimum 5)',
+                'default': get_default_value(default_config,['boards','wxalert','update_freq'],"int") or '5'
+            },
+            {
+            'type': 'confirm',
+            'name': 'show_on_clock',
+            'qmark': qmark,
+            'message': 'Display alert notification (Fred) on clock?',
+            'default': get_default_value(default_config,['boards','wxalert','show_on_clock'],"bool") or True
+            },
+
+        ]
+
+        alerts_answers = prompt(alerts_questions,style=custom_style_dope)
+        boards_config['boards']['wxalert'].update(alerts_answers)
+        
+    else:
+        alerts = False
+        boards_config['boards']['wxalert'].update(alerts_default)
+        boards_config['boards']['wxalert'].update(show_alerts = alerts)
+
 
     nhl_config.update(boards_config)
 
@@ -1136,7 +1192,7 @@ def main():
                 'name': 'state_triggered1',
                 'qmark': qmark,
                 'message': 'Pick board to display on button press: ',
-                'choices': ['clock','weather','scoreticker','seriesticker','standings','team_summary','covid_19'],
+                'choices': ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19'],
                 'default': get_default_value(default_config,['sbio','pushbutton','state_triggered1'],"string") or 'clock'
             },
             {

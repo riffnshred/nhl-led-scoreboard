@@ -56,23 +56,30 @@ class ScoreboardConfig:
 
         # Weather board preferences
         self.weather_enabled = json["boards"]["weather"]["enabled"]
+        self.weather_view = json["boards"]["weather"]["view"]
         self.weather_units = json["boards"]["weather"]["units"]
         self.weather_duration = json["boards"]["weather"]["duration"]
         self.weather_data_feed = json["boards"]["weather"]["data_feed"]
-        self.weather_alert_feed = json["boards"]["weather"]["alert_feed"]
         self.weather_owm_apikey = json["boards"]["weather"]["owm_apikey"]
         self.weather_update_freq = json["boards"]["weather"]["update_freq"]
+        # Show curr temp, humidity on clock
+        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+
+        #Weather Alerts Preferences
+        self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
-        self.weather_show_alerts = json["boards"]["weather"]["show_alerts"] 
+        self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"] 
         # Display on top and bottom bar the severity (for US) and type
-        self.weather_alert_title = json["boards"]["weather"]["alert_title"]
+        self.wxalert_alert_title = json["boards"]["wxalert"]["alert_title"]
         # Display static alert or scrolling
-        self.weather_scroll_alert = json["boards"]["weather"]["scroll_alert"]
+        self.wxalert_scroll_alert = json["boards"]["wxalert"]["scroll_alert"]
         # How long to display static alert in seconds
-        self.weather_alert_duration = json["boards"]["weather"]["alert_duration"]
-        # Show curr temp, humidity and any alerts on clock
-        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+        self.wxalert_alert_duration = json["boards"]["wxalert"]["alert_duration"]
+        # Show any alerts on clock
+        self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
+        self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
+        
 
 
         # States

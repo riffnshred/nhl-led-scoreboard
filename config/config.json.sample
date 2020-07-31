@@ -72,18 +72,23 @@
 		},
 		"weather": {
 			"enabled": true,
+			"view": "full",
 			"units": "metric",
 			"duration": 60,
 			"data_feed": "EC",
-			"alert_feed": "EC",
 			"owm_apikey": "",
 			"update_freq": 5,
-			"show_alerts": true,
-			"alert_title": true,
-			"scroll_alert": true,
-			"alert_duration": 5,
 			"show_on_clock": true
-		}	
+		},
+        "wxalert": {
+            "alert_feed": "EC",
+            "update_freq": 5,
+            "show_alerts": true,
+            "alert_title": true,
+            "scroll_alert": true,
+            "alert_duration": 5,
+			"show_on_clock": true
+        }	
 	},
 	"sbio": {
 		"dimmer": {
