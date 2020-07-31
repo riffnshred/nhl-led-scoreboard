@@ -4,8 +4,13 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.."
 
+# Install the latest version of pip3
+sudo apt-get update
+sudo apt install git python3-pip
+
 # Install the latest version of Python 3
-sudo apt-get update && sudo apt-get install python3-dev
+sudo apt-get install python3-dev
+
 sudo apt-get install python3-setuptools
 sudo apt-get install build-essential
 
@@ -13,7 +18,6 @@ sudo apt-get install build-essential
 git submodule update --init --recursive
 git config submodule.matrix.ignore all
 
-sudo apt-get update
 sudo apt-get -y install python3-dev python3-pillow
 
 cd submodules/matrix || exit

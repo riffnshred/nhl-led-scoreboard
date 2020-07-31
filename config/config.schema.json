@@ -395,6 +395,46 @@
                         }
                     }
                 },
+                "seriesticker": {
+                    "$id": "#/properties/boards/properties/seriesticker",
+                    "type": "object",
+                    "title": "seriesticker",
+                    "description": "Just like the scoreticker, this is showing playoff series status with a table sporting each game scores and result.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "preferred_teams_only": false,
+                            "rotation_rate": 5
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "preferred_teams_only",
+                        "rotation_rate"
+                    ],
+                    "properties": {
+                        "preferred_teams_only": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/preferred_teams_only",
+                            "type": "boolean",
+                            "title": "preferred_teams_only",
+                            "description": "Choose between showing all series of the current round of playoff or just the ones your preferred teams are part of.",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "rotation_rate": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/rotation_rate",
+                            "type": "integer",
+                            "title": "rotation_rate",
+                            "description": "Duration at which each series are shown on screen.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        }
+                    }
+                },
                 "standings": {
                     "$id": "#/properties/boards/properties/standings",
                     "type": "object",

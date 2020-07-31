@@ -580,7 +580,7 @@ def main():
     temp_dict = {}
 
     while state_index < len(states):
-        board_list = ['clock','weather','scoreticker','standings','team_summary','covid_19']
+        board_list = ['clock','weather','scoreticker','seriesticker','standings','team_summary','covid_19']
         
         boards_selected = []
         board = None
@@ -630,6 +630,31 @@ def main():
     scoreticker_answers = prompt(scoreticker_questions,style=custom_style_dope)
     
     boards_config['boards']['scoreticker'] = scoreticker_answers
+
+    # Get seriesticker config
+
+    seriesticker_questions = [
+        {
+            'type': 'confirm',
+            'name': 'preferred_teams_only',
+            'qmark': qmark,
+            'message': 'Show preferred teams only? (Show only your preferred team or all the series of the playoff)',
+            'default': get_default_value(default_config,['boards','seriesticker','preferred_teams_only'],"bool")
+        },
+        {
+            'type': 'input',
+            'name': 'rotation_rate',
+            'qmark': qmark,
+            'message': 'Board rotation rate? (How often do you want to rotate the series shown)',
+            'validate': lambda val: True if val.isdecimal() and int(val) >= 1 else 'Must be a number and greater or equal than 1',
+            'filter': lambda val: int(val),
+            'default': get_default_value(default_config,['boards','seriesticker','rotation_rate'],"int") or '5'
+        }
+    ]
+
+    seriesticker_answers = prompt(seriesticker_questions,style=custom_style_dope)
+    
+    boards_config['boards']['seriesticker'] = seriesticker_answers
 
     standings_questions = [
         {
@@ -1111,7 +1136,7 @@ def main():
                 'name': 'state_triggered1',
                 'qmark': qmark,
                 'message': 'Pick board to display on button press: ',
-                'choices': ['clock','weather','scoreticker','standings','team_summary','covid_19'],
+                'choices': ['clock','weather','scoreticker','seriesticker','standings','team_summary','covid_19'],
                 'default': get_default_value(default_config,['sbio','pushbutton','state_triggered1'],"string") or 'clock'
             },
             {
