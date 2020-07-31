@@ -279,22 +279,22 @@
     },
     "watch_us": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },
     "watch_ca": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     }, 
     "advisory_us": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },   
     "advisory_ca": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },
     "title_top": {

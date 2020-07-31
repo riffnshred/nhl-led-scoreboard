@@ -64,6 +64,8 @@ def args():
     parser.add_argument("--led-multiplexing", action="store",
                         help="Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)",
                         default=0, type=int)
+    parser.add_argument("--updatecheck", action="store", help="Check for updates (Default: False)", default=False, type=bool)
+    parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
 
     return parser.parse_args()
 

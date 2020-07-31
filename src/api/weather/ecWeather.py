@@ -118,10 +118,17 @@ class ecWxWorker(object):
 
                 self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
 
+                wind_bearing = curr_cond.get("wind_bearing").get("value","0")
+                if wind_bearing == None:
+                    wind_bearing = "0"
+                    
+                winddir = degrees_to_direction(float(wind_bearing))
 
-                winddir = degrees_to_direction(float(curr_cond.get("wind_bearing").get("value","0")))
-
-                curr_windspeed = float(curr_cond.get("wind_speed").get("value","0.0"))
+                wind_speed = curr_cond.get("wind_speed").get("value","0.0")
+                if wind_speed == None:
+                    wind_speed = "0.0"
+                    
+                curr_windspeed = float(wind_speed)
                 
                 if self.data.config.weather_units == "imperial":
                     curr_windspeed = round(wind_mph(curr_windspeed),1)

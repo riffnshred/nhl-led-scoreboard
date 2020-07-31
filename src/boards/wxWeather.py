@@ -15,6 +15,8 @@ class wxWeather:
 
         self.wxfont = data.config.layout.wxfont
 
+        self.view = data.config.weather_view
+
         self.matrix = matrix
 
         self.sleepEvent = sleepEvent
@@ -47,20 +49,25 @@ class wxWeather:
                 self.WxDrawTemp(display_sleep)
                 #self.sleepEvent.wait(display_sleep)
                 display_wx += display_sleep
-                self.WxDrawWind()
-                self.sleepEvent.wait(display_sleep)
-                display_wx += display_sleep
-                self.WxDrawPrecip_EC()
-                self.sleepEvent.wait(display_sleep)
+                if self.view.lower() == "full":
+                    self.WxDrawWind()
+                    self.sleepEvent.wait(display_sleep)
+                    display_wx += display_sleep
+                    self.WxDrawPrecip_EC()
+                    self.sleepEvent.wait(display_sleep)
 
-                if len(self.data.wx_alerts) > 0:
-                    if self.data.wx_alerts[1]!="ended":
-                        self.WxDrawAlert()
-                        self.sleepEvent.wait(display_sleep)
+                # Alerts now are on their own selectable board, wxalert
+                #if len(self.data.wx_alerts) > 0:
+                #    if self.data.wx_alerts[1]!="ended":
+                #        self.WxDrawAlert()
+                #        self.sleepEvent.wait(display_sleep)
 
                 display_wx += display_sleep
         else:
-            debug.error("Weather feed has not updated yet....")
+            if self.data.config.weather_enabled:
+                debug.error("Weather feed has not updated yet....")
+            else:
+                debug.error("Weather board not enabled in config.json.  Is enabled set to True?")
         
     def WxDrawTemp(self,display_loop):
 
@@ -171,10 +178,11 @@ class wxWeather:
             self.data.wx_curr_wind[4]
         )
 
-        self.matrix.draw_text_layout(
-            self.layout3.tendency,
-            self.data.wx_curr_wind[5]
-        )
+        if self.data.config.weather_data_feed.lower() == "ec":
+            self.matrix.draw_text_layout(
+                self.layout3.tendency,
+                self.data.wx_curr_wind[5]
+            )
 
         self.matrix.draw_text_layout(
             self.layout3.dewpoint,

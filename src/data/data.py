@@ -71,6 +71,7 @@ class Data:
 
         # For update checker, True means new update available from github
         self.newUpdate = False
+        self.UpdateRepo = "riffnshred/nhl-led-scoreboard"
         
 
         # Flag to determine when to refresh data
