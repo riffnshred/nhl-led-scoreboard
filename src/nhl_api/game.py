@@ -189,7 +189,11 @@ class Overview(object):
         # calculate the winning team
         if self.home_score > self.away_score:
             self.w_team = self.home_team_id
+            self.w_score = self.home_score
             self.l_team = self.away_team_id
+            self.l_score = self.away_score
         elif self.away_score > self.home_score:
             self.w_team = self.away_team_id
+            self.w_score = self.away_score
             self.l_team = self.home_team_id
+            self.l_score = self.home_score

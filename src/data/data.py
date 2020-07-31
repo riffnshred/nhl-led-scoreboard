@@ -1,3 +1,9 @@
+"""
+    TODO: How this whole system works is getting complex for nothing and I need to recode this by sorting into seperate classes instead of having everything into a
+          single one.
+"""
+
+
 from datetime import datetime, timedelta
 from time import sleep
 import debug
@@ -7,6 +13,8 @@ from data.status import Status
 from utils import get_lat_lng
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
+
+
 
 
 def filter_list_of_games(games, teams):
@@ -90,6 +98,7 @@ class Data:
 
         # For update checker, True means new update available from github
         self.newUpdate = False
+        self.UpdateRepo = "riffnshred/nhl-led-scoreboard"
         
 
         # Flag to determine when to refresh data
@@ -399,20 +408,42 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                self.playoffs = nhl_api.playoff()
-                self.current_round =  3 #self.playoffs.default_round
-                self.pref_series = filter_list_of_series(self.playoffs.rounds[0].series, self.pref_teams)
-                self.pref_series = prioritize_pref_series(self.pref_series, self.pref_teams)
-                for i in range(len(self.pref_series)):
-                    print(self.pref_series[i].names.matchupShortName)
+                # Get the plaoffs data from the nhl api
+                self.playoffs = nhl_api.playoff(self.status.season_id)
+                # Check if there is any rounds avaialable and grab the most recent one available.
+                if self.playoffs.rounds:
+                    self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
+                    self.current_round_name = self.current_round.names.name
+                    if self.current_round_name == "Stanley Cup Qualifier":
+                        self.current_round_name = "Qualifier"
+                
+                try:
+                    # Grab the series of the current round of playoff.
+                    self.series = self.current_round.series
+
+                    # Check if prefered team are part of the current round of playoff
+                    self.pref_series = prioritize_pref_series(filter_list_of_series(self.series, self.pref_teams), self.pref_teams)
+
+                    # If the user as set to show his favorite teams in the seriesticker
+                    if self.config.seriesticker_preferred_teams_only and self.pref_series:
+                        self.series = self.pref_series
+                except AttributeError:
+                    debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
+                
                 break
 
             except ValueError as error_message:
                 self.network_issues = True
-                debug.error("Failed to refresh the Standings. {} attempt remaining.".format(attempts_remaining))
+                debug.error("Failed to refresh the list of Series. {} attempt remaining.".format(attempts_remaining))
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+                
+    def series_by_conference():
+        """
+            TODO:reorganize the list of series by conference and return the list
+        """
+        pass
                 
     #
     # Offdays

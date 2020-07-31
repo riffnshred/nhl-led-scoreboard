@@ -395,6 +395,46 @@
                         }
                     }
                 },
+                "seriesticker": {
+                    "$id": "#/properties/boards/properties/seriesticker",
+                    "type": "object",
+                    "title": "seriesticker",
+                    "description": "Just like the scoreticker, this is showing playoff series status with a table sporting each game scores and result.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "preferred_teams_only": false,
+                            "rotation_rate": 5
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "preferred_teams_only",
+                        "rotation_rate"
+                    ],
+                    "properties": {
+                        "preferred_teams_only": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/preferred_teams_only",
+                            "type": "boolean",
+                            "title": "preferred_teams_only",
+                            "description": "Choose between showing all series of the current round of playoff or just the ones your preferred teams are part of.",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "rotation_rate": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/rotation_rate",
+                            "type": "integer",
+                            "title": "rotation_rate",
+                            "description": "Duration at which each series are shown on screen.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        }
+                    }
+                },
                 "standings": {
                     "$id": "#/properties/boards/properties/standings",
                     "type": "object",
@@ -653,33 +693,25 @@
                 "default": {},
                 "examples": [
                     {
-                        "scroll_alert": true,
                         "enabled": true,
-                        "alert_feed": "EC",
-                        "alert_duration": 5,
+                        "view": "full",
                         "data_feed": "EC",
                         "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
-                        "alert_title": true,
                         "units": "metric",
                         "update_freq": 5,
                         "duration": 30,
-                        "show_alerts": true,
                         "show_on_clock": true
                     }
                 ],
                 "additionalProperties": true,
                 "required": [
                     "enabled",
+                    "view",
                     "units",
                     "duration",
                     "data_feed",
-                    "alert_feed",
                     "owm_apikey",
                     "update_freq",
-                    "show_alerts",
-                    "alert_title",
-                    "scroll_alert",
-                    "alert_duration",
                     "show_on_clock"
                 ],
                 "properties": {
@@ -693,11 +725,21 @@
                             true
                         ]
                     },
+                    "view": {
+                        "$id": "#/properties/weather/properties/view",
+                        "type": "string",
+                        "title": "view",
+                        "description": "Weather board full (3 page) or summary view (1 page)",
+                        "default": "full",
+                        "examples": [
+                            "full"
+                        ]
+                    },
                     "units": {
                         "$id": "#/properties/weather/properties/units",
                         "type": "string",
                         "title": "units ",
-                        "description": "Units to use for displaying the weather(mtric or imperial)",
+                        "description": "Units to use for displaying the weather(metric or imperial)",
                         "default": "",
                         "examples": [
                             "metric"
@@ -723,16 +765,6 @@
                             "EC"
                         ]
                     },
-                    "alert_feed": {
-                        "$id": "#/properties/weather/properties/alert_feed",
-                        "type": "string",
-                        "title": "alert_feed",
-                        "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
-                        "default": "",
-                        "examples": [
-                            "EC"
-                        ]
-                    },
                     "owm_apikey": {
                         "$id": "#/properties/weather/properties/owm_apikey",
                         "type": "string",
@@ -741,6 +773,66 @@
                         "default": "",
                         "examples": [
                             "9ffxd195ax52a315xaed823xfcf4cdxf"
+                        ]
+                    },
+                    "update_freq": {
+                        "$id": "#/properties/weather/properties/update_freq",
+                        "type": "integer",
+                        "title": "update_freq ",
+                        "description": "How often in minutes to refresh the weather and alerts feeds.",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "show_on_clock": {
+                        "$id": "#/properties/weather/properties/show_on_clock",
+                        "type": "boolean",
+                        "title": "show_on_clock",
+                        "description": "Add the last observed temperature and humidity to the bottom of the clock board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    }
+                }
+            },
+            "wxalert": {
+                "$id": "#/properties/wxalert",
+                "type": "object",
+                "title": "wxalert",
+                "description": "Settings for the alerts data provider",
+                "default": {},
+                "examples": [
+                    {
+                        "scroll_alert": true,
+                        "alert_feed": "EC",
+                        "alert_duration": 5,
+                        "alert_title": true,
+                        "update_freq": 5,
+                        "show_on_clock": true,
+                        "show_alerts": true
+                    }
+                ],
+                "additionalProperties": true,
+                "required": [
+                    "alert_feed",
+                    "update_freq",
+                    "show_alerts",
+                    "alert_title",
+                    "scroll_alert",
+                    "show_on_clock",
+                    "alert_duration"
+                ],
+                "properties": {
+                    "alert_feed": {
+                        "$id": "#/properties/weather/properties/alert_feed",
+                        "type": "string",
+                        "title": "alert_feed",
+                        "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
+                        "default": "",
+                        "examples": [
+                            "EC"
                         ]
                     },
                     "update_freq": {
@@ -794,10 +886,10 @@
                         ]
                     },
                     "show_on_clock": {
-                        "$id": "#/properties/weather/properties/show_on_clock",
+                        "$id": "#/properties/wxalert/properties/show_on_clock",
                         "type": "boolean",
                         "title": "show_on_clock",
-                        "description": "Add the last observed temperature and humidity to the bottom of the clock board",
+                        "description": "Show Fred (active alert color square) on the bottom right corner of the clock board",
                         "default": false,
                         "examples": [
                             true

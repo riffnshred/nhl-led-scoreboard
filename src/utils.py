@@ -69,6 +69,8 @@ def args():
                         default=0, type=int)
     parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
     parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
+    parser.add_argument("--updatecheck", action="store", help="Check for updates (Default: False)", default=False, type=bool)
+    parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
 
     return parser.parse_args()
 

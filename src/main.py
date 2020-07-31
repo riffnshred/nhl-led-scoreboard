@@ -21,7 +21,7 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.2.1"
+SCRIPT_VERSION = "1.3.0"
 
 
 def run():
@@ -84,13 +84,13 @@ def run():
             debug.error("No valid weather providers selected, skipping weather feed")
             data.config.weather_enabled = False
 
-    if data.config.weather_show_alerts and data.config.weather_enabled:
-        if data.config.weather_alert_feed.lower() == "ec":
+    if data.config.wxalert_show_alerts:
+        if data.config.wxalert_alert_feed.lower() == "ec":
             ecalert = ecWxAlerts(data,sleepEvent)
             ecalertThread = threading.Thread(target=ecalert.run,args=())
             ecalertThread.daemon = True
             ecalertThread.start()
-        elif data.config.weather_alert_feed.lower() == "nws":
+        elif data.config.wxalert_alert_feed.lower() == "nws":
             nwsalert = nwsWxAlerts(data,sleepEvent)
             nwsalertThread = threading.Thread(target=nwsalert.run,args=())
             nwsalertThread.daemon = True
@@ -102,8 +102,9 @@ def run():
     #
     # Run check for updates against github on a background thread on a scheduler
     #     
-    updateCheck= True
-    if updateCheck:
+
+    if commandArgs.updatecheck:
+        data.UpdateRepo = commandArgs.updaterepo
         scheduler = BackgroundScheduler()
         checkupdate = UpdateChecker(data,scheduler)
         scheduler.start()
