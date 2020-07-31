@@ -613,14 +613,14 @@ def main():
             'type': 'confirm',
             'name': 'preferred_teams_only',
             'qmark': qmark,
-            'message': 'Show preferred teams only? (Show only your preferred team or all games of the day)',
+            'message': 'Score Ticker: Show preferred teams only? (Show only your preferred team or all games of the day)',
             'default': get_default_value(default_config,['boards','scoreticker','preferred_teams_only'],"bool")
         },
         {
             'type': 'input',
             'name': 'rotation_rate',
             'qmark': qmark,
-            'message': 'Board rotation rate? (How often do you want to rotate the games shown)',
+            'message': 'Score Ticker: Board rotation rate? (How often do you want to rotate the games shown)',
             'validate': lambda val: True if val.isdecimal() and int(val) >= 1 else 'Must be a number and greater or equal than 1',
             'filter': lambda val: int(val),
             'default': get_default_value(default_config,['boards','scoreticker','rotation_rate'],"int") or '5'
@@ -638,14 +638,14 @@ def main():
             'type': 'confirm',
             'name': 'preferred_teams_only',
             'qmark': qmark,
-            'message': 'Show preferred teams only? (Show only your preferred team or all the series of the playoff)',
+            'message': 'Series Ticker: Show preferred teams only? (Show only your preferred team or all the series of the playoff)',
             'default': get_default_value(default_config,['boards','seriesticker','preferred_teams_only'],"bool")
         },
         {
             'type': 'input',
             'name': 'rotation_rate',
             'qmark': qmark,
-            'message': 'Board rotation rate? (How often do you want to rotate the series shown)',
+            'message': 'Series Ticker: Board rotation rate? (How often do you want to rotate the series shown)',
             'validate': lambda val: True if val.isdecimal() and int(val) >= 1 else 'Must be a number and greater or equal than 1',
             'filter': lambda val: int(val),
             'default': get_default_value(default_config,['boards','seriesticker','rotation_rate'],"int") or '5'
