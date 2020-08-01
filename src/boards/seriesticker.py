@@ -168,9 +168,6 @@ class Seriesticker:
             if slides % 2:
               align = -1
 
-        # Measure the width of the indicator and then center it on the screen
-        indicator_length = (slides * spacing) - (spacing - 1)
-
         pixels = []
 
         # Render the indicator

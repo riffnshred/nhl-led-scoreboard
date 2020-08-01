@@ -64,6 +64,15 @@
     }
 
   },
+  "goal":{
+    "scorer_info":{
+      "hashtag_dots":{
+        "position": [0, 8],
+        "font": "medium_2",
+        "align": "left"
+      }
+    }
+  },
   "scoreticker": {
     "indicator_dots": {
       "position": ["50%", ["100%", -1]],
