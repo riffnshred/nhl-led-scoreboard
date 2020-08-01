@@ -56,7 +56,7 @@ class Clock:
         
         self.matrix.draw_text_layout(
             self.layout.date, 
-            self.date.strftime("%b %d %Y")
+            self.date.strftime("%b %d %Y").upper()
         )
 
         if self.time_format == "%I:%M":

@@ -6,6 +6,7 @@ from boards.boards import Boards
 from boards.clock import Clock
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
+from renderer.goal import GoalRenderer
 from utils import get_file
 import random
 import glob
@@ -65,6 +66,7 @@ class MainRenderer:
                 debug.info('This is a new day')
                 return
             self.data.refresh_data()
+            
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
 
     def __render_game_day(self):
@@ -115,6 +117,7 @@ class MainRenderer:
             elif self.status.is_game_over(self.data.overview.status):
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.check_new_goals()
                 self.__render_postgame(self.scoreboard)
                 # sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
@@ -123,13 +126,14 @@ class MainRenderer:
                 """ Post Game state """
                 debug.info("FINAL")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.check_new_goals()
                 self.__render_postgame(self.scoreboard)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
-                self.boards._post_game(self.data, self.matrix,self.sleepEvent)
+                #self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
@@ -159,12 +163,10 @@ class MainRenderer:
                 self.matrix.update_indicator()
 
 
-
     def __render_pregame(self, scoreboard):
         debug.info("Showing Pre-Game")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-
 
 
     def __render_postgame(self, scoreboard):
@@ -207,12 +209,14 @@ class MainRenderer:
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
             self._draw_goal_animation(away_id, away_name)
+            GoalRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
         if home_score < home_goals:
             self.home_score = home_goals
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             self._draw_goal_animation(home_id, home_name)
-
+            GoalRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.home_team).render()
+    
     def _draw_goal_animation(self, id=14, name="test"):
         debug.info('Score by team: ' + name)
 

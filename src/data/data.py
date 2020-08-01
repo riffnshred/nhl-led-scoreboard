@@ -153,7 +153,6 @@ class Data:
         # Get Covid 19 Data
         self.covid19 = covid19_data()
 
-
     #
     # Date
 
@@ -280,8 +279,8 @@ class Data:
         for game in self.pref_games:
             if game.status != "Final":
                 return
-            else:
-                self.all_pref_games_final = True
+            
+        self.all_pref_games_final = True
 
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
@@ -336,6 +335,7 @@ class Data:
         :return:
         """
         if self.all_pref_games_final:
+            print('hello')
             return False
 
         self.current_game_index += 1
@@ -416,6 +416,7 @@ class Data:
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
+                    debug.info("defaultround number is : {}".format(self.playoffs.default_round))
                 
                 try:
                     # Grab the series of the current round of playoff.

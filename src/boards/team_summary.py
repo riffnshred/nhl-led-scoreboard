@@ -186,12 +186,12 @@ class TeamSummary:
 
         if next_game_scoreboard:
             date = convert_date_format(next_game_scoreboard.date)
-            draw.text((0, 49), "{}".format(date), fill=(255, 255, 255), font=self.font)
+            draw.text((0, 49), "{}".format(date.upper()), fill=(255, 255, 255), font=self.font)
 
             if self.data.status.is_irregular(next_game_scoreboard.status):
                 if next_game_scoreboard.status == "Scheduled (Time TBD)":
                     next_game_scoreboard.status = "TBD"
-                draw.text((0, 55), "{}".format(next_game_scoreboard.status), fill=(255, 0, 0), font=self.font)
+                draw.text((0, 55), "{}".format(next_game_scoreboard.status.upper()), fill=(255, 0, 0), font=self.font)
             else:
                 draw.text((0, 55), "{}".format(next_game_scoreboard.start_time), fill=(255, 255, 255), font=self.font)
 
