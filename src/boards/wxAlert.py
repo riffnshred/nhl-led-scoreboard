@@ -39,9 +39,9 @@ class wxAlert:
                 # This will be similar to the weather board alert display
                 self.drawtitle = True
             else:
-                self.drawtitle = self.data.config.weather_alert_title
+                self.drawtitle = self.data.config.wxalert_alert_title
             
-            self.duration = self.data.config.weather_alert_duration
+            self.duration = self.data.config.wxalert_alert_duration
             
             
             self.wxDrawAlerts()
