@@ -22,7 +22,7 @@ class Status:
                 self.Live.append(status['detailedState'])
             elif status['abstractGameState'] == 'Final':
                 # since July 2020, status code 6 is no longer part of Game over but Final
-                if status['code'] == '5':
+                if status['code'] == '5' or status['code'] == '6':
                     self.GameOver.append(status['detailedState'])
                 else:
                     self.Final.append(status['detailedState'])
