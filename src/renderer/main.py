@@ -108,13 +108,13 @@ class MainRenderer:
                     debug.info("Main event is in Intermission")
                     # Show Boards for Intermission
                     self.draw_end_period_indicator()
-                    #sleep(self.refresh_rate)
                     self.sleepEvent.wait(self.refresh_rate)
                     self.boards._intermission(self.data, self.matrix,self.sleepEvent)
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_game_over(self.data.overview.status):
+                print(self.data.overview.status)
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
@@ -128,12 +128,12 @@ class MainRenderer:
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
                 self.__render_postgame(self.scoreboard)
-                #sleep(self.refresh_rate)
+
                 self.sleepEvent.wait(self.refresh_rate)
                 if self.data._next_game():
                     debug.info("moving to the next preferred game")
                     return
-                #self.boards._post_game(self.data, self.matrix,self.sleepEvent)
+                self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """

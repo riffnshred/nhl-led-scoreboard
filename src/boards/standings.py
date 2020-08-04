@@ -67,7 +67,7 @@ class Standings:
                 self.sleepEvent.wait(5)
 
             elif type == 'wild_card':
-                print("hello")
+                
                 wildcard_records = {}
                 conf_name = self.data.config.preferred_conference
                 conf_data = getattr(self.data.standings.by_wildcard, conf_name)

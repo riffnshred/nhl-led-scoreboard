@@ -335,7 +335,6 @@ class Data:
         :return:
         """
         if self.all_pref_games_final:
-            print('hello')
             return False
 
         self.current_game_index += 1

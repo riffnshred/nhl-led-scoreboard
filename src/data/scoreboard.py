@@ -89,8 +89,7 @@ class Scoreboard:
         self.status = overview.status
         self.periods = Periods(overview)
         self.intermission = linescore.intermissionInfo.inIntermission
-
-        if data.status.is_final(overview.status) and overview.w_score and overview.l_score:
+        if data.status.is_final(overview.status) and hasattr(overview, "w_score") and hasattr(overview, "l_score"):
             self.winning_team = overview.w_team
             self.winning_score = overview.w_score
             self.loosing_team = overview.l_team

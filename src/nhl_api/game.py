@@ -185,7 +185,7 @@ class Overview(object):
             except TypeError:
                 obj = nhl_api.object.Object(data[x])
                 setattr(self, x, obj)
-
+        
         # calculate the winning team
         if self.home_score > self.away_score:
             self.w_team = self.home_team_id

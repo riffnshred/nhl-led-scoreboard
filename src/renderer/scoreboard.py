@@ -41,6 +41,9 @@ class ScoreboardRenderer:
         if self.status.is_live(self.scoreboard.status):
             self.draw_live()
 
+        if self.status.is_game_over(self.scoreboard.status):
+            self.draw_final()
+
         if self.status.is_final(self.scoreboard.status):
             self.draw_final()
 

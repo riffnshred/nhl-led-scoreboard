@@ -113,7 +113,7 @@ class Seriesticker:
             # get the scoreboard
             scoreboard = Scoreboard(overview, self.data)
 
-            if self.data.status.is_final(overview.status):
+            if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
                 if scoreboard.winning_team == series.top_team.id:
                     winning_row = top_row
                     loosing_row = bottom_row
