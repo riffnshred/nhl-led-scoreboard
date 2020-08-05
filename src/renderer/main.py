@@ -221,12 +221,18 @@ class MainRenderer:
         debug.info('Score by team: ' + name)
 
         # Get the list of gif's under the preferred and opposing directory
-        preferred_gifs = glob.glob("assets/animations/preferred/*.gif")
-        opposing_gifs = glob.glob("assets/animations/opposing/*.gif")
+        all_gifs = glob.glob("assets/animations/goal/all/*.gif")
+        preferred_gifs = glob.glob("assets/animations/goal/preferred/*.gif")
+        opposing_gifs = glob.glob("assets/animations/goal/opposing/*.gif")
 
         filename = "assets/animations/goal_light_animation.gif"
         
         # Use alternate animations if there is any in the respective folder
+        if all_gifs:
+            # Set opposing team goal animation here
+            filename = random.choice(all_gifs)
+            debug.info("General animation is: " + filename)
+
         if opposing_gifs:
             # Set opposing team goal animation here
             filename = random.choice(opposing_gifs)
@@ -236,6 +242,7 @@ class MainRenderer:
             # Set your preferred team goal animation here
             filename = random.choice(preferred_gifs)
             debug.info("Preferred animation is: " + filename)
+        
 
 
         im = Image.open(get_file(filename))

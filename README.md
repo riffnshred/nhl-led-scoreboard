@@ -1,33 +1,6 @@
 # NHL-LED-scoreboard
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
-# (UPDATE) Causes of NHL suspending the Season
-As you know, the NHL suspended the season. Currently some of the data are still available and per popular request we made a COVID 19 stats board so that your display can still be useful. Meanwhile, we are working on V2 for next season which will be more dynamic and interactive. Stay tuned !!!
-
-# V1.2.1 (Bug fix)
-- Fixed issues caused buy installing the lastest version.
-
-# V1.2.0
-
-NOTE: If you face issues while running the nhl_setup app, delete your config.json file in the config directory and try again.
-
-New Features:
-- Now with 100% more weather features (Thanks to [falkyre](https://github.com/falkyre))
-  * Weather and alerts boards.
-  * Weather observations data provided by Environment Canada (no api key) or OpenWeatherMap (api key)
-  * Alerts data provided by EC (Canada Only) or National Weather Service (US only)
-  * See README.md under [src/api/weather](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather) for more information
-
-- New Terminal mode. (Thanks to [ELepolt](https://github.com/ELepolt))
-	* Allows you to run the scoreboard and see the scoreboard image in a terminal. Useful for debugging. 
-	* More info [Here](#terminal-mode)
-
-Bug Fixes and updates:
--   json validation against json schema (both in main script and also in nhl_setup)
--   nhl_setup updated to do validation of config.json and create simple config with a single team from command line. Also can create a simple config from within the app.
--   nhl_setup app updated to add new weather configuration entries
--   Updated nhl_setup README.md to document changes
--   Updated json.load calls to catch errors and not print full trace. Will exit app on bad json (both typo errors and validation errors)
 
 ## Support and community
 We have a nice community growing every day on discord. If you need help 
@@ -46,15 +19,8 @@ for my work?
 This project is new and is in constant evolution. Please read the documentation and instructions to install and run this software provided here. 
 
 
-## Requirements (START HERE)
-You need Git to clone this repo and PIP3 for installing the scoreboard software.
-
+## Requirements
 Since version V1.0.0 you need python 3.3 and up.
-Run these two commands in your terminal to install git and PIP3.
-```
-sudo apt-get update
-sudo apt install git python3-pip
-```
 
 
 ## Table of Contents
@@ -64,6 +30,7 @@ sudo apt install git python3-pip
     - [Goal animation](#goal-animation)
     - [Dimmer](#dimmer)
     - [Indicators](#indicators)
+    - [Update checker](#Update-checker)
   - [Time and data accuracy](#time-and-data-accuracy)
   - [Installation](#installation)
     - [Hardware Assembly](#hardware-assembly)
@@ -140,6 +107,14 @@ Because of its size, I programmed some indicators to display more information wi
 
 <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="210" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
 
+### Update checker
+**NEW for V1.3.0**
+
+Now the scoreboard has an Update checker option where it will show a green line on top of the screen if there is a new Major or minor update. To use it simply add the `--updatecheck` flag to the command line you use to run the board and set it to true of false like so `--updatecheck=True`.
+
+If you are using an other repo that is a fork of this one you can set to check that repo for updates instead like so: `--updaterepo="user/nameoftherepo"`. The repo can be the name (eg `riffnshred/nhl-led-scoreboard`) or the github URL (eg `https://github.com/riffnshred/nhl-led-scoreboard`).
+
+
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.
 
@@ -193,7 +168,7 @@ sudo ./scripts/install.sh
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 ### *Important Step after installation.*
-If it's a first install of the software, there is not config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
+If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
 
 
 #### Updating your software.
@@ -316,7 +291,7 @@ All the data related options.
 | `sog_display_frequency`                  | INT| `4`        | On data update frequency at which the Shots on goal stats appear while showing the scoreboard during a game. (Ex: the shots on goal will show every 4th data update)|      
                                                                                                                                              
 ### Goal Animations
-The goal animations can be set for both teams of just the preferred teams. MORE OPTIONS COMING SOON
+The goal animations is a gif image shown whene there is a new goal. You can now use you own goal animation. They need to be `.gif` animation and the resolution of the screen (64px x 32px or more if you use bigger screen) and placed into `assets/animations/goal/all`. You can also use specific animation for when your preferred team score or the opposing team score by putting the `.gif` animation into `assets/animations/goal/preferred` and/or `assets/animations/goal/opposing`. If you put multiple animation, the scoreboard will pick one rendomly everytime a new goal come up.
 
 | Settings         | Type | Parameters      | Description      |
 |------------------|------|-----------------|------------------|
@@ -361,8 +336,8 @@ Boards are essentially like pages on a website. Each of them shows something spe
 
 depending on the state of the scoreboard. Currently, there are only three boards available:
 
--   **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the
--   result or the status of the other games in the league.
+-   **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the result or the status of the other games in the league.
+-   **Series Ticker**: Works just like the Score Ticker but it shows single series bracket of a current round.
 -   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
 -   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
 -   **Clock**: Show the current time either in 24h or 12h format.
@@ -371,7 +346,9 @@ depending on the state of the scoreboard. Currently, there are only three boards
 | Boards        | Settings                   | Type   | Parameters | Description|
 |---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | `scoreticker` | `preferred_teams_only`     | Bool   | `true`, `false`                                  | Choose between showing all the games of the day or just the ones your preferred teams are playing |
-|               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each games are shown on screen.                                                 |
+|               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each games are shown on screen.
+| `seriesticker` | `preferred_teams_only`     | Bool   | `true`, `false`                                  | Choose between showing all series of the current round of playoff or just the ones your preferred teams are part of. |
+|               | `rotation_rate`            | INT    | `5`                                              | Duration at witch each series are shown on screen.                                                 |
 | `standings`   | `preferred_standings_only` | Bool   | `true`, `false`                                  | Choose between showing all the standings or only the the preferred division and conference.       |
 |               | `standing_type`            | String | `conference`, `division` , `wild_card`(Currently not available)           | Option to choose the type of standings to display. `conference` if set by default.                |
 |               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division |
