@@ -221,7 +221,7 @@ class MainRenderer:
                     # Remove the first cached goal
                     self.goal_team_cache.pop(0)
             except IndexError:
-                print("crash")
+                debug.error("The scoreboard object failed to get the goal details, trying on the next data refresh")
 
         if away_score < away_goals:
             self.away_score = away_goals
@@ -240,8 +240,6 @@ class MainRenderer:
             # run the goal animation
             self._draw_goal_animation(away_id, home_name)
             
-        
-        print(self.goal_team_cache)
     
     def _draw_goal_animation(self, id=14, name="test"):
         debug.info('Score by team: ' + name)
