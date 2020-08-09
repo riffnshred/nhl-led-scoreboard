@@ -58,7 +58,7 @@ class wxAlert:
             self.matrix.clear()
             #offscreen_canvas = self.matrix.CreateFrameCanvas()
 
-            if self.data.config.weather_alert_feed.lower() == "nws":
+            if self.data.config.wxalert_alert_feed.lower() == "nws":
                 top_title = self.data.wx_alerts[4]
             else:
                 top_title = "Weather"
@@ -88,7 +88,7 @@ class wxAlert:
                     )  
 
             elif self.data.wx_alerts[1] == "watch":
-                if self.data.config.weather_alert_feed.lower() == "nws":
+                if self.data.config.wxalert_alert_feed.lower() == "nws":
                     self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,165,0)) # watch
                     self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,165,0)) # watch
                 else:
@@ -105,7 +105,7 @@ class wxAlert:
                     )  
             else:
                 if self.data.wx_alerts[1] == "advisory":
-                    if self.data.config.weather_alert_feed.lower() == "nws":
+                    if self.data.config.wxalert_alert_feed.lower() == "nws":
                         self.matrix.draw.rectangle([0, 0, self.matrix.width,8], fill=(255,255,0)) #advisory
                         self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,255,0)) #advisory
                     else:
