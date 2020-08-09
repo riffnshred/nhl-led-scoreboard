@@ -203,6 +203,6 @@ class TeamSummary:
                 draw.text((0, 61), "VS {}".format(next_game_scoreboard.away_team.abbrev), fill=(255, 255, 255),
                           font=self.font)
         else:
-            draw.text((1, 61), "--------", fill=(200, 200, 200), font=self.font)
+            draw.text((1, 52), "--------", fill=(200, 200, 200), font=self.font)
 
         return image

@@ -1,6 +1,8 @@
 from data.team import TeamScore
 from data.periods import Periods
 from utils import convert_time
+from time import sleep
+import debug
 import nhl_api
 
 
@@ -24,7 +26,7 @@ def filter_scoring_plays(plays, away_id, home_id):
 
     return away, home
 
-def get_goal_players(players_list):
+def get_goal_players(players_list,data):
     """
         Grab the list of players involved in a goal and return their Id except for assists which is a list of Ids
     """
@@ -40,24 +42,29 @@ def get_goal_players(players_list):
             try:
                 if player["playerType"] == "Scorer":
                     scorerId = player['player']['id']
-                    scorer = nhl_api.player(scorerId)
+                    scorer["info"] = nhl_api.player(scorerId)
+                    scorer["points"] = player['seasonTotal']
                 if player["playerType"] == "Assist":
                     assistsId = player['player']['id']
-                    assists.append(nhl_api.player(assistsId)) 
+                    assists.append({"info":nhl_api.player(assistsId), "points":player['seasonTotal']}) 
                 if player["playerType"] == "Goalie":
                     goalieId = player['player']['id']
                     goalie = nhl_api.player(goalieId)
 
+                data.network_issues = False
                 break
             except ValueError as error_message:
-                self.network_issues = True
+                data.network_issues = True
                 debug.error("Failed to get the players info related to a GOAL. {} attempt remaining.".format(attempts_remaining))
                 debug.error(error_message)
                 attempts_remaining -= 1
-                sleep(NETWORK_RETRY_SLEEP_TIME)
+                sleep(2)
+
+        # If one of the request for player info failed after 5 attempts, return an empty dictionary
+        if attempts_remaining == 0:
+            return {}
     
-    return scorer, assists, goalie
-            
+    return {"scorer":scorer, "assists":assists, "goalie":goalie}
 
 class Scoreboard:
     def __init__(self, overview, data):
@@ -74,10 +81,28 @@ class Scoreboard:
         if hasattr(overview,"plays"):
             plays = overview.plays
             away_scoring_plays, home_scoring_plays = filter_scoring_plays(plays,away.team.id,home.team.id)
+            # Get the Away Goal details
+            # If the request to the API fails,return an empty list of goal plays. 
+            # This method is there to prevent the goal board to display the wrong info
             for play in away_scoring_plays:
-                away_goal_plays.append(Goal(play))
+                players = get_goal_players(play['players'], data)
+                if players:
+                    away_goal_plays.append(Goal(play, players))
+                else:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    away_goal_plays = []
+                    break
+            # Get the Home Goal details
+            # If the request to the API fails,return an empty list of goal plays
+            # This method is there to prevent the goal board to display the wrong info
             for play in home_scoring_plays:
-                home_goal_plays.append(Goal(play))
+                players = get_goal_players(play['players'], data)
+                if players:
+                    home_goal_plays.append(Goal(play,players))
+                else:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    home_goal_plays = []
+                    break
 
         self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
                               away.numSkaters, away.goaliePulled, away_goal_plays)
@@ -107,9 +132,10 @@ class Scoreboard:
         return output
 
 class Goal:
-    def __init__(self, play):
-        players = play['players']
-        self.scorer, self.assists, self.goalie = get_goal_players(players)
+    def __init__(self, play, players):
+        self.scorer = players["scorer"]
+        self.assists = players["assists"]
+        self.goalie = players["goalie"]
         self.team = play['team']['id']
         self.period = play['about']['ordinalNum']
         self.periodTime = play['about']['periodTime']
