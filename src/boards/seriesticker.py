@@ -62,11 +62,17 @@ class Seriesticker:
                 font=self.font, 
                 fill=(0,0,0)
             )
-            
-            self.draw_series_table(series)
-            
-            self.matrix.render()
             self.index += 1
+            
+            # # If something fails in the process of drawing the series table due to failed API request
+            # # Continue in the loop and skip this series.
+            # if not self.draw_series_table(series):
+            #     debug.error('Failed Draw the series table due to failed API request. Skiping to the next series')
+            #     continue
+
+
+            self.draw_series_table(series)
+            self.matrix.render()
             self.sleepEvent.wait(10)
 
     def draw_series_table(self, series):
@@ -106,49 +112,61 @@ class Seriesticker:
         offset_correction = 0
         
         for game in series.games:
-            
-            # Request the game overview
-            overview = nhl_api.overview(game["gameId"])
+            attempts_remaining = 5
+            while attempts_remaining > 0:
+                try:
+                    # Request the game overview
+                    overview = nhl_api.overview(game["gameId"])
+                    # get the scoreboard
+                    scoreboard = Scoreboard(overview, self.data)
 
-            # get the scoreboard
-            scoreboard = Scoreboard(overview, self.data)
+                    if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
+                        if scoreboard.winning_team == series.top_team.id:
+                            winning_row = top_row
+                            loosing_row = bottom_row
+                            winning_team_color = color_top_team
+                            winning_bg_color = color_top_bg
+                        else:
+                            winning_row = bottom_row
+                            loosing_row = top_row
+                            winning_team_color = color_bottom_team
+                            winning_bg_color = color_bottom_bg
 
-            if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
-                if scoreboard.winning_team == series.top_team.id:
-                    winning_row = top_row
-                    loosing_row = bottom_row
-                    winning_team_color = color_top_team
-                    winning_bg_color = color_top_bg
-                else:
-                    winning_row = bottom_row
-                    loosing_row = top_row
-                    winning_team_color = color_bottom_team
-                    winning_bg_color = color_bottom_bg
+                        # Look loosing score text needs an offset
+                        if len(str(scoreboard.winning_score)) == 2 and len(str(scoreboard.winning_score)) == 1:
+                            offset_correction = 1
+                        
+                        self.matrix.draw_text(
+                            ((rec_width + 15 + offset_correction), loosing_row), 
+                            str(scoreboard.loosing_score), 
+                            font=self.font, 
+                            fill=loosing_color,
+                            backgroundColor=None, 
+                            backgroundOffset=[1, 1, 1, 1]
+                        )
 
-                # Look loosing score text needs an offset
-                if len(str(scoreboard.winning_score)) == 2 and len(str(scoreboard.winning_score)) == 1:
-                    offset_correction = 1
-                
-                self.matrix.draw_text(
-                    ((rec_width + 15 + offset_correction), loosing_row), 
-                    str(scoreboard.loosing_score), 
-                    font=self.font, 
-                    fill=loosing_color,
-                    backgroundColor=None, 
-                    backgroundOffset=[1, 1, 1, 1]
-                )
+                        position = self.matrix.draw_text(
+                            (rec_width + 15, winning_row), 
+                            str(scoreboard.winning_score), 
+                            font=self.font, 
+                            fill=(winning_team_color['r'], winning_team_color['g'], winning_team_color['b']), 
+                            backgroundColor=(winning_bg_color['r'], winning_bg_color['g'], winning_bg_color['b']), 
+                            backgroundOffset=[1, 1, 1, 1]
+                        )
 
-                position = self.matrix.draw_text(
-                    (rec_width + 15, winning_row), 
-                    str(scoreboard.winning_score), 
-                    font=self.font, 
-                    fill=(winning_team_color['r'], winning_team_color['g'], winning_team_color['b']), 
-                    backgroundColor=(winning_bg_color['r'], winning_bg_color['g'], winning_bg_color['b']), 
-                    backgroundOffset=[1, 1, 1, 1]
-                )
+                        # Increment 
+                        rec_width += (position["size"][0] + 4)
+                    break
 
-                # Increment 
-                rec_width += (position["size"][0] + 4)
+                except ValueError as error_message:
+                    self.data.network_issues = True
+                    debug.error("Failed to get the Games for the {} VS {} series: {} attempts remaining".format(series.top_team.abbrev, series.bottom_team.abbrev, attempts_remaining))
+                    debug.error(error_message)
+                    attempts_remaining -= 1
+                    sleep(2)
+            # If one of the request for player info failed after 5 attempts, return an empty dictionary
+            if attempts_remaining == 0:
+                return False
 
 
     def show_indicator(self, index, slides):

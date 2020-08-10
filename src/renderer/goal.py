@@ -41,7 +41,7 @@ class GoalRenderer:
 
         #Show the Assists information
         self.matrix.clear()
-        self.draw_assists()
+        self.draw_details()
 
         self.matrix.render()
         self.sleepEvent.wait(self.rotation_rate)
@@ -58,7 +58,7 @@ class GoalRenderer:
         self.draw_hashtag()
         self.matrix.draw_text(
                 (11, 8), 
-                str(self.scorer.primaryNumber),
+                str(self.scorer["info"].primaryNumber),
                 font=self.font_medium, 
                 fill=(255,255,255)
             )
@@ -72,18 +72,18 @@ class GoalRenderer:
 
         self.matrix.draw_text(
                 (8, 20), 
-                self.scorer.firstName.upper(),
+                self.scorer["info"].firstName.upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
         self.matrix.draw_text(
                 (8, 26), 
-                self.scorer.lastName.upper(),
+                self.scorer["info"].lastName.upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
 
-    def draw_assists(self):
+    def draw_details(self):
         self.matrix.draw.rectangle([0,0,64,6], fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b']))
         self.matrix.draw_text(
                 (1, 1), 
@@ -91,23 +91,43 @@ class GoalRenderer:
                 font=self.font, 
                 fill=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b'])
             )
-        
-        self.matrix.draw_text(
-                (1, 9), 
-                "ASSISTS", 
+
+        scorer_name_coord = self.matrix.draw_text(
+                (1, 8), 
+                self.scorer["info"].lastName.upper(), 
                 font=self.font, 
-                fill=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b']),
-                backgroundColor=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
+                fill=(255, 255, 255)
+            )
+        scorer_points_x_coord = scorer_name_coord["position"][0] + scorer_name_coord["size"][0] + 3
+        self.matrix.draw_text(
+                (scorer_points_x_coord, 8), 
+                str(self.scorer["points"]), 
+                font=self.font, 
+                fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
             )
 
-        assists_y_pos = 16
+        self.matrix.draw_text(
+                (1, 15), 
+                "ASSISTS", 
+                font=self.font, 
+                fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b']),
+            )
+
+        assists_y_pos = 21
         if self.assists:
-            for player in self.assists:
-                self.matrix.draw_text(
+            for i in range(len(self.assists)):
+                assist_name_coord = self.matrix.draw_text(
                     (1, assists_y_pos), 
-                    player.lastName.upper(), 
+                    self.assists[i]["info"].lastName.upper(), 
                     font=self.font, 
                     fill=(255, 255, 255)
+                )
+                assists_points_x_coord = assist_name_coord["position"][0] + assist_name_coord["size"][0] + 3
+                self.matrix.draw_text(
+                    (assists_points_x_coord, assists_y_pos), 
+                    str(self.assists[i]["points"]), 
+                    font=self.font, 
+                    fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
                 )
                 assists_y_pos += 6
         else:
