@@ -238,7 +238,7 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
-            self._draw_goal_animation(away_id, home_name)
+            self._draw_goal_animation(home_id, home_name)
             
     
     def _draw_goal_animation(self, id=14, name="test"):
