@@ -234,6 +234,9 @@ class Data:
             If the user want's to rotate only his preferred games between the periods and during the day, save those
             only. Lastly, If if not an Off day for the pref teams, reorder the list in order of preferred teams and load
             the first game as the main event.
+
+            TODO:
+                Add the option to start the earliest game in the preferred game list but change to the top one as soon as it start.
         """
         attempts_remaining = 5
         while attempts_remaining > 0:
