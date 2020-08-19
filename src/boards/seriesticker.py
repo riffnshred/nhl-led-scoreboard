@@ -73,7 +73,7 @@ class Seriesticker:
 
             self.draw_series_table(series)
             self.matrix.render()
-            self.sleepEvent.wait(10)
+            self.sleepEvent.wait(self.data.config.seriesticker_rotation_rate)
 
     def draw_series_table(self, series):
 
@@ -163,7 +163,7 @@ class Seriesticker:
                     debug.error("Failed to get the Games for the {} VS {} series: {} attempts remaining".format(series.top_team.abbrev, series.bottom_team.abbrev, attempts_remaining))
                     debug.error(error_message)
                     attempts_remaining -= 1
-                    sleep(2)
+                    self.sleepEvent.wait(1)
             # If one of the request for player info failed after 5 attempts, return an empty dictionary
             if attempts_remaining == 0:
                 return False
