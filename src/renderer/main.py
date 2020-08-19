@@ -238,12 +238,12 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
-            self._draw_goal_animation(away_id, home_name)
+            self._draw_goal_animation(home_id, home_name)
             
     
     def _draw_goal_animation(self, id=14, name="test"):
         debug.info('Score by team: ' + name)
-
+        preferred_team_only = self.data.config.goal_anim_pref_team_only
         # Get the list of gif's under the preferred and opposing directory
         all_gifs = glob.glob("assets/animations/goal/all/*.gif")
         preferred_gifs = glob.glob("assets/animations/goal/preferred/*.gif")
@@ -257,7 +257,7 @@ class MainRenderer:
             filename = random.choice(all_gifs)
             debug.info("General animation is: " + filename)
 
-        if opposing_gifs:
+        if opposing_gifs not preferred_team_only:
             # Set opposing team goal animation here
             filename = random.choice(opposing_gifs)
             debug.info("Opposing animation is: " + filename)

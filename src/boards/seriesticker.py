@@ -55,7 +55,7 @@ class Seriesticker:
                 fill=(255,255,255)
             )
             # Conference banner, Round Title
-            self.matrix.draw.rectangle([0,0,64,5], fill=color_banner_bg)
+            self.matrix.draw.rectangle([0,0,self.matrix.width,5], fill=color_banner_bg)
             self.matrix.draw_text(
                 (1, 1), 
                 banner_text, 
@@ -84,7 +84,7 @@ class Seriesticker:
         color_bottom_team = self.team_colors.color("{}.text".format(series.bottom_team.id))
 
         # Table
-        self.matrix.draw.line([(0,21),(64,21)], width=1, fill=(150,150,150))
+        self.matrix.draw.line([(0,21),(self.matrix.width,21)], width=1, fill=(150,150,150))
 
         # use rectangle because I want to keep symmetry for the background of team's abbrev
         self.matrix.draw.rectangle([0,14,12,20], fill=(color_top_bg['r'], color_top_bg['g'], color_top_bg['b']))
