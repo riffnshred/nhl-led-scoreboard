@@ -222,6 +222,9 @@ class MainRenderer:
                     self.goal_team_cache.pop(0)
             except IndexError:
                 debug.error("The scoreboard object failed to get the goal details, trying on the next data refresh")
+            except KeyError:
+                debug.error("Last Goal is a No goal. Or the API is missing some information.")
+                self.goal_team_cache.pop(0)
 
         if away_score < away_goals:
             self.away_score = away_goals
@@ -257,7 +260,7 @@ class MainRenderer:
             filename = random.choice(all_gifs)
             debug.info("General animation is: " + filename)
 
-        if opposing_gifs not preferred_team_only:
+        if opposing_gifs and not preferred_team_only:
             # Set opposing team goal animation here
             filename = random.choice(opposing_gifs)
             debug.info("Opposing animation is: " + filename)

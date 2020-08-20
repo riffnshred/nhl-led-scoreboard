@@ -150,6 +150,12 @@ class Goal:
         self.periodTime = play['about']['periodTime']
         self.strength = play['result']['strength']['name']
         
-
-
-        
+class Penalty:
+    def __init__(self, play, player):
+        self.player = player
+        self.penaltyType = play['result']['Holding']
+        self.severity = play['result']['penaltySeverity']
+        self.penaltyMinutes = str(play['result']['penaltyMinutes'])
+        self.team = play['team']['id']
+        self.period = play['about']['ordinalNum']
+        self.periodTime = play['about']['periodTime']

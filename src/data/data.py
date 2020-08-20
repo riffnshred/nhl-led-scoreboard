@@ -407,6 +407,12 @@ class Data:
     #
     # Playoffs
     def refresh_playoff(self):
+        """
+            Currently the series ticker request all the games of a series everytime its asked to load on screen.
+            This create a lot of delay between showing each series. 
+            TODO:
+                Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
+        """
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -444,7 +450,7 @@ class Data:
                 
     def series_by_conference():
         """
-            TODO:reorganize the list of series by conference and return the list
+            TODO:reorganize the list of series by conference and return the list. this is to allow the option of showing the preferred conference series.
         """
         pass
                 
