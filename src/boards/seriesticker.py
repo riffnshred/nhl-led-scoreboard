@@ -29,8 +29,6 @@ class Seriesticker:
         self.allseries = self.data.series
         self.index = 0
         self.num_series = len(self.allseries)
-        
-        
 
         for s in self.allseries:
             self.matrix.clear()
@@ -110,13 +108,13 @@ class Seriesticker:
 
         #text offset for loosing score if the winning team has a score of 10 or higher and loosing team have a score lower then 10
         offset_correction = 0
-        
         for game in series.games:
             attempts_remaining = 5
             while attempts_remaining > 0:
                 try:
                     # Request the game overview
                     overview = nhl_api.overview(game["gameId"])
+                    
                     # get the scoreboard
                     scoreboard = Scoreboard(overview, self.data)
 
@@ -164,6 +162,10 @@ class Seriesticker:
                     debug.error(error_message)
                     attempts_remaining -= 1
                     self.sleepEvent.wait(1)
+                except KeyError as error_message:
+                    debug.error("Failed to get the overview for game id {}. Data unavailable or is TBD".format(game["gameId"]))
+                    debug.error(error_message)
+                    break
             # If one of the request for player info failed after 5 attempts, return an empty dictionary
             if attempts_remaining == 0:
                 return False
