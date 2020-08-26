@@ -158,7 +158,6 @@ class MainRenderer:
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            sleep(5)
             self.data.refresh_data()
             self.data.refresh_overview()
             if self.data.network_issues:

@@ -106,7 +106,14 @@ class Seriesticker:
         bottom_row = 23
         loosing_color = (150,150,150)
 
-        #text offset for loosing score if the winning team has a score of 10 or higher and loosing team have a score lower then 10
+        # text offset for loosing score if the winning team has a score of 10 or higher and loosing team 
+        # have a score lower then 10
+
+        """
+            TODO: Grabbing all the games of a series cause delay up to 15 sec for certain users. I think its time to put all the data
+            refresh into a thread and refresh everything from there
+            . 
+        """
         offset_correction = 0
         for game in series.games:
             attempts_remaining = 5
