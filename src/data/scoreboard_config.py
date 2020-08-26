@@ -64,6 +64,9 @@ class ScoreboardConfig:
         self.weather_update_freq = json["boards"]["weather"]["update_freq"]
         # Show curr temp, humidity on clock
         self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+        # Forecast settings
+        self.weather_forecast_enabled = json["boards"]["weather"]["forecast_enabled"]
+        self.weather_forecast_days = json["boards"]["weather"]["forecast_days"]
 
         #Weather Alerts Preferences
         self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
@@ -79,6 +82,8 @@ class ScoreboardConfig:
         # Show any alerts on clock
         self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
         self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
+
+        #Weather forecast config entries
         
 
 

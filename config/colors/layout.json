@@ -23,7 +23,13 @@
   },
   "wx_curr_temp": {
     "temp": [0,255,0],
-    "temp_app": [255,0,0]
+    "temp_app": [0,255,0],
+    "temp_app_hi": [255,0,0],
+    "temp_app_lo": [0,0,255],
+    "forecast_temp_hi": [255,0,0],
+    "forecast_temp_lo": [0,0,255],
+    "forecast_hi": [255,0,0],
+    "forecast_lo": [0,0,255]
   },
   "wx_curr_wind": {
     "wind": [255,255,0],

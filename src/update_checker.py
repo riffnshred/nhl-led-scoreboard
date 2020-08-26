@@ -30,7 +30,7 @@ class UpdateChecker(object):
             #scheduler.add_job(self.CheckForUpdate, 'cron', minute='*/5')
 
     def CheckForUpdate(self):
-        debug.info("Checking for new release for {} repo installed in {}".format(self.data.UpdateRepo,self.workingDir))
+        debug.info("Checking for new release. {} v{} installed in {}".format(self.data.UpdateRepo,self.version,self.workingDir))
 
         # Use lastversion to check against github latest release repo, don't look at pre releases
         latest_version = lastversion.latest(self.data.UpdateRepo, output_format='version', pre_ok=False)

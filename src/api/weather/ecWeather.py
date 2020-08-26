@@ -2,6 +2,7 @@ from env_canada import ECData
 import debug
 import datetime
 from time import sleep
+from random import randint
 from api.weather.wx_utils import cadhumidex, wind_chill, get_icons, degrees_to_direction, temp_f, wind_mph
 
 class ecWxWorker(object):
@@ -18,22 +19,27 @@ class ecWxWorker(object):
     def run(self):
 
         while True:
-            try:
-                debug.info("Refreshing EC current observations weather")
-                ecData = ECData(coordinates=(self.data.latlng))
-                self.data.wx_updated = True
-                self.network_issues = False
-            # except (requests.exceptions) as e:
-            #     #raise ValueError(e)
-            #     debug.error("Unable to get EC data error:{0}".format(e))
-            #     self.data.wx_updated = False
-            #     self.network_issues = True
-            #     pass
-            except Exception as e:
-                debug.error("Unable to get EC data error:{0}".format(e))
-                self.data.wx_updated = False
-                self.network_issues = True
-                pass
+            while not self.data.wx_updated:
+                try:
+                    sleep_time = randint(0,10)
+                    debug.info("Randomly sleeping {} seconds before getting EC current obs ...".format(sleep_time))
+                    sleep(sleep_time)
+                    debug.info("Refreshing EC current observations weather")
+                    ecData = ECData(coordinates=(self.data.latlng))
+                    self.data.wx_updated = True
+                    self.network_issues = False
+
+                    curr_cond = ecData.conditions
+                    if len(curr_cond) == 0:
+                        debug.error("Unable to get EC current observations")
+                        self.data.wx_updated = False
+
+                except Exception as e:
+                    debug.error("Unable to get EC data error:{0}".format(e))
+                    self.data.wx_updated = False
+                    self.network_issues = True
+                    pass
+                                
             
             if self.data.wx_updated:
                 #Set up units [temp, wind speed,precip, storm distance]
@@ -43,10 +49,10 @@ class ecWxWorker(object):
                 else:
                     self.data.wx_units = ["F","mph","in","miles","MB","us"]
 
-                curr_cond = ecData.conditions
+                
 
                 #Uncomment next line if you want to see what is being returned back from EC
-                #debug.info(curr_cond)
+                #debug.info(curr_cond)                            
 
                 if self.time_format == "%H:%M":
                     wx_timestamp = datetime.datetime.now().strftime("%m/%d %H:%M")
@@ -55,8 +61,18 @@ class ecWxWorker(object):
 
                 #Check current temperature to determine if using windchill or heat for apparent temperature
                 #Make sure we have a value.  Sometimes, the feed will not contain a value
-                curr_temp = curr_cond.get("temperature").get("value",{})
-                curr_humidity = curr_cond.get("humidity").get("value",{})
+                try:
+                    curr_temp = curr_cond.get("temperature").get("value",{})
+                except:
+                    curr_temp = None
+                    self.data.wx_updated = False
+
+                try:    
+                    curr_humidity = curr_cond.get("humidity").get("value",{})
+                except:
+                    curr_humidity = None
+                    self.data.wx_updated = False
+
                 if curr_humidity == None:
                     curr_humidity = "0"
                     wx_humidity = "N/A"
@@ -85,7 +101,12 @@ class ecWxWorker(object):
                     wx_temp = "N/A"
                     wx_app_temp = "N/A"
             
-                if curr_cond.get("icon_code").get("value","90") == None:
+                try:
+                    icon_code = curr_cond.get("icon_code").get("value","90")
+                except:
+                    icon_code = None
+
+                if icon_code == None:
                     wx_icon = '\uf07b'
                 else:
                     #Get condition and icon from dictionary
@@ -96,12 +117,18 @@ class ecWxWorker(object):
                         else:
                             wx_icon = '\uf07b'
                     
-                wx_summary = curr_cond.get("condition").get("value","N/A")
+                try:    
+                    wx_summary = curr_cond.get("condition").get("value","N/A")
+                except:
+                    wx_summary = None
 
                 if wx_summary == None:
                     wx_summary = "Curr Cond N/A"
 
-                curr_dewpoint = curr_cond.get("dewpoint").get("value","0.0")
+                try:
+                    curr_dewpoint = curr_cond.get("dewpoint").get("value","0.0")
+                except:
+                    curr_dewpoint = None
 
                 if curr_dewpoint == None:
                     curr_dewpoint = 0.0
@@ -118,13 +145,21 @@ class ecWxWorker(object):
 
                 self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
 
-                wind_bearing = curr_cond.get("wind_bearing").get("value","0")
+                try:
+                    wind_bearing = curr_cond.get("wind_bearing").get("value","0")
+                except:
+                    wind_bearing = None
+
                 if wind_bearing == None:
                     wind_bearing = "0"
                     
                 winddir = degrees_to_direction(float(wind_bearing))
 
-                wind_speed = curr_cond.get("wind_speed").get("value","0.0")
+                try:
+                    wind_speed = curr_cond.get("wind_speed").get("value","0.0")
+                except:
+                    wind_speed = None
+
                 if wind_speed == None:
                     wind_speed = "0.0"
                     
@@ -135,7 +170,12 @@ class ecWxWorker(object):
 
                 wx_windspeed = str(curr_windspeed) + " " + self.data.wx_units[1]
                 
-                if curr_cond.get("wind_gust").get("value","0.0") != None:
+                try:
+                    curr_windgust = curr_cond.get("wind_gust").get("value","0.0")
+                except:
+                    curr_windgust = None
+
+                if curr_windgust != None:
                     curr_windgust = float(curr_cond.get("wind_gust").get("value","0.0"))
                     if self.data.config.weather_units == "imperial":
                         curr_windgust = round(wind_mph(curr_windgust),1)
@@ -144,26 +184,38 @@ class ecWxWorker(object):
                 else:
                     wx_windgust = "0.0 " + self.data.wx_units[1]
 
-                wx_pressure = str(round(float(curr_cond.get("pressure").get("value","0")),1) * 10) + " " + self.data.wx_units[4]
+                try:
+                    wx_pressure = str(round(float(curr_cond.get("pressure").get("value","0")),1) * 10) + " " + self.data.wx_units[4]
+                except:
+                    wx_pressure = "N/A"
 
-                for row in range(len(self.icons)):
-                    if self.icons[row]["Description"].lower() == curr_cond.get("tendency").get("value","N/A"):
-                        wx_tendency = self.icons[row]['font']
-                        break
-                    else:
-                        wx_tendency = '\uf07b'
+                try:
+                    for row in range(len(self.icons)):
+                        if self.icons[row]["Description"].lower() == curr_cond.get("tendency").get("value","N/A"):
+                            wx_tendency = self.icons[row]['font']
+                            break
+                        else:
+                            wx_tendency = '\uf07b'
+                except:
+                    wx_tendency = '\uf07b'
                 
-                if curr_cond.get("visibility").get("value","24") == None:
+                try:
+                    if curr_cond.get("visibility").get("value","24") == None:
+                        if self.data.config.weather_units == "imperial":
+                            wx_visibility = "14.9 mi"
+                        else:
+                            wx_visibility = "24.1 km"
+                    else:
+                        if self.data.config.weather_units == "imperial":
+                            imp_visibility = round(float(curr_cond.get("visibility").get("value","24"))*0.621371,1)
+                            wx_visibility = str(imp_visibility) + " mi"
+                        else:
+                            wx_visibility = curr_cond.get("visibility").get("value","24") + " " + curr_cond.get("visibility").get("unit","km")
+                except:
                     if self.data.config.weather_units == "imperial":
                         wx_visibility = "14.9 mi"
                     else:
                         wx_visibility = "24.1 km"
-                else:
-                    if self.data.config.weather_units == "imperial":
-                        imp_visibility = round(float(curr_cond.get("visibility").get("value","24"))*0.621371,1)
-                        wx_visibility = str(imp_visibility) + " mi"
-                    else:
-                        wx_visibility = curr_cond.get("visibility").get("value","24") + " " + curr_cond.get("visibility").get("unit","km")
 
 
                 self.data.wx_curr_wind = [wx_windspeed,winddir[0],winddir[1],wx_windgust,wx_pressure,wx_tendency,wx_visibility]

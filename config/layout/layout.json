@@ -190,7 +190,58 @@
         "align": "left"
       }
     },
+    "forecast_temp_hi":{
+      "position": [-3, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "left"
+      }
+    },
+    "forecast_hi":{
+      "position": [2, 3],
+      "font": "wx_medium",
+      "align": "left"
+    },
+
+    "forecast_temp_lo": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "forecast_temp_hi",
+        "align": "right-bottom"
+      }
+    },
+    "forecast_lo":{
+      "position": [0, 6],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "forecast_hi",
+        "align": "left-bottom"
+      }
+    },
     "temp_app": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_hi": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_lo": {
       "position": [0, 2],
       "font": "wx_large",
       "align": "right",

@@ -13,6 +13,7 @@ from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
+from boards.wxForecast import wxForecast
 from time import sleep
 
 
@@ -181,6 +182,9 @@ class Boards:
     
     def wxalert(self, data, matrix,sleepEvent):
         wxAlert(data, matrix, sleepEvent)
+    
+    def wxforecast(self, data, matrix,sleepEvent):
+        wxForecast(data, matrix, sleepEvent)
 
     def covid_19(self, data, matrix,sleepEvent):
         Covid_19(data, matrix, sleepEvent)

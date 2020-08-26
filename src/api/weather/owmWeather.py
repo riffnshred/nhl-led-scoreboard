@@ -73,7 +73,7 @@ class owmWxWorker(object):
                 elif owm_wxcode in range(600,699):
                     # Rain Class
                     owm_icon = 600
-                elif owm_wxcode in range(801,804):
+                elif owm_wxcode in range(800,805):
                     # Rain Class
                     owm_icon = 801
                 else:

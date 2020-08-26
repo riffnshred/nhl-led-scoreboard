@@ -700,7 +700,9 @@
                         "units": "metric",
                         "update_freq": 5,
                         "duration": 30,
-                        "show_on_clock": true
+                        "show_on_clock": true,
+                        "forecast_enabled": true,
+                        "forecast_days": 3
                     }
                 ],
                 "additionalProperties": true,
@@ -712,7 +714,9 @@
                     "data_feed",
                     "owm_apikey",
                     "update_freq",
-                    "show_on_clock"
+                    "show_on_clock",
+                    "forecast_enabled",
+                    "forecast_days"
                 ],
                 "properties": {
                     "enabled": {
@@ -793,6 +797,26 @@
                         "default": false,
                         "examples": [
                             true
+                        ]
+                    },
+                    "forecast_enabled": {
+                        "$id": "#/properties/weather/properties/forecast_enabled",
+                        "type": "boolean",
+                        "title": "forecast_enabled",
+                        "description": "Enable the weather forecast thread to get your local weather forecast up to 3 days.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "forecast_days": {
+                        "$id": "#/properties/weather/properties/forecast_days",
+                        "type": "integer",
+                        "title": "forecast_days",
+                        "description": "Number of forecast days to show (3 is the maximum).",
+                        "default": 3,
+                        "examples": [
+                            3
                         ]
                     }
                 }

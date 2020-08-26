@@ -1,6 +1,7 @@
 from env_canada import ECData
 import debug
 import datetime
+from random import randint
 from time import sleep
 
 
@@ -13,7 +14,8 @@ class ecWxAlerts(object):
         self.alert_frequency = data.config.wxalert_update_freq
         self.weather_alert = 0
         # Date format Friday April 03, 2020 at 04:36 CDT
-        self.alert_date_format = "%A %B %d, %Y at %H:%M %Z"
+        # Strip off the last 4 caharacters in the date string to remove timezone
+        self.alert_date_format = "%A %B %d, %Y at %H:%M"
         self.network_issues = data.network_issues
 
 
@@ -23,6 +25,9 @@ class ecWxAlerts(object):
 
         while True:
             try:
+                sleep_time = randint(11,20)
+                debug.info("Randomly sleeping {} seconds before getting EC alerts....".format(sleep_time))
+                sleep(sleep_time)
                 debug.info("Checking for EC weather alerts")
                 ecData = ECData(coordinates=(self.data.latlng))
                 curr_alerts = ecData.alerts
@@ -44,10 +49,14 @@ class ecWxAlerts(object):
             #Find the latest date in the curr_alerts
 
 
-
-            len_warn = len(curr_alerts.get("warnings").get("value"))
-            len_watch = len(curr_alerts.get("watches").get("value"))
-            len_advisory = len(curr_alerts.get("advisories").get("value"))
+            try:
+                len_warn = len(curr_alerts.get("warnings").get("value"))
+                len_watch = len(curr_alerts.get("watches").get("value"))
+                len_advisory = len(curr_alerts.get("advisories").get("value"))
+            except:
+                len_warn = 0
+                len_watch = 0
+                len_advisory = 0
 
             num_alerts = len_warn + len_watch + len_advisory
 
@@ -71,7 +80,7 @@ class ecWxAlerts(object):
                 alerts = []
                 
                 if wx_num_warning > 0:
-                    warn_date = curr_alerts["warnings"]["value"][i]["date"]
+                    warn_date = curr_alerts["warnings"]["value"][i]["date"][:-4]
                     #Convert to date for display
                     warn_datetime = datetime.datetime.strptime(warn_date,self.alert_date_format)
                     if self.time_format == "%H:%M":
@@ -86,7 +95,7 @@ class ecWxAlerts(object):
                 
 
                 if wx_num_watch > 0:
-                    watch_date = curr_alerts["watches"]["value"][i]["date"]
+                    watch_date = curr_alerts["watches"]["value"][i]["date"][:-4]
                     #Convert to date for display
                     watch_datetime = datetime.datetime.strptime(watch_date,self.alert_date_format)
                     if self.time_format == "%H:%M":
@@ -100,7 +109,7 @@ class ecWxAlerts(object):
                 
 
                 if wx_num_advisory > 0:
-                    advisory_date = curr_alerts["advisories"]["value"][i]["date"]
+                    advisory_date = curr_alerts["advisories"]["value"][i]["date"][:-4]
                     #Convert to date for display
                     advisory_datetime = datetime.datetime.strptime(advisory_date,self.alert_date_format)
                     
@@ -133,7 +142,7 @@ class ecWxAlerts(object):
                     self.weather_alert = 0
 
                 if wx_num_endings > 0:
-                    ending_date = curr_alerts["endings"]["value"][i]["date"]
+                    ending_date = curr_alerts["endings"]["value"][i]["date"][:-4]
                     #Convert to date for display
                     ending_datetime = datetime.datetime.strptime(ending_date,self.alert_date_format)
                     if self.time_format == "%H:%M":

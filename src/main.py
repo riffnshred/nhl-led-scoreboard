@@ -13,6 +13,7 @@ from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
+from api.weather.wxForecast import wxForecast
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -21,7 +22,7 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.3.1"
+SCRIPT_VERSION = "1.3.2"
 
 
 def run():
@@ -98,16 +99,24 @@ def run():
         else:
             debug.error("No valid weather alerts providers selected, skipping alerts feed")
             data.config.weather_show_alerts = False
-    
+
+       
+    # Start task scheduler, used for UpdateChecker and screensaver
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+
+    # Any tasks that are scheduled go below this line
+    data_wxForecast = data.config.weather_forecast_enabled
+
+    if data_wxForecast:  
+        wxForecast(data,scheduler)
+
     #
     # Run check for updates against github on a background thread on a scheduler
-    #     
-
+    #  
     if commandArgs.updatecheck:
         data.UpdateRepo = commandArgs.updaterepo
-        scheduler = BackgroundScheduler()
         checkupdate = UpdateChecker(data,scheduler)
-        scheduler.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
 

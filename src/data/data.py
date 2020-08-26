@@ -96,6 +96,10 @@ class Data:
         self.wx_alerts = []
         self.wx_alert_interrupt = False 
 
+        #Weather Forecast Info
+        self.forecast_updated = False
+        self.wx_forecast = []
+
         # For update checker, True means new update available from github
         self.newUpdate = False
         self.UpdateRepo = "riffnshred/nhl-led-scoreboard"

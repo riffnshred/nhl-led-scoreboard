@@ -74,6 +74,7 @@ class Dimmer(object):
                       self.brightness = self.data.config.dimmer_sunset_brightness 
                   else:
                       debug.info("It is day time")
+                      
                       self.brightness = self.data.config.dimmer_sunrise_brightness
                else: 
                    # This is where code for light sensor will go.
