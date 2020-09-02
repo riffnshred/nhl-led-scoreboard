@@ -84,7 +84,8 @@
 			"update_freq": 5,
 			"show_on_clock": true,
 			"forecast_enabled": true,
-			"forecast_days": 3
+			"forecast_days": 3,
+			"forecast_update": 1
 		},
         "wxalert": {
             "alert_feed": "EC",
@@ -97,6 +98,12 @@
         }	
 	},
 	"sbio": {
+		"screensaver": {
+            "enabled": true,
+            "start": "22:00",
+            "stop": "22:05",
+            "data_updates": false
+        },
 		"dimmer": {
 			"enabled": false,
 			"source": "software",

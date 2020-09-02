@@ -29,6 +29,12 @@ class ScoreboardConfig:
         # Goal animation
         self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
 
+        #Screen Saver entries
+        self.screenaver_enabled = json["sbio"]["screensaver"]["enabled"]
+        self.screensaver_start = json["sbio"]["screensaver"]["start"]
+        self.screensaver_stop = json["sbio"]["screensaver"]["stop"]
+        self.screensaver_data_updates = json["sbio"]["screensaver"]["data_updates"]
+
         # Dimmer preferences
         self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
         self.dimmer_source = json["sbio"]["dimmer"]["source"]
@@ -66,7 +72,10 @@ class ScoreboardConfig:
         self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
         # Forecast settings
         self.weather_forecast_enabled = json["boards"]["weather"]["forecast_enabled"]
+        #Number of days up to 3 for forecast
         self.weather_forecast_days = json["boards"]["weather"]["forecast_days"]
+        #How frequent, in hours, to update the forecast
+        self.weather_forecast_update = json["boards"]["weather"]["forecast_update"]
 
         #Weather Alerts Preferences
         self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
@@ -83,7 +92,6 @@ class ScoreboardConfig:
         self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
         self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
 
-        #Weather forecast config entries
         
 
 

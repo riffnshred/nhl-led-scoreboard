@@ -702,7 +702,8 @@
                         "duration": 30,
                         "show_on_clock": true,
                         "forecast_enabled": true,
-                        "forecast_days": 3
+                        "forecast_days": 3,
+                        "forecast_update": 1
                     }
                 ],
                 "additionalProperties": true,
@@ -716,7 +717,8 @@
                     "update_freq",
                     "show_on_clock",
                     "forecast_enabled",
-                    "forecast_days"
+                    "forecast_days",
+                    "forecast_update"
                 ],
                 "properties": {
                     "enabled": {
@@ -814,6 +816,16 @@
                         "type": "integer",
                         "title": "forecast_days",
                         "description": "Number of forecast days to show (3 is the maximum).",
+                        "default": 3,
+                        "examples": [
+                            3
+                        ]
+                    },
+                    "forecast_update": {
+                        "$id": "#/properties/weather/properties/forecast_update",
+                        "type": "integer",
+                        "title": "forecast_update",
+                        "description": "How often to update forecast.  This is in hours",
                         "default": 3,
                         "examples": [
                             3
@@ -930,6 +942,12 @@
             "default": {},
             "examples": [
                 {
+                    "screensaver": {
+                        "enabled": "true",
+                        "start": "22:00",
+                        "end": "22:05",
+                        "data_updates": false
+                    },
                     "dimmer": {
                         "frequency": 5,
                         "light_level_lux": 10,
@@ -956,10 +974,75 @@
             ],
             "additionalProperties": true,
             "required": [
+                "screensaver",
                 "dimmer",
                 "pushbutton"
             ],
             "properties": {
+                "screensaver": {
+                    "$id": "#/properties/sbio/properties/screensaver",
+                    "type": "object",
+                    "title": "screensaver",
+                    "description": "Ability to turn off screen and back on at set times",
+                    "default": {},
+                    "examples": [
+                        {
+                                "enabled": true,
+                                "start": "22:00",
+                                "stop": "22:05",
+                                "data_updates": false
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "start",
+                        "stop",
+                        "data_updates"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the screensaver functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "start": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/start",
+                            "type": "string",
+                            "title": "start",
+                            "description": "Time to start screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:00"
+                            ]
+                        },
+                        "end": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/end",
+                            "type": "string",
+                            "title": "end",
+                            "description": "Time to end screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:30"
+                            ]
+                        },
+                        "data_updates": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/data_updates",
+                            "type": "boolean",
+                            "title": "data_updates",
+                            "description": "Update weather and NHL data while screen saver is active",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    }
+                },
                 "dimmer": {
                     "$id": "#/properties/sbio/properties/dimmer",
                     "type": "object",

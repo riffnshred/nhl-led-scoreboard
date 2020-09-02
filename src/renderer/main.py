@@ -99,6 +99,13 @@ class MainRenderer:
                 self.data.wx_alert_interrupt = False
                 #Display the board from the config
                 self.boards._wx_alert(self.data, self.matrix, self.sleepEvent)
+            
+            # Display the screensaver board
+            if self.data.screensaver:
+                debug.info('Screensaver triggered in game day loop....')
+                #self.data.wx_alert_interrupt = False
+                #Display the board from the config
+                self.boards._screensaver(self.data, self.matrix, self.sleepEvent)
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """

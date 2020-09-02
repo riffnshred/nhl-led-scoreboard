@@ -86,6 +86,8 @@ class Data:
         # Currently displayed board
         self.curr_board = None
 
+        # Environment Canada manager (to share between the forecast, alerts and current obs)
+        self.ecData = None
         # Weather Board Info
         self.wx_updated = False
         self.wx_units = []
@@ -103,6 +105,9 @@ class Data:
         # For update checker, True means new update available from github
         self.newUpdate = False
         self.UpdateRepo = "riffnshred/nhl-led-scoreboard"
+
+        #For screensaver
+        self.screensaver = False
         
 
         # Flag to determine when to refresh data

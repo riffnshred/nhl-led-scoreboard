@@ -10,8 +10,13 @@ import geocoder
 def get_lat_lng(location):
 
     if len(location) > 0:
-        g = geocoder.osm(location)
-        debug.info("location is: " + location + " " + str(g.latlng))
+        try:
+            g = geocoder.osm(location)
+            debug.info("location is: " + location + " " + str(g.latlng))
+        except Exception as e:
+            debug.error("Unable to find {} with Open Street Map, falling back to IP lookup for location.  Error: {}".format(location,e))
+            g = geocoder.ip('me')
+            debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
     else:
         g = geocoder.ip('me')
         debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
