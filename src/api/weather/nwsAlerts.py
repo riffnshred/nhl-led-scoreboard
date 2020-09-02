@@ -88,13 +88,18 @@ class nwsWxAlerts(object):
                 _attributes['headline'] = _attributes['alerts'][0]['headline'] if _state > 0 else None
                 _attributes['instruction'] = _attributes['alerts'][0]['instruction'] if _state > 0 else None
                 _attributes['effective'] = _attributes['alerts'][0]['effective'] if _state > 0 else None
+                _attributes['expires'] = _attributes['alerts'][0]['expires'] if _state > 0 else None
                 _attributes['alerts_string'] = json.dumps(_attributes['alerts'])
 
                 # Build up the weather alert string
                 # urgency	(Immediate, Expected, Future, Unknown)
                 # severity	severity level(minor, moderate, severe, extreme)
                 # 
-                warn_date = _attributes['effective']
+                if self.data.config.wx_alert_nws_show_expire:
+                    warn_date = _attributes['expires']
+                else:
+                    warn_date = _attributes['effective']
+                    
                 #Convert to date for display
                 warn_datetime = datetime.datetime.strptime(warn_date,self.alert_date_format)
                 if self.time_format == "%H:%M":

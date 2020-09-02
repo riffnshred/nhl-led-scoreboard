@@ -82,6 +82,8 @@ class ScoreboardConfig:
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
         self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"] 
+        #Show expire time instead of effective time of NWS alerts
+        self.wxalert_nws_show_expire = json["boards"]["wxalert"]["nws_show_expire"]
         # Display on top and bottom bar the severity (for US) and type
         self.wxalert_alert_title = json["boards"]["wxalert"]["alert_title"]
         # Display static alert or scrolling

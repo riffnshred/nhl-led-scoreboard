@@ -91,6 +91,7 @@
             "alert_feed": "EC",
             "update_freq": 5,
             "show_alerts": true,
+			"nws_show_expire": false,
             "alert_title": true,
             "scroll_alert": true,
             "alert_duration": 5,

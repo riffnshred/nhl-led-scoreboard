@@ -1,6 +1,7 @@
 #import data.scoreboard_config
 import time
 import sys
+import logging
 
 debug_enabled = False
 

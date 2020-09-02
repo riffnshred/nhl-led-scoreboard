@@ -843,6 +843,7 @@
                     {
                         "scroll_alert": true,
                         "alert_feed": "EC",
+                        "nws_show_expire": false,
                         "alert_duration": 5,
                         "alert_title": true,
                         "update_freq": 5,
@@ -854,6 +855,7 @@
                 "required": [
                     "alert_feed",
                     "update_freq",
+                    "nws_show_expire",
                     "show_alerts",
                     "alert_title",
                     "scroll_alert",
@@ -879,6 +881,16 @@
                         "default": 5,
                         "examples": [
                             5
+                        ]
+                    },
+                    "show_alerts": {
+                        "$id": "#/properties/weather/properties/nws_show_expire",
+                        "type": "boolean",
+                        "title": "nws_show_expire",
+                        "description": "Show expire time (true) instead of effective time (false) of alert",
+                        "default": false,
+                        "examples": [
+                            true
                         ]
                     },
                     "show_alerts": {
