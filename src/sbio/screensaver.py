@@ -29,6 +29,9 @@ class screenSaver(object):
         self.data.screensaver = True
         self.sleepEvent.set()
 
+        curr_brightness = self.brightness
+        
+
     def stopSaver(self):
         #Stop screen saver board, Fade in brightness back to last setting
         debug.info("Screen saver stopped.... Currently displayed board " + self.data.curr_board)

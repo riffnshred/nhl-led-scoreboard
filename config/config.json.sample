@@ -108,6 +108,9 @@
 		"dimmer": {
 			"enabled": false,
 			"source": "software",
+			"daytime": "",
+            "nighttime": "",
+            "offset": 90,
 			"frequency": 5,
 			"light_level_lux": 400,
 			"mode": "always",

@@ -2,7 +2,6 @@ from env_canada import ECData
 import debug
 import datetime
 from time import sleep
-from random import randint
 from api.weather.wx_utils import cadhumidex, wind_chill, get_icons, degrees_to_direction, temp_f, wind_mph
 
 class ecWxWorker(object):
@@ -36,29 +35,6 @@ class ecWxWorker(object):
                 self.data.wx_updated = False
             else:
                 self.data.wx_updated = True
-                
-            # while not self.data.wx_updated:
-            #     try:
-            #         #sleep_time = randint(0,10)
-            #         #debug.info("Randomly sleeping {} seconds before getting EC current obs ...".format(sleep_time))
-            #         #sleep(sleep_time)
-            #         debug.info("Refreshing EC current observations weather")
-            #         #ecData = ECData(coordinates=(self.data.latlng))
-            #         self.data.ecData.update()
-            #         self.data.wx_updated = True
-            #         self.network_issues = False
-
-            #         curr_cond = self.data.ecData.conditions
-                    
-            #         if len(curr_cond) == 0:
-            #             debug.error("Unable to get EC current observations")
-            #             self.data.wx_updated = False
-
-            #     except Exception as e:
-            #         debug.error("Unable to get EC data error:{0}".format(e))
-            #         self.data.wx_updated = False
-            #         self.network_issues = True
-            #         pass
                                 
             
             #if self.data.wx_updated:

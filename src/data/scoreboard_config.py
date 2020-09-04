@@ -14,6 +14,7 @@ class ScoreboardConfig:
 
         # Misc config options
         self.debug = json["debug"]
+        self.loglevel = json["loglevel"]
         self.live_mode = json["live_mode"]
 
         # Preferences
@@ -38,6 +39,9 @@ class ScoreboardConfig:
         # Dimmer preferences
         self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
         self.dimmer_source = json["sbio"]["dimmer"]["source"]
+        self.dimmer_daytime = json["sbio"]["dimmer"]["daytime"]
+        self.dimmer_nighttime = json["sbio"]["dimmer"]["nighttime"]
+        self.dimmer_offset = json["sbio"]["dimmer"]["offset"]
         self.dimmer_frequency = json["sbio"]["dimmer"]["frequency"]
         self.dimmer_light_level_lux = json["sbio"]["dimmer"]["light_level_lux"]
         self.dimmer_mode = json["sbio"]["dimmer"]["mode"]

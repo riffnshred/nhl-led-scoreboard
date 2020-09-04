@@ -3,7 +3,8 @@ import collections
 import argparse
 import os
 import debug
-from datetime import datetime, timezone
+from datetime import datetime, timezone, time
+import regex
 import math
 import geocoder
 
@@ -22,6 +23,22 @@ def get_lat_lng(location):
         debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
 
     return g.latlng
+
+# validate if a string is in 12h format or 24h format
+def timeValidator(timestr):
+    #Check 24hr HH:MM
+    ok24hr = regex.match('^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$', timestr)
+    #Check 12h 5:30 PM or 5:30 pm 
+    ok12hr = regex.match('^(1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm])$',timestr)
+
+    if ok24hr:
+        return "24h"
+    elif ok12hr:
+        return "12h"
+    else:
+        return "invalid"
+
+    
 
 def get_file(path):
     dir = os.path.dirname(os.path.dirname(__file__))
@@ -74,8 +91,10 @@ def args():
                         default=0, type=int)
     parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
     parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
-    parser.add_argument("--updatecheck", action="store", help="Check for updates (Default: False)", default=False, type=bool)
+    parser.add_argument("--updatecheck", action="store_true", help="Check for updates (Default: False)", default=False)
     parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
+    parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
+    parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
 
     return parser.parse_args()
 

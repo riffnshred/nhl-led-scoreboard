@@ -1,7 +1,6 @@
 from env_canada import ECData
 import debug
 import datetime
-from random import randint
 from time import sleep
 
 
@@ -26,20 +25,12 @@ class ecWxAlerts(object):
 
     def getAlerts(self):
 
-        #while True:
-        #try:
-            # sleep_time = randint(11,20)
-            # debug.info("Randomly sleeping {} seconds before getting EC alerts ...".format(sleep_time))
-            # sleep(sleep_time)
+        
         debug.info("Checking for EC weather alerts")
         #ecData = ECData(coordinates=(self.data.latlng))
         self.data.ecData.update()
         curr_alerts = self.data.ecData.alerts
         self.network_issues = False
-        # except Exception as e:
-        #     debug.error("Unable to get EC data error:{0}".format(e))
-        #     num_alerts = 0
-        #     self.network_issues = True
         
         
         debug.info("Last Alert: {0}".format(self.data.wx_alerts))

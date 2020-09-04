@@ -8,6 +8,7 @@
     "additionalProperties": true,
     "required": [
         "debug",
+        "loglevel",
         "live_mode",
         "preferences",
         "goal_animations",
@@ -24,6 +25,16 @@
             "default": false,
             "examples": [
                 true
+            ]
+        },
+        "loglevel": {
+            "$id": "#/properties/loglevel",
+            "type": "string",
+            "title": "loglevel",
+            "description": "Level of logs to show in output.  Can be DEBUG, INFO, WARN, ERROR, CRITICAL  DEBUG is same as setting debug to true ",
+            "default": "INFO",
+            "examples": [
+                "INFO"
             ]
         },
         "live_mode": {
@@ -883,7 +894,7 @@
                             5
                         ]
                     },
-                    "show_alerts": {
+                    "nws_show_expire": {
                         "$id": "#/properties/weather/properties/nws_show_expire",
                         "type": "boolean",
                         "title": "nws_show_expire",
@@ -967,7 +978,10 @@
                         "source": "software",
                         "sunrise_brightness": 40,
                         "enabled": true,
-                        "mode": "always"
+                        "mode": "always",
+                        "daytime": "8:30AM",
+                        "nighttime": "5:30PM",
+                        "offset": 90
                     },
                     "pushbutton": {
                         "state_triggered1": "weather",
@@ -1069,7 +1083,10 @@
                             "light_level_lux": 10,
                             "sunset_brightness": 5,
                             "source": "software",
-                            "sunrise_brightness": 40
+                            "sunrise_brightness": 40,
+                            "daytime": "8:30AM",
+                            "nighttime": "5:30PM",
+                            "offset": 90
                         }
                     ],
                     "additionalProperties": true,
@@ -1080,7 +1097,10 @@
                         "light_level_lux",
                         "mode",
                         "sunset_brightness",
-                        "sunrise_brightness"
+                        "sunrise_brightness",
+                        "daytime",
+                        "nighttime",
+                        "offset"
                     ],
                     "properties": {
                         "enabled": {
@@ -1131,6 +1151,36 @@
                             "default": "always",
                             "examples": [
                                 "always"
+                            ]
+                        },
+                        "daytime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/daytime",
+                            "type": "string",
+                            "title": "daytime",
+                            "description": "What time is day time (can be 12 or 24 hour time)",
+                            "default": "8:30AM",
+                            "examples": [
+                                "8:30AM"
+                            ]
+                        },
+                        "nighttime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/nighttime",
+                            "type": "string",
+                            "title": "nighttime",
+                            "description": "What time is night time (can be 12 or 24 hour time)",
+                            "default": "5:30PM",
+                            "examples": [
+                                "5:30PM"
+                            ]
+                        },
+                        "offset": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/offset",
+                            "type": "integer",
+                            "title": "offset",
+                            "description": "Value of offset in minutes for sunrise and sunset.  Can be positive or negative",
+                            "default": 0,
+                            "examples": [
+                                90
                             ]
                         },
                         "sunset_brightness": {

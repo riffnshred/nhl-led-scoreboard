@@ -3,7 +3,6 @@ from env_canada import ECData
 import debug
 from datetime import datetime,timedelta
 from time import sleep
-from random import randint
 from api.weather.wx_utils import cadhumidex, wind_chill, get_icons, degrees_to_direction, temp_f, wind_mph
 
 class wxForecast(object):
@@ -104,15 +103,15 @@ class wxForecast(object):
                 if icon_code == None:
                     wx_icon = '\uf07b'
                     wx_summary = "N/A"
-                    debug.info("Forecasts returned: {}".format(forecasts))
+                    debug.warning("Forecasts returned: {}".format(forecasts))
                 else:
                     #Get condition and icon from dictionary
-                    debug.info("icons length {}".format(len(self.icons)))
+                    debug.warning("icons length {}".format(len(self.icons)))
                     for row in range(len(self.icons)):
                         if int(self.icons[row]["ForecastCode"]) == int(icon_code):
                             wx_icon = self.icons[row]['font']
                             wx_summary = self.icons[row]['Description']
-                            debug.info("EC icon code: {} : EC Summary {}.  : Description {}".format(icon_code,summary,wx_summary))
+                            debug.warning("EC icon code: {} : EC Summary {}.  : Description {}".format(icon_code,summary,wx_summary))
                             break
                         else:
                             wx_icon = '\uf07b'

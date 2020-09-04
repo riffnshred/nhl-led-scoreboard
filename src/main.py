@@ -30,8 +30,8 @@ SCRIPT_VERSION = "1.3.2"
 def run():
     # Get supplied command line arguments
     commandArgs = args()
-
-    if commandArgs.terminal_mode:
+    
+    if commandArgs.terminal_mode and sys.stdin.isatty():
         height, width = os.popen('stty size', 'r').read().split()
         termMatrix = TermMatrix()
         termMatrix.width = int(width)
@@ -45,15 +45,23 @@ def run():
         # Initialize the matrix
         matrix = Matrix(RGBMatrix(options = matrixOptions))
 
-    # Print some basic info on startup
-    debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
-
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
-    debug.set_debug_status(config)
-
     data = Data(config)
+    
+    #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)
+    if commandArgs.logcolor and commandArgs.loglevel != None:
+        debug.set_debug_status(config,logcolor=commandArgs.logcolor,loglevel=commandArgs.loglevel)
+    elif not commandArgs.logcolor and commandArgs.loglevel != None:
+        debug.set_debug_status(config,loglevel=commandArgs.loglevel)
+    elif commandArgs.logcolor and commandArgs.loglevel == None:
+        debug.set_debug_status(config,logcolor=commandArgs.logcolor,loglevel=config.loglevel)
+    else:
+        debug.set_debug_status(config,loglevel=config.loglevel)
+
+    # Print some basic info on startup
+    debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
@@ -114,7 +122,8 @@ def run():
     #if data.config.screensaver_enabled: 
 
 
-    debug.info(scheduler.print_jobs())
+    #debug.info(scheduler.print_jobs())
+    
 
     MainRenderer(matrix, data, sleepEvent).render()
 
