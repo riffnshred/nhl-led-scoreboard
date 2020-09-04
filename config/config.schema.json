@@ -1158,9 +1158,10 @@
                             "type": "string",
                             "title": "daytime",
                             "description": "What time is day time (can be 12 or 24 hour time)",
-                            "default": "8:30AM",
+                            "default": "8:30 AM",
                             "examples": [
-                                "8:30AM"
+                                "8:30 AM",
+                                "08:30"
                             ]
                         },
                         "nighttime": {
@@ -1168,16 +1169,17 @@
                             "type": "string",
                             "title": "nighttime",
                             "description": "What time is night time (can be 12 or 24 hour time)",
-                            "default": "5:30PM",
+                            "default": "5:30 PM",
                             "examples": [
-                                "5:30PM"
+                                "5:30 PM",
+                                "17:30"
                             ]
                         },
                         "offset": {
                             "$id": "#/properties/sbio/properties/dimmer/properties/offset",
                             "type": "integer",
                             "title": "offset",
-                            "description": "Value of offset in minutes for sunrise and sunset.  Can be positive or negative",
+                            "description": "Value of offset in minutes for sunrise and sunset for automatic sunrise/sunset from location only.  Can be positive or negative",
                             "default": 0,
                             "examples": [
                                 90

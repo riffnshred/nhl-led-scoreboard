@@ -106,14 +106,21 @@ class Dimmer(object):
 
                 else:
 
-                    morning = self._observer.next_rising(ephem.Sun(), use_center=True)
-                    night = self._observer.next_setting(ephem.Sun(), use_center=True)
+                    morning = self._observer.next_rising(ephem.Sun(), use_center=True) + (self.data.config.dimmer_offset * ephem.minute)
+                    night = self._observer.next_setting(ephem.Sun(), use_center=True) + (self.data.config.dimmer_offset * ephem.minute)
                     #sunrise = ephem.localtime(morning)
                     #sunset = ephem.localtime(night)
                     #debug.info(sunrise)
                     #debug.info(sunset)
 
-                    debug.warning("Using ephem for dimmer:  Sunset is @ {}  Sunrise is @ {}".format(ephem.localtime(night),ephem.localtime(morning)))
+                    if self.data.config.dimmer_offset < 0:
+                        offset_dir = "back"
+                    elif self.data.config.dimmer_offset > 0:
+                        offset_dir = "forward"
+                    else:
+                        offset_dir = ""
+
+                    debug.info("Using location for dimmer:  Sunset is @ {}  Sunrise is @ {}  Offset by {} minutes {}".format(ephem.localtime(night),ephem.localtime(morning),self.data.config.dimmer_offset,offset_dir))
 
                     # Very simplistic way of handling the day/night but it works
                     if morning < night:
