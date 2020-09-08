@@ -31,7 +31,8 @@ class ScoreboardConfig:
         self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
 
         #Screen Saver entries
-        self.screenaver_enabled = json["sbio"]["screensaver"]["enabled"]
+        self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
+        self.screensaver_animations = json["sbio"]["screensaver"]["animations"]
         self.screensaver_start = json["sbio"]["screensaver"]["start"]
         self.screensaver_stop = json["sbio"]["screensaver"]["stop"]
         self.screensaver_data_updates = json["sbio"]["screensaver"]["data_updates"]

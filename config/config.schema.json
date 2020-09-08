@@ -1014,6 +1014,7 @@
                     "examples": [
                         {
                                 "enabled": true,
+                                "animations": true,
                                 "start": "22:00",
                                 "stop": "22:05",
                                 "data_updates": false
@@ -1022,6 +1023,7 @@
                     "additionalProperties": true,
                     "required": [
                         "enabled",
+                        "animations",
                         "start",
                         "stop",
                         "data_updates"
@@ -1032,6 +1034,16 @@
                             "type": "boolean",
                             "title": "enabled",
                             "description": "Use the screensaver functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "animations": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/animations",
+                            "type": "boolean",
+                            "title": "animations",
+                            "description": "Show anuimation on screensaver start (true) or go straight to black screen (false)",
                             "default": false,
                             "examples": [
                                 true

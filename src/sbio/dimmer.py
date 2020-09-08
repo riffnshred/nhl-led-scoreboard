@@ -85,8 +85,8 @@ class Dimmer(object):
         #debug.info(self.mode)
         #while True:
         debug.info("Checking for dimmer") 
-        # Only run if off day or override by config (dimmer mode = always)
-        if (not self.data.config.live_mode or self.data.is_pref_team_offday() or self.data.is_nhl_offday() or self.mode):
+        # Only run if off day or override by config (dimmer mode = always) and if screensaver is not active
+        if (not self.data.config.live_mode or self.data.is_pref_team_offday() or self.data.is_nhl_offday() or self.mode) and not self.data.screensaver:
             if not self.luxsensor:
                 debug.info("Using " + self.data.config.dimmer_source + " to determine dimming" )
                 #self._observer.date = ephem.now()
@@ -128,8 +128,7 @@ class Dimmer(object):
                         debug.info("It is night time")
                         self.brightness = self.data.config.dimmer_sunset_brightness 
                     else:
-                        debug.info("It is day time")
-                        
+                        debug.info("It is day time")  
                         self.brightness = self.data.config.dimmer_sunrise_brightness
             else: 
                 # This is where code for light sensor will go.
@@ -151,6 +150,6 @@ class Dimmer(object):
             self.matrix.set_brightness(self.brightness)
             #self.matrix.render()
         else:
-            debug.info("No dimming...Live Game on?")
+            debug.info("No dimming...Live Game on? or screen saver is active")
             # Run every 5 minutes
             #sleep(60 * self.data.config.dimmer_frequency)

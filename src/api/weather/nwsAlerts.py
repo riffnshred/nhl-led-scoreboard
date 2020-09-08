@@ -9,7 +9,7 @@ from time import sleep
 # A sensor created for Home Assistant.
 
 class nwsWxAlerts(object):
-    def __init__(self, data, scheduler):
+    def __init__(self, data, scheduler,sleepEvent):
         
         self.data = data
         self.sleepEvent = sleepEvent

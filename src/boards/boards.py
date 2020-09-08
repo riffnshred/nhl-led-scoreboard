@@ -51,6 +51,8 @@ class Boards:
             if data.pb_trigger:
                 debug.info('PushButton triggered....will display ' + data.config.pushbutton_state_triggered1 + ' board ' + "Overriding off_day -> " + data.config.boards_off_day[bord_index])
                 data.pb_trigger = False
+                if data.screensaver:
+                    data.screensaver = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1

@@ -108,6 +108,7 @@ class Data:
 
         #For screensaver
         self.screensaver = False
+        self.screensaver_displayed = False
         
 
         # Flag to determine when to refresh data

@@ -70,6 +70,7 @@ class wxForecast(object):
                 debug.error("Unable to update EC forecast. Error: {}".format(e))
 
             forecasts = self.data.ecData.daily_forecasts
+            debug.warning(forecasts)
 
             if len(forecasts) > 0:
                 forecasts_updated = True

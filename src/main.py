@@ -85,7 +85,11 @@ def run():
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
-            data.ecData = ECData(coordinates=(data.latlng))
+            try:
+                data.ecData = ECData(coordinates=(data.latlng))
+            except Exception as e:
+                debug.error("Unable to connect to EC, try running again in a few minutes")
+                sys.exit(0)
 
     if data.config.weather_enabled:
         if data.config.weather_data_feed.lower() == "ec":
@@ -99,9 +103,9 @@ def run():
     
     if data.config.wxalert_show_alerts:
         if data.config.wxalert_alert_feed.lower() == "ec":
-            ecalert = ecWxAlerts(data,scheduler)
+            ecalert = ecWxAlerts(data,scheduler,sleepEvent)
         elif data.config.wxalert_alert_feed.lower() == "nws":
-            nwsalert = nwsWxAlerts(data,scheduler)
+            nwsalert = nwsWxAlerts(data,scheduler,sleepEvent)
         else:
             debug.error("No valid weather alerts providers selected, skipping alerts feed")
             data.config.weather_show_alerts = False
@@ -119,10 +123,8 @@ def run():
     if data.config.dimmer_enabled:
         dimmer = Dimmer(data, matrix,scheduler)
 
-    #if data.config.screensaver_enabled: 
-
-
-    #debug.info(scheduler.print_jobs())
+    if data.config.screensaver_enabled: 
+        screenSaver(data, matrix, sleepEvent, scheduler)
     
 
     MainRenderer(matrix, data, sleepEvent).render()

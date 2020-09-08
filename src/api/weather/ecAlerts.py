@@ -5,7 +5,7 @@ from time import sleep
 
 
 class ecWxAlerts(object):
-    def __init__(self, data, scheduler):
+    def __init__(self, data, scheduler,sleepEvent):
         
         self.data = data
         self.time_format = data.config.time_format
@@ -15,6 +15,9 @@ class ecWxAlerts(object):
         # Strip off the last 4 caharacters in the date string to remove timezone
         self.alert_date_format = "%A %B %d, %Y at %H:%M"
         self.network_issues = data.network_issues
+
+        self.sleepEvent = sleepEvent
+        self.sleepEvent.clear()
 
         scheduler.add_job(self.getAlerts, 'interval', minutes=self.alert_frequency,jitter=90,id='ecAlerts')
         #Check every 5 mins for testing only
