@@ -12,17 +12,16 @@ class screenSaver:
     def __init__(self, data, matrix,sleepEvent):
         self.data = data
         self.status = self.data.screensaver_displayed
-        self.font = data.config.layout.font   
+        self.font = data.config.layout.font
         self.matrix = matrix
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
 
         self.draw_screenSaver()
-        
-            
-        
+
+
     def draw_screenSaver(self):
-        
+
         self.status = True
         show_gif = self.data.config.screensaver_animations
         all_gifs = glob.glob("assets/animations/screensaver/*.gif")
@@ -41,7 +40,7 @@ class screenSaver:
                 frame_nub = 0
                 #debug.warning("In screensaver {}".format(self.sleepEvent.is_set()))
                 self.matrix.clear()
-                
+
                 # Go through the frames
                 x = 0
                 while x is not 10:
@@ -57,7 +56,7 @@ class screenSaver:
 
                     frame_nub += 1
                     sleep(0.1)
-                
+
                 self.matrix.clear()
                 self.matrix.render()
                 show_gif = False
@@ -65,9 +64,9 @@ class screenSaver:
                 self.matrix.clear()
                 self.matrix.draw.rectangle([0,0, self.matrix.width, self.matrix.height], fill=(0,0,0))
                 self.matrix.render()
-            
+
             i += 1
             if i % 90 == 0:
                 debug.info("Screen saver is active....")
-                
+
             self.sleepEvent.wait(1)

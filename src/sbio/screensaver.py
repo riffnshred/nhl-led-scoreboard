@@ -1,4 +1,3 @@
-from gpiozero import MotionSensor
 import debug
 from datetime import datetime,date,time
 from utils import timeValidator
@@ -6,11 +5,6 @@ from time import sleep
 
 class screenSaver(object):
     def __init__(self, data, matrix,sleepEvent, scheduler):
-
-        # pir = MotionSensor(15)
-
-        # pir.wait_for_motion()
-        # print("Motion detected!")
 
         self.data = data
         self.matrix = matrix
@@ -22,24 +16,24 @@ class screenSaver(object):
         #User set times to start and end dimmer at, comes from the config.json
 
         startsaver = None
-        stopsaver = None 
+        stopsaver = None
 
         if len(data.config.screensaver_start) > 0:
             timeCheck = timeValidator(data.config.screensaver_start)
             if timeCheck == "12h":
                 startsaver = datetime.strptime(data.config.screensaver_start, '%I:%M %p').time()
             elif timeCheck == "24h":
-                startsaver = datetime.strptime(data.config.screensaver_start, '%H:%M').time() 
+                startsaver = datetime.strptime(data.config.screensaver_start, '%H:%M').time()
             else:
                 debug.error("Start time setting ({}) for screen saver is not a valid 12h or 24h format. Screen saver will not be used".format(data.config.screensaver_start))
-            
+
 
         if len(data.config.screensaver_stop) > 0:
             timeCheck = timeValidator(data.config.screensaver_stop)
             if timeCheck == "12h":
                 stopsaver = datetime.strptime(data.config.screensaver_stop, '%I:%M %p').time()
             elif timeCheck == "24h":
-                stopsaver = datetime.strptime(data.config.screensaver_stop, '%H:%M').time() 
+                stopsaver = datetime.strptime(data.config.screensaver_stop, '%H:%M').time()
             else:
                 debug.error("Stop time setting ({}) for screensaver is not a valid 12h or 24h format. Screen saver will not be used".format(data.config.screensaver_stop))
 
@@ -52,7 +46,7 @@ class screenSaver(object):
             debug.info("Screen saver will start @ {} and end @ {}".format(startrun.strftime("%H:%M"),stoprun.strftime("%H:%M")))
         else:
             debug.error("Start or Stop time setting for screensaver is not a valid 12h or 24h format. Screen saver will not be used, check the config.json")
-        
+
     def runSaver(self):
         #Launch screen saver board, then Fade off brightness to 0
         debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
@@ -60,15 +54,15 @@ class screenSaver(object):
         self.sleepEvent.clear()
 
         i = self.brightness
-        
+
         while not self.data.screensaver_displayed:
             pass
-            
+
         while i >=0:
             self.matrix.set_brightness(self.brightness)
             self.brightness = i
             i -= 1
-            sleep(0.5) 
+            sleep(0.5)
 
         #self.matrix.clear()
         #self.matrix.render()
@@ -94,16 +88,15 @@ class screenSaver(object):
             for job in alljobs:
                 if "screenSaver" not in job.id:
                     job.resume()
-        
+
         self.data.screensaver = False
         self.data.screensaver_displayed = False
         self.sleepEvent.set()
 
         i = 0
-        
+
         while i <= self.original_brightness:
             self.matrix.set_brightness(i)
             i += 1
-            sleep(0.5) 
-        
+            sleep(0.5)
 

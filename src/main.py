@@ -8,6 +8,7 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
+from sbio.motionsensor import Motion
 from sbio.screensaver import screenSaver
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
@@ -74,8 +75,7 @@ def run():
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
-       
-    
+
     # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
     scheduler = BackgroundScheduler()
     scheduler.start()
@@ -124,7 +124,13 @@ def run():
         dimmer = Dimmer(data, matrix,scheduler)
 
     if data.config.screensaver_enabled: 
-        screenSaver(data, matrix, sleepEvent, scheduler)
+        screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
+        #if data.config.motion_enabled:
+        if True:
+            motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
+            motionsensorThread = threading.Thread(target=motionsensor.run, args=())
+            motionsensorThread.daemon = True
+            motionsensorThread.start()
     
 
     MainRenderer(matrix, data, sleepEvent).render()

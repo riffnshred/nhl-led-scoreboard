@@ -76,7 +76,7 @@ class Data:
         self.latlng = get_lat_lng(config.location)
         # Test for alerts
         #self.latlng = [32.653,-83.7596]
-        
+
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
 
@@ -96,7 +96,7 @@ class Data:
         self.wx_curr_precip = []
         # Weather Alert Info
         self.wx_alerts = []
-        self.wx_alert_interrupt = False 
+        self.wx_alert_interrupt = False
 
         #Weather Forecast Info
         self.forecast_updated = False
@@ -109,7 +109,7 @@ class Data:
         #For screensaver
         self.screensaver = False
         self.screensaver_displayed = False
-        
+
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
