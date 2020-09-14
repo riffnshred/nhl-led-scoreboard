@@ -125,8 +125,7 @@ def run():
 
     if data.config.screensaver_enabled: 
         screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
-        #if data.config.motion_enabled:
-        if True:
+        if data.config.screensaver_motionsensor:
             motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
             motionsensorThread = threading.Thread(target=motionsensor.run, args=())
             motionsensorThread.daemon = True

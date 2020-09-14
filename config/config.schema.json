@@ -969,7 +969,10 @@
                         "enabled": "true",
                         "start": "22:00",
                         "end": "22:05",
-                        "data_updates": false
+                        "data_updates": false,
+                        "motionsensor": true,
+                        "pin": 24,
+                        "delay": 30
                     },
                     "dimmer": {
                         "frequency": 5,
@@ -1017,7 +1020,10 @@
                                 "animations": true,
                                 "start": "22:00",
                                 "stop": "22:05",
-                                "data_updates": false
+                                "data_updates": false,
+                                "motionsensor": true,
+                                "pin": 24,
+                                "delay": 30
                         }
                     ],
                     "additionalProperties": true,
@@ -1077,6 +1083,36 @@
                             "default": false,
                             "examples": [
                                 true
+                            ]
+                        },
+                        "motionsensor": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/motionsensor",
+                            "type": "boolean",
+                            "title": "motionsensor",
+                            "description": "Use motion sensor to stop screen saver",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "pin": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/pin",
+                            "type": "integer",
+                            "title": "pin",
+                            "description": "What gpio pin motion sensor is connected to",
+                            "default": 0,
+                            "examples": [
+                                24
+                            ]
+                        },
+                        "delay": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/delay",
+                            "type": "integer",
+                            "title": "delay",
+                            "description": "How long in seconds before there is no motion to turn screen saver back on",
+                            "default": 30,
+                            "examples": [
+                                30
                             ]
                         }
                     }

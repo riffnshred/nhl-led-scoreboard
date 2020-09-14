@@ -25,7 +25,7 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
-        
+
 
         # Goal animation
         self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
@@ -36,6 +36,9 @@ class ScoreboardConfig:
         self.screensaver_start = json["sbio"]["screensaver"]["start"]
         self.screensaver_stop = json["sbio"]["screensaver"]["stop"]
         self.screensaver_data_updates = json["sbio"]["screensaver"]["data_updates"]
+        self.screensaver_motionsensor = json["sbio"]["screensaver"]["motionsensor"]
+        self.screensaver_ms_pin = json["sbio"]["screensaver"]["pin"]
+        self.screensaver_ms_delay = json["sbio"]["screensaver"]["delay"]
 
         # Dimmer preferences
         self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]

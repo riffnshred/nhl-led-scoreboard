@@ -51,7 +51,7 @@ class screenSaver(object):
         #Launch screen saver board, then Fade off brightness to 0
         debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
         self.data.screensaver = True
-        self.sleepEvent.clear()
+        self.sleepEvent.set()
 
         i = self.brightness
 

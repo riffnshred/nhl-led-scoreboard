@@ -57,8 +57,8 @@ class screenSaver:
                     frame_nub += 1
                     sleep(0.1)
 
-                self.matrix.clear()
-                self.matrix.render()
+                #self.matrix.clear()
+                #self.matrix.render()
                 show_gif = False
             else:
                 self.matrix.clear()

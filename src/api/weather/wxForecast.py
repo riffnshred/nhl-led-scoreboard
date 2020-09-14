@@ -14,10 +14,10 @@ class wxForecast(object):
         self.time_format = data.config.time_format
         self.icons = get_icons("ecIcons_utf8.csv")
         self.network_issues = data.network_issues
-
+        self.currdate = datetime.now()
+        
         self.apikey = data.config.weather_owm_apikey
 
-        self.currdate = datetime.now()
         self.max_days = data.config.weather_forecast_days
 
 
@@ -58,6 +58,7 @@ class wxForecast(object):
         summary = None
         temp_high = None
         temp_low = None
+        self.currdate = datetime.now()
 
         # For testing
         #self.data.wx_forecast = [['Tue 08/25', 'Mainly Clear', '\uf02e', '-29C', '-14C'], ['Wed 08/26', 'Light Rain Shower', '\uf02b', '27C', '18C'], ['Thu 08/27', 'Clear', '\uf02e', '23C', '13C']]
@@ -69,6 +70,7 @@ class wxForecast(object):
             except Exception as e:
                 debug.error("Unable to update EC forecast. Error: {}".format(e))
 
+            forecasts = []
             forecasts = self.data.ecData.daily_forecasts
             debug.warning(forecasts)
 
@@ -100,26 +102,29 @@ class wxForecast(object):
                             # Get the nextdate_name + " night"
                             night_forecast = next((sub for sub in forecasts if sub['period'] == nextdate_name + " night"), None)
                             temp_low = night_forecast['temperature'] + self.data.wx_units[0]
-                
+                            break
+
                 if icon_code == None:
                     wx_icon = '\uf07b'
                     wx_summary = "N/A"
                     debug.warning("Forecasts returned: {}".format(forecasts))
                 else:
                     #Get condition and icon from dictionary
-                    debug.warning("icons length {}".format(len(self.icons)))
+                    #debug.warning("icons length {}".format(len(self.icons)))
                     for row in range(len(self.icons)):
                         if int(self.icons[row]["ForecastCode"]) == int(icon_code):
                             wx_icon = self.icons[row]['font']
                             wx_summary = self.icons[row]['Description']
-                            debug.warning("EC icon code: {} : EC Summary {}.  : Description {}".format(icon_code,summary,wx_summary))
                             break
                         else:
                             wx_icon = '\uf07b'
                             wx_summary = "N/A"
 
+                if wx_summary == "N/A":
+                    debug.error("Icon not found in icon spreadsheet:  EC icon code: {} : EC Summary {}.".format(icon_code,summary))
 
-                wx_forecast.append([nextdate,wx_summary,wx_icon,temp_high,temp_low])     
+
+                wx_forecast.append([nextdate,wx_summary,wx_icon,temp_high,temp_low])
                 index += 1
 
 

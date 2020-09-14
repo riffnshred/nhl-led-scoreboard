@@ -103,7 +103,10 @@
 			"animations": true,
             "start": "22:00",
             "stop": "22:05",
-            "data_updates": false
+            "data_updates": false,
+			"motionsensor": true,
+            "pin": 24,
+            "delay": 30
         },
 		"dimmer": {
 			"enabled": false,

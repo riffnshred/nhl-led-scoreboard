@@ -13,13 +13,13 @@ class Motion(object):
         self.sleepEvent = sleepEvent
         self.screensaver = screenSaver
 
-        self.pir = MotionSensor(24)
+        self.pir = MotionSensor(self.data.config.screensaver_ms_pin)
 
         self.pir.when_motion = self.motion_func
         self.pir.when_no_motion = self.no_motion_func
 
         #Delay to wait before motion is considered to have stopped completely
-        self.delay_time = 30
+        self.delay_time = self.data.config.screensaver_ms_delay
         self.delay_enabled = False
         self.off_timer = None
 
@@ -28,7 +28,7 @@ class Motion(object):
             debug.warning("No Motion triggered...screen saver being turned on")
             self.screensaver.runSaver()
         else:
-            debug.warning("Ignoring no motion, screen saver active")
+            debug.warning("Ignoring no motion, screen saver not active")
 
     def screenSaverOff(self):
         if self.data.screensaver_displayed and self.data.screensaver:
@@ -43,12 +43,12 @@ class Motion(object):
             self.off_timer = None
 
     def motion_func(self):
-        self.cancel_timer() # new motion detected, so we don't want the light turning off yet
+        self.cancel_timer() # new motion detected, so we don't want the screen saver on yet
         self.screenSaverOff()
 
     def no_motion_func(self):
         self.cancel_timer() # cancel the old timer because we're about to create a new one
-        self.off_timer = Timer(self.delay_time, self.screenSaverOn) # turn the light off after 60 seconds
+        self.off_timer = Timer(self.delay_time, self.screenSaverOn)  #turn on screen saver after delay
         self.off_timer.start()
 
     def run(self):
