@@ -85,6 +85,8 @@ class Data:
 
         # Currently displayed board
         self.curr_board = None
+        self.prev_board = None
+
 
         # Environment Canada manager (to share between the forecast, alerts and current obs)
         self.ecData = None
@@ -109,7 +111,6 @@ class Data:
         #For screensaver
         self.screensaver = False
         self.screensaver_displayed = False
-
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
@@ -289,7 +290,7 @@ class Data:
         for game in self.pref_games:
             if game.status != "Final":
                 return
-            
+
         self.all_pref_games_final = True
 
 
@@ -426,7 +427,7 @@ class Data:
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
-                
+
                 try:
                     # Grab the series of the current round of playoff.
                     self.series = self.current_round.series
@@ -439,7 +440,7 @@ class Data:
                         self.series = self.pref_series
                 except AttributeError:
                     debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
-                
+
                 break
 
             except ValueError as error_message:
@@ -448,13 +449,13 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
-                
+
     def series_by_conference():
         """
             TODO:reorganize the list of series by conference and return the list
         """
         pass
-                
+
     #
     # Offdays
 
@@ -494,7 +495,7 @@ class Data:
 
         # Update standings
         self.refresh_standings()
-        
+
         # Update Playoff data
         self.refresh_playoff()
 

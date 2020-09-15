@@ -124,7 +124,7 @@ class Dimmer(object):
                     debug.info("Using location for dimmer:  Sunset is @ {}  Sunrise is @ {}  Offset by {} minutes {}".format(ephem.localtime(night),ephem.localtime(morning),self.data.config.dimmer_offset,offset_dir))
 
                     # Very simplistic way of handling the day/night but it works
-                    debug.error("morning {} night {}".format(morning,night))
+                    # debug.error("morning {} night {}".format(morning,night))
                     if morning < night:
                         # Morning is sooner, so it must be night
                         debug.info("It is night time")

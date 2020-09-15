@@ -1,5 +1,6 @@
 {
-	"debug": true,
+	"debug": false,
+	"loglevel": "INFO",
 	"live_mode": false,
 	"preferences": {
 		"time_format": "24h",

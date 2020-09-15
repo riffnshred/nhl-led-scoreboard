@@ -15,6 +15,9 @@ class screenSaver:
         self.font = data.config.layout.font
         self.matrix = matrix
         self.sleepEvent = sleepEvent
+        
+        self.brightness = self.matrix.brightness
+        
         self.sleepEvent.clear()
 
         self.draw_screenSaver()
@@ -28,14 +31,18 @@ class screenSaver:
         if all_gifs and show_gif:
             filename = random.choice(all_gifs)
             debug.info("Screen saver animation is: " + filename)
+            toaster = Image.open(get_file(filename))
         else:
-            debug.error("No GIFs found for Screen saver animation")
+            debug.error("No GIFs found for Screen saver animation or animations not turned on in config.json")
             show_gif = False
 
-        toaster = Image.open(get_file(filename))
+
         i = 0
+        b = self.brightness
+
         while True and not self.sleepEvent.is_set():
             if show_gif:
+
                 # Set the frame index to 0
                 frame_nub = 0
                 #debug.warning("In screensaver {}".format(self.sleepEvent.is_set()))
@@ -57,10 +64,17 @@ class screenSaver:
                     frame_nub += 1
                     sleep(0.1)
 
-                #self.matrix.clear()
-                #self.matrix.render()
                 show_gif = False
             else:
+                # Fade to black
+
+                while b >=0:
+                    self.matrix.set_brightness(self.brightness)
+                    self.brightness = b
+                    self.matrix.render()
+                    b -= 1
+                    sleep(0.1)
+
                 self.matrix.clear()
                 self.matrix.draw.rectangle([0,0, self.matrix.width, self.matrix.height], fill=(0,0,0))
                 self.matrix.render()

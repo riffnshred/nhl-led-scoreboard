@@ -28,14 +28,14 @@ class ecWxAlerts(object):
 
     def getAlerts(self):
 
-        
+
         debug.info("Checking for EC weather alerts")
         #ecData = ECData(coordinates=(self.data.latlng))
         self.data.ecData.update()
         curr_alerts = self.data.ecData.alerts
         self.network_issues = False
-        
-        
+
+
         debug.info("Last Alert: {0}".format(self.data.wx_alerts))
         # Check if there's more than a length of 5 returned back as if there's
         # No alerts, the dictionary still comes back with empty values for 
@@ -75,7 +75,7 @@ class ecWxAlerts(object):
             watch = []
             advisory = []
             alerts = []
-            
+
             if wx_num_warning > 0:
                 warn_date = curr_alerts["warnings"]["value"][i]["date"][:-4]
                 #Convert to date for display
@@ -88,8 +88,8 @@ class ecWxAlerts(object):
                 wx_alert_title = curr_alerts["warnings"]["value"][i]["title"][:-(len(" Warning"))]
                 warning = [wx_alert_title,"warning",wx_alert_time]
                 alerts.append(warning)
-            
-            
+
+
 
             if wx_num_watch > 0:
                 watch_date = curr_alerts["watches"]["value"][i]["date"][:-4]
@@ -103,13 +103,13 @@ class ecWxAlerts(object):
                 watch = [wx_alert_title,"watch",wx_alert_time]
                 alerts.append(watch)
 
-            
+
 
             if wx_num_advisory > 0:
                 advisory_date = curr_alerts["advisories"]["value"][i]["date"][:-4]
                 #Convert to date for display
                 advisory_datetime = datetime.datetime.strptime(advisory_date,self.alert_date_format)
-                
+
                 if self.time_format == "%H:%M":
                     wx_alert_time = advisory_datetime.strftime("%m/%d %H:%M")
                 else:
@@ -119,11 +119,11 @@ class ecWxAlerts(object):
                 advisory = [wx_alert_title,"advisory",wx_alert_time]
                 alerts.append(advisory)
 
-            
+
             #Find the latest alert time to set what the alert should be shown
             #debug.info(alerts)
             alerts.sort(key = lambda x: x[2],reverse=True)
-            
+
 
             if alerts[0][0] == "Severe Thunderstorm":
                 alerts[0][0] = "Svr T-Storm"
@@ -131,7 +131,7 @@ class ecWxAlerts(object):
                 alerts[0][0] = "Frzn Rain"
             if alerts[0][0] == "Freezing Drizzle":
                 alerts[0][0] = "Frzn Drzl"
-            
+
             #debug.info(alerts)
 
             if self.data.wx_alerts != alerts[0]:
@@ -164,8 +164,8 @@ class ecWxAlerts(object):
                     self.data.wx_alert_interrupt = True
                     self.sleepEvent.set()
                 self.weather_alert += 1
-                
-            
+
+
         else:
             debug.info("No active EC weather alerts in your area")
             self.data.wx_alert_interrupt = False

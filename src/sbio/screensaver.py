@@ -53,38 +53,26 @@ class screenSaver(object):
         self.data.screensaver = True
         self.sleepEvent.set()
 
-        i = self.brightness
-
-        while not self.data.screensaver_displayed:
-            pass
-
-        while i >=0:
-            self.matrix.set_brightness(self.brightness)
-            self.brightness = i
-            i -= 1
-            sleep(0.5)
-
-        #self.matrix.clear()
-        #self.matrix.render()
-
         # Shut down all scheduled jobs (except for screensaver ones)
         if not self.data.config.screensaver_data_updates:
             alljobs = self.scheduler.get_jobs()
             #debug.info(alljobs)
             #Loop through the jobs and pause if not named screenSaverOn or screenSaverOFF
+            debug.info("Pausing all scheduled jobs while screensaver active")
             for job in alljobs:
                 if "screenSaver" not in job.id:
                     job.pause()
 
     def stopSaver(self):
         #Stop screen saver board, Fade brightness back to last setting
-        debug.info("Screen saver stopped.... Currently displayed board " + self.data.curr_board)
+        debug.info("Screen saver stopped.... Starting next displayed board " + self.data.prev_board)
 
         #Resume all paused jobs
         if not self.data.config.screensaver_data_updates:
             alljobs = self.scheduler.get_jobs()
             #debug.info(alljobs)
             #Loop through the jobs and resume if not named screenSaverOn or screenSaverOFF
+            debug.info("Resuming all paused jobs while screensaver off")
             for job in alljobs:
                 if "screenSaver" not in job.id:
                     job.resume()
@@ -98,5 +86,5 @@ class screenSaver(object):
         while i <= self.original_brightness:
             self.matrix.set_brightness(i)
             i += 1
-            sleep(0.5)
+            sleep(0.1)
 

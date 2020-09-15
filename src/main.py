@@ -31,7 +31,7 @@ SCRIPT_VERSION = "1.3.2"
 def run():
     # Get supplied command line arguments
     commandArgs = args()
-    
+
     if commandArgs.terminal_mode and sys.stdin.isatty():
         height, width = os.popen('stty size', 'r').read().split()
         termMatrix = TermMatrix()
@@ -50,7 +50,7 @@ def run():
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
     data = Data(config)
-    
+
     #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)
     if commandArgs.logcolor and commandArgs.loglevel != None:
         debug.set_debug_status(config,logcolor=commandArgs.logcolor,loglevel=commandArgs.loglevel)
@@ -93,14 +93,14 @@ def run():
 
     if data.config.weather_enabled:
         if data.config.weather_data_feed.lower() == "ec":
-           ecWxWorker(data,scheduler)
+            ecWxWorker(data,scheduler)
         elif data.config.weather_data_feed.lower() == "owm":
             owmweather = owmWxWorker(data,scheduler)
         else:
-           debug.error("No valid weather providers selected, skipping weather feed")
-           data.config.weather_enabled = False
+            debug.error("No valid weather providers selected, skipping weather feed")
+            data.config.weather_enabled = False
 
-    
+
     if data.config.wxalert_show_alerts:
         if data.config.wxalert_alert_feed.lower() == "ec":
             ecalert = ecWxAlerts(data,scheduler,sleepEvent)
@@ -110,12 +110,11 @@ def run():
             debug.error("No valid weather alerts providers selected, skipping alerts feed")
             data.config.weather_show_alerts = False
 
-    if data.config.weather_forecast_enabled:  
+    if data.config.weather_forecast_enabled:
         wxForecast(data,scheduler)
-    
     #
     # Run check for updates against github on a background thread on a scheduler
-    #  
+    #
     if commandArgs.updatecheck:
         data.UpdateRepo = commandArgs.updaterepo
         checkupdate = UpdateChecker(data,scheduler)
@@ -123,14 +122,13 @@ def run():
     if data.config.dimmer_enabled:
         dimmer = Dimmer(data, matrix,scheduler)
 
-    if data.config.screensaver_enabled: 
+    if data.config.screensaver_enabled:
         screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
         if data.config.screensaver_motionsensor:
             motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
             motionsensorThread = threading.Thread(target=motionsensor.run, args=())
             motionsensorThread.daemon = True
             motionsensorThread.start()
-    
 
     MainRenderer(matrix, data, sleepEvent).render()
 

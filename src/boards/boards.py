@@ -73,6 +73,7 @@ class Boards:
                 #Display the board from the config
                 board = getattr(self,"screensaver")
                 data.curr_board = "screensaver"
+                data.prev_board = data.config.boards_off_day[bord_index]
                 bord_index -= 1
 
             board(data, matrix,sleepEvent)
