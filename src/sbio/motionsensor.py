@@ -22,17 +22,20 @@ class Motion(object):
         self.delay_time = self.data.config.screensaver_ms_delay
         self.delay_enabled = False
         self.off_timer = None
+        self.ssOff_trigger = False
 
     def screenSaverOn(self):
-        if not self.data.screensaver_displayed and self.data.screensaver:
+        if self.ssOff_trigger:
             debug.warning("No Motion triggered...screen saver being turned on")
+            self.ssOff_trigger = False
             self.screensaver.runSaver()
         else:
             debug.warning("Ignoring no motion, screen saver not active")
 
     def screenSaverOff(self):
-        if self.data.screensaver_displayed and self.data.screensaver:
+        if self.data.screensaver_displayed and self.data.screensaver and not self.data.pb_trigger:
             debug.warning("Motion triggered...screen saver being turned off")
+            self.ssOff_trigger = True
             self.screensaver.stopSaver()
         else:
             debug.warning("Ignoring motion, screen saver not active")

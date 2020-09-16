@@ -1,6 +1,6 @@
 """
     TODO: How this whole system works is getting complex for nothing and I need to recode this by sorting into seperate classes instead of having everything into a
-          single one.
+        single one.
 """
 
 
@@ -111,6 +111,7 @@ class Data:
         #For screensaver
         self.screensaver = False
         self.screensaver_displayed = False
+        self.screensaver_livegame = False
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
@@ -170,7 +171,7 @@ class Data:
     def __parse_today(self):
         today = datetime.today()
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
-                                                           day=today.day)
+                                                        day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
         if noon < end_of_day < datetime.now() and datetime.now() > noon:

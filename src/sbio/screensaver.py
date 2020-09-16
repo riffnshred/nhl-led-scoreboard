@@ -37,7 +37,6 @@ class screenSaver(object):
             else:
                 debug.error("Stop time setting ({}) for screensaver is not a valid 12h or 24h format. Screen saver will not be used".format(data.config.screensaver_stop))
 
-
         if startsaver and stopsaver is not None:
             scheduler.add_job(self.runSaver, 'cron', hour=startsaver.hour,minute=startsaver.minute,id='screenSaverON')
             scheduler.add_job(self.stopSaver, 'cron', hour=stopsaver.hour, minute=stopsaver.minute,id='screenSaverOFF')
@@ -49,9 +48,12 @@ class screenSaver(object):
 
     def runSaver(self):
         #Launch screen saver board, then Fade off brightness to 0
-        debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
-        self.data.screensaver = True
-        self.sleepEvent.set()
+        if not self.data.screensaver_livegame:
+            debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
+            self.data.screensaver = True
+            self.sleepEvent.set()
+        else:
+            debug.error("Screen saver not started.... we are in a live game!")
 
         # Shut down all scheduled jobs (except for screensaver ones)
         if not self.data.config.screensaver_data_updates:

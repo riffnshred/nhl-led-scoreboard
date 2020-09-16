@@ -70,12 +70,6 @@ def run():
     sleepEvent = threading.Event()
 
 
-    if data.config.pushbutton_enabled:
-        pushbutton = PushButton(data,matrix,sleepEvent)
-        pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
-        pushbuttonThread.daemon = True
-        pushbuttonThread.start()
-
     # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
     scheduler = BackgroundScheduler()
     scheduler.start()
@@ -122,6 +116,7 @@ def run():
     if data.config.dimmer_enabled:
         dimmer = Dimmer(data, matrix,scheduler)
 
+    screensaver = None
     if data.config.screensaver_enabled:
         screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
         if data.config.screensaver_motionsensor:
@@ -129,6 +124,12 @@ def run():
             motionsensorThread = threading.Thread(target=motionsensor.run, args=())
             motionsensorThread.daemon = True
             motionsensorThread.start()
+
+    if data.config.pushbutton_enabled:
+        pushbutton = PushButton(data,matrix,sleepEvent)
+        pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
+        pushbuttonThread.daemon = True
+        pushbuttonThread.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
 

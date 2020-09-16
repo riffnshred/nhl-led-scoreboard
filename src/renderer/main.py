@@ -89,7 +89,8 @@ class MainRenderer:
             # Display the pushbutton board
             if self.data.pb_trigger:
                 debug.info('PushButton triggered in game day loop....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
-                self.data.pb_trigger = False
+                if not self.data.screensaver:
+                    self.data.pb_trigger = False
                 #Display the board from the config
                 self.boards._pb_board(self.data, self.matrix, self.sleepEvent)
 
@@ -102,13 +103,18 @@ class MainRenderer:
 
             # Display the screensaver board
             if self.data.screensaver:
-                debug.info('Screensaver triggered in game day loop....')
-                #self.data.wx_alert_interrupt = False
-                #Display the board from the config
-                self.boards._screensaver(self.data, self.matrix, self.sleepEvent)
+                if not self.data.pb_trigger:
+                    debug.info('Screensaver triggered in game day loop....')
+                    #self.data.wx_alert_interrupt = False
+                    #Display the board from the config
+                    self.boards._screensaver(self.data, self.matrix, self.sleepEvent)
+                else:
+                    self.data.pb_trigger = False
 
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
+                #blocks the screensaver from running if game is live
+                self.data.screensaver_livegame = True
                 debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()

@@ -11,13 +11,13 @@ DISPLAY_DURATION = 5
 class screenSaver:
     def __init__(self, data, matrix,sleepEvent):
         self.data = data
-        self.status = self.data.screensaver_displayed
+
         self.font = data.config.layout.font
         self.matrix = matrix
         self.sleepEvent = sleepEvent
-        
+
         self.brightness = self.matrix.brightness
-        
+
         self.sleepEvent.clear()
 
         self.draw_screenSaver()
@@ -25,7 +25,7 @@ class screenSaver:
 
     def draw_screenSaver(self):
 
-        self.status = True
+        self.data.screensaver_displayed = True
         show_gif = self.data.config.screensaver_animations
         all_gifs = glob.glob("assets/animations/screensaver/*.gif")
         if all_gifs and show_gif:
@@ -39,6 +39,7 @@ class screenSaver:
 
         i = 0
         b = self.brightness
+        original_brightness = self.brightness
 
         while True and not self.sleepEvent.is_set():
             if show_gif:
@@ -84,3 +85,8 @@ class screenSaver:
                 debug.info("Screen saver is active....")
 
             self.sleepEvent.wait(1)
+
+        if self.data.pb_trigger:
+            # Restore original brightness after push button
+            self.matrix.set_brightness(original_brightness)
+            self.matrix.render()
