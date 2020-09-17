@@ -57,7 +57,11 @@
 		},
 		"clock": {
 			"duration": 15,
-			"hide_indicator": false
+			"hide_indicator": false,
+			"preferred_team_colors": true,
+            "clock_rgb": "",
+            "date_rgb": "",
+            "flash_seconds": true
 		},
         "covid19": {
             "worldwide_enabled": false,

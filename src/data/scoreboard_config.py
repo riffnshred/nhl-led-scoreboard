@@ -102,7 +102,6 @@ class ScoreboardConfig:
         self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
         self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
 
-        
 
 
         # States
@@ -131,6 +130,10 @@ class ScoreboardConfig:
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
+        self.clock_team_colors =  json["boards"]["clock"]["preferred_team_colors"]
+        self.clock_clock_rgb =  json["boards"]["clock"]["clock_rgb"]
+        self.clock_date_rgb =  json["boards"]["clock"]["date_rgb"]
+        self.clock_flash_seconds =  json["boards"]["clock"]["flash_seconds"]
 
         # COVID-19
         self.covid_ww_board_enabled = json["boards"]["covid19"]["worldwide_enabled"]

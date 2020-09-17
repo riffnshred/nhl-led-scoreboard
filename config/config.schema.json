@@ -519,13 +519,21 @@
                     "examples": [
                         {
                             "hide_indicator": false,
-                            "duration": 60
+                            "duration": 60,
+                            "preferred_team_colors": true,
+                            "clock_rgb": "234,234,78",
+                            "date_rgb": "78,234,234",
+                            "flash_seconds": true
                         }
                     ],
                     "additionalProperties": true,
                     "required": [
                         "duration",
-                        "hide_indicator"
+                        "hide_indicator",
+                        "preferred_team_colors",
+                        "clock_rgb",
+                        "data_rgb",
+                        "flash_seconds"
                     ],
                     "properties": {
                         "duration": {
@@ -543,6 +551,46 @@
                             "type": "boolean",
                             "title": "hide_indicator",
                             "description": "Hide the red bar no network indicator on the bottom",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "preferred_team_colors": {
+                            "$id": "#/properties/boards/properties/clock/properties/preferred_team_colors",
+                            "type": "boolean",
+                            "title": "preferred_team_colors",
+                            "description": "Use your first preferred team's colors for clock.  The primary color will be used for clock numbers, while the team text color will be used for the date/weather and AM/PM",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "clock_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/clock_rgb",
+                            "type": "string",
+                            "title": "clock_rgb",
+                            "description": "Set the clock numbers to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "date_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/date_rgb",
+                            "type": "string",
+                            "title": "date_rgb",
+                            "description": "Set the date/weather and AM/PM text to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "flash_seconds": {
+                            "$id": "#/properties/boards/properties/clock/properties/flash_seconds",
+                            "type": "boolean",
+                            "title": "flash_seconds",
+                            "description": "Flash the seconds (:) if true.  If set to false, dont show the (:)",
                             "default": false,
                             "examples": [
                                 false
