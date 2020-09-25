@@ -11,7 +11,6 @@
         "loglevel",
         "live_mode",
         "preferences",
-        "goal_animations",
         "states",
         "boards",
         "sbio"
@@ -64,7 +63,10 @@
                         "Canadiens",
                         "Oilers"
                     ],
-                    "time_format": "12h"
+                    "time_format": "12h",
+                    "goal_animations": {
+                        "pref_team_only": true
+                    }
                 }
             ],
             "additionalProperties": true,
@@ -74,7 +76,8 @@
                 "location",
                 "live_game_refresh_rate",
                 "teams",
-                "sog_display_frequency"
+                "sog_display_frequency",
+                "goal_animations"
             ],
             "properties": {
                 "time_format": {
@@ -153,34 +156,34 @@
                     "examples": [
                         4
                     ]
-                }
-            }
-        },
-        "goal_animations": {
-            "$id": "#/properties/goal_animations",
-            "type": "object",
-            "title": "goal_animations",
-            "description": "The goal animations can be set for both teams of just the preferred teams",
-            "default": true,
-            "examples": [
-                {
-                    "pref_team_only": true
-                }
-            ],
-            "additionalProperties": true,
-            "required": [
-                "pref_team_only"
-            ],
-            "properties": {
-                "pref_team_only": {
-                    "$id": "#/properties/goal_animations/properties/pref_team_only",
-                    "type": "boolean",
-                    "title": "pref_team_only",
-                    "description": "Show only your preferred team goal animation or show both",
-                    "default": false,
+                },
+                "goal_animations": {
+                    "$id": "#/properties/preferences/goal_animations",
+                    "type": "object",
+                    "title": "goal_animations",
+                    "description": "The goal animations can be set for both teams of just the preferred teams",
+                    "default": true,
                     "examples": [
-                        true
-                    ]
+                        {
+                            "pref_team_only": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "pref_team_only"
+                    ],
+                    "properties": {
+                        "pref_team_only": {
+                            "$id": "#/properties/preferences/goal_animations/properties/pref_team_only",
+                            "type": "boolean",
+                            "title": "pref_team_only",
+                            "description": "Show only your preferred team goal animation or show both",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    }
                 }
             }
         },
@@ -532,7 +535,7 @@
                         "hide_indicator",
                         "preferred_team_colors",
                         "clock_rgb",
-                        "data_rgb",
+                        "date_rgb",
                         "flash_seconds"
                     ],
                     "properties": {

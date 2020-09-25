@@ -11,11 +11,10 @@
 			"Flames",
 			"Oilers"
 		],
-		"sog_display_frequency": 4
-	},
-
-	"goal_animations": {
-		"pref_team_only": true
+		"sog_display_frequency": 4,
+		"goal_animations": {
+        	"pref_team_only": true
+    	}
 	},
 
 	"states":{

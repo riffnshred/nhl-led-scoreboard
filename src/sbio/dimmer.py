@@ -19,9 +19,9 @@ class Dimmer(object):
         self._observer.lon = str(self.data.latlng[1])
 
         if data.config.dimmer_mode == "always":
-           self.mode = True
+            self.mode = True
         else:
-           self.mode = False
+            self.mode = False
 
         #If selected hardware, attempt to initialize sensor
         self.luxsensor = False
@@ -59,7 +59,7 @@ class Dimmer(object):
             if timeCheck == "12h":
                 self.daytime = datetime.strptime(data.config.dimmer_daytime, '%I:%M %p').time()
             elif timeCheck == "24h":
-                self.daytime = datetime.strptime(data.config.dimmer_daytime, '%H:%M').time() 
+                self.daytime = datetime.strptime(data.config.dimmer_daytime, '%H:%M').time()
             else:
                 debug.error("Daytime setting ({}) for dimmer is not a valid 12h or 24h format.  Will use location for sunrise".format(data.config.dimmer_daytime))
 
@@ -69,7 +69,7 @@ class Dimmer(object):
             if timeCheck == "12h":
                 self.nighttime = datetime.strptime(data.config.dimmer_nighttime, '%I:%M %p').time()
             elif timeCheck == "24h":
-                self.nighttime = datetime.strptime(data.config.dimmer_nighttime, '%H:%M').time() 
+                self.nighttime = datetime.strptime(data.config.dimmer_nighttime, '%H:%M').time()
             else:
                 debug.error("Night time setting ({}) for dimmer is not a valid 12h or 24h format.  Will use location for sunset".format(data.config.dimmer_nighttime))
 

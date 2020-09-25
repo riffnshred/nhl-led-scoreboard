@@ -31,12 +31,12 @@ def set_debug_status(config,logcolor=False,loglevel='INFO'):
 	if loglevel.lower() == "debug":
 		debug_enabled = True
 
-	if debug_enabled:	
+	if debug_enabled:
 		if colorAvail:
 			coloredlogs.install(level='DEBUG',fmt='%(asctime)s %(name)s %(levelname)s %(message)s',stream=sys.stdout)
 		else:
 			logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG, datefmt='%y-%m-%d %H:%M:%S')
-			
+
 	else:
 		if colorAvail:
 			coloredlogs.install(level=loglevel,fmt='%(asctime)s %(levelname)s %(message)s',stream=sys.stdout,logger=logger)
