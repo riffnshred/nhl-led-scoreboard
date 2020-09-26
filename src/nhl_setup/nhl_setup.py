@@ -395,6 +395,7 @@ def general_settings(default_config,qmark):
             'name' : 'loglevel',
             'qmark': qmark,
             'message' : "What log level do you want? ",
+            "when": lambda x: not x["debug"],
             'choices' : ['INFO','WARNING','ERROR','CRITICAL'],
             'default' : get_default_value(default_config,['loglevel'],"string") or 'INFO'
         },
@@ -530,7 +531,6 @@ def states_settings(default_config,qmark,setup_type):
 
     # States configuration
     states_config = get_default_value(default_config,['states'],"string")
-    print(states_config)
     #Select the boards you want to update
     if setup_type != "full":
         thestates = (
@@ -697,6 +697,7 @@ def clock(default_config,qmark):
             'name': 'clock_rgb',
             'qmark': qmark,
             'message': 'Set the clock numbers to the RGB value if preferred_team_colors set to false.  format: 0,0,0',
+            "when": lambda x: not x["preferred_team_colors"],
             'validate': RGBValidator,
             'default': get_default_value(default_config,['boards','clock','clock_rgb'],"string") or '255,255,255'
         },
@@ -705,6 +706,7 @@ def clock(default_config,qmark):
             'name': 'date_rgb',
             'qmark': qmark,
             'message': 'Set the date, weather and AM/PM numbers to the RGB value if preferred_team_colors set to false.  format: 0,0,0',
+            "when": lambda x: not x["preferred_team_colors"],
             'validate': RGBValidator,
             'default': get_default_value(default_config,['boards','clock','date_rgb'],"string") or '255,255,255'
         },
@@ -938,6 +940,7 @@ def weather(default_config,qmark):
                     'name': 'owm_apikey',
                     'qmark': qmark,
                     'message': 'OpenWeatherMap API key if using OWM as data feed: (get key from https://openweathermap.org/appid)',
+                    "when": lambda x: x["data_feed"] == 'OWM',
                     'default': get_default_value(default_config,['boards','weather','owm_apikey'],"string") or ''
                 },
                 {
@@ -1024,6 +1027,7 @@ def wxalert(default_config,qmark):
             'name': 'nws_show_expire',
             'qmark': qmark,
             'message': 'For NWS alert feed use expire time rather than effective time?',
+            "when": lambda x: x["alert_feed"] == 'NWS',
             'default': get_default_value(default_config,['boards','wxalert','nws_show_expire'],"bool") or True
             },
             {
@@ -1078,9 +1082,9 @@ def board_settings(default_config,qmark,setup_type):
     if setup_type != "full":
         theboards = (
             questionary.checkbox(
-                "Select boards(s) to configure", choices=BOARDS, style=custom_style_dope,qmark=qmark
+                "Select boards(s) to configure (no selection defaults to all boards)", choices=BOARDS, style=custom_style_dope,qmark=qmark
             ).ask()
-            or []
+            or BOARDS
         )
     else:
         theboards = BOARDS
@@ -1148,6 +1152,7 @@ def dimmer(default_config,qmark):
                 'message': 'Level of light if a sensor is used to change brightness at (full daylight would be around 1000)',
                 'validate': lambda val: True if val.isdecimal() and int(val) >= 1 and int(val) <= 1000 else 'Must be a number between 1 and 1000',
                 'filter': lambda val: int(val),
+                "when": lambda x: x["source"] == "hardware",
                 'default': get_default_value(default_config,['sbio','dimmer','light_level_lux'],"int") or '300'
             },
             {
@@ -1396,6 +1401,7 @@ def screensaver(default_config,qmark):
                 'message': 'Which GPIO pin is motion sensor attached to?',
                 'validate': lambda val: True if val.isdecimal() and int(val) in [2,3,7,8,9,10,11,14,15,19,24,25] else 'Must be pin 2,3,7,8,9,10,11,14,15,19,24,25',
                 'filter': lambda val: int(val),
+                "when": lambda x: x["motionsensor"],
                 'default': get_default_value(default_config,['sbio','screensaver','pin'],"int") or '24'
             },
             {
@@ -1405,6 +1411,7 @@ def screensaver(default_config,qmark):
                 'message': 'How long to wait for no motion?',
                 'validate': NumberValidator,
                 'filter': lambda val: int(val),
+                "when": lambda x: x["motionsensor"],
                 'default': get_default_value(default_config,['sbio','screensaver','delay'],"int") or '30'
             }
         ]
@@ -1425,9 +1432,9 @@ def sbio_settings(default_config,qmark,setup_type):
     if setup_type != "full":
         thesbio = (
             questionary.checkbox(
-                "Select sbio section(s) to configure", choices=SBIO, style=custom_style_dope,qmark=qmark
+                "Select sbio section(s) to configure (no selection defaults to all sections)", choices=SBIO, style=custom_style_dope,qmark=qmark
             ).ask()
-            or []
+            or SBIO
         )
     else:
         thesbio = SBIO
@@ -1527,9 +1534,9 @@ def main():
     if setup_type == 'sections':
         sections  = (
             questionary.checkbox(
-                "Select section(s)", choices=SECTIONS, style=custom_style_dope,qmark=qmark
+                "Select section(s) (no selection defaults to all sections)", choices=SECTIONS, style=custom_style_dope,qmark=qmark
             ).ask()
-            or []
+            or SECTIONS
         )
     else:
         sections = SECTIONS
@@ -1555,9 +1562,6 @@ def main():
             sbio_config = sbio_settings(default_config,qmark,setup_type)
             nhl_config.update(sbio_config)
 
-
-    print(json.dumps(nhl_config,indent=4))
-    sys.exit(0)
 
     #Prepare to output to config.json file
     if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():

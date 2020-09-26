@@ -15,20 +15,20 @@ class wxForecast(object):
         self.icons = get_icons("ecIcons_utf8.csv")
         self.network_issues = data.network_issues
         self.currdate = datetime.now()
-        
+
         self.apikey = data.config.weather_owm_apikey
 
         self.max_days = data.config.weather_forecast_days
 
 
         if self.data.config.weather_data_feed.lower() == "owm":
-            
+
             self.owm = OWM(self.apikey)
             self.owm_manager = self.owm.weather_manager()
 
 
         # Get forecast for next day, every forecast_update hours
-    
+
         hour_update = '*/' + str(self.data.config.weather_forecast_update)
 
         scheduler.add_job(self.getForecast, 'cron', hour=hour_update,minute=0,id='forecast')
@@ -45,11 +45,11 @@ class wxForecast(object):
             self.data.wx_units = ["C","kph","mm","miles","hPa","ca"]
         else:
             self.data.wx_units = ["F","mph","in","miles","MB","us"]
-        
+
         #Get initial forecast
         self.getForecast()
-    
-    
+
+
     def getForecast(self):
 
         #self.data.wx_forecast = []
@@ -72,14 +72,14 @@ class wxForecast(object):
 
             forecasts = []
             forecasts = self.data.ecData.daily_forecasts
-            debug.warning(forecasts)
+            #debug.warning(forecasts)
 
             if len(forecasts) > 0:
                 forecasts_updated = True
             else:
                 forecasts_updated = False
                 debug.error("EC Forecast not updated.... ")
-            
+
             #Loop through the data and create the forecast
             #Number of days to add to current day for the date string, this will be incremented
             index = 1
@@ -107,7 +107,7 @@ class wxForecast(object):
                 if icon_code == None:
                     wx_icon = '\uf07b'
                     wx_summary = "N/A"
-                    debug.warning("Forecasts returned: {}".format(forecasts))
+                    #debug.warning("Forecasts returned: {}".format(forecasts))
                 else:
                     #Get condition and icon from dictionary
                     #debug.warning("icons length {}".format(len(self.icons)))
@@ -188,7 +188,7 @@ class wxForecast(object):
 
                 wx_forecast.append([nextdate,summary,wx_icon,temp_hi,temp_lo])
                 index += 1
-        
+
         debug.info("New forecast: {}".format(wx_forecast))
 
         if self.data.wx_forecast != wx_forecast:
@@ -196,7 +196,7 @@ class wxForecast(object):
             self.data.wx_forecast = wx_forecast
         else:
             debug.info("Forecast has not changed, no update needed....")
-        
+
         self.data.forecast_updated = True
         self.network_issues = False
 
