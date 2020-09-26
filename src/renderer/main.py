@@ -4,6 +4,7 @@ from datetime import datetime
 import debug
 from boards.boards import Boards
 from boards.clock import Clock
+from boards.stanley_cup_champions import StanleyCupChampions
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -37,6 +38,9 @@ class MainRenderer:
                     # Offseason (Show offseason related stuff)
                     debug.info("It's offseason")
                     self.__render_offday()
+                elif self.data.config.testScChampions:
+                    self.test_stanley_cup_champion(self.data.config.testScChampions)
+
                 else:
                     # Season.
                     if not self.data.config.live_mode:
@@ -66,7 +70,6 @@ class MainRenderer:
                 debug.info('This is a new day')
                 return
             self.data.refresh_data()
-            
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
 
     def __render_game_day(self):
@@ -121,8 +124,9 @@ class MainRenderer:
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
+                self.check_stanley_cup_champion()
                 self.__render_postgame(self.scoreboard)
-                # sleep(self.refresh_rate)
+
                 self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_final(self.data.overview.status):
@@ -130,7 +134,7 @@ class MainRenderer:
                 debug.info("FINAL")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
-                
+                self.check_stanley_cup_champion()
                 self.__render_postgame(self.scoreboard)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -158,7 +162,6 @@ class MainRenderer:
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            sleep(5)
             self.data.refresh_data()
             self.data.refresh_overview()
             if self.data.network_issues:
@@ -303,3 +306,12 @@ class MainRenderer:
         color = self.matrix.graphics.Color(255, 0, 0)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+
+    def check_stanley_cup_champion(self):
+        if self.data.isPlayoff and self.data.stanleycup_round:
+            for x in range(len(self.data.current_round.series[0].matchupTeams)):
+                if self.data.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
+                    StanleyCupChampions(self.data, self.data.current_round.series[0].matchupTeams[x].team.id, self.matrix, self.sleepEvent).render()
+
+    def test_stanley_cup_champion(self, team_id):
+        StanleyCupChampions(self.data, team_id, self.matrix, self.sleepEvent).render()
