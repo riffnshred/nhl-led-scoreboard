@@ -157,6 +157,11 @@ class ScoreboardConfig:
 
         self.config = Config(size)
 
+        if args.testScChampions != None:
+            self.testScChampions = args.testScChampions
+        else:
+            self.testScChampions = False
+
     def read_json(self, filename):
         # Find and return a json file
 

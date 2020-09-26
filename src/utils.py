@@ -95,6 +95,7 @@ def args():
     parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
     parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
     parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
+    parser.add_argument("--testScChampions", action="store", help="A flag to test the stanley cup champions board. Put your team's ID", default=None, type=int)
 
     return parser.parse_args()
 
