@@ -71,6 +71,7 @@ def args():
     parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
     parser.add_argument("--updatecheck", action="store", help="Check for updates (Default: False)", default=False, type=bool)
     parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
+    parser.add_argument("--testScChampions", action="store", help="A flag to test the stanley cup champions board. Put your team's ID", default=None, type=int)
 
     return parser.parse_args()
 
