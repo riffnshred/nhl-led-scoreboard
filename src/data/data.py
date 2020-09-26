@@ -150,6 +150,11 @@ class Data:
         # Fetch the playoff data
         self.refresh_playoff()
 
+        self.isPlayoff = False
+
+        # Stanley cup round flag
+        self.stanleycup_round = False
+
         # Get Covid 19 Data
         self.covid19 = covid19_data()
 
@@ -415,21 +420,27 @@ class Data:
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
+                    if self.playoffs.default_round == 4:
+                        self.stanleycup_round = True
+
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
-                
-                try:
-                    # Grab the series of the current round of playoff.
-                    self.series = self.current_round.series
+                    
+                    try:
+                        # Grab the series of the current round of playoff.
+                        self.series = self.current_round.series
 
-                    # Check if prefered team are part of the current round of playoff
-                    self.pref_series = prioritize_pref_series(filter_list_of_series(self.series, self.pref_teams), self.pref_teams)
+                        # Check if prefered team are part of the current round of playoff
+                        self.pref_series = prioritize_pref_series(filter_list_of_series(self.series, self.pref_teams), self.pref_teams)
 
-                    # If the user as set to show his favorite teams in the seriesticker
-                    if self.config.seriesticker_preferred_teams_only and self.pref_series:
-                        self.series = self.pref_series
-                except AttributeError:
-                    debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
-                
+                        # If the user as set to show his favorite teams in the seriesticker
+                        if self.config.seriesticker_preferred_teams_only and self.pref_series:
+                            self.series = self.pref_series
+                    except AttributeError:
+                        debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
+                        self.isPlayoff = False
+                        break
+
+                    self.isPlayoff = True
                 break
 
             except ValueError as error_message:
