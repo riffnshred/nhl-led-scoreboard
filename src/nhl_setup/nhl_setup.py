@@ -543,7 +543,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19']
+        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions']
 
         boards_selected = []
         board = None
@@ -963,6 +963,7 @@ def weather(default_config,qmark):
                     'qmark': qmark,
                     'validate': lambda val: True if val.isdecimal() and int(val) >= 1 and int(val) <= 3 else 'Must be a number and greater or equal than 1 and less than or equal to 3',
                     'filter': lambda val: int(val),
+                    "when": lambda x: x["forecast_enabled"],
                     'message': 'Number of days forecast to show?(minimum 1, max 3)',
                     'default': get_default_value(default_config,['boards','weather','forecast_days'],"int") or '1'
                 },
@@ -972,6 +973,7 @@ def weather(default_config,qmark):
                     'qmark': qmark,
                     'validate': lambda val: True if val.isdecimal() and int(val) >= 1 else 'Must be a number and greater or equal than 1',
                     'filter': lambda val: int(val),
+                    "when": lambda x: x["forecast_enabled"],
                     'message': 'How often to update weather forecast in hours?(minimum 1)',
                     'default': get_default_value(default_config,['boards','weather','forecast_update'],"int") or '1'
                 },
