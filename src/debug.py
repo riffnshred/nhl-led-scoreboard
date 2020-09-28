@@ -41,7 +41,7 @@ def set_debug_status(config,logcolor=False,loglevel='INFO'):
 		if colorAvail:
 			coloredlogs.install(level=loglevel,fmt='%(asctime)s %(levelname)s %(message)s',stream=sys.stdout,logger=logger)
 		else:
-			handler = logging.StreamHandler()
+			handler = logging.StreamHandler(sys.stdout)
 			formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 			handler.setFormatter(formatter)
 			logger.addHandler(handler)
