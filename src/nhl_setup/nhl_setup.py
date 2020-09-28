@@ -381,6 +381,7 @@ def get_canada_prov(canada_prov_index,canada_prov_choices,pref_canada_prov,qmark
     return answers['canada_prov']
 
 def general_settings(default_config,qmark):
+
     questions = [
 
         {
@@ -535,9 +536,9 @@ def states_settings(default_config,qmark,setup_type):
     if setup_type != "full":
         thestates = (
             questionary.checkbox(
-                "Select states(s) to configure", choices=STATES, style=custom_style_dope,qmark=qmark
+                "Select states(s) to configure (no selection defaults to all states)", choices=STATES, style=custom_style_dope,qmark=qmark
             ).ask()
-            or []
+            or STATES
         )
     else:
         thestates = STATES
@@ -578,6 +579,7 @@ def states_settings(default_config,qmark,setup_type):
 
 def scoreticker(default_config,qmark):
     # Get scoreticker config
+    scoreticker_default = get_default_value(default_config,['boards','scoreticker'],"string")
 
     scoreticker_questions = [
         {
@@ -600,10 +602,13 @@ def scoreticker(default_config,qmark):
 
     scoreticker_conf = prompt(scoreticker_questions,style=custom_style_dope)
 
-    return scoreticker_conf
+    scoreticker_default.update(scoreticker_conf)
+
+    return scoreticker_default
 
 def seriesticker(default_config,qmark):
     # Get seriesticker config
+    seriesticker_default = get_default_value(default_config,['boards','seriesticker'],"string")
 
     seriesticker_questions = [
         {
@@ -626,9 +631,14 @@ def seriesticker(default_config,qmark):
 
     seriesticker_conf = prompt(seriesticker_questions,style=custom_style_dope)
 
-    return seriesticker_conf
+    seriesticker_default.update(seriesticker_conf)
+
+    return seriesticker_default
 
 def standings(default_config,qmark):
+
+    standings_default = get_default_value(default_config,['boards','standings'],"string")
+
     standings_questions = [
         {
             'type': 'confirm',
@@ -665,9 +675,13 @@ def standings(default_config,qmark):
 
     standings_conf = prompt(standings_questions,style=custom_style_dope)
 
-    return standings_conf
+    standings_default.update(standings_conf)
+
+    return standings_default
 
 def clock(default_config,qmark):
+    clock_default = get_default_value(default_config,['boards','clock'],"string")
+
     clock_questions = [
         {
             'type': 'input',
@@ -721,7 +735,9 @@ def clock(default_config,qmark):
 
     clock_conf = prompt(clock_questions,style=custom_style_dope)
 
-    return clock_conf
+    clock_default.update(clock_conf)
+
+    return clock_default
 
 def covid19(default_config,qmark):
     # COVID board questions
@@ -1100,12 +1116,16 @@ def board_settings(default_config,qmark,setup_type):
             boards_config['standings'] = standings(default_config,qmark)
         if aboard == 'clock':
             boards_config['clock'] = clock(default_config,qmark)
+            #boards_config.update(clock(default_config,qmark))
         if aboard == 'covid19':
             boards_config['covid19'] = covid19(default_config,qmark)
         if aboard == 'weather':
             boards_config['weather'] = weather(default_config,qmark)
         if aboard == 'wxalert':
             boards_config['wxalert'] = wxalert(default_config,qmark)
+
+    #boards_dict = {'boards':{}}
+    #boards_dict = boards_config
 
     return boards_config
 
@@ -1528,7 +1548,6 @@ def main():
     else:
         #Do full setup or by sections?
         setup_type = questionary.select("What kind of setup do you want?",choices=['full','sections'],style=custom_style_dope,qmark=qmark).ask()
-        print(setup_type)
 
 
     nhl_config = default_config
@@ -1558,11 +1577,11 @@ def main():
 
         if section == "boards":
             boards_config = board_settings(default_config,qmark,setup_type)
-            nhl_config.update(boards_config)
+            nhl_config['boards'] = boards_config
 
         if section == "sbio":
             sbio_config = sbio_settings(default_config,qmark,setup_type)
-            nhl_config.update(sbio_config)
+            nhl_config['sbio'] = sbio_config
 
 
     #Prepare to output to config.json file
