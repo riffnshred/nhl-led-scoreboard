@@ -114,10 +114,28 @@ class wxWeather:
                 self.data.wx_current[3]
             )  
 
-            self.matrix.draw_text_layout(
-                self.layout.temp_app,
-                self.data.wx_current[4] 
-            )
+            # Covert temp and apparent temp to floats to compare
+            temp_float = float(self.data.wx_current[3][:-1])
+            app_temp_float = float(self.data.wx_current[4][:-1])
+
+            if (temp_float > app_temp_float):
+                # apparent temperature is colder than temperature, show blue
+                self.matrix.draw_text_layout(
+                    self.layout.temp_app_lo,
+                    self.data.wx_current[4] 
+                )
+            elif (temp_float < app_temp_float):
+                # apparent temperature is warmer than temperature, show red
+                self.matrix.draw_text_layout(
+                    self.layout.temp_app_hi,
+                    self.data.wx_current[4] 
+                )
+            else:
+                # apparent temperature is colder than temperature, show green, same as temp
+                self.matrix.draw_text_layout(
+                    self.layout.temp_app,
+                    self.data.wx_current[4] 
+                )
 
             self.matrix.render()
 

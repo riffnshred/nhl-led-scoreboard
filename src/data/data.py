@@ -1,6 +1,6 @@
 """
     TODO: How this whole system works is getting complex for nothing and I need to recode this by sorting into seperate classes instead of having everything into a
-          single one.
+        single one.
 """
 
 
@@ -76,7 +76,7 @@ class Data:
         self.latlng = get_lat_lng(config.location)
         # Test for alerts
         #self.latlng = [32.653,-83.7596]
-        
+
         # Flag for if pushbutton has triggered
         self.pb_trigger = False
 
@@ -85,7 +85,11 @@ class Data:
 
         # Currently displayed board
         self.curr_board = None
+        self.prev_board = None
 
+
+        # Environment Canada manager (to share between the forecast, alerts and current obs)
+        self.ecData = None
         # Weather Board Info
         self.wx_updated = False
         self.wx_units = []
@@ -94,12 +98,20 @@ class Data:
         self.wx_curr_precip = []
         # Weather Alert Info
         self.wx_alerts = []
-        self.wx_alert_interrupt = False 
+        self.wx_alert_interrupt = False
+
+        #Weather Forecast Info
+        self.forecast_updated = False
+        self.wx_forecast = []
 
         # For update checker, True means new update available from github
         self.newUpdate = False
         self.UpdateRepo = "riffnshred/nhl-led-scoreboard"
-        
+
+        #For screensaver
+        self.screensaver = False
+        self.screensaver_displayed = False
+        self.screensaver_livegame = False
 
         # Flag to determine when to refresh data
         self.needs_refresh = True
@@ -164,7 +176,7 @@ class Data:
     def __parse_today(self):
         today = datetime.today()
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
-                                                           day=today.day)
+                                                        day=today.day)
         end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
                                                                                 day=today.day)
         if noon < end_of_day < datetime.now() and datetime.now() > noon:
@@ -287,7 +299,7 @@ class Data:
         for game in self.pref_games:
             if game.status != "Final":
                 return
-            
+
         self.all_pref_games_final = True
 
 
@@ -458,13 +470,13 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
-                
+
     def series_by_conference():
         """
             TODO:reorganize the list of series by conference and return the list. this is to allow the option of showing the preferred conference series.
         """
         pass
-                
+
     #
     # Offdays
 
@@ -504,7 +516,7 @@ class Data:
 
         # Update standings
         self.refresh_standings()
-        
+
         # Update Playoff data
         self.refresh_playoff()
 

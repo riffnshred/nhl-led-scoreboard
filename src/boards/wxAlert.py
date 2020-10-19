@@ -63,6 +63,13 @@ class wxAlert:
             else:
                 top_title = "Weather"
 
+            if self.drawtitle:
+                if self.data.wx_alerts[0] == "Severe Thunderstorm":
+                    self.data.wx_alerts[0] = "Svr T-Storm"
+                if self.data.wx_alerts[0] == "Freezing Rain":
+                    self.data.wx_alerts[0] = "Frzn Rain"
+                if self.data.wx_alerts[0] == "Freezing Drizzle":
+                    self.data.wx_alerts[0] = "Frzn Drzl"
 
             # Draw Alert boxes and numbers (warning,watch,advisory) for 64x32 board
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
@@ -70,14 +77,7 @@ class wxAlert:
                 self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,0,0)) # warning
                 self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
                 
-                if self.drawtitle:
-                    if self.data.wx_alerts[0] == "Severe Thunderstorm":
-                        self.data.wx_alerts[0] = "Svr T-Storm"
-                    if self.data.wx_alerts[0] == "Freezing Rain":
-                        self.data.wx_alerts[0] = "Frzn Rain"
-                    if self.data.wx_alerts[0] == "Freezing Drizzle":
-                        self.data.wx_alerts[0] = "Frzn Drzl"
-                        
+                if self.drawtitle:     
                     self.matrix.draw_text_layout(
                         self.layout4.title_top,
                         top_title

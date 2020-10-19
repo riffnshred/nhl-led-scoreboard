@@ -1,5 +1,6 @@
 ![nhl_setup](../../assets/images/nhl_setup.gif)
 ### History
+* V1.4.0 - September 25, 2020
 * V1.3.0 - Wx version - May 10, 2020
 * V1.2.1 - "Maple Leafs" fix - April 1, 2020
 * V1.2.0 - covid 19 board configs - ntjoumas - March 31, 2020
@@ -7,6 +8,13 @@
 * V1.0.0 - Initial release - March 14, 2020
   
 ### Latest Changes
+
+#### V1.4.0
+Added in new sections for screensaver board and additions to the weather, wxalerts and dimmer board.
+Can now select individual sections to update instead of doing the whole config.  The config.json is broken into the following sections: general, preferences, states, boards and sbio.  General is the first 3 items in the config.
+The states, boards and sbio sections all can be configured in their respective individual sections as well.  Example:  Under boards, you will be asked which boards you want to update and only those ones will be offered to be changed.
+Updated the underlying questionary library to fix some of the prompt colors.
+
 #### V1.3.0
 App now has some other functionality right from the command line, including the ability to verify your config against a schema of what the scoreboard requires, check the version of the setup app and also create a simple one team with all defaults configuration.  Here are the command line options:
 

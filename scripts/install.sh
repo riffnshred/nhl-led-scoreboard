@@ -36,6 +36,7 @@ git fetch origin --prune
 git pull
 
 sudo pip3 install requests 
+sudo pip3 install regex
 
 # For dimmer
 sudo pip3 install geocoder python_tsl2591 ephem

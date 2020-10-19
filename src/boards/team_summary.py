@@ -23,7 +23,7 @@ class TeamSummary:
         self.preferred_teams = data.pref_teams
         self.matrix = matrix
         self.team_colors = data.config.team_colors
-        
+
         self.font = data.config.layout.font
         self.layout = data.config.config.layout.get_board_layout('team_summary')
 
@@ -36,7 +36,7 @@ class TeamSummary:
 
             team = self.teams_info[team_id]
             team_data = Team(
-                team.team_id, 
+                team.team_id,
                 team.abbreviation,
                 team.name
             )
@@ -85,22 +85,22 @@ class TeamSummary:
             team_logo = Image.open(get_file('assets/logos/{}.png'.format(team_abbrev)))
 
             i = 0
-            
+
             if not self.sleepEvent.is_set():
                 image = self.draw_team_summary(
-                    stats, 
-                    prev_game_scoreboard, 
-                    next_game_scoreboard, 
-                    bg_color, 
+                    stats,
+                    prev_game_scoreboard,
+                    next_game_scoreboard,
+                    bg_color,
                     txt_color,
                     im_height
                 )
                 self.matrix.clear()
 
                 logo_renderer.render()
-            
+
                 self.matrix.draw_image_layout(
-                    self.layout.info, 
+                    self.layout.info,
                     image,
                 )
                 self.matrix.render()
@@ -119,8 +119,8 @@ class TeamSummary:
 
                 logo_renderer.render()
                 self.matrix.draw_image_layout(
-                self.layout.info, 
-                image, 
+                self.layout.info,
+                image,
                 (0, i)
                 )
 
@@ -129,9 +129,9 @@ class TeamSummary:
                     self.matrix.network_issue_indicator()
                 if self.data.newUpdate and not self.data.config.clock_hide_indicators:
                     self.matrix.update_indicator()
-                    
+
                 self.sleepEvent.wait(0.3)
-                
+
             # Show the bottom before we change to the next table.
             self.sleepEvent.wait(5)
 
@@ -198,10 +198,10 @@ class TeamSummary:
 
             if next_game_scoreboard.away_team.id == self.team_id:
                 draw.text((0, 61), "@ {}".format(next_game_scoreboard.home_team.abbrev), fill=(255, 255, 255),
-                          font=self.font)
+                        font=self.font)
             if next_game_scoreboard.home_team.id == self.team_id:
                 draw.text((0, 61), "VS {}".format(next_game_scoreboard.away_team.abbrev), fill=(255, 255, 255),
-                          font=self.font)
+                        font=self.font)
         else:
             draw.text((1, 52), "--------", fill=(200, 200, 200), font=self.font)
 
