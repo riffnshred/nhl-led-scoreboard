@@ -7,6 +7,7 @@ def get_icons(iconfile):
     icon_path = "src/api/weather/" + iconfile
     return list(csv.DictReader(open(icon_path)))
 
+
 #Take a degree (float) and convert to text and icon   
 def degrees_to_direction(degrees):
         try:

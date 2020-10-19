@@ -5,10 +5,11 @@ import os
 from gpiozero import Button
 from signal import pause
 from subprocess import check_call
+from sbio.screensaver import screenSaver
 
 VALID_PINS = [2,3,7,8,9,10,11,14,15,19,25]
 REBOOT_DEFAULT = 2
-AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock","covid_19","weather","wxalert","pbdisplay"]
+AVAIL_BOARDS = ["team_summary","standings","scoreticker","clock","covid_19","weather","wxalert","pbdisplay","wxforecast","screensaver","stanley_cup_champions"]
 
 class PushButton(object):
     def __init__(self, data, matrix, sleepEvent):
@@ -16,11 +17,12 @@ class PushButton(object):
         # Pins available for HAT: RX, TX, 25, MOSI, MISO, SCLK, CE0, CE1, 19.
         # Pins available on bonnet: SCL, SDA, RX, TX, #25, MOSI, MISO, SCLK, CE0, CE1, #19.
         # GPIOZero pin numbering: 7,8,9,10,11,14,15,19,25 HAT , bonnet adds 2,3
-        
+
         self.data = data
         self.matrix = matrix
         self.pb_run = True
         self.sleepEvent = sleepEvent
+
 
         #Test the state_triggered1 to make sure that the board exists, if not, default to clock
         if data.config.pushbutton_state_triggered1 not in AVAIL_BOARDS:
@@ -37,8 +39,8 @@ class PushButton(object):
             debug.error("Power off duration (" + str(self.poweroff_duration) +  "s) is less than reboot duration (" +str(self.reboot_duration) + "s), values have been swapped, please change config for next run")
             self.reboot_duration = data.config.pushbutton_poweroff_duration
             self.poweroff_duration = data.config.pushbutton_reboot_duration
-        
-        # Make sure reboot suration is not less than REBOOT_DEFAULT seconds 
+
+        # Make sure reboot suration is not less than REBOOT_DEFAULT seconds
         if self.reboot_duration < REBOOT_DEFAULT:
             debug.error("Reboot duration (" + str(self.reboot_duration) +  "s) is less than minimum of " + str(REBOOT_DEFAULT) + "s , please change config for next run")
             self.reboot_duration = REBOOT_DEFAULT
@@ -50,7 +52,7 @@ class PushButton(object):
         self.display_reboot = data.config.pushbutton_display_reboot
         self.display_halt = data.config.pushbutton_display_halt
 
-    
+
         if self.reboot_process:
             if not os.path.isfile(self.reboot_process):
                 debug.error("Reboot override process does not exist or is blank in config.json, falling back to default /sbin/reboot.  Check the config.json for errors")
@@ -82,20 +84,20 @@ class PushButton(object):
         self.bonnet = data.config.pushbutton_bonnet
         try:
             if data.config.pushbutton_pin in VALID_PINS:
-               if not self.bonnet and (data.config.pushbutton_pin in [2,3]):
-                  raise ValueError("You can not use pin # " + str(data.config.pushbutton_pin) + " with the Adafruit RGB HAT. Valid gpiozero numbered pins: 7,8,9,10,11,14,15,19,25")
-               else:
-                  self.use_button = data.config.pushbutton_pin
-                  self.button=Button(self.use_button, hold_time=self.poweroff_duration)
-                  self.button.when_held = self.on_hold
-                  self.button.when_released = self.on_release
-                  self.button.when_pressed = self.on_press
+                if not self.bonnet and (data.config.pushbutton_pin in [2,3]):
+                    raise ValueError("You can not use pin # " + str(data.config.pushbutton_pin) + " with the Adafruit RGB HAT. Valid gpiozero numbered pins: 7,8,9,10,11,14,15,19,25")
+                else:
+                    self.use_button = data.config.pushbutton_pin
+                    self.button=Button(self.use_button, hold_time=self.poweroff_duration)
+                    self.button.when_held = self.on_hold
+                    self.button.when_released = self.on_release
+                    self.button.when_pressed = self.on_press
             else:
                 raise ValueError("You can not use pin # " + str(data.config.pushbutton_pin) + " with the Adafruit RGB Bonnet. Valid gpiozero numbered pins: 2,3,7,8,9,10,11,14,15,19,25")
         except ValueError as exp:
             debug.error("PushButton will not work and is now disabled.  Error: " + format(exp))
             self.pb_run = False
-        
+
 
     def on_press(self):
         self.__press_time = time.time()
@@ -107,12 +109,12 @@ class PushButton(object):
         #self.data.pb_trigger = True
         #self.data.config.pushbutton_state_triggered1 = "pbdisplay"
         #self.sleepEvent.set()
-        
+
     def on_release(self):
         release_time = time.time()
         held_for = release_time - self.__press_time
-        
-  
+
+
         if held_for >= self.reboot_duration and held_for < self.poweroff_duration:
             self.__press_count = 0
             debug.info("reboot process " + self.reboot_process + " triggered after " + str(self.reboot_duration) + " seconds (actual held time = " + str(held_for) + ")")
@@ -152,14 +154,13 @@ class PushButton(object):
         if self.display_halt:
             self.data.pb_trigger = True
             self.data.config.pushbutton_state_triggered1 = "pbdisplay"
-            self.sleepEvent.set()    
+            self.sleepEvent.set()
             time.sleep(2)
 
         try:
             check_call([self.poweroff_process])
         except CalledProcessError as e:
             debug.error("Unable to run " + self.poweroff_process + "Error: " + format(e))
-    
 
     def run(self):
         if self.pb_run:

@@ -1,46 +1,48 @@
-﻿encode,Code,OWMCode,Description,Represents,fontcode,font
-UTF8,0,800,Sunny,Day Conditions Only,f00d,
-UTF8,1,800,Mainly Sunny,Day Conditions Only,f00d,
-UTF8,2,801,Partly Cloudy,Day Conditions Only,f002,
-UTF8,3,801,Mostly Cloudy,Day Conditions Only,f013,
-UTF8,6,500,Light Rain Shower,Day Conditions Only,f008,
-UTF8,7,300,Light Rain Shower and Flurries,Day Conditions Only,f006,
-UTF8,8,600,Light Flurries,Day Conditions Only,f00a,
-UTF8,10,801,Cloudy,Day and Night Conditions,f013,
-UTF8,11,500,Precipitation,Day and Night Conditions,f01c,
-UTF8,12,500,Rain,Day and Night Conditions,f019,
-UTF8,13,500,Rain Shower,Day and Night Conditions,f01a,
-UTF8,14,500,Freezing Rain,Day and Night Conditions,f0b5,
-UTF8,15,600,Rain and Snow,Day and Night Conditions,f017,
-UTF8,16,600,Snow,Day and Night Conditions,f01b,
-UTF8,17,600,Snow,Day and Night Conditions,f01b,
-UTF8,18,600,Heavy Snow,Day and Night Conditions,f01b,
-UTF8,19,200,Thunderstorm,Day Conditions Only,f01e,
-UTF8,23,721,Haze,Day and Night Conditions,f0b6,
-UTF8,24,741,Fog,Day and Night Conditions,f014,
-UTF8,25,600,Drifting Snow,Day and Night Conditions,f064,
-UTF8,26,600,Ice Crystals,Day and Night Conditions,f076,
-UTF8,27,600,Hail,Day and Night Conditions,f015,
-UTF8,28,300,Drizzle,Day and Night Conditions,f01c,
-UTF8,30,800,Clear,Night Conditions Only,f02e,
-UTF8,31,800,Mainly Clear,Night Conditions Only,f02e,
-UTF8,32,801,Partly Cloudy,Night Conditions Only,f031,
-UTF8,33,801,Mostly Cloudy,Night Conditions Only,f041,
-UTF8,36,500,Light Rain Shower,Night Conditions Only,f02b,
-UTF8,37,300,Light Rain Shower and Flurries,Night Conditions Only,f026,
-UTF8,38,600,Light Flurries,Night Conditions Only,f02a,
-UTF8,39,200,Thunderstorm,Night Conditions Only,f02d,
-UTF8,40,600,Blowing Snow,Day and Night Conditions,f064,
-UTF8,41,781,Funnel Cloud,Day and Night Conditions,f056,
-UTF8,42,781,Tornado,Day and Night Conditions,f056,
-UTF8,43,430,Windy,Day and Night Conditions,f021,
-UTF8,44,711,Smoke,Day and Night Conditions,f062,
-UTF8,45,761,Blowing Dust,Day and Night Conditions,f063,
-UTF8,46,200,Thunderstorm with Hail,Day and Night Conditions,f01e,
-UTF8,47,200,Thunderstorm with Dust Storm,Day and Night Conditions,f01e,
-UTF8,48,781,Waterspout,Day and Night Conditions,f056,
-UTF8,90,900,N/A,Day and Night Conditions,f07b,
-UTF8,91,901,Humidity,Day and Night Conditions,f07a,
-UTF8,92,902,Rising,Day and Night Conditions,f057,
-UTF8,93,903,Falling,Day and Night Conditions,f088,
-UTF8,94,904,Steady,Day and Night Conditions,f04d,
+﻿encode,Code,ForecastCode,OWMCode,Description,Represents,fontcode,font
+UTF8,0,0,800,Sunny,Day Conditions Only,f00d,
+UTF8,1,2,800,Mainly Sunny,Day Conditions Only,f00d,
+UTF8,2,1,801,Partly Cloudy,Day Conditions Only,f002,
+UTF8,3,4,801,Mostly Cloudy,Day Conditions Only,f013,
+UTF8,6,6,500,Light Rain Shower,Day Conditions Only,f008,
+UTF8,7,7,300,Light Rain Shower and Flurries,Day Conditions Only,f006,
+UTF8,8,8,600,Light Flurries,Day Conditions Only,f00a,
+UTF8,10,10,801,Cloudy,Day and Night Conditions,f013,
+UTF8,11,13,500,Precipitation,Day and Night Conditions,f01c,
+UTF8,12,13,500,Rain,Day and Night Conditions,f019,
+UTF8,13,12,500,Rain Shower,Day and Night Conditions,f01a,
+UTF8,14,14,500,Freezing Rain,Day and Night Conditions,f0b5,
+UTF8,15,15,600,Rain and Snow,Day and Night Conditions,f017,
+UTF8,16,17,600,Snow,Day and Night Conditions,f01b,
+UTF8,17,17,600,Snow,Day and Night Conditions,f01b,
+UTF8,18,17,600,Heavy Snow,Day and Night Conditions,f01b,
+UTF8,19,9,200,Thunderstorm,Day Conditions Only,f01e,
+UTF8,23,23,721,Haze,Day and Night Conditions,f0b6,
+UTF8,24,24,741,Fog,Day and Night Conditions,f014,
+UTF8,25,17,600,Drifting Snow,Day and Night Conditions,f064,
+UTF8,26,27,600,Ice Crystals,Day and Night Conditions,f076,
+UTF8,27,19,600,Hail,Day and Night Conditions,f015,
+UTF8,28,28,300,Drizzle,Day and Night Conditions,f01c,
+UTF8,30,30,800,Clear,Night Conditions Only,f02e,
+UTF8,31,31,800,Mainly Clear,Night Conditions Only,f02e,
+UTF8,32,32,801,Partly Cloudy,Night Conditions Only,f031,
+UTF8,33,33,801,Mostly Cloudy,Night Conditions Only,f041,
+UTF8,36,36,500,Light Rain Shower,Night Conditions Only,f02b,
+UTF8,37,37,300,Light Rain Shower and Flurries,Night Conditions Only,f026,
+UTF8,38,38,600,Light Flurries,Night Conditions Only,f02a,
+UTF8,39,39,200,Thunderstorm,Night Conditions Only,f02d,
+UTF8,40,40,600,Blowing Snow,Day and Night Conditions,f064,
+UTF8,41,43,781,Funnel Cloud,Day and Night Conditions,f056,
+UTF8,42,43,781,Tornado,Day and Night Conditions,f056,
+UTF8,43,43,430,Windy,Day and Night Conditions,f021,
+UTF8,44,44,711,Smoke,Day and Night Conditions,f062,
+UTF8,45,44,761,Blowing Dust,Day and Night Conditions,f063,
+UTF8,46,9,200,Thunderstorm with Hail,Day and Night Conditions,f01e,
+UTF8,47,9,200,Thunderstorm with Dust Storm,Day and Night Conditions,f01e,
+UTF8,48,43,781,Waterspout,Day and Night Conditions,f056,
+UTF8,90,29,900,N/A,Day and Night Conditions,f07b,
+UTF8,91,91,901,Humidity,Day and Night Conditions,f07a,
+UTF8,92,92,902,Rising,Day and Night Conditions,f057,
+UTF8,93,93,903,Falling,Day and Night Conditions,f088,
+UTF8,94,94,904,Steady,Day and Night Conditions,f04d,
+UTF8,1,5,800,Clear,Day Conditions Only,f00d,
+UTF8,3,3,801,Cloudy Periods,Day Conditions Only,f013,

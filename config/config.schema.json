@@ -8,9 +8,9 @@
     "additionalProperties": true,
     "required": [
         "debug",
+        "loglevel",
         "live_mode",
         "preferences",
-        "goal_animations",
         "states",
         "boards",
         "sbio"
@@ -24,6 +24,16 @@
             "default": false,
             "examples": [
                 true
+            ]
+        },
+        "loglevel": {
+            "$id": "#/properties/loglevel",
+            "type": "string",
+            "title": "loglevel",
+            "description": "Level of logs to show in output.  Can be DEBUG, INFO, WARN, ERROR, CRITICAL  DEBUG is same as setting debug to true ",
+            "default": "INFO",
+            "examples": [
+                "INFO"
             ]
         },
         "live_mode": {
@@ -53,7 +63,10 @@
                         "Canadiens",
                         "Oilers"
                     ],
-                    "time_format": "12h"
+                    "time_format": "12h",
+                    "goal_animations": {
+                        "pref_team_only": true
+                    }
                 }
             ],
             "additionalProperties": true,
@@ -63,7 +76,8 @@
                 "location",
                 "live_game_refresh_rate",
                 "teams",
-                "sog_display_frequency"
+                "sog_display_frequency",
+                "goal_animations"
             ],
             "properties": {
                 "time_format": {
@@ -142,34 +156,34 @@
                     "examples": [
                         4
                     ]
-                }
-            }
-        },
-        "goal_animations": {
-            "$id": "#/properties/goal_animations",
-            "type": "object",
-            "title": "goal_animations",
-            "description": "The goal animations can be set for both teams of just the preferred teams",
-            "default": true,
-            "examples": [
-                {
-                    "pref_team_only": true
-                }
-            ],
-            "additionalProperties": true,
-            "required": [
-                "pref_team_only"
-            ],
-            "properties": {
-                "pref_team_only": {
-                    "$id": "#/properties/goal_animations/properties/pref_team_only",
-                    "type": "boolean",
-                    "title": "pref_team_only",
-                    "description": "Show only your preferred team goal animation or show both",
-                    "default": false,
+                },
+                "goal_animations": {
+                    "$id": "#/properties/preferences/goal_animations",
+                    "type": "object",
+                    "title": "goal_animations",
+                    "description": "The goal animations can be set for both teams of just the preferred teams",
+                    "default": true,
                     "examples": [
-                        true
-                    ]
+                        {
+                            "pref_team_only": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "pref_team_only"
+                    ],
+                    "properties": {
+                        "pref_team_only": {
+                            "$id": "#/properties/preferences/goal_animations/properties/pref_team_only",
+                            "type": "boolean",
+                            "title": "pref_team_only",
+                            "description": "Show only your preferred team goal animation or show both",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    }
                 }
             }
         },
@@ -508,13 +522,21 @@
                     "examples": [
                         {
                             "hide_indicator": false,
-                            "duration": 60
+                            "duration": 60,
+                            "preferred_team_colors": true,
+                            "clock_rgb": "234,234,78",
+                            "date_rgb": "78,234,234",
+                            "flash_seconds": true
                         }
                     ],
                     "additionalProperties": true,
                     "required": [
                         "duration",
-                        "hide_indicator"
+                        "hide_indicator",
+                        "preferred_team_colors",
+                        "clock_rgb",
+                        "date_rgb",
+                        "flash_seconds"
                     ],
                     "properties": {
                         "duration": {
@@ -532,6 +554,46 @@
                             "type": "boolean",
                             "title": "hide_indicator",
                             "description": "Hide the red bar no network indicator on the bottom",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "preferred_team_colors": {
+                            "$id": "#/properties/boards/properties/clock/properties/preferred_team_colors",
+                            "type": "boolean",
+                            "title": "preferred_team_colors",
+                            "description": "Use your first preferred team's colors for clock.  The primary color will be used for clock numbers, while the team text color will be used for the date/weather and AM/PM",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "clock_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/clock_rgb",
+                            "type": "string",
+                            "title": "clock_rgb",
+                            "description": "Set the clock numbers to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "date_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/date_rgb",
+                            "type": "string",
+                            "title": "date_rgb",
+                            "description": "Set the date/weather and AM/PM text to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "flash_seconds": {
+                            "$id": "#/properties/boards/properties/clock/properties/flash_seconds",
+                            "type": "boolean",
+                            "title": "flash_seconds",
+                            "description": "Flash the seconds (:) if true.  If set to false, dont show the (:)",
                             "default": false,
                             "examples": [
                                 false
@@ -700,7 +762,10 @@
                         "units": "metric",
                         "update_freq": 5,
                         "duration": 30,
-                        "show_on_clock": true
+                        "show_on_clock": true,
+                        "forecast_enabled": true,
+                        "forecast_days": 3,
+                        "forecast_update": 1
                     }
                 ],
                 "additionalProperties": true,
@@ -712,7 +777,10 @@
                     "data_feed",
                     "owm_apikey",
                     "update_freq",
-                    "show_on_clock"
+                    "show_on_clock",
+                    "forecast_enabled",
+                    "forecast_days",
+                    "forecast_update"
                 ],
                 "properties": {
                     "enabled": {
@@ -794,6 +862,36 @@
                         "examples": [
                             true
                         ]
+                    },
+                    "forecast_enabled": {
+                        "$id": "#/properties/weather/properties/forecast_enabled",
+                        "type": "boolean",
+                        "title": "forecast_enabled",
+                        "description": "Enable the weather forecast thread to get your local weather forecast up to 3 days.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "forecast_days": {
+                        "$id": "#/properties/weather/properties/forecast_days",
+                        "type": "integer",
+                        "title": "forecast_days",
+                        "description": "Number of forecast days to show (3 is the maximum).",
+                        "default": 3,
+                        "examples": [
+                            3
+                        ]
+                    },
+                    "forecast_update": {
+                        "$id": "#/properties/weather/properties/forecast_update",
+                        "type": "integer",
+                        "title": "forecast_update",
+                        "description": "How often to update forecast.  This is in hours",
+                        "default": 3,
+                        "examples": [
+                            3
+                        ]
                     }
                 }
             },
@@ -807,6 +905,7 @@
                     {
                         "scroll_alert": true,
                         "alert_feed": "EC",
+                        "nws_show_expire": false,
                         "alert_duration": 5,
                         "alert_title": true,
                         "update_freq": 5,
@@ -818,6 +917,7 @@
                 "required": [
                     "alert_feed",
                     "update_freq",
+                    "nws_show_expire",
                     "show_alerts",
                     "alert_title",
                     "scroll_alert",
@@ -843,6 +943,16 @@
                         "default": 5,
                         "examples": [
                             5
+                        ]
+                    },
+                    "nws_show_expire": {
+                        "$id": "#/properties/weather/properties/nws_show_expire",
+                        "type": "boolean",
+                        "title": "nws_show_expire",
+                        "description": "Show expire time (true) instead of effective time (false) of alert",
+                        "default": false,
+                        "examples": [
+                            true
                         ]
                     },
                     "show_alerts": {
@@ -906,6 +1016,15 @@
             "default": {},
             "examples": [
                 {
+                    "screensaver": {
+                        "enabled": "true",
+                        "start": "22:00",
+                        "end": "22:05",
+                        "data_updates": false,
+                        "motionsensor": true,
+                        "pin": 24,
+                        "delay": 30
+                    },
                     "dimmer": {
                         "frequency": 5,
                         "light_level_lux": 10,
@@ -913,7 +1032,10 @@
                         "source": "software",
                         "sunrise_brightness": 40,
                         "enabled": true,
-                        "mode": "always"
+                        "mode": "always",
+                        "daytime": "8:30AM",
+                        "nighttime": "5:30PM",
+                        "offset": 90
                     },
                     "pushbutton": {
                         "state_triggered1": "weather",
@@ -932,10 +1054,120 @@
             ],
             "additionalProperties": true,
             "required": [
+                "screensaver",
                 "dimmer",
                 "pushbutton"
             ],
             "properties": {
+                "screensaver": {
+                    "$id": "#/properties/sbio/properties/screensaver",
+                    "type": "object",
+                    "title": "screensaver",
+                    "description": "Ability to turn off screen and back on at set times",
+                    "default": {},
+                    "examples": [
+                        {
+                                "enabled": true,
+                                "animations": true,
+                                "start": "22:00",
+                                "stop": "22:05",
+                                "data_updates": false,
+                                "motionsensor": true,
+                                "pin": 24,
+                                "delay": 30
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "animations",
+                        "start",
+                        "stop",
+                        "data_updates"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the screensaver functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "animations": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/animations",
+                            "type": "boolean",
+                            "title": "animations",
+                            "description": "Show anuimation on screensaver start (true) or go straight to black screen (false)",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "start": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/start",
+                            "type": "string",
+                            "title": "start",
+                            "description": "Time to start screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:00"
+                            ]
+                        },
+                        "end": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/end",
+                            "type": "string",
+                            "title": "end",
+                            "description": "Time to end screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:30"
+                            ]
+                        },
+                        "data_updates": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/data_updates",
+                            "type": "boolean",
+                            "title": "data_updates",
+                            "description": "Update weather and NHL data while screen saver is active",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "motionsensor": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/motionsensor",
+                            "type": "boolean",
+                            "title": "motionsensor",
+                            "description": "Use motion sensor to stop screen saver",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "pin": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/pin",
+                            "type": "integer",
+                            "title": "pin",
+                            "description": "What gpio pin motion sensor is connected to",
+                            "default": 0,
+                            "examples": [
+                                24
+                            ]
+                        },
+                        "delay": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/delay",
+                            "type": "integer",
+                            "title": "delay",
+                            "description": "How long in seconds before there is no motion to turn screen saver back on",
+                            "default": 30,
+                            "examples": [
+                                30
+                            ]
+                        }
+                    }
+                },
                 "dimmer": {
                     "$id": "#/properties/sbio/properties/dimmer",
                     "type": "object",
@@ -950,7 +1182,10 @@
                             "light_level_lux": 10,
                             "sunset_brightness": 5,
                             "source": "software",
-                            "sunrise_brightness": 40
+                            "sunrise_brightness": 40,
+                            "daytime": "8:30AM",
+                            "nighttime": "5:30PM",
+                            "offset": 90
                         }
                     ],
                     "additionalProperties": true,
@@ -961,7 +1196,10 @@
                         "light_level_lux",
                         "mode",
                         "sunset_brightness",
-                        "sunrise_brightness"
+                        "sunrise_brightness",
+                        "daytime",
+                        "nighttime",
+                        "offset"
                     ],
                     "properties": {
                         "enabled": {
@@ -1012,6 +1250,38 @@
                             "default": "always",
                             "examples": [
                                 "always"
+                            ]
+                        },
+                        "daytime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/daytime",
+                            "type": "string",
+                            "title": "daytime",
+                            "description": "What time is day time (can be 12 or 24 hour time)",
+                            "default": "8:30 AM",
+                            "examples": [
+                                "8:30 AM",
+                                "08:30"
+                            ]
+                        },
+                        "nighttime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/nighttime",
+                            "type": "string",
+                            "title": "nighttime",
+                            "description": "What time is night time (can be 12 or 24 hour time)",
+                            "default": "5:30 PM",
+                            "examples": [
+                                "5:30 PM",
+                                "17:30"
+                            ]
+                        },
+                        "offset": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/offset",
+                            "type": "integer",
+                            "title": "offset",
+                            "description": "Value of offset in minutes for sunrise and sunset for automatic sunrise/sunset from location only.  Can be positive or negative",
+                            "default": 0,
+                            "examples": [
+                                90
                             ]
                         },
                         "sunset_brightness": {
