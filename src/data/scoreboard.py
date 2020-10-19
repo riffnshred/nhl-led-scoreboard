@@ -5,6 +5,15 @@ from time import sleep
 import debug
 import nhl_api
 
+"""
+    TODO:
+        Split the current Scoreboard class into two:
+            - scoreboard (subclass of game, only showing minimum data of a game like the status, score, away and home etc...  )
+            - game (for the overview, load all the static data like players, away and home teams etc... on init 
+            and have methods to refresh the dynamic data like score, goals, penalty etc...)
+
+        This will affect how the Data module init and refresh games. Need to test figure what this change will affect.
+"""
 
 def filter_scoring_plays(plays, away_id, home_id):
     """
@@ -139,3 +148,13 @@ class Goal:
         self.period = play['about']['ordinalNum']
         self.periodTime = play['about']['periodTime']
         self.strength = play['result']['strength']['name']
+        
+class Penalty:
+    def __init__(self, play, player):
+        self.player = player
+        self.penaltyType = play['result']['Holding']
+        self.severity = play['result']['penaltySeverity']
+        self.penaltyMinutes = str(play['result']['penaltyMinutes'])
+        self.team = play['team']['id']
+        self.period = play['about']['ordinalNum']
+        self.periodTime = play['about']['periodTime']

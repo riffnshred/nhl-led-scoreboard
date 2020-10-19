@@ -3,13 +3,12 @@
 	"loglevel": "INFO",
 	"live_mode": false,
 	"preferences": {
-		"time_format": "24h",
+		"time_format": "12h",
 		"end_of_day": "8:00",
 		"location": "",
 		"live_game_refresh_rate": 10,
 		"teams": [
-			"Flames",
-			"Oilers"
+			"Canadiens"
 		],
 		"sog_display_frequency": 4,
 		"goal_animations": {
@@ -19,7 +18,9 @@
 
 	"states":{
 		"off_day": [
-			"covid_19",
+			"scoreticker",
+			"team_summary",
+			"standings",
 			"clock"
 		],
 		"scheduled": [
@@ -29,7 +30,8 @@
 			"clock"
 		],
 		"intermission": [
-			"scoreticker"
+			"scoreticker",
+			"team_summary"
 		],
 		"post_game": [
 			"team_summary",
@@ -64,7 +66,7 @@
 		},
         "covid19": {
             "worldwide_enabled": false,
-            "country_enabled": true,
+            "country_enabled": false,
             "country": [
                 "USA"
             ],
@@ -78,7 +80,7 @@
             ]
 		},
 		"weather": {
-			"enabled": true,
+			"enabled": false,
 			"view": "full",
 			"units": "metric",
 			"duration": 60,
@@ -125,8 +127,8 @@
 			"sunrise_brightness": 40
 		},
 		"pushbutton": {
-			"enabled": true,
-			"bonnet": true,
+			"enabled": false,
+			"bonnet": false,
 			"pin": 25,
 			"reboot_duration": 2,
 			"reboot_override_process": "",

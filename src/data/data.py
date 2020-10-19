@@ -251,6 +251,9 @@ class Data:
             If the user want's to rotate only his preferred games between the periods and during the day, save those
             only. Lastly, If if not an Off day for the pref teams, reorder the list in order of preferred teams and load
             the first game as the main event.
+
+            TODO:
+                Add the option to start the earliest game in the preferred game list but change to the top one as soon as it start.
         """
         attempts_remaining = 5
         while attempts_remaining > 0:
@@ -421,6 +424,12 @@ class Data:
     #
     # Playoffs
     def refresh_playoff(self):
+        """
+            Currently the series ticker request all the games of a series everytime its asked to load on screen.
+            This create a lot of delay between showing each series. 
+            TODO:
+                Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
+        """
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -464,7 +473,7 @@ class Data:
 
     def series_by_conference():
         """
-            TODO:reorganize the list of series by conference and return the list
+            TODO:reorganize the list of series by conference and return the list. this is to allow the option of showing the preferred conference series.
         """
         pass
 
