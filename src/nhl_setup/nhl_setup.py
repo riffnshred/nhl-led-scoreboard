@@ -26,7 +26,7 @@ SECTIONS = ['general','preferences','states','boards','sbio']
 STATES = ['off_day','scheduled','intermission','post_game']
 #Note: for boards, the covid19 in config is NOT the same name as the covid_19 python function
 #the boards listed below are what's listed in the config
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19']
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19','christmas']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 class Clock24hValidator(Validator):
@@ -544,7 +544,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions']
+        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions','christmas']
 
         boards_selected = []
         board = None
@@ -1100,7 +1100,7 @@ def board_settings(default_config,qmark,setup_type):
     if setup_type != "full":
         theboards = (
             questionary.checkbox(
-                "Select boards(s) to configure (no selection defaults to all boards)", choices=BOARDS, style=custom_style_dope,qmark=qmark
+                "Select board(s) to configure (no selection defaults to all boards)", choices=BOARDS, style=custom_style_dope,qmark=qmark
             ).ask()
             or BOARDS
         )
