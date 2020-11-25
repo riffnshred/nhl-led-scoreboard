@@ -165,11 +165,11 @@ class ScoreboardRenderer:
         self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 3, 0, self.matrix.height - 3,
                                       colors[str(away_number_skaters)])
 
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 1, 60,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 1, self.matrix.width - 4,
                                       self.matrix.height - 1, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 2, 62,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 2, self.matrix.width - 2,
                                       self.matrix.height - 2, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 3, 63,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 3, self.matrix.width - 1,
                                       self.matrix.height - 3, colors[str(home_number_skaters)])
 
     def draw_SOG(self):

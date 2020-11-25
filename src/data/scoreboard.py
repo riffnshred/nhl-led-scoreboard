@@ -5,11 +5,20 @@ from time import sleep
 import debug
 import nhl_api
 
+"""
+    TODO:
+        Split the current Scoreboard class into two:
+            - scoreboard (subclass of game, only showing minimum data of a game like the status, score, away and home etc...  )
+            - game (for the overview, load all the static data like players, away and home teams etc... on init 
+            and have methods to refresh the dynamic data like score, goals, penalty etc...)
+
+        This will affect how the Data module init and refresh games. Need to test figure what this change will affect.
+"""
 
 def filter_scoring_plays(plays, away_id, home_id):
     """
         Take a list of scoring plays and split them into their cooresponding team.
-        return two list, one for each team. 
+        return two list, one for each team.
     """
     all_plays = plays.allPlays
     scoring_plays_id = plays.scoringPlays
@@ -63,7 +72,6 @@ def get_goal_players(players_list,data):
         # If one of the request for player info failed after 5 attempts, return an empty dictionary
         if attempts_remaining == 0:
             return {}
-    
     return {"scorer":scorer, "assists":assists, "goalie":goalie}
 
 class Scoreboard:
@@ -82,7 +90,7 @@ class Scoreboard:
             plays = overview.plays
             away_scoring_plays, home_scoring_plays = filter_scoring_plays(plays,away.team.id,home.team.id)
             # Get the Away Goal details
-            # If the request to the API fails,return an empty list of goal plays. 
+            # If the request to the API fails,return an empty list of goal plays.
             # This method is there to prevent the goal board to display the wrong info
             for play in away_scoring_plays:
                 players = get_goal_players(play['players'], data)
@@ -105,9 +113,9 @@ class Scoreboard:
                     break
 
         self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
-                              away.numSkaters, away.goaliePulled, away_goal_plays)
+                            away.numSkaters, away.goaliePulled, away_goal_plays)
         self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
-                              home.numSkaters, home.goaliePulled, home_goal_plays)
+                            home.numSkaters, home.goaliePulled, home_goal_plays)
 
         self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")
         self.start_time = convert_time(overview.game_date).strftime(time_format)
@@ -141,6 +149,12 @@ class Goal:
         self.periodTime = play['about']['periodTime']
         self.strength = play['result']['strength']['name']
         
-
-
-        
+class Penalty:
+    def __init__(self, play, player):
+        self.player = player
+        self.penaltyType = play['result']['Holding']
+        self.severity = play['result']['penaltySeverity']
+        self.penaltyMinutes = str(play['result']['penaltyMinutes'])
+        self.team = play['team']['id']
+        self.period = play['about']['ordinalNum']
+        self.periodTime = play['about']['periodTime']

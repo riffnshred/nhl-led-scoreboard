@@ -92,10 +92,11 @@ class MainRenderer:
             # Display the pushbutton board
             if self.data.pb_trigger:
                 debug.info('PushButton triggered in game day loop....will display ' + self.data.config.pushbutton_state_triggered1 + ' board')
-                self.data.pb_trigger = False
+                if not self.data.screensaver:
+                    self.data.pb_trigger = False
                 #Display the board from the config
                 self.boards._pb_board(self.data, self.matrix, self.sleepEvent)
-            
+
             # Display the Weather Alert board
             if self.data.wx_alert_interrupt:
                 debug.info('Weather Alert triggered in game day loop....will display weather alert board')
@@ -103,8 +104,20 @@ class MainRenderer:
                 #Display the board from the config
                 self.boards._wx_alert(self.data, self.matrix, self.sleepEvent)
 
+            # Display the screensaver board
+            if self.data.screensaver:
+                if not self.data.pb_trigger:
+                    debug.info('Screensaver triggered in game day loop....')
+                    #self.data.wx_alert_interrupt = False
+                    #Display the board from the config
+                    self.boards._screensaver(self.data, self.matrix, self.sleepEvent)
+                else:
+                    self.data.pb_trigger = False
+
             if self.status.is_live(self.data.overview.status):
                 """ Live Game state """
+                #blocks the screensaver from running if game is live
+                self.data.screensaver_livegame = True
                 debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
@@ -124,7 +137,11 @@ class MainRenderer:
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
-                self.check_stanley_cup_champion()
+                if self.data.isPlayoff and self.stanleycup_round:
+                    self.check_stanley_cup_champion()
+                    if self.data.ScChampions_id:
+                        StanleyCupChampions(self.data, self.data.ScChampions_id, self.matrix, self.sleepEvent).render()
+                
                 self.__render_postgame(self.scoreboard)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -134,7 +151,10 @@ class MainRenderer:
                 debug.info("FINAL")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
-                self.check_stanley_cup_champion()
+                if self.data.isPlayoff and self.stanleycup_round:
+                    self.check_stanley_cup_champion()
+                    if self.data.ScChampions_id:
+                        StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
                 self.__render_postgame(self.scoreboard)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -166,7 +186,7 @@ class MainRenderer:
             self.data.refresh_overview()
             if self.data.network_issues:
                 self.matrix.network_issue_indicator()
-            
+
             if self.data.newUpdate and not self.data.config.clock_hide_indicators:
                 self.matrix.update_indicator()
 
@@ -201,7 +221,7 @@ class MainRenderer:
 
     def check_new_goals(self):
         debug.log("Check new goal")
-        
+
         pref_team_only = self.data.config.goal_anim_pref_team_only
         away_id = self.scoreboard.away_team.id
         away_name = self.scoreboard.away_team.name
@@ -225,6 +245,9 @@ class MainRenderer:
                     self.goal_team_cache.pop(0)
             except IndexError:
                 debug.error("The scoreboard object failed to get the goal details, trying on the next data refresh")
+            except KeyError:
+                debug.error("Last Goal is a No goal. Or the API is missing some information.")
+                self.goal_team_cache.pop(0)
 
         if away_score < away_goals:
             self.away_score = away_goals
@@ -233,7 +256,7 @@ class MainRenderer:
                 return
             # run the goal animation
             self._draw_goal_animation(away_id, away_name)
-            
+
 
         if home_score < home_goals:
             self.home_score = home_goals
@@ -241,26 +264,26 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
-            self._draw_goal_animation(away_id, home_name)
+            self._draw_goal_animation(home_id, home_name)
             
     
     def _draw_goal_animation(self, id=14, name="test"):
         debug.info('Score by team: ' + name)
-
+        preferred_team_only = self.data.config.goal_anim_pref_team_only
         # Get the list of gif's under the preferred and opposing directory
         all_gifs = glob.glob("assets/animations/goal/all/*.gif")
         preferred_gifs = glob.glob("assets/animations/goal/preferred/*.gif")
         opposing_gifs = glob.glob("assets/animations/goal/opposing/*.gif")
 
         filename = "assets/animations/goal_light_animation.gif"
-        
+
         # Use alternate animations if there is any in the respective folder
         if all_gifs:
             # Set opposing team goal animation here
             filename = random.choice(all_gifs)
             debug.info("General animation is: " + filename)
 
-        if opposing_gifs:
+        if opposing_gifs and not preferred_team_only:
             # Set opposing team goal animation here
             filename = random.choice(opposing_gifs)
             debug.info("Opposing animation is: " + filename)
@@ -269,7 +292,7 @@ class MainRenderer:
             # Set your preferred team goal animation here
             filename = random.choice(preferred_gifs)
             debug.info("Preferred animation is: " + filename)
-        
+
 
 
         im = Image.open(get_file(filename))
@@ -306,12 +329,6 @@ class MainRenderer:
         color = self.matrix.graphics.Color(255, 0, 0)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
-
-    def check_stanley_cup_champion(self):
-        if self.data.isPlayoff and self.data.stanleycup_round:
-            for x in range(len(self.data.current_round.series[0].matchupTeams)):
-                if self.data.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
-                    StanleyCupChampions(self.data, self.data.current_round.series[0].matchupTeams[x].team.id, self.matrix, self.sleepEvent).render()
 
     def test_stanley_cup_champion(self, team_id):
         StanleyCupChampions(self.data, team_id, self.matrix, self.sleepEvent).render()

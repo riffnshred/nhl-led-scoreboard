@@ -2,6 +2,7 @@ from data.team import SeriesTeam
 from utils import convert_time
 import nhl_api
 
+
 def get_team_position(teams_info):
     """
         Lookup for both team's position in the seed data of team's info and return 

@@ -6,6 +6,8 @@ from packaging import version
 
 class UpdateChecker(object):
     def __init__(self,data,scheduler):
+
+        self.scheduler = scheduler
         self.workingDir = os.getcwd()
         self.versionFile = os.path.join(self.workingDir,'VERSION')
         self.data = data
@@ -22,15 +24,14 @@ class UpdateChecker(object):
             debug.error("File {} does not exist.".format(self.versionFile))
 
         if self.version != "":
-            self.CheckForUpdate()
-
             # Do a daily check @ 3AM
-            scheduler.add_job(self.CheckForUpdate, 'cron', hour=3,minute=0)
+            scheduler.add_job(self.CheckForUpdate, 'cron', hour=3,minute=0,id='updatecheck')
             #Check every 5 mins for testing only
             #scheduler.add_job(self.CheckForUpdate, 'cron', minute='*/5')
+            self.CheckForUpdate()
 
     def CheckForUpdate(self):
-        debug.info("Checking for new release for {} repo installed in {}".format(self.data.UpdateRepo,self.workingDir))
+        debug.info("Checking for new release. {} v{} installed in {}".format(self.data.UpdateRepo,self.version,self.workingDir))
 
         # Use lastversion to check against github latest release repo, don't look at pre releases
         latest_version = lastversion.latest(self.data.UpdateRepo, output_format='version', pre_ok=False)
@@ -43,7 +44,10 @@ class UpdateChecker(object):
                 self.data.newUpdate = False
         else:
             debug.error("Unable to get latest version from github, is it tagged properly?")
-            
+        
+        nextcheck = self.scheduler.get_job('updatecheck').next_run_time
+
+        debug.info("Next check for update @ {}".format(nextcheck))
 
         
         
