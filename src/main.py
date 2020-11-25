@@ -8,11 +8,15 @@ from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
+from sbio.motionsensor import Motion
+from sbio.screensaver import screenSaver
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
+from api.weather.wxForecast import wxForecast
+from env_canada import ECData
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -28,7 +32,7 @@ def run():
     # Get supplied command line arguments
     commandArgs = args()
 
-    if commandArgs.terminal_mode:
+    if commandArgs.terminal_mode and sys.stdin.isatty():
         height, width = os.popen('stty size', 'r').read().split()
         termMatrix = TermMatrix()
         termMatrix.width = int(width)
@@ -42,72 +46,90 @@ def run():
         # Initialize the matrix
         matrix = Matrix(RGBMatrix(options = matrixOptions))
 
-    # Print some basic info on startup
-    debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
-
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
-    debug.set_debug_status(config)
-
     data = Data(config)
+
+    #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)
+    if commandArgs.logcolor and commandArgs.loglevel != None:
+        debug.set_debug_status(config,logcolor=commandArgs.logcolor,loglevel=commandArgs.loglevel)
+    elif not commandArgs.logcolor and commandArgs.loglevel != None:
+        debug.set_debug_status(config,loglevel=commandArgs.loglevel)
+    elif commandArgs.logcolor and commandArgs.loglevel == None:
+        debug.set_debug_status(config,logcolor=commandArgs.logcolor,loglevel=config.loglevel)
+    else:
+        debug.set_debug_status(config,loglevel=config.loglevel)
+
+    # Print some basic info on startup
+    debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
     # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
+
+    # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+
+    # Any tasks that are scheduled go below this line
+
+    #Create EC data feed handler
+    if data.config.weather_enabled or data.config.wxalert_show_alerts:
+        if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
+            try:
+                data.ecData = ECData(coordinates=(data.latlng))
+            except Exception as e:
+                debug.error("Unable to connect to EC, try running again in a few minutes")
+                sys.exit(0)
+
+    if data.config.weather_enabled:
+        if data.config.weather_data_feed.lower() == "ec":
+            ecWxWorker(data,scheduler)
+        elif data.config.weather_data_feed.lower() == "owm":
+            owmweather = owmWxWorker(data,scheduler)
+        else:
+            debug.error("No valid weather providers selected, skipping weather feed")
+            data.config.weather_enabled = False
+
+
+    if data.config.wxalert_show_alerts:
+        if data.config.wxalert_alert_feed.lower() == "ec":
+            ecalert = ecWxAlerts(data,scheduler,sleepEvent)
+        elif data.config.wxalert_alert_feed.lower() == "nws":
+            nwsalert = nwsWxAlerts(data,scheduler,sleepEvent)
+        else:
+            debug.error("No valid weather alerts providers selected, skipping alerts feed")
+            data.config.weather_show_alerts = False
+
+    if data.config.weather_forecast_enabled:
+        wxForecast(data,scheduler)
+    #
+    # Run check for updates against github on a background thread on a scheduler
+    #
+    if commandArgs.updatecheck:
+        data.UpdateRepo = commandArgs.updaterepo
+        checkupdate = UpdateChecker(data,scheduler)
+
     if data.config.dimmer_enabled:
-        dimmer = Dimmer(data, matrix)
-        dimmerThread = threading.Thread(target=dimmer.run, args=())
-        dimmerThread.daemon = True
-        dimmerThread.start()
+        dimmer = Dimmer(data, matrix,scheduler)
+
+    screensaver = None
+    if data.config.screensaver_enabled:
+        screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
+        if data.config.screensaver_motionsensor:
+            motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
+            motionsensorThread = threading.Thread(target=motionsensor.run, args=())
+            motionsensorThread.daemon = True
+            motionsensorThread.start()
 
     if data.config.pushbutton_enabled:
         pushbutton = PushButton(data,matrix,sleepEvent)
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
-    
-    if data.config.weather_enabled:
-        if data.config.weather_data_feed.lower() == "owm":
-            owmweather = owmWxWorker(data,sleepEvent)
-            owmweatherThread = threading.Thread(target=owmweather.run,args=())
-            owmweatherThread.daemon = True
-            owmweatherThread.start()
-        elif data.config.weather_data_feed.lower() == "ec":
-            ecweather = ecWxWorker(data,sleepEvent)
-            ecweatherThread = threading.Thread(target=ecweather.run,args=())
-            ecweatherThread.daemon = True
-            ecweatherThread.start()
-        else:
-            debug.error("No valid weather providers selected, skipping weather feed")
-            data.config.weather_enabled = False
-
-    if data.config.wxalert_show_alerts:
-        if data.config.wxalert_alert_feed.lower() == "ec":
-            ecalert = ecWxAlerts(data,sleepEvent)
-            ecalertThread = threading.Thread(target=ecalert.run,args=())
-            ecalertThread.daemon = True
-            ecalertThread.start()
-        elif data.config.wxalert_alert_feed.lower() == "nws":
-            nwsalert = nwsWxAlerts(data,sleepEvent)
-            nwsalertThread = threading.Thread(target=nwsalert.run,args=())
-            nwsalertThread.daemon = True
-            nwsalertThread.start()
-        else:
-            debug.error("No valid weather alerts providers selected, skipping alerts feed")
-            data.config.weather_show_alerts = False
-    
-    #
-    # Run check for updates against github on a background thread on a scheduler
-    #     
-
-    if commandArgs.updatecheck:
-        data.UpdateRepo = commandArgs.updaterepo
-        scheduler = BackgroundScheduler()
-        checkupdate = UpdateChecker(data,scheduler)
-        scheduler.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
 

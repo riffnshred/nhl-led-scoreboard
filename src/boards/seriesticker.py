@@ -29,8 +29,6 @@ class Seriesticker:
         self.allseries = self.data.series
         self.index = 0
         self.num_series = len(self.allseries)
-        
-        
 
         for s in self.allseries:
             self.matrix.clear()
@@ -55,7 +53,7 @@ class Seriesticker:
                 fill=(255,255,255)
             )
             # Conference banner, Round Title
-            self.matrix.draw.rectangle([0,0,64,5], fill=color_banner_bg)
+            self.matrix.draw.rectangle([0,0,self.matrix.width,5], fill=color_banner_bg)
             self.matrix.draw_text(
                 (1, 1), 
                 banner_text, 
@@ -73,7 +71,7 @@ class Seriesticker:
 
             self.draw_series_table(series)
             self.matrix.render()
-            self.sleepEvent.wait(10)
+            self.sleepEvent.wait(self.data.config.seriesticker_rotation_rate)
 
     def draw_series_table(self, series):
 
@@ -84,7 +82,7 @@ class Seriesticker:
         color_bottom_team = self.team_colors.color("{}.text".format(series.bottom_team.id))
 
         # Table
-        self.matrix.draw.line([(0,21),(64,21)], width=1, fill=(150,150,150))
+        self.matrix.draw.line([(0,21),(self.matrix.width,21)], width=1, fill=(150,150,150))
 
         # use rectangle because I want to keep symmetry for the background of team's abbrev
         self.matrix.draw.rectangle([0,14,12,20], fill=(color_top_bg['r'], color_top_bg['g'], color_top_bg['b']))
@@ -108,15 +106,22 @@ class Seriesticker:
         bottom_row = 23
         loosing_color = (150,150,150)
 
-        #text offset for loosing score if the winning team has a score of 10 or higher and loosing team have a score lower then 10
+        # text offset for loosing score if the winning team has a score of 10 or higher and loosing team 
+        # have a score lower then 10
+
+        """
+            TODO: Grabbing all the games of a series cause delay up to 15 sec for certain users. I think its time to put all the data
+            refresh into a thread and refresh everything from there
+            . 
+        """
         offset_correction = 0
-        
         for game in series.games:
             attempts_remaining = 5
             while attempts_remaining > 0:
                 try:
                     # Request the game overview
                     overview = nhl_api.overview(game["gameId"])
+                    
                     # get the scoreboard
                     scoreboard = Scoreboard(overview, self.data)
 
@@ -163,7 +168,11 @@ class Seriesticker:
                     debug.error("Failed to get the Games for the {} VS {} series: {} attempts remaining".format(series.top_team.abbrev, series.bottom_team.abbrev, attempts_remaining))
                     debug.error(error_message)
                     attempts_remaining -= 1
-                    sleep(2)
+                    self.sleepEvent.wait(1)
+                except KeyError as error_message:
+                    debug.error("Failed to get the overview for game id {}. Data unavailable or is TBD".format(game["gameId"]))
+                    debug.error(error_message)
+                    break
             # If one of the request for player info failed after 5 attempts, return an empty dictionary
             if attempts_remaining == 0:
                 return False

@@ -25,12 +25,6 @@ Since version V1.0.0 you need python 3.3 and up.
 
 ## Table of Contents
   - [Features](#features)
-    - [States](#states)
-    - [New Board System](#new-board-system)
-    - [Goal animation](#goal-animation)
-    - [Dimmer](#dimmer)
-    - [Indicators](#indicators)
-    - [Update checker](#Update-checker)
   - [Time and data accuracy](#time-and-data-accuracy)
   - [Installation](#installation)
     - [Hardware Assembly](#hardware-assembly)
@@ -68,12 +62,13 @@ Since version V1.0.0 you need python 3.3 and up.
 ### States
 Depending on the situation, the scoreboard will operate in a different state. For example, If your team is off today, the scoreboard will be in the "Offday" State. This allows showing specific boards (see Boards) depending on the state of the unit.
 
+-   **Offday**: When your favorite teams don't have any scheduled games for the day
 -   **Scheduled**: When one of your preferred team has a game scheduled on the current day, the scoreboard will rotate through a list of boards set by the user in the config file.
 -   **Live game**: Display the live score in near real-time of your favorite game. If one of the team scores a goal, a goal animation (.gif) is played.
 -   **Intermission**: Between periods, the scoreboard will rotate through a list of boards set for the intermission state by the user in the config file.
 -   **Post-game**: Once the game is over, the scoreboard will rotate through a list of boards set for the Post-game state by the user in the config file.
 
-### New Board System
+### Board rotation System
 <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_scoreticker.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/boards_team_summary.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/board_standings.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/clock.png">
 
 The board system allows the user to choose what to display depending on the state of the scoreboard. For example: While the game I'm watching is in the intermission state, I like to see the score ticker, which is showing the score of the other games.
@@ -83,8 +78,13 @@ There are currently three different boards available:
 -   **Score Ticker**: A carousel that cycles through the games of the day.
 -   **Team Summary**: Display your preferred team's summary. It displays their standing record, the result of their previous game and the next game on their schedule.
 -   **Standings**: Display the standings either by conference or by division. The Wildcard is currently not available, due to the NHL API not providing the info, this will probably be back for next season.
+-   **Series Ticker**: A slider that display each bracket and the result of each games of the series.
+-   **Stanley cup Champions**: Display the current Stanley cup champions.
+
+
+Non-hockey boards:
 -   **Clock**: a basic clock. (***NEW***: Now with the option to show basic weather information and weather alert. More details [here](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather))
--   **Weather**: Display weather information and also provide weather alerts. 
+-   **Weather**: Display weather information and also provide weather alerts.
 -   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
@@ -107,13 +107,20 @@ Because of its size, I programmed some indicators to display more information wi
 
 <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/indicators.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/network_indicator.png"> <img  width="210" src="https://github.com/riffnshred/image_bank/blob/master/nhl-led-scoreboard/documentation/intermission_indicator.png"> <img  width="210" src="https://raw.githubusercontent.com/riffnshred/image_bank/master/nhl-led-scoreboard/documentation/end_of_game_indicator.png">
 
-### Update checker
-**NEW for V1.3.0**
+### Screensaver
+**NEW for V1.5.0**
+You can now setup a screensaver and you can either use a gif animation by simply adding a gif under `assets/animations/screensaver` or leave the folder empty to just have the screen off. See the [Configuration](#configuration) section below for more details.
 
+### Update checker
 Now the scoreboard has an Update checker option where it will show a green line on top of the screen if there is a new Major or minor update. To use it simply add the `--updatecheck` flag to the command line you use to run the board and set it to true of false like so `--updatecheck=True`.
 
 If you are using an other repo that is a fork of this one you can set to check that repo for updates instead like so: `--updaterepo="user/nameoftherepo"`. The repo can be the name (eg `riffnshred/nhl-led-scoreboard`) or the github URL (eg `https://github.com/riffnshred/nhl-led-scoreboard`).
 
+### Weather
+This project has a nice weather app developped by [Sean Ostermann](https://github.com/falkyre). Check out the [Weather app](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/api/weather) README for more details and all it's features.
+
+**NEW for V1.5.0**
+The weather app now has a weather forecast board (wxforecast) that show up to 3 days forcast.
 
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.
@@ -261,11 +268,12 @@ MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 ```
 
 ## Configuration
-~~First thing first, Open the config.json file from the config directory to configure your scoreboard.~~
 Since V1.1.2, you won't need to reconfigure your board everytime you update, **UNLESS** we add a major feature or we make a major update. There is 2 way to configure you board:
 
 #### Using the nhl_setup app (recommended) 
-from the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
+![nhl setup](assets/images/nhl_setup.png)
+
+From the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
 
 #### Configuring manualy.
 If you have no issue working with json files in a prompt, you can still configure manualy. 
@@ -341,6 +349,7 @@ depending on the state of the scoreboard. Currently, there are only three boards
 -   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
 -   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
 -   **Clock**: Show the current time either in 24h or 12h format.
+
 -   **Covid_19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 | Boards        | Settings                   | Type   | Parameters | Description|
