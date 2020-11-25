@@ -13,6 +13,7 @@ from boards.covid_19 import Covid_19
 from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
+from boards.christmas import Christmas
 from time import sleep
 
 
@@ -184,3 +185,6 @@ class Boards:
 
     def covid_19(self, data, matrix,sleepEvent):
         Covid_19(data, matrix, sleepEvent)
+
+    def christmas(self, data, matrix,sleepEvent):
+        Christmas(data, matrix, sleepEvent).draw()
