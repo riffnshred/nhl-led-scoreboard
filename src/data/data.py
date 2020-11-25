@@ -60,6 +60,7 @@ def prioritize_pref_series(series, teams):
     cleaned_series_list = list(filter(None, list(dict.fromkeys(ordered_series_list))))
     return cleaned_series_list
 
+
 class Data:
     def __init__(self, config):
         """
@@ -162,6 +163,10 @@ class Data:
         # Fetch the playoff data
         self.refresh_playoff()
 
+        # Stanley cup champions
+        self.ScChampions_id = self.check_stanley_cup_champion()
+
+        # Playoff Flag
         self.isPlayoff = False
 
         # Stanley cup round flag
@@ -457,7 +462,7 @@ class Data:
                         if self.config.seriesticker_preferred_teams_only and self.pref_series:
                             self.series = self.pref_series
                     except AttributeError:
-                        debug.error("The {} Season playoff has to started yet or unavailable".format(self.playoffs.season))
+                        debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
                         self.isPlayoff = False
                         break
 
@@ -470,6 +475,15 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
+    def check_stanley_cup_champion(self):
+        if self.isPlayoff and self.stanleycup_round:
+            for x in range(len(self.current_round.series[0].matchupTeams)):
+                if self.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
+                    print('hello')
+                    return self.current_round.series[0].matchupTeams[x].team.id
+                else:
+                    return False
 
     def series_by_conference():
         """
@@ -517,6 +531,4 @@ class Data:
         # Update standings
         self.refresh_standings()
 
-        # Update Playoff data
-        self.refresh_playoff()
 

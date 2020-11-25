@@ -15,6 +15,7 @@ from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
+from boards.stanley_cup_champions import StanleyCupChampions
 from time import sleep
 
 
@@ -223,6 +224,9 @@ class Boards:
     def seriesticker(self, data, matrix,sleepEvent):
         if data.status.is_playoff(data.today, data.playoffs):
             Seriesticker(data, matrix, sleepEvent).render()
+    
+    def stanley_cup_champions(self, data, matrix,sleepEvent):
+        StanleyCupChampions(data, matrix, sleepEvent).render()
 
     def standings(self, data, matrix,sleepEvent):
         #Try making standings a thread

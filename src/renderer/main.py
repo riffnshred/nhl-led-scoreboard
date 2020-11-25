@@ -137,7 +137,11 @@ class MainRenderer:
                 debug.info("Game Over")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
-                self.check_stanley_cup_champion()
+                if self.data.isPlayoff and self.stanleycup_round:
+                    self.check_stanley_cup_champion()
+                    if self.data.ScChampions_id:
+                        StanleyCupChampions(self.data, self.data.ScChampions_id, self.matrix, self.sleepEvent).render()
+                
                 self.__render_postgame(self.scoreboard)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -147,7 +151,10 @@ class MainRenderer:
                 debug.info("FINAL")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
-                self.check_stanley_cup_champion()
+                if self.data.isPlayoff and self.stanleycup_round:
+                    self.check_stanley_cup_champion()
+                    if self.data.ScChampions_id:
+                        StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
                 self.__render_postgame(self.scoreboard)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -322,12 +329,6 @@ class MainRenderer:
         color = self.matrix.graphics.Color(255, 0, 0)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
-
-    def check_stanley_cup_champion(self):
-        if self.data.isPlayoff and self.data.stanleycup_round:
-            for x in range(len(self.data.current_round.series[0].matchupTeams)):
-                if self.data.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
-                    StanleyCupChampions(self.data, self.data.current_round.series[0].matchupTeams[x].team.id, self.matrix, self.sleepEvent).render()
 
     def test_stanley_cup_champion(self, team_id):
         StanleyCupChampions(self.data, team_id, self.matrix, self.sleepEvent).render()
