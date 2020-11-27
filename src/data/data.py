@@ -480,7 +480,6 @@ class Data:
         if self.isPlayoff and self.stanleycup_round:
             for x in range(len(self.current_round.series[0].matchupTeams)):
                 if self.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
-                    print('hello')
                     return self.current_round.series[0].matchupTeams[x].team.id
                 else:
                     return False

@@ -86,6 +86,7 @@ Non-hockey boards:
 -   **Clock**: a basic clock. (***NEW***: Now with the option to show basic weather information and weather alert. More details [here](https://github.com/riffnshred/nhl-led-scoreboard/tree/beta/src/api/weather))
 -   **Weather**: Display weather information and also provide weather alerts.
 -   **Covid-19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
+-   **Christmas Count down**: Show how many days are left until Christmas
 
 The board system also allows to easily integrate new features. For example, if you want to have a clock displayed during the day along with other boards, or if you wish one of the existing boards would show something different, you can make your own and integrate it without touching the main software. I strongly suggest you play around with the python examples in the [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building) to learn how to display anything on the matrix.
 
@@ -125,8 +126,7 @@ The weather app now has a weather forecast board (wxforecast) that show up to 3 
 ## Time and data accuracy
 For this version, the scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.
 
-Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV 
-broadcast is different depending on where you are in relation to the game's location. This also means that you will see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement
+Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV broadcast is different depending on where you are in relation to the game's location. This also means that you will see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement
 a delay.
 
 Also, it might happen the data shown on board might be wrong for a short time, even goals. That's because the API is drunk. If you see data that might be wrong, compare it to the nhl.com and see if it's different. 
@@ -275,6 +275,9 @@ Since V1.1.2, you won't need to reconfigure your board everytime you update, **U
 
 From the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
 
+**New with v1.5.0**
+You can now edit your current file instead of creating a new one. 
+
 #### Configuring manualy.
 If you have no issue working with json files in a prompt, you can still configure manualy. 
 FIRST, you will need to make a copy of the config.json.sample and rename it config.json. Then open it and modify the options. 
@@ -284,17 +287,19 @@ These are options to set the scoreboard to run in a certain mode. This is where 
 while will show the scoreboard of your favorite game when it's live.
 | Settings    | Type | Parameters  | Description                                                           |
 |-------------|------|-------------|-----------------------------------------------------------------------|
-| `debug`     | Bool | true, false | Enable the debug mode which show on your console what the scoreboard  |
+| `debug`     | Bool | true, false | Python logging module and in memory logs. |
+| `loglevel` | String | "DEBUG", "INFO", "WARN", "ERROR", "CRITICAL" |  Level of debug information. NOTE!!!! Be careful with using "debug" = true or "loglevel" = "DEBUG" in config. It logs EVERYTHING that the scoreboard code uses (all modules). Only use this if asked to for troubleshooting. So leave "debug": false in the config unless otherwise asked to set to true. You've been warned.|
 | `live_mode` | Bool | true, false | Enable the live mode which show live game data of your favorite team. |
 
 ### Preferences
+
 All the data related options. 
 | Settings                 | Type   | Parameters                                       | Description                                                                                                                                                                          |
 |--------------------------|--------|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `live_game_refresh_rate` | INT    | `15`                                             | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
 | `time_format`            | String | `"12h"` or `"24h"`                               | The format in which the game start time will be displayed.                                                                                                                           |
 | `end_of_day`             | String | `"12:00"`                                        | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.                                                                  |
-| `location`             | String | `"City,State/Province"`                            | Location at which you would like to get weather updates. (Ex  `"Ottawa,ON"`) 
+| `location`             | String | `"City,State/Province"`, `"49.8844,-97.147"`       | Location at which you would like to get weather updates. You can use either your city and state/province (Ex  `"Ottawa,ON"`) , your Latitude and Longitude (Ex `"49.8844,-97.147"`) or even your home address.
 | `teams`                  | Array  | `["Canadiens", Blackhawks", "Avalanche"]`        | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode|
 | `sog_display_frequency`                  | INT| `4`        | On data update frequency at which the Shots on goal stats appear while showing the scoreboard during a game. (Ex: the shots on goal will show every 4th data update)|      
                                                                                                                                              
@@ -342,15 +347,6 @@ to have all the data possible shown during the day so I'll set the all the board
 ### Boards
 Boards are essentially like pages on a website. Each of them shows something specific and the user can decide which board to display
 
-depending on the state of the scoreboard. Currently, there are only three boards available:
-
--   **Score Ticker**: This is basally like the generic score ticker you see during a game on TV of sports news showing the result or the status of the other games in the league.
--   **Series Ticker**: Works just like the Score Ticker but it shows single series bracket of a current round.
--   **Standings**: Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.
--   **Team Summary**: Show a summary of your preferred teams. It includes data like standing record, Result of the previous game and the next scheduled game.
--   **Clock**: Show the current time either in 24h or 12h format.
-
--   **Covid_19**: Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).
 
 | Boards        | Settings                   | Type   | Parameters | Description|
 |---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
@@ -362,14 +358,21 @@ depending on the state of the scoreboard. Currently, there are only three boards
 |               | `standing_type`            | String | `conference`, `division` , `wild_card`(Currently not available)           | Option to choose the type of standings to display. `conference` if set by default.                |
 |               | `divisions`                | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division |
 |               | `conference`               | String | `eastern`, `western` | Your preferred conference  |
-| `Clock`   | `Duration` | INT| `15`| The duration that the clock will be shown in Seconds  |
+| `clock`   | `Duration` | INT| `15`| The duration that the clock will be shown in Seconds  |
 | 		    | `hide_indicator` | Bool   | `true`, `false`| Show top green bar if there is a new update available.  |
+| `covid_19` | `worldwide_enabled` | Bool   | `true`, `false`| Show the World wide stats |
+| 		    | `country_enabled` | Bool   | `true`, `false`| Show the World wide specific country stats |
+| 		    | `country` | List, String   | `"Canada"`, `"USA"`| List of prefered country to display when `country_enabled` is set to true|
+| 		    | `us_state_enabled` | Bool   | `true`, `false`| Show stats of specific states of the USA|
+| 		    | `us_state` | List, String   | `"New York"`, `"Minnesota"`| List of prefered states to display when `us_state_enabled` is set to true|
+| 		    | `canada_enabled` | Bool   | `true`, `false`| Show stats of specific states of the USA|
+| 		    | `canada_prov` | List, String   | `"Quebec"`, `"Manitoba"`| List of prefered states to display when `canada_enabled` is set to true|
 
-
+NOTE: 
+Check out the [Weather app](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/api/weather) README for more all the weather board config.
 
 ### Dimmer
-The scoreboard can adjust the brightness of the matrix will running using the Dimmer function. By default, if enabled, 
-the scoreboard software will detect your location using your IP address and will calculate the when the sun rise and the sun set.
+The scoreboard can adjust the brightness of the matrix will running using the Dimmer function. By default, if enabled, the scoreboard software will detect your location using your IP address and will calculate the when the sun rise and the sun set.
 It will then use these moments to change the brightness of the screen depending on the parameters set in the config.
 
 If you install the [TSL2591](https://www.adafruit.com/product/1980) lux sensor, you can tell the scoreboard to use that to
@@ -383,7 +386,7 @@ control the brightness instead.
 | `frequency`          | INT    | `5`                        | Frequency at which the scoreboard will look if it needs to change the brightness                                                                                                                                                                                                                 |
 | `mode`               | String | `"always"`, `"offday"`     | Mode at which the dimmer will operate. If set at `"always"`, the dimmer will operate at all time. at `"offday"`, it will operate only when your preferred teams don't play any games.                                                                                                            |
 | `sunset_brightness`  | INT    | `10`                       | The brightness level (between 5 and 100)  you want when it's night.                                                                                                                                                                                                                              |
-| `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day.                                                                                                                                                                                                                               |
+| `sunrise_brightness` | INT    | `60`                       | The brightness level (between 5 and 100)  you want during the day. |
 
 
 ## Usage
