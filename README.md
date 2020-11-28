@@ -3,10 +3,15 @@
 
 
 ## Support and community
-We have a nice community growing every day on discord. If you need help 
-or you are curious about the development of the project, come join us by clicking on this button.
+We have a nice community growing every day on discord who shares the same passion for hockey, tinkering electronics, and making stuff.  If you need help or you are curious about the development of the project, come join us by clicking on the button below.
+
+<a href="assets/images/community_4.jpg" target="_blank"><img  width="115" src="assets/images/community_4.jpg"></a> <a href="assets/images/community_2.jpg" target="_blank">  <img  width="220" src="assets/images/community_2.jpg"></a><a href="assets/images/community_1.jpg" target="_blank"> <img  width="220" src="assets/images/community_1.jpg"></a> <a href="assets/images/community_3.jpg" target="_blank"> <img  width="220" src="assets/images/community_3.jpg"></a>
+
+
 
 [![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
+
+
 
 Want to help me turn coffee into features? Or just want to contribute
 for my work? 
