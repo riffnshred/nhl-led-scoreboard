@@ -14,6 +14,7 @@ class ScoreboardConfig:
 
         # Misc config options
         self.debug = json["debug"]
+        self.loglevel = json["loglevel"]
         self.live_mode = json["live_mode"]
 
         # Preferences
@@ -24,14 +25,27 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
-        
+
 
         # Goal animation
-        self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
+        self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
+
+        #Screen Saver entries
+        self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
+        self.screensaver_animations = json["sbio"]["screensaver"]["animations"]
+        self.screensaver_start = json["sbio"]["screensaver"]["start"]
+        self.screensaver_stop = json["sbio"]["screensaver"]["stop"]
+        self.screensaver_data_updates = json["sbio"]["screensaver"]["data_updates"]
+        self.screensaver_motionsensor = json["sbio"]["screensaver"]["motionsensor"]
+        self.screensaver_ms_pin = json["sbio"]["screensaver"]["pin"]
+        self.screensaver_ms_delay = json["sbio"]["screensaver"]["delay"]
 
         # Dimmer preferences
         self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
         self.dimmer_source = json["sbio"]["dimmer"]["source"]
+        self.dimmer_daytime = json["sbio"]["dimmer"]["daytime"]
+        self.dimmer_nighttime = json["sbio"]["dimmer"]["nighttime"]
+        self.dimmer_offset = json["sbio"]["dimmer"]["offset"]
         self.dimmer_frequency = json["sbio"]["dimmer"]["frequency"]
         self.dimmer_light_level_lux = json["sbio"]["dimmer"]["light_level_lux"]
         self.dimmer_mode = json["sbio"]["dimmer"]["mode"]
@@ -64,12 +78,20 @@ class ScoreboardConfig:
         self.weather_update_freq = json["boards"]["weather"]["update_freq"]
         # Show curr temp, humidity on clock
         self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+        # Forecast settings
+        self.weather_forecast_enabled = json["boards"]["weather"]["forecast_enabled"]
+        #Number of days up to 3 for forecast
+        self.weather_forecast_days = json["boards"]["weather"]["forecast_days"]
+        #How frequent, in hours, to update the forecast
+        self.weather_forecast_update = json["boards"]["weather"]["forecast_update"]
 
         #Weather Alerts Preferences
         self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
         self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"] 
+        #Show expire time instead of effective time of NWS alerts
+        self.wxalert_nws_show_expire = json["boards"]["wxalert"]["nws_show_expire"]
         # Display on top and bottom bar the severity (for US) and type
         self.wxalert_alert_title = json["boards"]["wxalert"]["alert_title"]
         # Display static alert or scrolling
@@ -79,7 +101,7 @@ class ScoreboardConfig:
         # Show any alerts on clock
         self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
         self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
-        
+
 
 
         # States
@@ -108,6 +130,10 @@ class ScoreboardConfig:
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
+        self.clock_team_colors =  json["boards"]["clock"]["preferred_team_colors"]
+        self.clock_clock_rgb =  json["boards"]["clock"]["clock_rgb"]
+        self.clock_date_rgb =  json["boards"]["clock"]["date_rgb"]
+        self.clock_flash_seconds =  json["boards"]["clock"]["flash_seconds"]
 
         # COVID-19
         self.covid_ww_board_enabled = json["boards"]["covid19"]["worldwide_enabled"]
