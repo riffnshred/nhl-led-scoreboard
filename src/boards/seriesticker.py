@@ -10,6 +10,9 @@ import debug
 import nhl_api
 
 class Seriesticker:
+    """
+        TODO: Take out the Series object and create a list of instence from the refresh_playoff in Data instead. Call the data only once a day.
+    """
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.rotation_rate = 5

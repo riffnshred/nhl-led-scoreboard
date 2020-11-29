@@ -9,6 +9,7 @@ from time import sleep
 import debug
 import nhl_api
 from api.covid19.data import Data as covid19_data
+from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
 
@@ -222,7 +223,7 @@ class Data:
             self.all_pref_games_final = False
 
             # Reset and refresh Data
-            self.refresh_data()
+            self.daily_refresh()
             return True
         else:
             debug.info("It is not a new day")
@@ -435,6 +436,7 @@ class Data:
             TODO:
                 Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
         """
+        print("hello")
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -521,13 +523,16 @@ class Data:
         # Parse today's date and see if we should use today or yesterday
         self.refresh_current_date()
 
-        # Update team's data
-        self.get_teams_info()
-
         # Update games for today
         self.refresh_games()
+
+    def daily_refresh(self):
+
+        # Update team's data
+        self.get_teams_info()
 
         # Update standings
         self.refresh_standings()
 
-
+        # Fetch the playoff data
+        self.refresh_playoff()
