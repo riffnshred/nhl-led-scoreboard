@@ -34,17 +34,20 @@ class UpdateChecker(object):
         debug.info("Checking for new release. {} v{} installed in {}".format(self.data.UpdateRepo,self.version,self.workingDir))
 
         # Use lastversion to check against github latest release repo, don't look at pre releases
-        latest_version = lastversion.latest(self.data.UpdateRepo, output_format='version', pre_ok=False)
-        if latest_version != None:
-            if latest_version > version.parse(self.version):
-                debug.info("New release v{} available.".format(latest_version))
-                self.data.newUpdate = True
-            else:
-                debug.info("No new release.")
-                self.data.newUpdate = False
+        try:
+            latest_version = lastversion.latest(self.data.UpdateRepo, output_format='version', pre_ok=False)
+        except Exception as e:
+            debug.error("Unable to get info from GitHub.  Error: {}".format(e))
         else:
-            debug.error("Unable to get latest version from github, is it tagged properly?")
-        
+            if latest_version != None:
+                if latest_version > version.parse(self.version):
+                    debug.info("New release v{} available.".format(latest_version))
+                    self.data.newUpdate = True
+                else:
+                    debug.info("No new release.")
+                    self.data.newUpdate = False
+            else:
+                debug.error("Unable to get latest version from github, is it tagged properly?")        
         nextcheck = self.scheduler.get_job('updatecheck').next_run_time
 
         debug.info("Next check for update @ {}".format(nextcheck))
