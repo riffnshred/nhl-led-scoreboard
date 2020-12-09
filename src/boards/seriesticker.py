@@ -33,10 +33,8 @@ class Seriesticker:
         self.index = 0
         self.num_series = len(self.allseries)
 
-        for s in self.allseries:
+        for series in self.allseries:
             self.matrix.clear()
-            series = Series(s,self.data)
-            
             banner_text = "Stanley Cup"
             color_banner_bg = (200,200,200)
             color_banner_text = (0,0,0)

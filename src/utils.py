@@ -52,6 +52,8 @@ def split_string(string, num_chars):
 def args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--testing-mode", action="store", help="Allow to put use a loop in the renderer to do testing. For Development only")
+
     # Options for the rpi-rgb-led-matrix library
     parser.add_argument("--led-rows", action="store", help="Display rows. 16 for 16x32, 32 for 32x32. (Default: 32)",
                         default=32, type=int)
@@ -96,7 +98,7 @@ def args():
     parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
     parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
     parser.add_argument("--testScChampions", action="store", help="A flag to test the stanley cup champions board. Put your team's ID", default=None, type=int)
-
+    
     return parser.parse_args()
 
 
@@ -122,6 +124,7 @@ def led_matrix_options(args):
     except AttributeError:
         debug.warning("Your compiled RGB Matrix Library is out of date.")
         debug.warning("The --led-pixel-mapper argument will not work until it is updated.")
+    
 
     if args.led_show_refresh:
         options.show_refresh_rate = 1
