@@ -176,6 +176,8 @@ class Data:
         # Get Covid 19 Data
         self.covid19 = covid19_data()
 
+        self.current_game_id = 2017020653
+
     #
     # Date
 
@@ -264,7 +266,6 @@ class Data:
 
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
 
-
                     # Remove the current game id (Main event) form the list of games.
                     if self.config.live_mode:
                         game_list = []
@@ -318,6 +319,7 @@ class Data:
     # Main game event data
 
     def refresh_overview(self):
+        print("Data overview")
         """
             Get a all the data of the main event.
         :return:
@@ -326,6 +328,7 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
+
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
                     self.new_data = True

@@ -31,9 +31,10 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                Seriesticker(self.data, self.matrix, self.sleepEvent).render()
-                data.refresh.daily(self.data)
-                self.sleepEvent.wait(1)
+                self.data.refresh_overview()
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self.__render_live(self.scoreboard)
+                self.sleepEvent.wait(10)
                 debug.info("Testing Mode Refresh")
 
 
