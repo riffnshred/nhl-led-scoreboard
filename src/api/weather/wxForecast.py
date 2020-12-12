@@ -20,12 +20,9 @@ class wxForecast(object):
 
         self.max_days = data.config.weather_forecast_days
 
-
         if self.data.config.weather_data_feed.lower() == "owm":
-
             self.owm = OWM(self.apikey)
             self.owm_manager = self.owm.weather_manager()
-
 
         # Get forecast for next day, every forecast_update hours
 
@@ -133,7 +130,14 @@ class wxForecast(object):
             debug.info("Refreshing OWM daily weather forecast")
             #lat = self.data.latlng[0]
             #lon = self.data.latlng[1]
-            one_call = self.owm_manager.one_call(lat=self.data.latlng[0],lon=self.data.latlng[1])
+            one_call = None
+            try:
+                one_call = self.owm_manager.one_call(lat=self.data.latlng[0],lon=self.data.latlng[1])
+            except Exception as e:
+                debug.error("Unable to get OWM data error:{0}".format(e))
+                self.data.forecast_updated = False
+                self.network_issues = True
+                return
 
             index=1
             forecast = []
@@ -149,7 +153,7 @@ class wxForecast(object):
                     temp_high = one_call.forecast_daily[index].temperature('fahrenheit').get('max', None) 
                     temp_low = one_call.forecast_daily[index].temperature('fahrenheit').get('min', None)
 
-                #Round high and low temps to two digitrs only (ie 25 and not 25.61)
+                #Round high and low temps to two digits only (ie 25 and not 25.61)
                 temp_hi = str(round(float(temp_high))) + self.data.wx_units[0]
                 temp_lo = str(round(float(temp_low))) + self.data.wx_units[0]
 

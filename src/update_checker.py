@@ -5,9 +5,10 @@ from lastversion import lastversion
 from packaging import version
 
 class UpdateChecker(object):
-    def __init__(self,data,scheduler):
+    def __init__(self,data,scheduler,ghtoken):
 
         self.scheduler = scheduler
+        self.token = ghtoken
         self.workingDir = os.getcwd()
         self.versionFile = os.path.join(self.workingDir,'VERSION')
         self.data = data
@@ -33,6 +34,9 @@ class UpdateChecker(object):
     def CheckForUpdate(self):
         debug.info("Checking for new release. {} v{} installed in {}".format(self.data.UpdateRepo,self.version,self.workingDir))
 
+        #Use GITHUB Token to remove rate limit, not required if you are doing a single test per day
+        os.environ['GITHUB_API_TOKEN'] = self.token
+        debug.info("Using github api token: {} to check updates".format(self.token))
         # Use lastversion to check against github latest release repo, don't look at pre releases
         try:
             latest_version = lastversion.latest(self.data.UpdateRepo, output_format='version', pre_ok=False)
