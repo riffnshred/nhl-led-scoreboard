@@ -95,7 +95,7 @@ class nwsWxAlerts(object):
                 # urgency	(Immediate, Expected, Future, Unknown)
                 # severity	severity level(minor, moderate, severe, extreme)
                 # 
-                if self.data.config.wx_alert_nws_show_expire:
+                if self.data.config.wxalert_nws_show_expire and _attributes['expires'] != None:
                     warn_date = _attributes['expires']
                 else:
                     warn_date = _attributes['effective']

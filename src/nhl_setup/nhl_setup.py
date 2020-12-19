@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.4.0"
+SCRIPT_VERSION = "1.4.1"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -26,7 +26,8 @@ SECTIONS = ['general','preferences','states','boards','sbio']
 STATES = ['off_day','scheduled','intermission','post_game']
 #Note: for boards, the covid19 in config is NOT the same name as the covid_19 python function
 #the boards listed below are what's listed in the config
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19','christmas']
+# These are boards that have configuration.  If your board does not have any config, you don't need to add it
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 class Clock24hValidator(Validator):
@@ -1493,18 +1494,22 @@ def main():
     #Check to see if the user wants to validate an existing config.json against the schema
     #Only from command line
 
-    if args.check:
-        conffile = "{0}/config.json".format(args.confdir)
-        schemafile = "{0}/config.schema.json".format(args.confdir)
+    #Change to check on running app every time, if config is not valid, exit.
 
-        confpath = get_file(conffile)
-        schemapath = get_file(schemafile)
-        print("Now validating config......")
-        (valid,msg) = validateConf(confpath,schemapath)
-        if valid:
-            print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
-        else:
-            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+    conffile = "{0}/config.json".format(args.confdir)
+    schemafile = "{0}/config.schema.json".format(args.confdir)
+
+    confpath = get_file(conffile)
+    schemapath = get_file(schemafile)
+    print("Now validating config......")
+    (valid,msg) = validateConf(confpath,schemapath)
+    if valid:
+        print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+    else:
+        print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+        sys.exit(0)
+
+    if args.check:
         sys.exit(0)
 
     #Check to see if there was a team name on the command line, if so, create a new config.json from

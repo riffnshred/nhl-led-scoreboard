@@ -7,13 +7,14 @@ from api.weather.wx_utils import wind_chill, get_icons, degrees_to_direction, de
 
 class owmWxWorker(object):
     def __init__(self, data, scheduler):
-        
+
         self.data = data
         self.weather_frequency = data.config.weather_update_freq
         self.time_format = data.config.time_format
         self.icons = get_icons("ecIcons_utf8.csv")
         self.apikey = data.config.weather_owm_apikey
         self.network_issues = False
+
         self.owm = OWM(self.apikey)
         self.owm_manager = self.owm.weather_manager()
 
@@ -23,7 +24,6 @@ class owmWxWorker(object):
 
         #Get initial obs
         self.getWeather()
-
 
     def getWeather(self):
 
