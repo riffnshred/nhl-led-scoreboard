@@ -10,6 +10,9 @@ import debug
 import nhl_api
 
 class Seriesticker:
+    """
+        TODO: Take out the Series object and create a list of instence from the refresh_playoff in Data instead. Call the data only once a day.
+    """
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.rotation_rate = 5
@@ -30,10 +33,8 @@ class Seriesticker:
         self.index = 0
         self.num_series = len(self.allseries)
 
-        for s in self.allseries:
+        for series in self.allseries:
             self.matrix.clear()
-            series = Series(s,self.data)
-            
             banner_text = "Stanley Cup"
             color_banner_bg = (200,200,200)
             color_banner_text = (0,0,0)

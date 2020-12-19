@@ -5,6 +5,8 @@ import debug
 from boards.boards import Boards
 from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
+from boards.seriesticker import Seriesticker
+import data.refresh
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -26,6 +28,15 @@ class MainRenderer:
         self.alternate_data_counter = 1
 
     def render(self):
+        if self.data.config.testing_mode:
+            debug.info("Rendering in Testing Mode")
+            while True:
+                Seriesticker(self.data, self.matrix, self.sleepEvent).render()
+                data.refresh.daily(self.data)
+                self.sleepEvent.wait(1)
+                debug.info("Testing Mode Refresh")
+
+
         while self.data.network_issues:
             Clock(self.data, self.matrix, self.sleepEvent, duration=60)
             self.data.refresh_data()
@@ -33,7 +44,7 @@ class MainRenderer:
         while True:
             try:
                 debug.info('Rendering...')
-                self.data.refresh_data()
+                
                 if self.status.is_offseason(self.data.date()):
                     # Offseason (Show offseason related stuff)
                     debug.info("It's offseason")
@@ -55,6 +66,8 @@ class MainRenderer:
                     else:
                         debug.info("Game Day Wooooo")
                         self.__render_game_day()
+                
+                self.data.refresh_data()
 
             except AttributeError as e:
                 debug.log(f"ERROR WHILE RENDERING: {e}")
@@ -68,6 +81,7 @@ class MainRenderer:
             debug.log('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
+                data.refresh.daily(self.data)
                 return
             self.data.refresh_data()
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)

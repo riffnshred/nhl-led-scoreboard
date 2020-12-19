@@ -12,6 +12,9 @@ class ScoreboardConfig:
     def __init__(self, filename_base, args, size):
         json = self.__get_config(filename_base)
 
+        self.testing_mode = False
+        self.testScChampions = False
+
         # Misc config options
         self.debug = json["debug"]
         self.loglevel = json["loglevel"]
@@ -159,8 +162,10 @@ class ScoreboardConfig:
 
         if args.testScChampions != None:
             self.testScChampions = args.testScChampions
-        else:
-            self.testScChampions = False
+
+        if args.testing_mode :
+            self.testing_mode = True
+            
 
     def read_json(self, filename):
         # Find and return a json file

@@ -22,7 +22,6 @@ from time import sleep
 
 class Boards:
     def __init__(self):
-        # self.standings_board = Standings(config, matrix)
         pass
 
     # Board handler for PushButton

@@ -3,14 +3,15 @@
         single one.
 """
 
-
 from datetime import datetime, timedelta
 from time import sleep
 import debug
 import nhl_api
 from api.covid19.data import Data as covid19_data
+from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
+import data.refresh
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
@@ -209,20 +210,9 @@ class Data:
             # Today's date
             self.today = self.date()
 
-            # Get the status info from the API
-            self.get_status()
-
-            # Get the teams info
-            self.teams = self.get_teams()
-
-            # Get favorite team's id
-            self.pref_teams = self.get_pref_teams_id()
-
             # Reset flag
             self.all_pref_games_final = False
 
-            # Reset and refresh Data
-            self.refresh_data()
             return True
         else:
             debug.info("It is not a new day")
@@ -323,7 +313,6 @@ class Data:
                 attempts_remaining -= 1
                 self.status = []
                 sleep(NETWORK_RETRY_SLEEP_TIME)
-
 
     #
     # Main game event data
@@ -435,6 +424,7 @@ class Data:
             TODO:
                 Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
         """
+        print("hello")
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -442,7 +432,7 @@ class Data:
                 self.playoffs = nhl_api.playoff(self.status.season_id)
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
-                    self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
+                    self.current_round = self.playoffs.rounds[str(2)]
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
@@ -452,21 +442,29 @@ class Data:
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
                     
                     try:
+                        self.series = []
+
                         # Grab the series of the current round of playoff.
-                        self.series = self.current_round.series
+                        self.series_list = self.current_round.series
 
                         # Check if prefered team are part of the current round of playoff
-                        self.pref_series = prioritize_pref_series(filter_list_of_series(self.series, self.pref_teams), self.pref_teams)
+                        self.pref_series = prioritize_pref_series(filter_list_of_series(self.series_list, self.pref_teams), self.pref_teams)
 
                         # If the user as set to show his favorite teams in the seriesticker
                         if self.config.seriesticker_preferred_teams_only and self.pref_series:
-                            self.series = self.pref_series
+                            self.series_list = self.pref_series
+                        
+                        for s in self.series_list:
+                            print(s)
+                            self.series.append(Series(s,self))
+                        
+                        self.isPlayoff = True
+                        print(self.isPlayoff)
                     except AttributeError:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
+                        
                         self.isPlayoff = False
                         break
-
-                    self.isPlayoff = True
                 break
 
             except ValueError as error_message:
@@ -506,11 +504,7 @@ class Data:
             return True
 
     def refresh_data(self):
-        """
-            This method is used when the software move to the next day or . It reset all the main variables
-            and re-initialize the overall data.
-        :return:
-        """
+
         debug.log("refresing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
@@ -521,13 +515,5 @@ class Data:
         # Parse today's date and see if we should use today or yesterday
         self.refresh_current_date()
 
-        # Update team's data
-        self.get_teams_info()
-
         # Update games for today
         self.refresh_games()
-
-        # Update standings
-        self.refresh_standings()
-
-
