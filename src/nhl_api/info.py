@@ -21,7 +21,7 @@ def team_info():
         short_name = team['shortName']
         division_id = team['division']['id']
         division_name = team['division']['name']
-        division_abbrev = team['division']['abbreviation']
+        #division_abbrev = team['division']['abbreviation']
         conference_id = team['conference']['id']
         conference_name = team['conference']['name']
         official_site_url = team['officialSiteUrl']
@@ -55,7 +55,7 @@ def team_info():
             'short_name': short_name,
             'division_id': division_id,
             'division_name': division_name,
-            'division_abbrev': division_abbrev,
+            #'division_abbrev': division_abbrev,
             'conference_id': conference_id,
             'conference_name': conference_name,
             'official_site_url': official_site_url,
