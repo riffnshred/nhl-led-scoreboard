@@ -7,7 +7,7 @@ from utils import round_normal
 
 PATH = 'assets/logos'
 LOGO_NAME = 'light'
-LOGO_URL = 'http://cdn.nhle.com/logos/nhl/svg/{}_{}.svg'
+LOGO_URL = 'assets/logos/svg/{}/{}_{}.svg'
 
 class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team, board, gameLocation=None):
@@ -67,7 +67,7 @@ class LogoRenderer:
                     raise
                 
         self.logo = ImageHelper.image_from_svg(
-            LOGO_URL.format(team.abbrev, LOGO_NAME)
+            LOGO_URL.format(LOGO_NAME,team.abbrev, LOGO_NAME)
         )
 
         self.logo.thumbnail(self.get_size())

@@ -31,10 +31,10 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
+                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
                 self.matrix.render()
                 data.refresh.daily(self.data)
-                self.sleep(15)
+                sleep(15)
                 debug.info("Testing Mode Refresh")
 
         while self.data.network_issues:
