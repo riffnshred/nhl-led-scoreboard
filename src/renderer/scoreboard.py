@@ -18,7 +18,8 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.home_logo,
-            self.scoreboard.home_team,
+            #self.scoreboard.home_team.abbrev,
+            "DET",
             'scoreboard',
             'home'
         )
@@ -26,7 +27,8 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.away_logo,
-            self.scoreboard.away_team,
+            #self.scoreboard.away_team.abbrev,
+            "DET",
             'scoreboard',
             'away'
         )
