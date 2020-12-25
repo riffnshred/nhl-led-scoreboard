@@ -425,7 +425,6 @@ class Data:
             TODO:
                 Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
         """
-        print("hello")
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -456,11 +455,9 @@ class Data:
                             self.series_list = self.pref_series
                         
                         for s in self.series_list:
-                            print(s)
                             self.series.append(Series(s,self))
                         
                         self.isPlayoff = True
-                        print(self.isPlayoff)
                     except AttributeError:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
                         
