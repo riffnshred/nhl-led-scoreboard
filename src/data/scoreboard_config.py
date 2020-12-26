@@ -13,6 +13,7 @@ class ScoreboardConfig:
         json = self.__get_config(filename_base)
 
         self.testing_mode = False
+        self.test_goal_animation = False
         self.testScChampions = False
 
         # Misc config options
@@ -165,6 +166,9 @@ class ScoreboardConfig:
 
         if args.testing_mode :
             self.testing_mode = True
+        
+        if args.test_goal_animation :
+            self.test_goal_animation = True
             
 
     def read_json(self, filename):

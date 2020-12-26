@@ -92,25 +92,24 @@ def playoff_info(season):
     parsed = data.json()
     season = parsed["season"]
     output = {'season': season}
-    if parsed["rounds"]:
+    try:
         playoff_rounds = parsed["rounds"]
-        
-        try:
-            default_round = parsed["defaultRound"]
-            output['default_round'] = default_round
-        except KeyError:
-            debug.error("No default round for {} Playoff.".format(season))
-            default_round = 0
-            output['default_round'] = default_round
-        
         rounds = {}
         for r in range(len(playoff_rounds)):
             rounds[str(playoff_rounds[r]["number"])] = MultiLevelObject(playoff_rounds[r])
         
         output['rounds'] = rounds
-    else:
+    except KeyError:
         debug.error("No data for {} Playoff".format(season))
-        playoff_rounds = False
+        output['rounds'] = False
+
+    try:
+        default_round = parsed["defaultRound"]
+        output['default_round'] = default_round
+    except KeyError:
+        debug.error("No default round for {} Playoff.".format(season))
+        default_round = 0
+        output['default_round'] = default_round
 
     return output
 

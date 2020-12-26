@@ -52,6 +52,8 @@ def split_string(string, num_chars):
 def args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--testScChampions", action="store", help="A flag to test the stanley cup champions board. Put your team's ID", default=None, type=int)
+    parser.add_argument("--test-goal-animation", action="store", help="A flag to test the goal animation", default=None, type=bool)
     parser.add_argument("--testing-mode", action="store", help="Allow to put use a loop in the renderer to do testing. For Development only")
 
     # Options for the rpi-rgb-led-matrix library
@@ -98,8 +100,8 @@ def args():
     parser.add_argument("--ghtoken", action="store", help="Github API token for doing update checks(Default: blank)", default="", type=str)
     parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
     parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
-    parser.add_argument("--testScChampions", action="store", help="A flag to test the stanley cup champions board. Put your team's ID", default=None, type=int)
-    
+
+
     return parser.parse_args()
 
 

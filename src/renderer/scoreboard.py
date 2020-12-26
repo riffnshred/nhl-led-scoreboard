@@ -18,8 +18,7 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.home_logo,
-            #self.scoreboard.home_team.abbrev,
-            "DET",
+            self.scoreboard.home_team.abbrev,
             'scoreboard',
             'home'
         )
@@ -27,13 +26,13 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.away_logo,
-            #self.scoreboard.away_team.abbrev,
-            "DET",
+            self.scoreboard.away_team.abbrev,
             'scoreboard',
             'away'
         )
 
     def render(self):
+        self.matrix.clear()
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
 
@@ -110,9 +109,10 @@ class ScoreboardRenderer:
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
         date = convert_date_format(self.scoreboard.date)
         
-        gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
+        #Work in progress. testing gradients
+        #gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
+        #self.matrix.draw_image((64,0), gradient, align="center")
 
-        self.matrix.draw_image((64,0), gradient, align="center")
         # Draw the info
         self.matrix.draw_text_layout(
             self.layout.scheduled_date, 

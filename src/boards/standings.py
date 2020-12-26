@@ -8,8 +8,8 @@ class Standings:
         TODO: Change draw standings to use new matrix layout system
     """
     def __init__(self, data, matrix,sleepEvent):
-        self.conferences = ["eastern", "western"]
-        self.divisions = ["metropolitan", "atlantic", "central", "pacific"]
+        #self.conferences = ["eastern", "western"]
+        self.divisions = ["west", "east", "north", "central"]
         self.data = data
         self.matrix = matrix
         self.team_colors = data.config.team_colors
@@ -18,7 +18,12 @@ class Standings:
 
     def render(self):
         self.matrix.clear()
-        type = self.data.config.standing_type
+
+        
+        #type = self.data.config.standing_type 
+
+        #For 2021 season, the league only uses divisions, so I'm forcing the type to divisons. 
+        type = 'division'
         if self.data.config.preferred_standings_only:
             if type == 'conference':
                 conference = self.data.config.preferred_conference
