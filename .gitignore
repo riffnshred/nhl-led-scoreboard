@@ -151,5 +151,7 @@ config/config.json.backup
 # Testing file for the nhl api
 src/nhl_api_testing.py
 
+src/renderer/boarddev
+
 # Extra Layout File
 config/layout/layout_128x64.json

@@ -66,7 +66,7 @@ class Christmas:
             
         debug.info("It's Christmas!")
 
-        while self.sleepEvent.is_set():
+        while not self.sleepEvent.is_set():
 
             self.matrix.clear()
 

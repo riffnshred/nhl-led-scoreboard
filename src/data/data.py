@@ -190,7 +190,8 @@ class Data:
         elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
-        return today.year, today.month, today.day
+        #return today.year, today.month, today.day
+        return 2018, 1, 2
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
@@ -257,7 +258,7 @@ class Data:
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
-
+                
                 if not self.is_pref_team_offday():
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()

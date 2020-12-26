@@ -19,15 +19,7 @@
         "rotate": 0,
         "crop": [0, 0, 0, 0]
       },
-      "DAL": {
-        "home": {
-          
-        },
-        "away": {
-          "position": [5, 0]
-        }
-      },
-      "CGY": {
+      "TOR": {
         "home": {
           "position": [-2, 0]
         },
