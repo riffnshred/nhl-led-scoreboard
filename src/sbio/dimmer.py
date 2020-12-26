@@ -101,7 +101,7 @@ class Dimmer(object):
                         debug.info("It is day time")
                         self.brightness = self.data.config.dimmer_sunrise_brightness
 
-                    if currtime > self.nighttime and currtime < self.daytime:
+                    if currtime >= self.nighttime and currtime > self.daytime:
                         debug.info("It is night time")
                         self.brightness = self.data.config.dimmer_sunset_brightness
 

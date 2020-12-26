@@ -90,7 +90,10 @@ class Clock:
 
         display_time = 0
         while display_time < self.duration and not self.sleepEvent.is_set():
-            self.time = datetime.datetime.now().strftime(self.time_format.replace(":", " "))
+            if self.data.config.clock_flash_seconds:
+                self.time = datetime.datetime.now().strftime(self.time_format.replace(":", " "))
+            else:
+                self.time = datetime.datetime.now().strftime(self.time_format)
             self.meridiem = datetime.datetime.now().strftime("%P")
             display_time += 1
             self.draw_clock()
