@@ -31,6 +31,7 @@ class TeamSummary:
         self.sleepEvent.clear()
 
     def render(self):
+        self.matrix.clear()
         for team_id in self.preferred_teams:
             self.team_id = team_id
 
@@ -51,7 +52,7 @@ class TeamSummary:
                 self.matrix,
                 self.data.config,
                 self.layout.logo,
-                team_data,
+                team_data.abbrev,
                 'team_summary'
             )
 
@@ -82,7 +83,6 @@ class TeamSummary:
             stats = team.stats
             im_height = 67
             team_abbrev = team.abbreviation
-            team_logo = Image.open(get_file('assets/logos/{}.png'.format(team_abbrev)))
 
             i = 0
 

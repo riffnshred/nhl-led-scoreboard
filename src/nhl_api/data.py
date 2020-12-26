@@ -15,7 +15,7 @@ PLAYER_URL = '{0}people/{1}'
 OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
 STATUS_URL = BASE_URL + 'gameStatus'
 CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
-STANDINGS_URL = BASE_URL + 'standings'
+STANDINGS_URL = BASE_URL + 'standings?season=20202021'
 STANDINGS_WILD_CARD = STANDINGS_URL + '/wildCardWithLeaders'
 PLAYOFF_URL = BASE_URL + "tournaments/playoffs?expand=round.series,schedule.game.seriesSummary&season={}"
 SERIES_RECORD = "https://records.nhl.com/site/api/playoff-series?cayenneExp=playoffSeriesLetter='{}' and seasonId={}"
@@ -78,12 +78,12 @@ def get_standings():
     except requests.exceptions.RequestException as e:
         raise ValueError(e)
 
-def get_standings_wildcard():
-    try:
-        data = requests.get(STANDINGS_WILD_CARD, timeout=REQUEST_TIMEOUT)
-        return data
-    except requests.exceptions.RequestException as e:
-        raise ValueError(e)
+# def get_standings_wildcard():
+#     try:
+#         data = requests.get(STANDINGS_WILD_CARD, timeout=REQUEST_TIMEOUT)
+#         return data
+#     except requests.exceptions.RequestException as e:
+#         raise ValueError(e)
 
 def get_playoff_data(season):
     try:

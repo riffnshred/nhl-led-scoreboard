@@ -17,6 +17,7 @@ class Standings:
         self.sleepEvent.clear()
 
     def render(self):
+        self.matrix.clear()
         type = self.data.config.standing_type
         if self.data.config.preferred_standings_only:
             if type == 'conference':
