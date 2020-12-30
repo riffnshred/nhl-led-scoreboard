@@ -111,7 +111,7 @@ def run():
     #
     if commandArgs.updatecheck:
         data.UpdateRepo = commandArgs.updaterepo
-        checkupdate = UpdateChecker(data,scheduler)
+        checkupdate = UpdateChecker(data,scheduler,commandArgs.ghtoken)
 
     if data.config.dimmer_enabled:
         dimmer = Dimmer(data, matrix,scheduler)

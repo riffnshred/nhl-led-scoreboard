@@ -12,6 +12,9 @@ class ScoreboardConfig:
     def __init__(self, filename_base, args, size):
         json = self.__get_config(filename_base)
 
+        self.testing_mode = False
+        self.testScChampions = False
+
         # Misc config options
         self.debug = json["debug"]
         self.loglevel = json["loglevel"]
@@ -89,7 +92,7 @@ class ScoreboardConfig:
         self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
-        self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"] 
+        self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"]  
         #Show expire time instead of effective time of NWS alerts
         self.wxalert_nws_show_expire = json["boards"]["wxalert"]["nws_show_expire"]
         # Display on top and bottom bar the severity (for US) and type
@@ -159,8 +162,10 @@ class ScoreboardConfig:
 
         if args.testScChampions != None:
             self.testScChampions = args.testScChampions
-        else:
-            self.testScChampions = False
+
+        if args.testing_mode :
+            self.testing_mode = True
+            
 
     def read_json(self, filename):
         # Find and return a json file
@@ -188,10 +193,11 @@ class ScoreboardConfig:
             else:
                 debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
             sys.exit(1)
-        
+
+
         if base_filename == "config":
             # Validate against the config.json
-            debug.info("Now validating config.json.....")
+            debug.error("INFO: Validating config.json.....")
             conffile = "config/config.json"
             schemafile = "config/config.schema.json"
 
@@ -199,10 +205,10 @@ class ScoreboardConfig:
             schemapath = get_file(schemafile)
             (valid,msg) = validateConf(confpath,schemapath)
             if valid:
-                debug.info("config.json passes validation")
+                debug.error("INFO: config.json passes validation")
             else:
-                debug.error("config.json fails validation: error: [{0}]".format(msg))
-                debug.error("Rerun the nhl_setup app to create a valid config.json")
+                debug.warning("WARN: config.json fails validation: error: [{0}]".format(msg))
+                debug.warning("WARN: Rerun the nhl_setup app to create a valid config.json")
                 sys.exit(1)
 
         return reference_config
