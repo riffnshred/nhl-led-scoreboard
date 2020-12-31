@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.4.1"
+SCRIPT_VERSION = "1.5.0"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -70,7 +70,7 @@ def get_file(path):
 def load_config(confdir,simple=False):
     # Find and return a json file
 
-        filename = ["config.json","config.json.sample"]
+        filename = ["config.json","config.json.sample",".default/config.json.sample"]
         j = {}
 
         jloaded = False
@@ -661,7 +661,7 @@ def standings(default_config,qmark):
             'name' : 'divisions',
             'qmark': qmark,
             'message' : "Select the division to display",
-            'choices' : ['atlantic','metropolitan','central','pacific'],
+            'choices' : ['atlantic','metropolitan','central','pacific','north','west','east'],
             'default' : get_default_value(default_config,['boards','standings','divisions'],"string") or 'atlantic'
         },
         {
@@ -898,7 +898,7 @@ def weather(default_config,qmark):
             'type': 'confirm',
             'name': 'enabled',
             'qmark': qmark,
-            'message': 'Use weather board?',
+            'message': 'Use weather data feed (this is required to get data for the weather and weather alert boards)?',
             'default': get_default_value(default_config,['boards','weather','enabled'],"bool") or True
         }
     ]
@@ -1496,18 +1496,26 @@ def main():
 
     #Change to check on running app every time, if config is not valid, exit.
 
-    conffile = "{0}/config.json".format(args.confdir)
-    schemafile = "{0}/config.schema.json".format(args.confdir)
+    #Check for existence of config/.default/firstrun file, if one exists, don't try to validate
+    
+    firstrun = "{0}/.default/firstrun".format(args.confdir)
+    if not os.path.exists(firstrun):
+        conffile = "{0}/config.json".format(args.confdir)
+        schemafile = "{0}/config.schema.json".format(args.confdir)
+        if not os.path.exists(schemafile):
+            schemafile = "{0}/.default/config.schema.json".format(args.confdir)
 
-    confpath = get_file(conffile)
-    schemapath = get_file(schemafile)
-    print("Now validating config......")
-    (valid,msg) = validateConf(confpath,schemapath)
-    if valid:
-        print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+        confpath = get_file(conffile)
+        schemapath = get_file(schemafile)
+        print("Now validating config......")
+        (valid,msg) = validateConf(confpath,schemapath)
+        if valid:
+            print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+        else:
+            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+            sys.exit(0)
     else:
-        print("Your config.json fails validation: error: [{0}]".format(msg),RED)
-        sys.exit(0)
+        os.remove(firstrun)
 
     if args.check:
         sys.exit(0)

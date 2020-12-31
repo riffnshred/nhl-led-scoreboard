@@ -1,0 +1,143 @@
+{
+	"debug": false,
+	"loglevel": "INFO",
+	"live_mode": false,
+	"preferences": {
+		"time_format": "12h",
+		"end_of_day": "8:00",
+		"location": "",
+		"live_game_refresh_rate": 10,
+		"teams": [
+			"Canadiens"
+		],
+		"sog_display_frequency": 4,
+		"goal_animations": {
+        	"pref_team_only": true
+    	}
+	},
+
+	"states":{
+		"off_day": [
+			"scoreticker",
+			"team_summary",
+			"standings",
+			"clock"
+		],
+		"scheduled": [
+			"team_summary",
+			"standings",
+			"scoreticker",
+			"clock"
+		],
+		"intermission": [
+			"scoreticker",
+			"team_summary"
+		],
+		"post_game": [
+			"team_summary",
+			"standings",
+			"scoreticker",
+			"clock"
+		]
+	},
+
+	"boards": {
+		"scoreticker": {
+			"preferred_teams_only": false,
+			"rotation_rate": 5
+		},
+                "seriesticker": {
+                        "preferred_teams_only": true,
+                        "rotation_rate": 5
+                },
+		"standings": {
+			"preferred_standings_only": true,
+			"standing_type": "wild_card",
+			"divisions": "central",
+			"conference": "eastern"
+		},
+		"clock": {
+			"duration": 15,
+			"hide_indicator": false,
+			"preferred_team_colors": true,
+            "clock_rgb": "",
+            "date_rgb": "",
+            "flash_seconds": true
+		},
+        "covid19": {
+            "worldwide_enabled": false,
+            "country_enabled": false,
+            "country": [
+                "USA"
+            ],
+            "us_state_enabled": false,
+            "us_state": [
+                "New York"
+            ],
+            "canada_enabled": false,
+            "canada_prov": [
+                "Quebec"
+            ]
+		},
+		"weather": {
+			"enabled": false,
+			"view": "full",
+			"units": "metric",
+			"duration": 60,
+			"data_feed": "EC",
+			"owm_apikey": "",
+			"update_freq": 5,
+			"show_on_clock": true,
+			"forecast_enabled": true,
+			"forecast_days": 3,
+			"forecast_update": 1
+		},
+        "wxalert": {
+            "alert_feed": "EC",
+            "update_freq": 5,
+            "show_alerts": true,
+			"nws_show_expire": false,
+            "alert_title": true,
+            "scroll_alert": true,
+            "alert_duration": 5,
+			"show_on_clock": true
+        }
+	},
+	"sbio": {
+		"screensaver": {
+            "enabled": true,
+			"animations": true,
+            "start": "22:00",
+            "stop": "22:05",
+            "data_updates": false,
+			"motionsensor": true,
+            "pin": 24,
+            "delay": 30
+        },
+		"dimmer": {
+			"enabled": false,
+			"source": "software",
+			"daytime": "",
+            "nighttime": "",
+            "offset": 90,
+			"frequency": 5,
+			"light_level_lux": 400,
+			"mode": "always",
+			"sunset_brightness": 5,
+			"sunrise_brightness": 40
+		},
+		"pushbutton": {
+			"enabled": false,
+			"bonnet": false,
+			"pin": 25,
+			"reboot_duration": 2,
+			"reboot_override_process": "",
+			"display_reboot": true,
+			"poweroff_duration": 10,
+			"poweroff_override_process": "",
+			"display_halt": true,
+			"state_triggered1": "weather",
+			"state_triggered1_process": ""
+		}
+	}
+}
