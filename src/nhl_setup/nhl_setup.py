@@ -898,7 +898,7 @@ def weather(default_config,qmark):
             'type': 'confirm',
             'name': 'enabled',
             'qmark': qmark,
-            'message': 'Use weather board?',
+            'message': 'Use weather data feed (this is required to get data for the weather and weather alert boards)?',
             'default': get_default_value(default_config,['boards','weather','enabled'],"bool") or True
         }
     ]
@@ -1502,6 +1502,8 @@ def main():
     if not os.path.exists(firstrun):
         conffile = "{0}/config.json".format(args.confdir)
         schemafile = "{0}/config.schema.json".format(args.confdir)
+        if not os.path.exists(schemafile):
+            schemafile = "{0}/.default/config.schema.json".format(args.confdir)
 
         confpath = get_file(conffile)
         schemapath = get_file(schemafile)

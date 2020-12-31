@@ -104,7 +104,7 @@ def run():
             debug.error("No valid weather alerts providers selected, skipping alerts feed")
             data.config.weather_show_alerts = False
 
-    if data.config.weather_forecast_enabled:
+    if data.config.weather_forecast_enabled and data.config.weather_enabled:
         wxForecast(data,scheduler)
     #
     # Run check for updates against github on a background thread on a scheduler
