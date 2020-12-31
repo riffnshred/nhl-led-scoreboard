@@ -1,0 +1,1461 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/riffnshred/nhl-led-scoreboard/config/config.json.sample",
+    "type": "object",
+    "title": "NHL LED Scoreboard configuration",
+    "description": "Configuration that controls the NHL LED scoreboard rgb matrix application",
+    "default": {},
+    "additionalProperties": true,
+    "required": [
+        "debug",
+        "loglevel",
+        "live_mode",
+        "preferences",
+        "states",
+        "boards",
+        "sbio"
+    ],
+    "properties": {
+        "debug": {
+            "$id": "#/properties/debug",
+            "type": "boolean",
+            "title": "debug",
+            "description": "Enable the debug mode which show on your console what the scoreboard",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "loglevel": {
+            "$id": "#/properties/loglevel",
+            "type": "string",
+            "title": "loglevel",
+            "description": "Level of logs to show in output.  Can be DEBUG, INFO, WARN, ERROR, CRITICAL  DEBUG is same as setting debug to true ",
+            "default": "INFO",
+            "examples": [
+                "INFO"
+            ]
+        },
+        "live_mode": {
+            "$id": "#/properties/live_mode",
+            "type": "boolean",
+            "title": "live_mode",
+            "description": "Enable the live mode which show live game data of your favorite team.",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "preferences": {
+            "$id": "#/properties/preferences",
+            "type": "object",
+            "title": "preferences",
+            "description": "All data related options",
+            "default": {},
+            "examples": [
+                {
+                    "location": "Winnipeg, MB",
+                    "sog_display_frequency": 4,
+                    "end_of_day": "10:00",
+                    "live_game_refresh_rate": 10,
+                    "teams": [
+                        "Jets",
+                        "Canadiens",
+                        "Oilers"
+                    ],
+                    "time_format": "12h",
+                    "goal_animations": {
+                        "pref_team_only": true
+                    }
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "time_format",
+                "end_of_day",
+                "location",
+                "live_game_refresh_rate",
+                "teams",
+                "sog_display_frequency",
+                "goal_animations"
+            ],
+            "properties": {
+                "time_format": {
+                    "$id": "#/properties/preferences/properties/time_format",
+                    "type": "string",
+                    "title": "time_format(12h or 24h)",
+                    "description": "The format in which the game start time will be displayed.",
+                    "default": "12h",
+                    "examples": [
+                        "12h"
+                    ]
+                },
+                "end_of_day": {
+                    "$id": "#/properties/preferences/properties/end_of_day",
+                    "type": "string",
+                    "title": "end_of_day",
+                    "description": "A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.",
+                    "default": "12:00",
+                    "examples": [
+                        "10:00"
+                    ]
+                },
+                "location": {
+                    "$id": "#/properties/preferences/properties/location",
+                    "type": "string",
+                    "title": "location",
+                    "description": "Overrides latitude and longitude lookup by IP address.  Used by dimmer and weather",
+                    "default": "",
+                    "examples": [
+                        "Winnipeg, MB"
+                    ]
+                },
+                "live_game_refresh_rate": {
+                    "$id": "#/properties/preferences/properties/live_game_refresh_rate",
+                    "type": "integer",
+                    "title": "live_game_refresh_rate",
+                    "description": "The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec)",
+                    "default": 15,
+                    "examples": [
+                        10
+                    ]
+                },
+                "teams": {
+                    "$id": "#/properties/preferences/properties/teams",
+                    "type": "array",
+                    "title": "teams",
+                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in offday mode",
+                    "default": [],
+                    "examples": [
+                        [
+                            "Jets",
+                            "Canadiens",
+                            "Oilers"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/preferences/properties/teams/items",
+                        "type": "string",
+                        "title": "teams",
+                        "description": "Teams selected to display",
+                        "default": "",
+                        "examples": [
+                            "Jets",
+                            "Canadiens",
+                            "Oilers"
+                        ]
+                    }
+                },
+                "sog_display_frequency": {
+                    "$id": "#/properties/preferences/properties/sog_display_frequency",
+                    "type": "integer",
+                    "title": "sog_display_frequency",
+                    "description": "How often the shots on goal are updated",
+                    "default": 4,
+                    "examples": [
+                        4
+                    ]
+                },
+                "goal_animations": {
+                    "$id": "#/properties/preferences/goal_animations",
+                    "type": "object",
+                    "title": "goal_animations",
+                    "description": "The goal animations can be set for both teams of just the preferred teams",
+                    "default": true,
+                    "examples": [
+                        {
+                            "pref_team_only": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "pref_team_only"
+                    ],
+                    "properties": {
+                        "pref_team_only": {
+                            "$id": "#/properties/preferences/goal_animations/properties/pref_team_only",
+                            "type": "boolean",
+                            "title": "pref_team_only",
+                            "description": "Show only your preferred team goal animation or show both",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "states": {
+            "$id": "#/properties/states",
+            "type": "object",
+            "title": "states",
+            "description": "If the live mode is enabled, the scoreboard will go through different states depending on the current situation. For each state, you can define which of the available board you want the scoreboard to show. For example, if one of my preferred team has a game scheduled on the current day, during the day, the scoreboard will be in the scheduled state. I personally like to have all the data possible shown during the day so I'll set the all the boards in the scheduled setting.",
+            "default": {},
+            "examples": [
+                {
+                    "off_day": [
+                        "clock",
+                        "wxweather"
+                    ],
+                    "scheduled": [
+                        "team_summary",
+                        "standings",
+                        "scoreticker",
+                        "clock"
+                    ],
+                    "post_game": [
+                        "scoreticker"
+                    ],
+                    "intermission": [
+                        "clock"
+                    ]
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "off_day",
+                "scheduled",
+                "intermission",
+                "post_game"
+            ],
+            "properties": {
+                "off_day": {
+                    "$id": "#/properties/states/properties/off_day",
+                    "type": "array",
+                    "title": "off_day",
+                    "description": "Offday is when your team is not playing.  This could be off season as well",
+                    "default": [],
+                    "examples": [
+                        [
+                            "clock",
+                            "wxweather"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/states/properties/off_day/items",
+                        "type": "string",
+                        "title": "boards",
+                        "description": "Boards to display on offday",
+                        "default": "",
+                        "examples": [
+                            "clock",
+                            "wxweather"
+                        ]
+                    }
+                },
+                "scheduled": {
+                    "$id": "#/properties/states/properties/scheduled",
+                    "type": "array",
+                    "title": "scheduled",
+                    "description": "Scheduled is for when you team will be playing",
+                    "default": [],
+                    "examples": [
+                        [
+                            "team_summary",
+                            "standings",
+                            "scoreticker"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/states/properties/scheduled/items",
+                        "type": "string",
+                        "title": "boards",
+                        "description": "Boards to display on sceduled",
+                        "default": "",
+                        "examples": [
+                            "team_summary",
+                            "standings",
+                            "scoreticker"
+                        ]
+                    }
+                },
+                "intermission": {
+                    "$id": "#/properties/states/properties/intermission",
+                    "type": "array",
+                    "title": "intermission",
+                    "description": "What to display during itermission betweeen periods",
+                    "default": [],
+                    "examples": [
+                        [
+                            "clock"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/states/properties/intermission/items",
+                        "type": "string",
+                        "title": "boards",
+                        "description": "Boards to display at intermission",
+                        "default": "",
+                        "examples": [
+                            "clock"
+                        ]
+                    }
+                },
+                "post_game": {
+                    "$id": "#/properties/states/properties/post_game",
+                    "type": "array",
+                    "title": "post_game",
+                    "description": "What to display after the game is done",
+                    "default": [],
+                    "examples": [
+                        [
+                            "scoreticker"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/states/properties/post_game/items",
+                        "type": "string",
+                        "title": "boards",
+                        "description": "Boards to display for post game",
+                        "default": "",
+                        "examples": [
+                            "scoreticker"
+                        ]
+                    }
+                }
+            }
+        },
+        "boards": {
+            "$id": "#/properties/boards",
+            "type": "object",
+            "title": "boards",
+            "description": "All possible boards that can be displayed and their settings",
+            "default": {},
+            "examples": [
+                {
+                    "standings": {
+                        "standing_type": "wild_card",
+                        "preferred_standings_only": true,
+                        "divisions": "central",
+                        "conference": "eastern"
+                    },
+                    "covid19": {
+                        "country_enabled": true,
+                        "canada_prov": [
+                            "Quebec"
+                        ],
+                        "country": [
+                            "USA"
+                        ],
+                        "us_state_enabled": false,
+                        "worldwide_enabled": false,
+                        "canada_enabled": false,
+                        "us_state": [
+                            "New York"
+                        ]
+                    },
+                    "clock": {
+                        "hide_indicator": false,
+                        "duration": 60
+                    },
+                    "scoreticker": {
+                        "rotation_rate": 5,
+                        "preferred_teams_only": false
+                    }
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "scoreticker",
+                "standings",
+                "clock",
+                "covid19",
+                "weather"
+            ],
+            "properties": {
+                "scoreticker": {
+                    "$id": "#/properties/boards/properties/scoreticker",
+                    "type": "object",
+                    "title": "scoreticker",
+                    "description": "This is basically like the generic score ticker you see during a game on TV of sports news showing the result or the status of the other games in the league",
+                    "default": {},
+                    "examples": [
+                        {
+                            "preferred_teams_only": false,
+                            "rotation_rate": 5
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "preferred_teams_only",
+                        "rotation_rate"
+                    ],
+                    "properties": {
+                        "preferred_teams_only": {
+                            "$id": "#/properties/boards/properties/scoreticker/properties/preferred_teams_only",
+                            "type": "boolean",
+                            "title": "preferred_teams_only",
+                            "description": "Choose between showing all the games of the day or just the ones your preferred teams are playing",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "rotation_rate": {
+                            "$id": "#/properties/boards/properties/scoreticker/properties/rotation_rate",
+                            "type": "integer",
+                            "title": "rotation_rate",
+                            "description": "Duration at which each games are shown on screen.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        }
+                    }
+                },
+                "seriesticker": {
+                    "$id": "#/properties/boards/properties/seriesticker",
+                    "type": "object",
+                    "title": "seriesticker",
+                    "description": "Just like the scoreticker, this is showing playoff series status with a table sporting each game scores and result.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "preferred_teams_only": false,
+                            "rotation_rate": 5
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "preferred_teams_only",
+                        "rotation_rate"
+                    ],
+                    "properties": {
+                        "preferred_teams_only": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/preferred_teams_only",
+                            "type": "boolean",
+                            "title": "preferred_teams_only",
+                            "description": "Choose between showing all series of the current round of playoff or just the ones your preferred teams are part of.",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "rotation_rate": {
+                            "$id": "#/properties/boards/properties/seriesticker/properties/rotation_rate",
+                            "type": "integer",
+                            "title": "rotation_rate",
+                            "description": "Duration at which each series are shown on screen.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        }
+                    }
+                },
+                "standings": {
+                    "$id": "#/properties/boards/properties/standings",
+                    "type": "object",
+                    "title": "standings",
+                    "description": "Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "divisions": "central",
+                            "conference": "eastern",
+                            "standing_type": "wild_card",
+                            "preferred_standings_only": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "preferred_standings_only",
+                        "standing_type",
+                        "divisions",
+                        "conference"
+                    ],
+                    "properties": {
+                        "preferred_standings_only": {
+                            "$id": "#/properties/boards/properties/standings/properties/preferred_standings_only",
+                            "type": "boolean",
+                            "title": "preferred_standings_only",
+                            "description": "Choose between showing all the standings or only the the preferred division and conference.",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "standing_type": {
+                            "$id": "#/properties/boards/properties/standings/properties/standing_type",
+                            "type": "string",
+                            "title": "standing_type",
+                            "description": "Option to choose the type of standings to display. conference if set by default.",
+                            "default": "conference",
+                            "examples": [
+                                "wild_card"
+                            ]
+                        },
+                        "divisions": {
+                            "$id": "#/properties/boards/properties/standings/properties/divisions",
+                            "type": "string",
+                            "title": "divisions (central, pacific, atlanic, metropolitan",
+                            "description": "Your preferred division",
+                            "default": "",
+                            "examples": [
+                                "central"
+                            ]
+                        },
+                        "conference": {
+                            "$id": "#/properties/boards/properties/standings/properties/conference",
+                            "type": "string",
+                            "title": "conference (eastern or western)",
+                            "description": "Your preferred conference",
+                            "default": "",
+                            "examples": [
+                                "eastern"
+                            ]
+                        }
+                    }
+                },
+                "clock": {
+                    "$id": "#/properties/boards/properties/clock",
+                    "type": "object",
+                    "title": "clock",
+                    "description": "Show the current time either in 24h or 12h format.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "hide_indicator": false,
+                            "duration": 60,
+                            "preferred_team_colors": true,
+                            "clock_rgb": "234,234,78",
+                            "date_rgb": "78,234,234",
+                            "flash_seconds": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "duration",
+                        "hide_indicator",
+                        "preferred_team_colors",
+                        "clock_rgb",
+                        "date_rgb",
+                        "flash_seconds"
+                    ],
+                    "properties": {
+                        "duration": {
+                            "$id": "#/properties/boards/properties/clock/properties/duration",
+                            "type": "integer",
+                            "title": "duration",
+                            "description": "How long to show the clock",
+                            "default": 60,
+                            "examples": [
+                                60
+                            ]
+                        },
+                        "hide_indicator": {
+                            "$id": "#/properties/boards/properties/clock/properties/hide_indicator",
+                            "type": "boolean",
+                            "title": "hide_indicator",
+                            "description": "Hide the red bar no network indicator on the bottom",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "preferred_team_colors": {
+                            "$id": "#/properties/boards/properties/clock/properties/preferred_team_colors",
+                            "type": "boolean",
+                            "title": "preferred_team_colors",
+                            "description": "Use your first preferred team's colors for clock.  The primary color will be used for clock numbers, while the team text color will be used for the date/weather and AM/PM",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "clock_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/clock_rgb",
+                            "type": "string",
+                            "title": "clock_rgb",
+                            "description": "Set the clock numbers to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "date_rgb": {
+                            "$id": "#/properties/boards/properties/clock/properties/date_rgb",
+                            "type": "string",
+                            "title": "date_rgb",
+                            "description": "Set the date/weather and AM/PM text to the RGB value if preferred_team_colors set to false.  This must be in the form R,G,B",
+                            "default": false,
+                            "examples": [
+                                "230,230,23"
+                            ]
+                        },
+                        "flash_seconds": {
+                            "$id": "#/properties/boards/properties/clock/properties/flash_seconds",
+                            "type": "boolean",
+                            "title": "flash_seconds",
+                            "description": "Flash the seconds (:) if true.  If set to false, dont show the (:)",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        }
+                    }
+                },
+                "covid19": {
+                    "$id": "#/properties/boards/properties/covid19",
+                    "type": "object",
+                    "title": "covid19",
+                    "description": "Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).",
+                    "default": {},
+                    "examples": [
+                        {
+                            "us_state": [
+                                "New York"
+                            ],
+                            "country_enabled": true,
+                            "canada_prov": [
+                                "Quebec"
+                            ],
+                            "country": [
+                                "USA"
+                            ],
+                            "us_state_enabled": false,
+                            "worldwide_enabled": false,
+                            "canada_enabled": false
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "worldwide_enabled",
+                        "country_enabled",
+                        "country",
+                        "us_state_enabled",
+                        "us_state",
+                        "canada_enabled",
+                        "canada_prov"
+                    ],
+                    "properties": {
+                        "worldwide_enabled": {
+                            "$id": "#/properties/boards/properties/covid19/properties/worldwide_enabled",
+                            "type": "boolean",
+                            "title": "worldwide_enabled",
+                            "description": "Whole world wide cases",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "country_enabled": {
+                            "$id": "#/properties/boards/properties/covid19/properties/country_enabled",
+                            "type": "boolean",
+                            "title": "country_enabled",
+                            "description": "Pick a country to show statistics from",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "country": {
+                            "$id": "#/properties/boards/properties/covid19/properties/country",
+                            "type": "array",
+                            "title": "country",
+                            "description": "What country to show",
+                            "default": [],
+                            "examples": [
+                                [
+                                    "USA"
+                                ]
+                            ],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/boards/properties/covid19/properties/country/items",
+                                "type": "string",
+                                "title": "country ",
+                                "description": "What country to show",
+                                "default": "",
+                                "examples": [
+                                    "USA"
+                                ]
+                            }
+                        },
+                        "us_state_enabled": {
+                            "$id": "#/properties/boards/properties/covid19/properties/us_state_enabled",
+                            "type": "boolean",
+                            "title": "us_state_enabled",
+                            "description": "Show by state if USA selected as country",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "us_state": {
+                            "$id": "#/properties/boards/properties/covid19/properties/us_state",
+                            "type": "array",
+                            "title": "us_state",
+                            "description": "Show by state if USA selected as country",
+                            "default": [],
+                            "examples": [
+                                [
+                                    "New York"
+                                ]
+                            ],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/boards/properties/covid19/properties/us_state/items",
+                                "type": "string",
+                                "title": "state",
+                                "description": "What state to show",
+                                "default": "",
+                                "examples": [
+                                    "New York"
+                                ]
+                            }
+                        },
+                        "canada_enabled": {
+                            "$id": "#/properties/boards/properties/covid19/properties/canada_enabled",
+                            "type": "boolean",
+                            "title": "canada_enabled",
+                            "description": "Show Canadian provinces",
+                            "default": false,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "canada_prov": {
+                            "$id": "#/properties/boards/properties/covid19/properties/canada_prov",
+                            "type": "array",
+                            "title": "canada_prov ",
+                            "description": "What province to show if Canada selected as a country",
+                            "default": [],
+                            "examples": [
+                                [
+                                    "Quebec"
+                                ]
+                            ],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/boards/properties/covid19/properties/canada_prov/items",
+                                "type": "string",
+                                "title": "province",
+                                "description": "Province to show",
+                                "default": "",
+                                "examples": [
+                                    "Quebec"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "weather": {
+                "$id": "#/properties/weather",
+                "type": "object",
+                "title": "weather",
+                "description": "Settings for the weather data provider",
+                "default": {},
+                "examples": [
+                    {
+                        "enabled": true,
+                        "view": "full",
+                        "data_feed": "EC",
+                        "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
+                        "units": "metric",
+                        "update_freq": 5,
+                        "duration": 30,
+                        "show_on_clock": true,
+                        "forecast_enabled": true,
+                        "forecast_days": 3,
+                        "forecast_update": 1
+                    }
+                ],
+                "additionalProperties": true,
+                "required": [
+                    "enabled",
+                    "view",
+                    "units",
+                    "duration",
+                    "data_feed",
+                    "owm_apikey",
+                    "update_freq",
+                    "show_on_clock",
+                    "forecast_enabled",
+                    "forecast_days",
+                    "forecast_update"
+                ],
+                "properties": {
+                    "enabled": {
+                        "$id": "#/properties/weather/properties/enabled",
+                        "type": "boolean",
+                        "title": "enabled",
+                        "description": "Enable the weather thread to get your local weather.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "view": {
+                        "$id": "#/properties/weather/properties/view",
+                        "type": "string",
+                        "title": "view",
+                        "description": "Weather board full (3 page) or summary view (1 page)",
+                        "default": "full",
+                        "examples": [
+                            "full"
+                        ]
+                    },
+                    "units": {
+                        "$id": "#/properties/weather/properties/units",
+                        "type": "string",
+                        "title": "units ",
+                        "description": "Units to use for displaying the weather(metric or imperial)",
+                        "default": "",
+                        "examples": [
+                            "metric"
+                        ]
+                    },
+                    "duration": {
+                        "$id": "#/properties/weather/properties/duration",
+                        "type": "integer",
+                        "title": "duration ",
+                        "description": "The time to flip through the pages in the weather board.  If there are no alerts, this will be 3 pages, if there are alerts a 4th is added.  Minimum 30 seconds duration",
+                        "default": 30,
+                        "examples": [
+                            30
+                        ]
+                    },
+                    "data_feed": {
+                        "$id": "#/properties/weather/properties/data_feed",
+                        "type": "string",
+                        "title": "data_feed",
+                        "description": "Where is the observation data coming from. You can use EC for Environment Canada, OWM for Open Weather Map (requires API KEY from https://openweathermap.org/api)",
+                        "default": "",
+                        "examples": [
+                            "EC"
+                        ]
+                    },
+                    "owm_apikey": {
+                        "$id": "#/properties/weather/properties/owm_apikey",
+                        "type": "string",
+                        "title": "owm_apikey",
+                        "description": "API key required for when you use OpenWeatherMAP.  https://openweathermap.org/api",
+                        "default": "",
+                        "examples": [
+                            "9ffxd195ax52a315xaed823xfcf4cdxf"
+                        ]
+                    },
+                    "update_freq": {
+                        "$id": "#/properties/weather/properties/update_freq",
+                        "type": "integer",
+                        "title": "update_freq ",
+                        "description": "How often in minutes to refresh the weather and alerts feeds.",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "show_on_clock": {
+                        "$id": "#/properties/weather/properties/show_on_clock",
+                        "type": "boolean",
+                        "title": "show_on_clock",
+                        "description": "Add the last observed temperature and humidity to the bottom of the clock board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "forecast_enabled": {
+                        "$id": "#/properties/weather/properties/forecast_enabled",
+                        "type": "boolean",
+                        "title": "forecast_enabled",
+                        "description": "Enable the weather forecast thread to get your local weather forecast up to 3 days.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "forecast_days": {
+                        "$id": "#/properties/weather/properties/forecast_days",
+                        "type": "integer",
+                        "title": "forecast_days",
+                        "description": "Number of forecast days to show (3 is the maximum).",
+                        "default": 3,
+                        "examples": [
+                            3
+                        ]
+                    },
+                    "forecast_update": {
+                        "$id": "#/properties/weather/properties/forecast_update",
+                        "type": "integer",
+                        "title": "forecast_update",
+                        "description": "How often to update forecast.  This is in hours",
+                        "default": 3,
+                        "examples": [
+                            3
+                        ]
+                    }
+                }
+            },
+            "wxalert": {
+                "$id": "#/properties/wxalert",
+                "type": "object",
+                "title": "wxalert",
+                "description": "Settings for the alerts data provider",
+                "default": {},
+                "examples": [
+                    {
+                        "scroll_alert": true,
+                        "alert_feed": "EC",
+                        "nws_show_expire": false,
+                        "alert_duration": 5,
+                        "alert_title": true,
+                        "update_freq": 5,
+                        "show_on_clock": true,
+                        "show_alerts": true
+                    }
+                ],
+                "additionalProperties": true,
+                "required": [
+                    "alert_feed",
+                    "update_freq",
+                    "nws_show_expire",
+                    "show_alerts",
+                    "alert_title",
+                    "scroll_alert",
+                    "show_on_clock",
+                    "alert_duration"
+                ],
+                "properties": {
+                    "alert_feed": {
+                        "$id": "#/properties/weather/properties/alert_feed",
+                        "type": "string",
+                        "title": "alert_feed",
+                        "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
+                        "default": "",
+                        "examples": [
+                            "EC"
+                        ]
+                    },
+                    "update_freq": {
+                        "$id": "#/properties/weather/properties/update_freq",
+                        "type": "integer",
+                        "title": "update_freq ",
+                        "description": "How often in minutes to refresh the weather and alerts feeds.",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "nws_show_expire": {
+                        "$id": "#/properties/weather/properties/nws_show_expire",
+                        "type": "boolean",
+                        "title": "nws_show_expire",
+                        "description": "Show expire time (true) instead of effective time (false) of alert",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "show_alerts": {
+                        "$id": "#/properties/weather/properties/show_alerts",
+                        "type": "boolean",
+                        "title": "show_alerts",
+                        "description": "Get weather alerts and display them",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "alert_title": {
+                        "$id": "#/properties/weather/properties/alert_title",
+                        "type": "boolean",
+                        "title": "alert_title",
+                        "description": "On the initial alert page that will interrupt the normal board rotation, display on the top and bottom board the type of alert (WARNING, WATCH or ADVISORY)",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "scroll_alert": {
+                        "$id": "#/properties/weather/properties/scroll_alert",
+                        "type": "boolean",
+                        "title": "Scroll_alert",
+                        "description": "Scroll the text of the alert on the initial alert page.  If you select false, a static page will be displayed that is the same as the 4th page on the weather board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "alert_duration": {
+                        "$id": "#/properties/weather/properties/alert_duration",
+                        "type": "integer",
+                        "title": "alert_duration",
+                        "description": "How long to display alert board (in seconds)",
+                        "default": 5,
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "show_on_clock": {
+                        "$id": "#/properties/wxalert/properties/show_on_clock",
+                        "type": "boolean",
+                        "title": "show_on_clock",
+                        "description": "Show Fred (active alert color square) on the bottom right corner of the clock board",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    }
+                }
+            }
+        },
+        "sbio": {
+            "$id": "#/properties/sbio",
+            "type": "object",
+            "title": "sbio",
+            "description": "Scoreboard IO functions",
+            "default": {},
+            "examples": [
+                {
+                    "screensaver": {
+                        "enabled": "true",
+                        "start": "22:00",
+                        "end": "22:05",
+                        "data_updates": false,
+                        "motionsensor": true,
+                        "pin": 24,
+                        "delay": 30
+                    },
+                    "dimmer": {
+                        "frequency": 5,
+                        "light_level_lux": 10,
+                        "sunset_brightness": 5,
+                        "source": "software",
+                        "sunrise_brightness": 40,
+                        "enabled": true,
+                        "mode": "always",
+                        "daytime": "8:30AM",
+                        "nighttime": "5:30PM",
+                        "offset": 90
+                    },
+                    "pushbutton": {
+                        "state_triggered1": "weather",
+                        "bonnet": true,
+                        "pin": 25,
+                        "display_reboot": true,
+                        "state_triggered1_process": "",
+                        "poweroff_duration": 10,
+                        "poweroff_override_process": "",
+                        "reboot_override_process": "",
+                        "reboot_duration": 2,
+                        "display_halt": true,
+                        "enabled": true
+                    }
+                }
+            ],
+            "additionalProperties": true,
+            "required": [
+                "screensaver",
+                "dimmer",
+                "pushbutton"
+            ],
+            "properties": {
+                "screensaver": {
+                    "$id": "#/properties/sbio/properties/screensaver",
+                    "type": "object",
+                    "title": "screensaver",
+                    "description": "Ability to turn off screen and back on at set times",
+                    "default": {},
+                    "examples": [
+                        {
+                                "enabled": true,
+                                "animations": true,
+                                "start": "22:00",
+                                "stop": "22:05",
+                                "data_updates": false,
+                                "motionsensor": true,
+                                "pin": 24,
+                                "delay": 30
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "animations",
+                        "start",
+                        "stop",
+                        "data_updates"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the screensaver functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "animations": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/animations",
+                            "type": "boolean",
+                            "title": "animations",
+                            "description": "Show anuimation on screensaver start (true) or go straight to black screen (false)",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "start": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/start",
+                            "type": "string",
+                            "title": "start",
+                            "description": "Time to start screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:00"
+                            ]
+                        },
+                        "end": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/end",
+                            "type": "string",
+                            "title": "end",
+                            "description": "Time to end screensaver at (12h or 24h)",
+                            "default": "",
+                            "examples": [
+                                "22:30"
+                            ]
+                        },
+                        "data_updates": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/data_updates",
+                            "type": "boolean",
+                            "title": "data_updates",
+                            "description": "Update weather and NHL data while screen saver is active",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "motionsensor": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/motionsensor",
+                            "type": "boolean",
+                            "title": "motionsensor",
+                            "description": "Use motion sensor to stop screen saver",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "pin": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/pin",
+                            "type": "integer",
+                            "title": "pin",
+                            "description": "What gpio pin motion sensor is connected to",
+                            "default": 0,
+                            "examples": [
+                                24
+                            ]
+                        },
+                        "delay": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/delay",
+                            "type": "integer",
+                            "title": "delay",
+                            "description": "How long in seconds before there is no motion to turn screen saver back on",
+                            "default": 30,
+                            "examples": [
+                                30
+                            ]
+                        }
+                    }
+                },
+                "dimmer": {
+                    "$id": "#/properties/sbio/properties/dimmer",
+                    "type": "object",
+                    "title": "dimmer",
+                    "description": "Automatic setting of the brightness of scoreboard (software or hardware based)",
+                    "default": {},
+                    "examples": [
+                        {
+                            "enabled": true,
+                            "mode": "always",
+                            "frequency": 5,
+                            "light_level_lux": 10,
+                            "sunset_brightness": 5,
+                            "source": "software",
+                            "sunrise_brightness": 40,
+                            "daytime": "8:30AM",
+                            "nighttime": "5:30PM",
+                            "offset": 90
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "source",
+                        "frequency",
+                        "light_level_lux",
+                        "mode",
+                        "sunset_brightness",
+                        "sunrise_brightness",
+                        "daytime",
+                        "nighttime",
+                        "offset"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the dimmer functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "source": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/source",
+                            "type": "string",
+                            "title": "source",
+                            "description": "Hardware (adafruit TSL2591 light sensor) or software (based on your IP address)",
+                            "default": "",
+                            "examples": [
+                                "software"
+                            ]
+                        },
+                        "frequency": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/frequency",
+                            "type": "integer",
+                            "title": "frequency",
+                            "description": "How often in minutes that the dimmer code checks to see if it should adjust the brightness",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        },
+                        "light_level_lux": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/light_level_lux",
+                            "type": "integer",
+                            "title": "light_level_lux",
+                            "description": "If using a sensor, the level of light where the dimmer will change the brightness",
+                            "default": 10,
+                            "examples": [
+                                10
+                            ]
+                        },
+                        "mode": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/mode",
+                            "type": "string",
+                            "title": "mode",
+                            "description": "Run the dimmer always or just on offday",
+                            "default": "always",
+                            "examples": [
+                                "always"
+                            ]
+                        },
+                        "daytime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/daytime",
+                            "type": "string",
+                            "title": "daytime",
+                            "description": "What time is day time (can be 12 or 24 hour time)",
+                            "default": "8:30 AM",
+                            "examples": [
+                                "8:30 AM",
+                                "08:30"
+                            ]
+                        },
+                        "nighttime": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/nighttime",
+                            "type": "string",
+                            "title": "nighttime",
+                            "description": "What time is night time (can be 12 or 24 hour time)",
+                            "default": "5:30 PM",
+                            "examples": [
+                                "5:30 PM",
+                                "17:30"
+                            ]
+                        },
+                        "offset": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/offset",
+                            "type": "integer",
+                            "title": "offset",
+                            "description": "Value of offset in minutes for sunrise and sunset for automatic sunrise/sunset from location only.  Can be positive or negative",
+                            "default": 0,
+                            "examples": [
+                                90
+                            ]
+                        },
+                        "sunset_brightness": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/sunset_brightness",
+                            "type": "integer",
+                            "title": "sunset_brightness",
+                            "description": "Value of brightness you want when it's night",
+                            "default": 0,
+                            "examples": [
+                                5
+                            ]
+                        },
+                        "sunrise_brightness": {
+                            "$id": "#/properties/sbio/properties/dimmer/properties/sunrise_brightness",
+                            "type": "integer",
+                            "title": "sunrise_brightness",
+                            "description": "Value of brightness you want when it's daytime",
+                            "default": 0,
+                            "examples": [
+                                40
+                            ]
+                        }
+                    }
+                },
+                "pushbutton": {
+                    "$id": "#/properties/sbio/properties/pushbutton",
+                    "type": "object",
+                    "title": "pushbutton",
+                    "description": "Settings for the pushbutton",
+                    "default": {},
+                    "examples": [
+                        {
+                            "reboot_override_process": "",
+                            "reboot_duration": 2,
+                            "display_halt": true,
+                            "enabled": true,
+                            "state_triggered1": "wxweather",
+                            "bonnet": true,
+                            "pin": 25,
+                            "state_triggered1_process": "",
+                            "display_reboot": true,
+                            "poweroff_duration": 10,
+                            "poweroff_override_process": ""
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "bonnet",
+                        "pin",
+                        "reboot_duration",
+                        "reboot_override_process",
+                        "display_reboot",
+                        "poweroff_duration",
+                        "poweroff_override_process",
+                        "display_halt",
+                        "state_triggered1",
+                        "state_triggered1_process"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the pushbutton code or not",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "bonnet": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/bonnet",
+                            "type": "boolean",
+                            "title": "bonnet",
+                            "description": "What type of adafruit rgb matrix interface is connected, hat or bonnet.  Defines what GIO pins are available.  True=bonnet false=HAT",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "pin": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/pin",
+                            "type": "integer",
+                            "title": "pin",
+                            "description": "The gpiozero number pin your button is connected to",
+                            "default":25,
+                            "examples": [
+                                25
+                            ]
+                        },
+                        "reboot_duration": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/reboot_duration",
+                            "type": "integer",
+                            "title": "reboot_duration",
+                            "description": "Number of seconds the PushButton must be held to trigger a reboot. 2 is the minimum value",
+                            "default": 2,
+                            "examples": [
+                                2
+                            ]
+                        },
+                        "reboot_override_process": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/reboot_override_process",
+                            "type": "string",
+                            "title": "reboot_override_process",
+                            "description": "Process or script to use instead of the default /sbin/reboot command. Must have full path to script/process and no arguments for the process. If you need arguments, wrap in a script. If this is blank or the command/process does not exist, falls back to the default",
+                            "default": "",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "display_reboot": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/display_reboot",
+                            "type": "boolean",
+                            "title": "display_reboot",
+                            "description": "Show the word REBOOT in green on scoreboard when reboot triggered",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "poweroff_duration": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/poweroff_duration",
+                            "type": "integer",
+                            "title": "poweroff_duration",
+                            "description": "Number of seconds the PushButton must be held to trigger a poweroff. Must be greater than reboot_duration. If reboot_duration is higher than poweroff_duration, the code will swap them",
+                            "default": 10,
+                            "examples": [
+                                10
+                            ]
+                        },
+                        "poweroff_override_process": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/poweroff_override_process",
+                            "type": "string",
+                            "title": "poweroff_override_process",
+                            "description": "Process or script to use instead of the default /sbin/poweroff command. Must have full path to script/process and no arguments for the process. If you need arguments, wrap in a script.. If this is blank or the command/process does not exist, falls back to the default",
+                            "default": "",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "display_halt": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/display_halt",
+                            "type": "boolean",
+                            "title": "display_halt",
+                            "description": "Show the word ! HALT ! in red on scoreboard when poweroff triggered",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "state_triggered1": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/state_triggered1",
+                            "type": "string",
+                            "title": "state_triggered1",
+                            "description": "The board you want displayed on button press. If this is blank falls back to the default board which is clock. Current boards available are team_summary,standings,scoreticker,wxweather and clock",
+                            "default": "clock",
+                            "examples": [
+                                "wxweather"
+                            ]
+                        },
+                        "state_triggered1_process": {
+                            "$id": "#/properties/sbio/properties/pushbutton/properties/state_triggered1_process",
+                            "type": "string",
+                            "title": "state_triggered1_process",
+                            "description": "Process or script to use when a single press of the button happens to switch the board. Must have full path to script/process and no arguments for the process. If you need arguments, wrap in a script.",
+                            "default": "",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
