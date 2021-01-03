@@ -163,9 +163,13 @@ this page.
 
 [Raspbian Buster Lite Installation](https://medium.com/@danidudas/install-raspbian-jessie-lite-and-setup-wi-fi-without-access-to-command-line-or-using-the-network-97f065af722e)
 
+
 #### Time Zones
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
+#### Intalling Git
+You will need to install Git on your raspberry pi in order to download the software. To do so, run this command. 
+`sudo apt install git`
 
 #### Installing the NHL scoreboard software
 This installation process might take some time because it will install all the dependencies listed below.
@@ -185,16 +189,12 @@ If it's a first install of the software, there is no config.json only a config.j
 
 
 #### Updating your software.
-If you undate from any version that was released **before V1.0.0**, run these commands to update.
 `git reset --hard`
 `git checkout master`
-`sudo git pull`
+`git pull`
 `sudo chmod +x scripts/install.sh`
 `sudo ./scripts/install.sh`.
 
-If your board runs **any V1 version**, simply run the install like so.
-`sudo chmod +x scripts/install.sh`
-`sudo ./scripts/install.sh`
 
 If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
