@@ -2,7 +2,7 @@
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
 
-## UPDATE ON 2021 Season changes (PLEASE READ)
+## UPDATE ON 2021 Season (PLEASE READ)
 The 2021 season is upon us. REJOICE !!!
 
 This project rely on the undocumented NHL API and I have no control over it. the 2021 season as we know it is a different one and that will have an effect on this software. Your board might crash and not run sometimes. I suspect most of the changes, if there is any, will be found early on and I'll publish updates accordingly. Please keep an eye on the issue sections or open a new one if you believe what you are encounting has not been reported.
