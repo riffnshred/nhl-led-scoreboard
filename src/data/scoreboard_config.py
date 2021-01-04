@@ -219,7 +219,7 @@ class ScoreboardConfig:
 
     def __get_time_format(self, config):
         # Set the time format to 12h.
-        time_format = "%I:%M"
+        time_format = "%-I:%M"
 
         # Check if the time format is different in the config. if so, change it.
         if config == "24h":

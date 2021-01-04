@@ -117,11 +117,11 @@ class Clock:
 
         self.matrix.draw_text_layout(
             self.layout.date,
-            self.date.strftime("%b %d %Y").upper(),
+            self.date.strftime("%a, %b %-d").upper()+ "   " +self.data.wx_current[5],
             fillColor=self.wxdtfill
         )
 
-        if self.time_format == "%I:%M":
+        if self.time_format == "%-I:%M":
             self.matrix.draw_text_layout(
                 self.layout.meridiem,
                 "{}\n{}".format(self.meridiem[0], self.meridiem[1]),
@@ -132,7 +132,7 @@ class Clock:
         if self.data.config.weather_show_on_clock and self.wx_clock:
             self.matrix.draw_text_layout(
             self.layout.wx_display,
-            self.data.wx_current[3] + " " +self.data.wx_current[5],
+            self.data.wx_current[2],
             fillColor=self.wxdtfill
             )
             if len(self.data.wx_alerts) > 0 and self.data.config.wxalert_show_on_clock:

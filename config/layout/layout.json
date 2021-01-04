@@ -114,12 +114,8 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -2],
-      "align": "left-bottom",
-      "relative": {
-        "to": "time",
-        "align": "left-top"
-      }
+      "position": ["50%", "5%"],
+      "align": "center-top"
     },
     "meridiem": {
       "position": [2, 0],
