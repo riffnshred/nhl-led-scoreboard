@@ -190,8 +190,7 @@ class Data:
         elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
-        #return today.year, today.month, today.day
-        return 2018, 1, 2
+        return today.year, today.month, today.day
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
