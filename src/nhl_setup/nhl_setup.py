@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.5.0"
+SCRIPT_VERSION = "1.5.1"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -27,7 +27,7 @@ STATES = ['off_day','scheduled','intermission','post_game']
 #Note: for boards, the covid19 in config is NOT the same name as the covid_19 python function
 #the boards listed below are what's listed in the config
 # These are boards that have configuration.  If your board does not have any config, you don't need to add it
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19']
+BOARDS = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','covid19']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 class Clock24hValidator(Validator):
