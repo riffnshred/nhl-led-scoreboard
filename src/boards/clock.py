@@ -117,7 +117,7 @@ class Clock:
 
         self.matrix.draw_text_layout(
             self.layout.date,
-            self.date.strftime("%a, %b %-d").upper()+ "   " +self.data.wx_current[5],
+            self.date.strftime("%a, %b %-d").upper()+ "   " +self.data.wx_current[3],
             fillColor=self.wxdtfill
         )
 
