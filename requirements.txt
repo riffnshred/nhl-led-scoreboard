@@ -1,4 +1,4 @@
-CairoSVG==2.4.2
+CairoSVG==2.5.1
 env-canada==0.0.35
 ephem==3.7.7.0
 fastjsonschema==2.14.4
