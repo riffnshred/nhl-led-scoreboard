@@ -27,7 +27,7 @@ STATES = ['off_day','scheduled','intermission','post_game']
 #Note: for boards, the covid19 in config is NOT the same name as the covid_19 python function
 #the boards listed below are what's listed in the config
 # These are boards that have configuration.  If your board does not have any config, you don't need to add it
-BOARDS = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','covid19']
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings','covid19']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 class Clock24hValidator(Validator):
@@ -51,7 +51,9 @@ class RGBValidator(Validator):
     def validate(self, document):
         r = r"(\d+),\s*(\d+),\s*(\d+)"
         #ok = regex.match('^(\d+),\s*(\d+),\s*(\d+)$', document.text)
-        ok = all(0 <= int(group) <= 255 for group in re.match(r, document.text).groups())
+        ok = False
+        if re.match(r,document.text) is not None:
+            ok = all(0 <= int(group) <= 255 for group in re.match(r, document.text).groups())
         if not ok:
             raise ValidationError(
                 message='Please enter a valid RGB tuple (r,g,b)',
@@ -545,7 +547,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions','christmas']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions','christmas']
 
         boards_selected = []
         board = None
