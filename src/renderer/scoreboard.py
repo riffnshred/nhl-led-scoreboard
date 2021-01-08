@@ -35,7 +35,12 @@ class ScoreboardRenderer:
         self.matrix.clear()
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
-
+        
+        
+        #Work in progress. testing gradients
+        gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
+        self.matrix.draw_image((64,0), gradient, align="center")
+        
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()
 
@@ -57,7 +62,7 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-          self.layout.scheduled_date, 
+          self.layout.center_top, 
           'TODAY'
         )
         self.matrix.draw_text_layout(
@@ -108,14 +113,10 @@ class ScoreboardRenderer:
         result = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
         date = convert_date_format(self.scoreboard.date)
-        
-        #Work in progress. testing gradients
-        #gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
-        #self.matrix.draw_image((64,0), gradient, align="center")
 
         # Draw the info
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date, 
+            self.layout.center_top, 
             date
         )
 
@@ -142,11 +143,11 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date,
+            self.layout.center_top,
             'TODAY'
         )
         self.matrix.draw_text_layout(
-            self.layout.irregular_status,
+            self.layout.relative_center_top,
             status
         )
         self.matrix.draw_text_layout(

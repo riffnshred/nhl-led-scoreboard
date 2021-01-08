@@ -83,6 +83,8 @@ def args():
                         help="Shows the current refresh rate of the LED panel.")
     parser.add_argument("--led-slowdown-gpio", action="store",
                         help="Slow down writing to GPIO. Range: 0..4. (Default: 1)", choices=range(5), type=int)
+    parser.add_argument("--led-limit-refresh", action="store",
+                        help="Limit refresh rate to this frequency in Hz. Useful to keep a constant refresh rate on loaded system. 0=no limit. Default: 0", default=0, type=int)
     parser.add_argument("--led-no-hardware-pulse", action="store", help="Don't use hardware pin-pulse generation.")
     parser.add_argument("--led-rgb-sequence", action="store",
                         help="Switch if your matrix has led colors swapped. (Default: RGB)", default="RGB", type=str)
@@ -93,6 +95,7 @@ def args():
     parser.add_argument("--led-multiplexing", action="store",
                         help="Multiplexing type: 0 = direct; 1 = strip; 2 = checker; 3 = spiral; 4 = Z-strip; 5 = ZnMirrorZStripe; 6 = coreman; 7 = Kaler2Scan; 8 = ZStripeUneven. (Default: 0)",
                         default=0, type=int)
+
     parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
     parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
     parser.add_argument("--updatecheck", action="store_true", help="Check for updates (Default: False)", default=False)
@@ -122,6 +125,7 @@ def led_matrix_options(args):
     options.pwm_lsb_nanoseconds = args.led_pwm_lsb_nanoseconds
     options.led_rgb_sequence = args.led_rgb_sequence
     options.panel_type = args.led_panel_type
+    options.limit_refresh_rate_hz = args.led_limit_refresh
     try:
         options.pixel_mapper_config = args.led_pixel_mapper
     except AttributeError:

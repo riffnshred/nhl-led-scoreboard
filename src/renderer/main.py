@@ -31,7 +31,6 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                self._draw_goal_animation()
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
                 self.matrix.render()
                 data.refresh.daily(self.data)

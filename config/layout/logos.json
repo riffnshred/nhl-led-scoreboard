@@ -17,7 +17,22 @@
         "position": [0, 0],
         "flip": 0,
         "rotate": 0,
-        "crop": [0, 0, 0, 0]
+        "crop": [0, 0, 0, 0],
+
+        "home": {
+          "zoom": "100%",
+          "position": [0, 0],
+          "flip": 0,
+          "rotate": 0,
+          "crop": [0, 0, 0, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [0, 0],
+          "flip": 0,
+          "rotate": 0,
+          "crop": [0, 0, 0, 0]
+        }
       },
       "TOR": {
         "home": {
@@ -28,6 +43,8 @@
           "position": [2, 0]
         }
       },
+
+      
       "ANA": {
         "home": {
           "zoom": "70%",

@@ -12,13 +12,25 @@
     }
   },
   "scoreboard": {
+    "center_top":{
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "relative_center_top": {
+      "position": [0, 2],
+      "relative": {
+        "to": "center_top",
+        "align": "center-bottom"
+      }
+    },
+
     "home_logo": {
-      "position": ["100%", 0],
-      "align": "right"
+      "position": [["50%", 15], 0],
+      "align": "left"
     },
     "away_logo": {
-      "position": [0, 0],
-      "align": "left"
+      "position": [["50%", -15], 0],
+      "align": "right"
     },
     "vs": {
       "position": ["50%", "45%"],
@@ -36,19 +48,29 @@
     },
     "scheduled_time": {
       "position": ["50%", 6],
-      "align": "center-top"
+      "align": "center-top",
+      "relative": {
+        "to": "scheduled_date",
+        "align": "center"
+      } 
     },
     "clock": {
-      "position": ["50%", 6],
-      "align": "center-top"
+      "position": [0, 2],
+      "relative": {
+        "to": "period",
+        "align": "center-bottom"
+      }
     },
     "period": {
       "position": ["50%", 0],
       "align": "center-top"
     },
     "period_final": {
-      "position": ["50%", 6],
-      "align": "center-top"
+      "position": [0, 2],
+      "relative": {
+        "to": "center_top",
+        "align": "center-bottom"
+      }
     },
     "SOG_label": {
       "position": ["50%", 0],
@@ -59,8 +81,11 @@
       "align": "center-top"
     },
     "irregular_status": {
-      "position": ["50%", 6],
-      "align": "center-top"
+      "position": [0, 2],
+      "relative": {
+        "to": "center_top",
+        "align": "center-bottom"
+      }
     }
 
   },
