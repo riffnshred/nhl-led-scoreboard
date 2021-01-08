@@ -10,6 +10,7 @@ class ScoreboardRenderer:
         self.layout = self.data.config.config.layout.get_board_layout('scoreboard')
         self.font = self.data.config.layout.font
         self.font_large = self.data.config.layout.font_large
+        self.team_colors = data.config.team_colors
         self.scoreboard = scoreboard
         self.matrix = matrix
         self.show_SOG = shot_on_goal
@@ -33,10 +34,14 @@ class ScoreboardRenderer:
 
     def render(self):
         self.matrix.clear()
+        bg_away = self.team_colors.color("{}.primary".format(self.scoreboard.away_team.id))
+        bg_home = self.team_colors.color("{}.primary".format(self.scoreboard.home_team.id))
+        self.matrix.draw_rectangle((0,0), (64,64), (bg_away['r'],bg_away['g'],bg_away['b']))
+        self.matrix.draw_rectangle((64,0), (128,64), (bg_home['r'],bg_home['g'],bg_home['b']))
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
         
-        
+        #self.matrix.draw.polygon([(37,0), (91,0), (80,64), (48,64)], fill=(0,0,0))
         #Work in progress. testing gradients
         gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
         self.matrix.draw_image((64,0), gradient, align="center")
@@ -62,7 +67,7 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-          self.layout.center_top, 
+          self.layout.scheduled_date, 
           'TODAY'
         )
         self.matrix.draw_text_layout(

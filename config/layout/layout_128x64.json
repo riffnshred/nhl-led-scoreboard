@@ -23,7 +23,6 @@
         "align": "center-bottom"
       }
     },
-
     "home_logo": {
       "position": [["50%", 15], 0],
       "align": "left"
@@ -47,11 +46,10 @@
       "align": "center-top"
     },
     "scheduled_time": {
-      "position": ["50%", 6],
-      "align": "center-top",
+      "position": [0, 2],
       "relative": {
         "to": "scheduled_date",
-        "align": "center"
+        "align": "center-bottom"
       } 
     },
     "clock": {

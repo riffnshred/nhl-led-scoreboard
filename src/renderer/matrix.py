@@ -179,6 +179,8 @@ class Matrix:
             "position": position,
             "size": size
         }
+    
+    
 
     def draw_pixel(self, position, color):
         try:
