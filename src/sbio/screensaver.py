@@ -49,7 +49,11 @@ class screenSaver(object):
     def runSaver(self):
         #Launch screen saver board, then Fade off brightness to 0
         if not self.data.screensaver_livegame:
-            debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
+            if self.data.curr_board is not None:
+                debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
+            else:
+                debug.info("Screen saver started.... Currently displayed board is not set")
+                
             self.data.screensaver = True
             self.sleepEvent.set()
         else:
@@ -67,7 +71,10 @@ class screenSaver(object):
 
     def stopSaver(self):
         #Stop screen saver board, Fade brightness back to last setting
-        debug.info("Screen saver stopped.... Starting next displayed board " + self.data.prev_board)
+        if self.data.prev_board is not None:
+            debug.info("Screen saver stopped.... Starting next displayed board " + self.data.prev_board)
+        else:
+            debug.info("Screen saver stopped.... Starting next displayed board (not set)")
 
         #Resume all paused jobs
         if not self.data.config.screensaver_data_updates:
@@ -85,8 +92,10 @@ class screenSaver(object):
 
         i = 0
 
-        while i <= self.original_brightness:
-            self.matrix.set_brightness(i)
-            i += 1
-            sleep(0.1)
+        # If user doesn't use dimmer or brightness on command line, don't fade in
+        if self.original_brightness is not None:
+            while i <= self.original_brightness:
+                self.matrix.set_brightness(i)
+                i += 1
+                sleep(0.1)
 
