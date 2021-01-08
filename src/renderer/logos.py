@@ -7,20 +7,20 @@ from utils import round_normal
 
 PATH = 'assets/logos'
 LOGO_NAME = 'light'
-LOGO_URL = 'http://cdn.nhle.com/logos/nhl/svg/{}_{}.svg'
+LOGO_URL = 'assets/logos/svg/{}/{}_{}.svg'
 
 class LogoRenderer:
-    def __init__(self, matrix, config, element_layout, team, board, gameLocation=None):
+    def __init__(self, matrix, config, element_layout, team_abbrev, board, gameLocation=None):
         self.matrix = matrix
         self.layout = config.config.layout.get_scoreboard_logo(
-            team.abbrev, 
+            team_abbrev, 
             board, 
             gameLocation
         )
         
         self.element_layout = element_layout
 
-        self.load(team)
+        self.load(team_abbrev)
 
     def get_size(self):
         return (
@@ -28,19 +28,19 @@ class LogoRenderer:
             int(round_normal(self.matrix.height * self.layout.zoom))
         )
 
-    def get_path(self, team):
+    def get_path(self, team_abbrev):
         size = self.get_size()
         return get_file('{}/{}/{}/{}x{}.png'.format(
-            PATH, team.abbrev, LOGO_NAME, 
+            PATH, team_abbrev, LOGO_NAME, 
             size[0], size[1]
         ))
 
-    def load(self, team):
+    def load(self, team_abbrev):
         try:
-            filename = self.get_path(team)
+            filename = self.get_path(team_abbrev)
             self.logo = Image.open(filename)
         except FileNotFoundError:
-            self.save_image(filename, team)
+            self.save_image(filename, team_abbrev)
 
         rotate = self.layout.rotate
         flip = self.layout.flip
@@ -58,7 +58,7 @@ class LogoRenderer:
                 self.logo.height - (self.logo.height * (crop[3])),
             ))
        
-    def save_image(self, filename, team):
+    def save_image(self, filename, team_abbrev):
         if not os.path.exists(os.path.dirname(filename)):
             try:
                 os.makedirs(os.path.dirname(filename))
@@ -67,7 +67,7 @@ class LogoRenderer:
                     raise
                 
         self.logo = ImageHelper.image_from_svg(
-            LOGO_URL.format(team.abbrev, LOGO_NAME)
+            LOGO_URL.format(LOGO_NAME,team_abbrev, LOGO_NAME)
         )
 
         self.logo.thumbnail(self.get_size())

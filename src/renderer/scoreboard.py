@@ -1,5 +1,5 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
-from utils import center_text, convert_date_format
+from utils import center_text, convert_date_format, get_file
 from renderer.logos import LogoRenderer
 
 
@@ -18,7 +18,7 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.home_logo,
-            self.scoreboard.home_team,
+            self.scoreboard.home_team.abbrev,
             'scoreboard',
             'home'
         )
@@ -26,20 +26,29 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.away_logo,
-            self.scoreboard.away_team,
+            self.scoreboard.away_team.abbrev,
             'scoreboard',
             'away'
         )
 
     def render(self):
+        self.matrix.clear()
         self.away_logo_renderer.render()
         self.home_logo_renderer.render()
-
+        
+        
+        #Work in progress. testing gradients
+        gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
+        self.matrix.draw_image((64,0), gradient, align="center")
+        
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()
 
         if self.status.is_live(self.scoreboard.status):
             self.draw_live()
+
+        if self.status.is_game_over(self.scoreboard.status):
+            self.draw_final()
 
         if self.status.is_final(self.scoreboard.status):
             self.draw_final()
@@ -53,7 +62,7 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-          self.layout.scheduled_date, 
+          self.layout.center_top, 
           'TODAY'
         )
         self.matrix.draw_text_layout(
@@ -107,7 +116,7 @@ class ScoreboardRenderer:
 
         # Draw the info
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date, 
+            self.layout.center_top, 
             date
         )
 
@@ -134,11 +143,11 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date,
+            self.layout.center_top,
             'TODAY'
         )
         self.matrix.draw_text_layout(
-            self.layout.irregular_status,
+            self.layout.relative_center_top,
             status
         )
         self.matrix.draw_text_layout(
@@ -162,11 +171,11 @@ class ScoreboardRenderer:
         self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 3, 0, self.matrix.height - 3,
                                       colors[str(away_number_skaters)])
 
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 1, 60,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 1, self.matrix.width - 4,
                                       self.matrix.height - 1, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 2, 62,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 2, self.matrix.width - 2,
                                       self.matrix.height - 2, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 63, self.matrix.height - 3, 63,
+        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 3, self.matrix.width - 1,
                                       self.matrix.height - 3, colors[str(home_number_skaters)])
 
     def draw_SOG(self):

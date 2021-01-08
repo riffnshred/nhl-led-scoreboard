@@ -12,8 +12,13 @@ class ScoreboardConfig:
     def __init__(self, filename_base, args, size):
         json = self.__get_config(filename_base)
 
+        self.testing_mode = False
+        self.test_goal_animation = False
+        self.testScChampions = False
+
         # Misc config options
         self.debug = json["debug"]
+        self.loglevel = json["loglevel"]
         self.live_mode = json["live_mode"]
 
         # Preferences
@@ -24,14 +29,27 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
-        
+
 
         # Goal animation
-        self.goal_anim_pref_team_only = json["goal_animations"]["pref_team_only"]
+        self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
+
+        #Screen Saver entries
+        self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
+        self.screensaver_animations = json["sbio"]["screensaver"]["animations"]
+        self.screensaver_start = json["sbio"]["screensaver"]["start"]
+        self.screensaver_stop = json["sbio"]["screensaver"]["stop"]
+        self.screensaver_data_updates = json["sbio"]["screensaver"]["data_updates"]
+        self.screensaver_motionsensor = json["sbio"]["screensaver"]["motionsensor"]
+        self.screensaver_ms_pin = json["sbio"]["screensaver"]["pin"]
+        self.screensaver_ms_delay = json["sbio"]["screensaver"]["delay"]
 
         # Dimmer preferences
         self.dimmer_enabled = json["sbio"]["dimmer"]["enabled"]
         self.dimmer_source = json["sbio"]["dimmer"]["source"]
+        self.dimmer_daytime = json["sbio"]["dimmer"]["daytime"]
+        self.dimmer_nighttime = json["sbio"]["dimmer"]["nighttime"]
+        self.dimmer_offset = json["sbio"]["dimmer"]["offset"]
         self.dimmer_frequency = json["sbio"]["dimmer"]["frequency"]
         self.dimmer_light_level_lux = json["sbio"]["dimmer"]["light_level_lux"]
         self.dimmer_mode = json["sbio"]["dimmer"]["mode"]
@@ -56,23 +74,38 @@ class ScoreboardConfig:
 
         # Weather board preferences
         self.weather_enabled = json["boards"]["weather"]["enabled"]
+        self.weather_view = json["boards"]["weather"]["view"]
         self.weather_units = json["boards"]["weather"]["units"]
         self.weather_duration = json["boards"]["weather"]["duration"]
         self.weather_data_feed = json["boards"]["weather"]["data_feed"]
-        self.weather_alert_feed = json["boards"]["weather"]["alert_feed"]
         self.weather_owm_apikey = json["boards"]["weather"]["owm_apikey"]
         self.weather_update_freq = json["boards"]["weather"]["update_freq"]
+        # Show curr temp, humidity on clock
+        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+        # Forecast settings
+        self.weather_forecast_enabled = json["boards"]["weather"]["forecast_enabled"]
+        #Number of days up to 3 for forecast
+        self.weather_forecast_days = json["boards"]["weather"]["forecast_days"]
+        #How frequent, in hours, to update the forecast
+        self.weather_forecast_update = json["boards"]["weather"]["forecast_update"]
+
+        #Weather Alerts Preferences
+        self.wxalert_alert_feed = json["boards"]["wxalert"]["alert_feed"]
         #Allow the weather thread to interrupt the current flow of the display loop and show an alert if it shows up
         #Similar to how a pushbutton interrupts the flow
-        self.weather_show_alerts = json["boards"]["weather"]["show_alerts"] 
+        self.wxalert_show_alerts = json["boards"]["wxalert"]["show_alerts"]  
+        #Show expire time instead of effective time of NWS alerts
+        self.wxalert_nws_show_expire = json["boards"]["wxalert"]["nws_show_expire"]
         # Display on top and bottom bar the severity (for US) and type
-        self.weather_alert_title = json["boards"]["weather"]["alert_title"]
+        self.wxalert_alert_title = json["boards"]["wxalert"]["alert_title"]
         # Display static alert or scrolling
-        self.weather_scroll_alert = json["boards"]["weather"]["scroll_alert"]
+        self.wxalert_scroll_alert = json["boards"]["wxalert"]["scroll_alert"]
         # How long to display static alert in seconds
-        self.weather_alert_duration = json["boards"]["weather"]["alert_duration"]
-        # Show curr temp, humidity and any alerts on clock
-        self.weather_show_on_clock = json["boards"]["weather"]["show_on_clock"]
+        self.wxalert_alert_duration = json["boards"]["wxalert"]["alert_duration"]
+        # Show any alerts on clock
+        self.wxalert_show_on_clock = json["boards"]["wxalert"]["show_on_clock"]
+        self.wxalert_update_freq = json["boards"]["wxalert"]["update_freq"]
+
 
 
         # States
@@ -88,6 +121,10 @@ class ScoreboardConfig:
         self.preferred_teams_only = json["boards"]["scoreticker"]["preferred_teams_only"]
         self.scoreticker_rotation_rate = json["boards"]["scoreticker"]["rotation_rate"]
 
+        # Seriesticker
+        self.seriesticker_preferred_teams_only = json["boards"]["seriesticker"]["preferred_teams_only"]
+        self.seriesticker_rotation_rate = json["boards"]["seriesticker"]["rotation_rate"]
+
         # Standings
         self.preferred_standings_only = json["boards"]["standings"]["preferred_standings_only"]
         self.standing_type = json["boards"]["standings"]["standing_type"]
@@ -97,6 +134,10 @@ class ScoreboardConfig:
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]
         self.clock_hide_indicators = json["boards"]["clock"]["hide_indicator"]
+        self.clock_team_colors =  json["boards"]["clock"]["preferred_team_colors"]
+        self.clock_clock_rgb =  json["boards"]["clock"]["clock_rgb"]
+        self.clock_date_rgb =  json["boards"]["clock"]["date_rgb"]
+        self.clock_flash_seconds =  json["boards"]["clock"]["flash_seconds"]
 
         # COVID-19
         self.covid_ww_board_enabled = json["boards"]["covid19"]["worldwide_enabled"]
@@ -119,6 +160,16 @@ class ScoreboardConfig:
         ))
 
         self.config = Config(size)
+
+        if args.testScChampions != None:
+            self.testScChampions = args.testScChampions
+
+        if args.testing_mode :
+            self.testing_mode = True
+        
+        if args.test_goal_animation :
+            self.test_goal_animation = True
+            
 
     def read_json(self, filename):
         # Find and return a json file
@@ -146,10 +197,11 @@ class ScoreboardConfig:
             else:
                 debug.error("Invalid {} config file. Make sure {} exists in config/".format(base_filename, base_filename))
             sys.exit(1)
-        
+
+
         if base_filename == "config":
             # Validate against the config.json
-            debug.info("Now validating config.json.....")
+            debug.error("INFO: Validating config.json.....")
             conffile = "config/config.json"
             schemafile = "config/config.schema.json"
 
@@ -157,10 +209,10 @@ class ScoreboardConfig:
             schemapath = get_file(schemafile)
             (valid,msg) = validateConf(confpath,schemapath)
             if valid:
-                debug.info("config.json passes validation")
+                debug.error("INFO: config.json passes validation")
             else:
-                debug.error("config.json fails validation: error: [{0}]".format(msg))
-                debug.error("Rerun the nhl_setup app to create a valid config.json")
+                debug.warning("WARN: config.json fails validation: error: [{0}]".format(msg))
+                debug.warning("WARN: Rerun the nhl_setup app to create a valid config.json")
                 sys.exit(1)
 
         return reference_config

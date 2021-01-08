@@ -45,9 +45,12 @@ class LayoutConfig:
 
     logos = self.logo_config.data[board].logos
     
+    conf_set = logos["_default"]
     if (team in logos):
-      logo.__merge__(logos[team])
-      if (gameLocation != None and gameLocation in logos[team]):
-        logo.__merge__(logos[team][gameLocation], overwrite=True)
+      conf_set = logos[team]
+    
+    logo.__merge__(conf_set)
+    if (gameLocation != None and gameLocation in conf_set):
+        logo.__merge__(conf_set[gameLocation], overwrite=True)
     
     return logo

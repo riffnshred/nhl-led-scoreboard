@@ -64,6 +64,15 @@
     }
 
   },
+  "goal":{
+    "scorer_info":{
+      "hashtag_dots":{
+        "position": [0, 8],
+        "font": "medium_2",
+        "align": "left"
+      }
+    }
+  },
   "scoreticker": {
     "indicator_dots": {
       "position": ["50%", ["100%", -1]],
@@ -91,6 +100,11 @@
         "to": "time",
         "align": "right-top"
       } 
+    }
+  },
+  "seriesticker":{
+    "table":{
+      "position":[0,22]
     }
   },
   "wx_clock": {
@@ -176,7 +190,58 @@
         "align": "left"
       }
     },
+    "forecast_temp_hi":{
+      "position": [-3, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "left"
+      }
+    },
+    "forecast_hi":{
+      "position": [2, 3],
+      "font": "wx_medium",
+      "align": "left"
+    },
+
+    "forecast_temp_lo": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "forecast_temp_hi",
+        "align": "right-bottom"
+      }
+    },
+    "forecast_lo":{
+      "position": [0, 6],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "forecast_hi",
+        "align": "left-bottom"
+      }
+    },
     "temp_app": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_hi": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_lo": {
       "position": [0, 2],
       "font": "wx_large",
       "align": "right",
@@ -279,22 +344,22 @@
     },
     "watch_us": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },
     "watch_ca": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     }, 
     "advisory_us": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },   
     "advisory_ca": {
       "position": ["50%","50%"],
-      "font": "wx_alert",
+      "font": "wx_medium",
       "align": "center-center"
     },
     "title_top": {

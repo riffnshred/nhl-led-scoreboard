@@ -15,6 +15,8 @@ class wxWeather:
 
         self.wxfont = data.config.layout.wxfont
 
+        self.view = data.config.weather_view
+
         self.matrix = matrix
 
         self.sleepEvent = sleepEvent
@@ -47,20 +49,25 @@ class wxWeather:
                 self.WxDrawTemp(display_sleep)
                 #self.sleepEvent.wait(display_sleep)
                 display_wx += display_sleep
-                self.WxDrawWind()
-                self.sleepEvent.wait(display_sleep)
-                display_wx += display_sleep
-                self.WxDrawPrecip_EC()
-                self.sleepEvent.wait(display_sleep)
+                if self.view.lower() == "full":
+                    self.WxDrawWind()
+                    self.sleepEvent.wait(display_sleep)
+                    display_wx += display_sleep
+                    self.WxDrawPrecip_EC()
+                    self.sleepEvent.wait(display_sleep)
 
-                if len(self.data.wx_alerts) > 0:
-                    if self.data.wx_alerts[1]!="ended":
-                        self.WxDrawAlert()
-                        self.sleepEvent.wait(display_sleep)
+                # Alerts now are on their own selectable board, wxalert
+                #if len(self.data.wx_alerts) > 0:
+                #    if self.data.wx_alerts[1]!="ended":
+                #        self.WxDrawAlert()
+                #        self.sleepEvent.wait(display_sleep)
 
                 display_wx += display_sleep
         else:
-            debug.error("Weather feed has not updated yet....")
+            if self.data.config.weather_enabled:
+                debug.error("Weather feed has not updated yet....")
+            else:
+                debug.error("Weather board not enabled in config.json.  Is enabled set to True?")
         
     def WxDrawTemp(self,display_loop):
 
@@ -107,10 +114,34 @@ class wxWeather:
                 self.data.wx_current[3]
             )  
 
-            self.matrix.draw_text_layout(
-                self.layout.temp_app,
-                self.data.wx_current[4] 
-            )
+            # Covert temp and apparent temp to floats to compare
+            if  self.data.wx_current[3] == "N/A" or self.data.wx_current[4] == "N/A":
+                self.matrix.draw_text_layout(
+                        self.layout.temp_app,
+                        self.data.wx_current[4] 
+                    )
+            else:
+                temp_float = float(self.data.wx_current[3][:-1])
+                app_temp_float = float(self.data.wx_current[4][:-1])
+
+                if (temp_float > app_temp_float):
+                    # apparent temperature is colder than temperature, show blue
+                    self.matrix.draw_text_layout(
+                        self.layout.temp_app_lo,
+                        self.data.wx_current[4] 
+                    )
+                elif (temp_float < app_temp_float):
+                    # apparent temperature is warmer than temperature, show red
+                    self.matrix.draw_text_layout(
+                        self.layout.temp_app_hi,
+                        self.data.wx_current[4] 
+                    )
+                else:
+                    # apparent temperature is colder than temperature, show green, same as temp
+                    self.matrix.draw_text_layout(
+                        self.layout.temp_app,
+                        self.data.wx_current[4] 
+                    )
 
             self.matrix.render()
 
@@ -171,10 +202,11 @@ class wxWeather:
             self.data.wx_curr_wind[4]
         )
 
-        self.matrix.draw_text_layout(
-            self.layout3.tendency,
-            self.data.wx_curr_wind[5]
-        )
+        if self.data.config.weather_data_feed.lower() == "ec":
+            self.matrix.draw_text_layout(
+                self.layout3.tendency,
+                self.data.wx_curr_wind[5]
+            )
 
         self.matrix.draw_text_layout(
             self.layout3.dewpoint,

@@ -75,7 +75,7 @@ class Matrix:
 
         return (round_normal(x), round_normal(y))
 
-    def draw_text(self, position, text, font, fill=None, align="left", 
+    def draw_text(self, position, text, font, fill=None, align="left",
                 backgroundColor=None, backgroundOffset=[1, 1, 1, 1]):
         width = 0
         height = 0
@@ -102,7 +102,7 @@ class Matrix:
         size = (width, height)
 
         x, y = self.align_position(align, position, size)
-        
+
         if (backgroundColor != None):
             self.draw_rectangle(
             (x - backgroundOffset[0], y - backgroundOffset[1]),
@@ -167,11 +167,11 @@ class Matrix:
     def draw_rectangle(self, position, size, color):
         self.draw.rectangle(
             [
-            position[0], 
-            position[1], 
-            position[0] + size[0], 
+            position[0],
+            position[1],
+            position[0] + size[0],
             position[1] + size[1]
-            ], 
+            ],
             fill=color
         )
 
@@ -179,7 +179,7 @@ class Matrix:
             "position": position,
             "size": size
         }
-    
+
     def draw_pixel(self, position, color):
         try:
             self.pixels[position] = color
@@ -198,13 +198,15 @@ class Matrix:
                 pixel.color
             )
 
-    def draw_text_layout(self, layout, text, align="left", backgroundColor=None):
+    def draw_text_layout(self, layout, text, align="left", fillColor=None, backgroundColor=None):
+        if fillColor == None:
+            fillColor = layout.color
         self.cache_position(
             layout.id,
             self.draw_text(
                 self.layout_position(layout),
                 text,
-                fill=layout.color,
+                fill=fillColor,
                 font=layout.font,
                 backgroundColor=backgroundColor, #layout.backgroundColor if hasattr(layout, 'backgroundColor') else None,
                 align=layout.align

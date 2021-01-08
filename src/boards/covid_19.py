@@ -13,7 +13,7 @@ class Covid_19:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         self.time_format = self.data.config.time_format
-        
+
         if data.config.covid_ww_board_enabled or (not data.config.covid_ww_board_enabled and not data.config.covid_country_board_enabled and not data.config.covid_us_state_board_enabled and not data.config.covid_canada_board_enabled):
             try:
                 self.worldwide_data = self.data.covid19.ww
@@ -21,7 +21,7 @@ class Covid_19:
                 self.data.network_issues = False
                 for case in self.worldwide_data:
                     if case not in ("cases", "deaths", "recovered"):
-                        continue              
+                        continue
                     self.draw_count(case, self.worldwide_data[case],  self.last_update, "WW")
                     self.sleepEvent.wait(5)
             except ValueError as e:
@@ -32,7 +32,7 @@ class Covid_19:
 
         if data.config.covid_country_board_enabled:
             self.country = data.config.covid_country
-            count = 0 
+            count = 0
             for i in self.country:
                 try:
                     self.data.network_issues = False
@@ -48,7 +48,7 @@ class Covid_19:
                             self.sleepEvent.wait(3)
                         else:
                             self.draw_count(case, self.country_data[case],  self.last_update, self.country[count][0:3])
-                            self.sleepEvent.wait(3)                         
+                            self.sleepEvent.wait(3)
                 except ValueError as e:
                     print("NETWORK ERROR, COULD NOT GET NEW COVID 19 DATA: {}".format(e))
                     self.data.network_issues = True
@@ -57,7 +57,7 @@ class Covid_19:
         if data.config.covid_us_state_board_enabled:
             self.us_state = data.config.covid_us_state
             count = 0
-            for i in self.us_state: 
+            for i in self.us_state:
                 try:
                     self.data.network_issues = False
                     self.us_state_data = self.data.covid19.us_state_dict[self.us_state[count]]
