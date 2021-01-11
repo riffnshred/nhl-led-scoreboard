@@ -77,15 +77,15 @@ class MainRenderer:
                 self.data.refresh_data()
 
             except AttributeError as e:
-                debug.log(f"ERROR WHILE RENDERING: {e}")
-                debug.log("Refreshing data in a minute")
+                debug.info(f"ERROR WHILE RENDERING: {e}")
+                debug.info("Refreshing data in a minute")
                 self.boards.fallback(self.data, self.matrix, self.sleepEvent)
                 self.data.refresh_data()
 
 
     def __render_offday(self):
         while True:
-            debug.log('PING !!! Render off day')
+            debug.info('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 data.refresh.daily(self.data)
