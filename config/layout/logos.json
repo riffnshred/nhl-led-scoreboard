@@ -33,6 +33,206 @@
           "rotate": 0,
           "crop": [0, 0, 0, 0]
         }
+      },
+      "ANA": {
+        "home": {
+          "zoom": "80%",
+          "position": [-22, 3]
+        },
+        "away": {
+          "zoom": "80%",
+          "position": [7, 3]
+        }
+      },
+      "ARI": {
+        "home": {
+          "zoom": "100%",
+          "position": [-12, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [3, 0]
+        }
+      },
+      "BOS": {
+        "home": {
+          "zoom": "100%",
+          "position": [-3, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [3, 0]
+        }
+      },
+      "BUF": {
+        "home": {
+          "zoom": "100%",
+          "position": [-1, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [1, 0]
+        }
+      },
+      "CGY": {
+        "home": {
+          "zoom": "100%",
+          "position": [-16, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [5, 0]
+        }
+      },
+      "CAR": {
+        "home": {
+          "zoom": "100%",
+          "position": [-16, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [15, 0]
+        }
+      },
+      "CHI": {
+        "home": {
+          "zoom": "100%",
+          "position": [-4, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [20, 0]
+        }
+      },
+      "COL": {
+        "home": {
+          "zoom": "100%",
+          "position": [-5, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [5, 0]
+        }
+      },
+      "CBJ": {
+        "home": {
+          "zoom": "100%",
+          "position": [-13, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [10, 0]
+        }
+      },
+      "DAL": {
+        "home": {
+          "zoom": "100%",
+          "position": [-6, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [10, 0]
+        }
+      },
+      "DET": {
+        "home": {
+          "zoom": "100%",
+          "position": [-5, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [24, 0]
+        }
+      },
+      "EDM": {
+        "home": {
+          "zoom": "100%",
+          "position": [-5, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [5, 0]
+        }
+      },
+      "FLA": {
+        "home": {
+          "zoom": "100%",
+          "position": [-3, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [3, 0]
+        }
+      },
+      "LAK": {
+        "home": {
+          "zoom": "90%",
+          "position": [-1, 2]
+        },
+        "away": {
+          "zoom": "90%",
+          "position": [1, 2]
+        }
+      },
+      "MIN": {
+        "home": {
+          "zoom": "100%",
+          "position": [-20, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [13, 0]
+        }
+      },
+      "MTL": {
+        "home": {
+          "zoom": "90%",
+          "position": [-3, 2]
+        },
+        "away": {
+          "zoom": "90%",
+          "position": [3, 2]
+        }
+      },
+      "NSH": {
+        "home": {
+          "zoom": "85%",
+          "position": [-25, 3]
+        },
+        "away": {
+          "zoom": "85%",
+          "position": [8, 3]
+        }
+      },
+      "NYR": {
+        "home": {
+          "zoom": "90%",
+          "position": [-3, 2]
+        },
+        "away": {
+          "zoom": "90%",
+          "position": [3, 2]
+        }
+      },
+      "STL": {
+        "home": {
+          "zoom": "100%",
+          "position": [-5, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [20, 0]
+        }
+      },
+      "TOR": {
+        "home": {
+          "zoom": "100%",
+          "position": [-3, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [3, 0]
+        }
       }
     }
   }

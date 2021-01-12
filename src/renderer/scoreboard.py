@@ -19,7 +19,8 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.home_logo,
-            self.scoreboard.home_team.abbrev,
+            #self.scoreboard.home_team.abbrev,
+            "LAK",
             'scoreboard',
             'home'
         )
@@ -27,7 +28,8 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.away_logo,
-            self.scoreboard.away_team.abbrev,
+            #self.scoreboard.away_team.abbrev,
+            "NYR",
             'scoreboard',
             'away'
         )
@@ -43,8 +45,8 @@ class ScoreboardRenderer:
         
         #self.matrix.draw.polygon([(37,0), (91,0), (80,64), (48,64)], fill=(0,0,0))
         #Work in progress. testing gradients
-        #gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
-        #self.matrix.draw_image((64,0), gradient, align="center")
+        gradient = Image.open(get_file('assets/images/64x32_scoreboard_center_gradient.png'))
+        self.matrix.draw_image((32,0), gradient, align="center")
         
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()
@@ -74,9 +76,16 @@ class ScoreboardRenderer:
           self.layout.scheduled_time, 
           start_time
         )
+
+        # self.matrix.draw_text_layout(
+        #   self.layout.vs, 
+        #   'VS'
+        # )
+        #### TO DELETE
+        score = '{}-{}'.format(4, 8)
         self.matrix.draw_text_layout(
-          self.layout.vs, 
-          'VS'
+            self.layout.score,
+            score
         )
 
         self.matrix.render()
@@ -152,7 +161,7 @@ class ScoreboardRenderer:
             'TODAY'
         )
         self.matrix.draw_text_layout(
-            self.layout.relative_center_top,
+            self.layout.irregular_status,
             status
         )
         self.matrix.draw_text_layout(
