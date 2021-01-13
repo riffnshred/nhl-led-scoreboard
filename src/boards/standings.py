@@ -237,7 +237,6 @@ def draw_standing(data, name, records, img_height, width):
     row_height = 7
     top = row_height - 1  # For some reason, when drawing with PIL, the first row is not 0 but -1
     div_bg_color = team_colors.color("{}.primary".format(name))
-    print(div_bg_color)
     draw.rectangle((0,0,63,6), fill=(div_bg_color['r'], div_bg_color['g'], div_bg_color['b']))
     draw.text((1, 0), name, font=layout.font, fill=(0,0,0))
     row_pos += row_height

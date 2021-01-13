@@ -19,8 +19,7 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.home_logo,
-            #self.scoreboard.home_team.abbrev,
-            "LAK",
+            self.scoreboard.home_team.abbrev,
             'scoreboard',
             'home'
         )
@@ -28,8 +27,7 @@ class ScoreboardRenderer:
             self.matrix,
             data.config,
             self.layout.away_logo,
-            #self.scoreboard.away_team.abbrev,
-            "NYR",
+            self.scoreboard.away_team.abbrev,
             'scoreboard',
             'away'
         )
@@ -40,7 +38,9 @@ class ScoreboardRenderer:
         # bg_home = self.team_colors.color("{}.primary".format(self.scoreboard.home_team.id))
         # self.matrix.draw_rectangle((0,0), (64,64), (bg_away['r'],bg_away['g'],bg_away['b']))
         # self.matrix.draw_rectangle((64,0), (128,64), (bg_home['r'],bg_home['g'],bg_home['b']))
+        self.matrix.draw_rectangle((0,0), (32,32), (0,0,0))
         self.away_logo_renderer.render()
+        self.matrix.draw_rectangle((32,0), (64,32), (0,0,0))
         self.home_logo_renderer.render()
         
         #self.matrix.draw.polygon([(37,0), (91,0), (80,64), (48,64)], fill=(0,0,0))
@@ -77,16 +77,11 @@ class ScoreboardRenderer:
           start_time
         )
 
-        # self.matrix.draw_text_layout(
-        #   self.layout.vs, 
-        #   'VS'
-        # )
-        #### TO DELETE
-        score = '{}-{}'.format(4, 8)
         self.matrix.draw_text_layout(
-            self.layout.score,
-            score
+          self.layout.vs, 
+          'VS'
         )
+
 
         self.matrix.render()
 
