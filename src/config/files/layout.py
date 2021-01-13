@@ -3,14 +3,16 @@ from config.file import ConfigFile, JSONData
 class LayoutConfig:
   def __init__(self, size, fonts):
     self.layout = ConfigFile('config/layout/layout.json', size)
-    self.dynamic_layout = ConfigFile('config/layout/layout_{}x{}.json'.format(size[0], size[1]), size)
-    self.colors = ConfigFile('config/colors/layout.json')
-    self.fonts = fonts
-
+    self.dynamic_layout = ConfigFile('config/layout/layout_{}x{}.json'.format(size[0], size[1]), size, False)
     # Combine layout for current size with the base layout, overwriting any values found
     self.layout.combine(self.dynamic_layout)
 
     self.logo_config = ConfigFile('config/layout/logos.json', size)
+    self.dynamic_logo_config = ConfigFile('config/layout/logos_{}x{}.json'.format(size[0], size[1]), size, False)
+    self.logo_config.combine(self.dynamic_logo_config)
+
+    self.colors = ConfigFile('config/colors/layout.json')
+    self.fonts = fonts
 
   def get_board_layout(self, board):
     layouts = self.layout.data

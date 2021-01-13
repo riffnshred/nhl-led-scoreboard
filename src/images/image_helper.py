@@ -4,7 +4,6 @@ from io import BytesIO
 
 class ImageHelper:
   def image_from_svg(url):
-    print(url)
     out = BytesIO()
     cairosvg.svg2png(url=url, write_to=out)
     img = Image.open(out)
