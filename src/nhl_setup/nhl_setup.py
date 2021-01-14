@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.5.0"
+SCRIPT_VERSION = "1.5.1"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -51,7 +51,9 @@ class RGBValidator(Validator):
     def validate(self, document):
         r = r"(\d+),\s*(\d+),\s*(\d+)"
         #ok = regex.match('^(\d+),\s*(\d+),\s*(\d+)$', document.text)
-        ok = all(0 <= int(group) <= 255 for group in re.match(r, document.text).groups())
+        ok = False
+        if re.match(r,document.text) is not None:
+            ok = all(0 <= int(group) <= 255 for group in re.match(r, document.text).groups())
         if not ok:
             raise ValidationError(
                 message='Please enter a valid RGB tuple (r,g,b)',
@@ -545,7 +547,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions','christmas']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','covid_19','stanley_cup_champions','christmas']
 
         boards_selected = []
         board = None

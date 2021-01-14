@@ -3,9 +3,10 @@ from utils import round_normal
 import copy
 
 class ConfigFile:
-  def __init__(self, path, size=None):
+  def __init__(self, path, size=None, warn_if_missing=True):
     self.path = path
     self.size = size
+    self.warn_if_missing = warn_if_missing
 
     self.load()
 
@@ -16,7 +17,8 @@ class ConfigFile:
 
       self.data = JSONData(self.json, self.size)
     except:
-      print('Config file {} not found!'.format(self.path))
+      if (self.warn_if_missing):
+        print('Config file {} not found!'.format(self.path))
 
   def save(self):
     with open(self.path, 'w') as f:

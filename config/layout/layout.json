@@ -12,6 +12,17 @@
     }
   },
   "scoreboard": {
+    "center_top":{
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "relative_center_top": {
+      "position": [0, 2],
+      "relative": {
+        "to": "center_top",
+        "align": "center-bottom"
+      }
+    },
     "home_logo": {
       "position": [["50%", 15], 0],
       "align": "left"

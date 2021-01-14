@@ -227,7 +227,7 @@ def draw_standing(data, name, records, img_height, width):
     # Create a new data image.
     image = Image.new('RGB', (width, img_height))
     draw = ImageDraw.Draw(image)
-
+    team_colors = data.config.team_colors
     """
         Each record info is shown in a row of 7 pixel high. The initial row start at pixel 0 (top screen). For each
         team's record we add an other row and increment the row position by the height of a row plus the
@@ -236,8 +236,9 @@ def draw_standing(data, name, records, img_height, width):
     row_pos = 0
     row_height = 7
     top = row_height - 1  # For some reason, when drawing with PIL, the first row is not 0 but -1
-
-    draw.text((1, 0), name, font=layout.font)
+    div_bg_color = team_colors.color("{}.primary".format(name))
+    draw.rectangle((0,0,63,6), fill=(div_bg_color['r'], div_bg_color['g'], div_bg_color['b']))
+    draw.text((1, 0), name, font=layout.font, fill=(0,0,0))
     row_pos += row_height
 
     for team in records:
@@ -247,7 +248,6 @@ def draw_standing(data, name, records, img_height, width):
         wins = team['leagueRecord']['wins']
         losses = team['leagueRecord']['losses']
         ot = team['leagueRecord']['ot']
-        team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))

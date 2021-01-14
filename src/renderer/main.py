@@ -31,8 +31,7 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                self._draw_goal_animation()
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
+                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
                 self.matrix.render()
                 data.refresh.daily(self.data)
                 sleep(15)
@@ -78,15 +77,15 @@ class MainRenderer:
                 self.data.refresh_data()
 
             except AttributeError as e:
-                debug.log(f"ERROR WHILE RENDERING: {e}")
-                debug.log("Refreshing data in a minute")
+                debug.info(f"ERROR WHILE RENDERING: {e}")
+                debug.info("Refreshing data in a minute")
                 self.boards.fallback(self.data, self.matrix, self.sleepEvent)
                 self.data.refresh_data()
 
 
     def __render_offday(self):
         while True:
-            debug.log('PING !!! Render off day')
+            debug.info('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 data.refresh.daily(self.data)

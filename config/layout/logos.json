@@ -17,31 +17,21 @@
         "position": [0, 0],
         "flip": 0,
         "rotate": 0,
-        "crop": [0, 0, 0, 0]
-      },
-      "TOR": {
+        "crop": [0, 0, 0, 0],
+
         "home": {
-          "zoom": "90%",
-          "position": [-2, 0]
+          "zoom": "100%",
+          "position": [0, 0],
+          "flip": 0,
+          "rotate": 0,
+          "crop": [0, 0, 0, 0]
         },
         "away": {
-          "position": [2, 0]
-        }
-      },
-      "ANA": {
-        "home": {
-          "zoom": "70%",
-          "position": [-5, "15%"]
-        },
-        "away": {
-          "zoom": "80%",
-          "position": [5, "10%"]
-        }
-      },
-      "PIT": {
-        "away": {
-          "zoom": "80%",
-          "position": [5, "10%"]
+          "zoom": "100%",
+          "position": [0, 0],
+          "flip": 0,
+          "rotate": 0,
+          "crop": [0, 0, 0, 0]
         }
       }
     }

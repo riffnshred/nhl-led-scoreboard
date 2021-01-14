@@ -6,12 +6,13 @@ import errno
 from utils import round_normal
 
 PATH = 'assets/logos'
-LOGO_NAME = 'light'
-LOGO_URL = 'assets/logos/svg/{}/{}_{}.svg'
+LOGO_URL = 'https://assets.nhle.com/logos/nhl/svg/{}_{}.svg'
 
 class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team_abbrev, board, gameLocation=None):
         self.matrix = matrix
+
+        self.logo_name = config.config.logos.get_team_logo(team_abbrev)
         self.layout = config.config.layout.get_scoreboard_logo(
             team_abbrev, 
             board, 
@@ -31,7 +32,7 @@ class LogoRenderer:
     def get_path(self, team_abbrev):
         size = self.get_size()
         return get_file('{}/{}/{}/{}x{}.png'.format(
-            PATH, team_abbrev, LOGO_NAME, 
+            PATH, team_abbrev, self.logo_name, 
             size[0], size[1]
         ))
 
@@ -67,7 +68,7 @@ class LogoRenderer:
                     raise
                 
         self.logo = ImageHelper.image_from_svg(
-            LOGO_URL.format(LOGO_NAME,team_abbrev, LOGO_NAME)
+            LOGO_URL.format(team_abbrev, self.logo_name)
         )
 
         self.logo.thumbnail(self.get_size())

@@ -133,7 +133,8 @@ def standings():
     #wildcard = data_wildcard['records']
     for division in range(len(divisions)):
         team_records = divisions[division]['teamRecords']
-        division_name = divisions[division]['division']['name']
+        division_full_name = divisions[division]['division']['name'].split()
+        division_name = division_full_name[-1]
         #conference_name = divisions[division]['conference']['name']
 
         for team in range(len(team_records)):

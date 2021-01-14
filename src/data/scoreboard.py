@@ -93,10 +93,10 @@ class Scoreboard:
             # If the request to the API fails,return an empty list of goal plays.
             # This method is there to prevent the goal board to display the wrong info
             for play in away_scoring_plays:
-                players = get_goal_players(play['players'], data)
-                if players:
+                try:
+                    players = get_goal_players(play['players'], data)
                     away_goal_plays.append(Goal(play, players))
-                else:
+                except KeyError:
                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                     away_goal_plays = []
                     break
@@ -104,10 +104,10 @@ class Scoreboard:
             # If the request to the API fails,return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info
             for play in home_scoring_plays:
-                players = get_goal_players(play['players'], data)
-                if players:
+                try:
+                    players = get_goal_players(play['players'], data)
                     home_goal_plays.append(Goal(play,players))
-                else:
+                except KeyError:
                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                     home_goal_plays = []
                     break

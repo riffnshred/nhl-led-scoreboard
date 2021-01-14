@@ -68,13 +68,14 @@ class screenSaver:
                 show_gif = False
             else:
                 # Fade to black
-
-                while b >=0:
-                    self.matrix.set_brightness(self.brightness)
-                    self.brightness = b
-                    self.matrix.render()
-                    b -= 1
-                    sleep(0.1)
+                # If user doesn't use dimmer or brightness on command line
+                if b is not None:
+                    while b >=0:
+                        self.matrix.set_brightness(self.brightness)
+                        self.brightness = b
+                        self.matrix.render()
+                        b -= 1
+                        sleep(0.1)
 
                 self.matrix.clear()
                 self.matrix.draw.rectangle([0,0, self.matrix.width, self.matrix.height], fill=(0,0,0))

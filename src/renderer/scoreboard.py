@@ -10,6 +10,7 @@ class ScoreboardRenderer:
         self.layout = self.data.config.config.layout.get_board_layout('scoreboard')
         self.font = self.data.config.layout.font
         self.font_large = self.data.config.layout.font_large
+        self.team_colors = data.config.team_colors
         self.scoreboard = scoreboard
         self.matrix = matrix
         self.show_SOG = shot_on_goal
@@ -33,9 +34,20 @@ class ScoreboardRenderer:
 
     def render(self):
         self.matrix.clear()
+        # bg_away = self.team_colors.color("{}.primary".format(self.scoreboard.away_team.id))
+        # bg_home = self.team_colors.color("{}.primary".format(self.scoreboard.home_team.id))
+        # self.matrix.draw_rectangle((0,0), (64,64), (bg_away['r'],bg_away['g'],bg_away['b']))
+        # self.matrix.draw_rectangle((64,0), (128,64), (bg_home['r'],bg_home['g'],bg_home['b']))
+        self.matrix.draw_rectangle((0,0), (32,32), (0,0,0))
         self.away_logo_renderer.render()
+        self.matrix.draw_rectangle((32,0), (64,32), (0,0,0))
         self.home_logo_renderer.render()
-
+        
+        #self.matrix.draw.polygon([(37,0), (91,0), (80,64), (48,64)], fill=(0,0,0))
+        #Work in progress. testing gradients
+        gradient = Image.open(get_file('assets/images/64x32_scoreboard_center_gradient.png'))
+        self.matrix.draw_image((32,0), gradient, align="center")
+        
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()
 
@@ -64,10 +76,12 @@ class ScoreboardRenderer:
           self.layout.scheduled_time, 
           start_time
         )
+
         self.matrix.draw_text_layout(
           self.layout.vs, 
           'VS'
         )
+
 
         self.matrix.render()
 
@@ -108,14 +122,10 @@ class ScoreboardRenderer:
         result = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
         date = convert_date_format(self.scoreboard.date)
-        
-        #Work in progress. testing gradients
-        #gradient = Image.open(get_file('assets/images/scoreboard_center_gradient.png'))
-        #self.matrix.draw_image((64,0), gradient, align="center")
 
         # Draw the info
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date, 
+            self.layout.center_top, 
             date
         )
 
@@ -142,7 +152,7 @@ class ScoreboardRenderer:
 
         # Draw the text on the Data image.
         self.matrix.draw_text_layout(
-            self.layout.scheduled_date,
+            self.layout.center_top,
             'TODAY'
         )
         self.matrix.draw_text_layout(

@@ -131,7 +131,7 @@ dmypy.json
 .pyre/
 
 # ignore generated logos
-assets/logos/*/light/*
+assets/logos/*
 
 !assets/logos/svg/light/*
 #nhl-led-scoreboard
