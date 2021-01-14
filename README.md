@@ -189,8 +189,8 @@ This installation process might take some time because it will install all the d
 ```
 git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
 cd nhl-led-scoreboard/
-sudo chmod +x scripts/install.sh
-sudo ./scripts/install.sh
+chmod +x scripts/install.sh
+./scripts/install.sh
 ```
 
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
@@ -201,12 +201,13 @@ If it's a first install of the software, there is no config.json only a config.j
 
 
 #### Updating your software.
-`git reset --hard`
-`git checkout master`
-`git pull`
-`sudo chmod +x scripts/install.sh`
-`sudo ./scripts/install.sh`.
-
+```
+git reset --hard
+git checkout master
+git pull
+chmod +x scripts/install.sh
+./scripts/install.sh
+```
 
 If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
