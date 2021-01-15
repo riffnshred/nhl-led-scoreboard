@@ -26,7 +26,7 @@ echo "Running rgbmatrix installation..."
 make build-python PYTHON=$(which python3)
 sudo make install-python PYTHON=$(which python3)
 cd bindings
-sudo pip3 install -e python/
+sudo pip3 install --ignore-installed -e python/
 
 cd ../../../
 
