@@ -63,6 +63,11 @@ def run():
 
     # Print some basic info on startup
     debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
+    
+    if data.latlng is not None:
+        debug.info(data.latlng_msg)
+    else:
+        debug.error("Unable to find your location.")
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
