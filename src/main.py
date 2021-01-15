@@ -81,6 +81,9 @@ def run():
 
     # Any tasks that are scheduled go below this line
 
+    # Make sure we have a valid location for the data.latlng as the geocode can return a None
+    # If there is no valid location, skip the weather boards
+    
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
