@@ -297,11 +297,11 @@
       "TOR": {
         "home": {
           "zoom": "100%",
-          "position": [-4, 0]
+          "position": [-6, 0]
         },
         "away": {
           "zoom": "100%",
-          "position": [4, 0]
+          "position": [6, 0]
         }
       },
       "VAN": {
@@ -332,6 +332,16 @@
         "away": {
           "zoom": "120%",
           "position": [40, -3]
+        },
+        "alt":{
+          "home": {
+            "zoom": "110%",
+            "position": [-11, -3]
+          },
+          "away": {
+            "zoom": "110%",
+            "position": [10, -3]
+          }
         }
       },
       "WPG": {

@@ -32,7 +32,6 @@ class MainRenderer:
             debug.info("Rendering in Testing Mode")
             while True:
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
-                self.matrix.render()
                 data.refresh.daily(self.data)
                 sleep(15)
                 debug.info("Testing Mode Refresh")
@@ -292,7 +291,7 @@ class MainRenderer:
         debug.info('Score by team: ' + name)
         preferred_team_only = self.data.config.goal_anim_pref_team_only
         # Get the list of gif's under the preferred and opposing directory
-        all_gifs = glob.glob("assets/animations/goal/all/*.gif")
+        all_gifs = glob.glob("assets/animations/goal/general/*.gif")
         preferred_gifs = glob.glob("assets/animations/goal/preferred/*.gif")
         opposing_gifs = glob.glob("assets/animations/goal/opposing/*.gif")
 

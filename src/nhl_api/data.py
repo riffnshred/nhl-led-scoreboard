@@ -10,7 +10,7 @@ import debug
 
 BASE_URL = "http://statsapi.web.nhl.com/api/v1/"
 SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
-TEAM_URL = '{0}/teams?expand=team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
+TEAM_URL = '{0}/teams?expand=team.roster,team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
 PLAYER_URL = '{0}people/{1}'
 OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
 STATUS_URL = BASE_URL + 'gameStatus'

@@ -6,17 +6,19 @@ import errno
 from utils import round_normal
 
 PATH = 'assets/logos'
+LOCAL_LOGO_URL = PATH+'/_local/{}_{}.svg'
 LOGO_URL = 'https://assets.nhle.com/logos/nhl/svg/{}_{}.svg'
 
 class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team_abbrev, board, gameLocation=None):
         self.matrix = matrix
 
-        self.logo_name = config.config.logos.get_team_logo(team_abbrev)
+        self.logo_variant = config.config.logos.get_team_logo(team_abbrev)
         self.layout = config.config.layout.get_scoreboard_logo(
             team_abbrev, 
             board, 
-            gameLocation
+            gameLocation,
+            self.logo_variant
         )
         
         self.element_layout = element_layout
@@ -32,7 +34,7 @@ class LogoRenderer:
     def get_path(self, team_abbrev):
         size = self.get_size()
         return get_file('{}/{}/{}/{}x{}.png'.format(
-            PATH, team_abbrev, self.logo_name, 
+            PATH, team_abbrev, self.logo_variant, 
             size[0], size[1]
         ))
 
@@ -66,10 +68,14 @@ class LogoRenderer:
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
-                
-        self.logo = ImageHelper.image_from_svg(
-            LOGO_URL.format(team_abbrev, self.logo_name)
-        )
+        try:        
+            self.logo = ImageHelper.image_from_svg(
+                LOGO_URL.format(team_abbrev, self.logo_variant)
+            )
+        except:
+            self.logo = ImageHelper.image_from_svg(
+                LOCAL_LOGO_URL.format(team_abbrev, self.logo_variant)
+            )
 
         self.logo.thumbnail(self.get_size())
         self.logo.save(filename)
