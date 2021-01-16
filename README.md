@@ -197,7 +197,7 @@ chmod +x scripts/install.sh
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 ### *Important Step after installation.*
-If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
+If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Follow the steps in the [Configuration](#configuration) section of this documentation.
 
 
 #### Updating your software.
