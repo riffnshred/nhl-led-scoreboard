@@ -6,6 +6,7 @@ from boards.boards import Boards
 from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.seriesticker import Seriesticker
+from boards.team_summary import TeamSummary
 import data.refresh
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
@@ -31,16 +32,16 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
-                data.refresh.daily(self.data)
+                #ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
+                #data.refresh.daily(self.data)
+                TeamSummary(self.data, self.matrix, self.sleepEvent).render()
                 sleep(15)
                 debug.info("Testing Mode Refresh")
 
         if self.data.config.test_goal_animation:
             debug.info("Rendering in Testing Mode")
             while True:
-                self._draw_goal_animation()
-                self.matrix.render()
+                self._draw_goal_animation(id=9)
                 sleep(1)
 
         while self.data.network_issues:
