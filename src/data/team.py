@@ -6,11 +6,12 @@ class Team:
 
 
 class TeamScore(Team):
-    def __init__(self, id, abbrev, name, goals=0, sog=0, powerplay=False, num_skaters=0, pulled_goalie=False, goal_plays = []):
+    def __init__(self, id, abbrev, name, goals=0, sog=0, penalties = [], powerplay=False, num_skaters=0, pulled_goalie=False, goal_plays = []):
         super().__init__(id, abbrev, name)
         self.goals = goals
         self.goal_plays = goal_plays
         self.shot_on_goal = sog
+        self.penalties = penalties
         self.powerplay = powerplay
         self.num_skaters = num_skaters
         self.pulled_goalie = pulled_goalie

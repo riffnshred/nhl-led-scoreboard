@@ -15,25 +15,34 @@ import nhl_api
         This will affect how the Data module init and refresh games. Need to test figure what this change will affect.
 """
 
-def filter_scoring_plays(plays, away_id, home_id):
+def filter_plays(plays, away_id, home_id):
     """
         Take a list of scoring plays and split them into their cooresponding team.
         return two list, one for each team.
     """
     all_plays = plays.allPlays
-    scoring_plays_id = plays.scoringPlays
     scoring_plays = []
-    away = []
-    home = []
+    penalty_plays = []
+    away_goals = []
+    away_penalties  = []
+    home_goals = []
+    home_penalties = []
 
     # Filter the scoring plays out of all the plays
-    for i in scoring_plays_id:
+    for i in plays.scoringPlays:
         scoring_plays.append(all_plays[i])
+    
+    # Filter the Penalty plays out of all the plays
+    for i in plays.penaltyPlays:
+        penalty_plays.append(all_plays[i])
 
-    away = [ x for x in scoring_plays if x['team']['id'] == away_id]
-    home = [ x for x in scoring_plays if x['team']['id'] == home_id]
+    away_goals = [ x for x in scoring_plays if x['team']['id'] == away_id]
+    home_goals = [ x for x in scoring_plays if x['team']['id'] == home_id]
+    away_penalties = [ x for x in penalty_plays if x['team']['id'] == away_id]
+    home_penalties = [ x for x in penalty_plays if x['team']['id'] == home_id]
 
-    return away, home
+    return away_goals, away_penalties, home_goals, home_penalties
+
 
 def get_goal_players(players_list, roster, opposing_roster):
     """
@@ -61,6 +70,18 @@ def get_goal_players(players_list, roster, opposing_roster):
 
     return {"scorer":scorer, "assists":assists, "goalie":goalie}
 
+def get_penalty_players(players_list, roster):
+    
+    for p in players_list:
+        if p["playerType"] == "PenaltyOn":
+            playerId = p['player']['id']
+            try:
+                return roster[playerId]
+            except KeyError:
+                return {}
+
+    return {}
+
 class Scoreboard:
     def __init__(self, overview, data):
         time_format = data.config.time_format
@@ -77,12 +98,16 @@ class Scoreboard:
         away_goal_plays = []
         home_goal_plays = []
 
+        away_penalties = []
+        home_penalties = []
+
         if hasattr(overview,"plays"):
             plays = overview.plays
-            away_scoring_plays, home_scoring_plays = filter_scoring_plays(plays,away.team.id,home.team.id)
+            away_scoring_plays, away_penalty_play, home_scoring_plays, home_penalty_play = filter_plays(plays,away.team.id,home.team.id)
+            
             
             # Get the Away Goal details
-            # If the request to the API fails,return an empty list of goal plays.
+            # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info
             for play in away_scoring_plays:
                 try:
@@ -93,7 +118,7 @@ class Scoreboard:
                     away_goal_plays = []
                     break
             # Get the Home Goal details
-            # If the request to the API fails,return an empty list of goal plays
+            # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info
             for play in home_scoring_plays:
                 try:
@@ -104,9 +129,27 @@ class Scoreboard:
                     home_goal_plays = []
                     break
 
-        self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away.powerPlay,
+            for play in away_penalty_play:
+                try:
+                    player = get_penalty_players(play['players'], self.away_roster)
+                    away_penalties.append(Penalty(play,player))
+                except KeyError:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    away_penalties = []
+                    break
+
+            for play in home_penalty_play:
+                try:
+                    player = get_penalty_players(play['players'], self.home_roster)
+                    home_penalties.append(Penalty(play,player))
+                except KeyError:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    home_penalties = []
+                    break
+
+        self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away_penalties, away.powerPlay,
                             away.numSkaters, away.goaliePulled, away_goal_plays)
-        self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home.powerPlay,
+        self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home_penalties, home.powerPlay,
                             home.numSkaters, home.goaliePulled, home_goal_plays)
 
         self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")
@@ -146,9 +189,9 @@ class Goal:
 class Penalty:
     def __init__(self, play, player):
         self.player = player
-        self.penaltyType = play['result']['Holding']
+        self.penaltyType = play['result']['secondaryType']
         self.severity = play['result']['penaltySeverity']
         self.penaltyMinutes = str(play['result']['penaltyMinutes'])
-        self.team = play['team']['id']
+        self.team_id = play['team']['id']
         self.period = play['about']['ordinalNum']
         self.periodTime = play['about']['periodTime']

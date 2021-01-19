@@ -11,6 +11,7 @@ import data.refresh
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
+from renderer.penalty import PenaltyRenderer
 from utils import get_file
 import random
 import glob
@@ -34,14 +35,17 @@ class MainRenderer:
             while True:
                 #ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
                 #data.refresh.daily(self.data)
-                TeamSummary(self.data, self.matrix, self.sleepEvent).render()
-                sleep(15)
+                self.data.refresh_overview()
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self._draw_event_animation("penalty", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
+                PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                sleep(1)
                 debug.info("Testing Mode Refresh")
 
         if self.data.config.test_goal_animation:
             debug.info("Rendering in Testing Mode")
             while True:
-                self._draw_goal_animation(id=9)
+                self._draw_event_animation("goal",id=9)
                 sleep(1)
 
         while self.data.network_issues:
@@ -100,8 +104,11 @@ class MainRenderer:
         self.scoreboard = Scoreboard(self.data.overview, self.data)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
-        # Cache to save goals and allow all the details to be collected on the API.
+        self.away_penalties = self.scoreboard.away_team.penalties
+        self.home_penalties = self.scoreboard.home_team.penalties
+        # Cache to save goals and penalties and allow all the details to be collected on the API.
         self.goal_team_cache = []
+        self.penalties_team_cache = []
         self.sleepEvent.clear()
 
         while not self.sleepEvent.is_set():
@@ -142,6 +149,7 @@ class MainRenderer:
                 debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
                 self.check_new_goals()
+                self.check_new_penalty()
                 self.__render_live(self.scoreboard)
                 if self.scoreboard.intermission:
                     debug.info("Main event is in Intermission")
@@ -149,6 +157,7 @@ class MainRenderer:
                     self.draw_end_period_indicator()
                     self.sleepEvent.wait(self.refresh_rate)
                     self.check_new_goals()
+                    self.check_new_penalty()
                     self.boards._intermission(self.data, self.matrix,self.sleepEvent)
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
@@ -238,7 +247,7 @@ class MainRenderer:
         debug.info("Showing Irregular")
         self.matrix.clear()
         ScoreboardRenderer(self.data, self.matrix, scoreboard).render()
-
+    
 
     def check_new_goals(self):
         debug.log("Check new goal")
@@ -276,7 +285,7 @@ class MainRenderer:
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
-            self._draw_goal_animation(away_id, away_name)
+            self._draw_event_animation("goal", away_id, away_name)
 
 
         if home_score < home_goals:
@@ -285,18 +294,63 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
-            self._draw_goal_animation(home_id, home_name)
+            self._draw_event_animation("goal", home_id, home_name)
             
-    
-    def _draw_goal_animation(self, id=14, name="test"):
-        debug.info('Score by team: ' + name)
+    def check_new_penalty(self):
+        debug.log("Check new penalty")
+
+        #pref_team_only = self.data.config.penalty_anim_pref_team_only
+        away_id = self.scoreboard.away_team.id
+        away_name = self.scoreboard.away_team.name
+        away_data_penalties = self.scoreboard.away_team.penalties
+        a_penalties = self.away_penalties
+        home_id = self.scoreboard.home_team.id
+        home_name = self.scoreboard.home_team.name
+        home_data_penalties = self.scoreboard.home_team.penalties
+        h_penalties = self.home_penalties
+        # Display goal details that are cached if there is any
+        # GoalRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+        if self.penalties_team_cache:
+            try:
+                while self.penalties_team_cache:
+                    # create a goal object first to see if there are any missing data
+                    if self.penalties_team_cache[0] == "away":
+                        PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                    else:
+                        PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.home_team).render()
+                    # Remove the first cached goal
+                    self.penalties_team_cache.pop(0)
+            except IndexError:
+                debug.error("The Penalty object failed to get the goal details, trying on the next data refresh")
+
+        if len(a_penalties) < len(away_data_penalties):
+            self.away_penalties = away_data_penalties
+            self.penalties_team_cache.append("away")
+            #if away_id not in self.data.pref_teams: and pref_team_only:
+            #    return
+            # run the goal animation
+            self._draw_event_animation("penalty", away_id, away_name)
+
+        if len(h_penalties) < len(home_data_penalties):
+            self.home_penalties = home_data_penalties
+            self.penalties_team_cache.append("home")
+            #if home_id not in self.data.pref_teams: #and pref_team_only:
+            #    return
+            # run the goal animation
+            self._draw_event_animation("penalty", home_id, home_name)
+
+    def _draw_event_animation(self, event, id=14, name="test"):
         preferred_team_only = self.data.config.goal_anim_pref_team_only
         # Get the list of gif's under the preferred and opposing directory
-        all_gifs = glob.glob("assets/animations/goal/general/*.gif")
-        preferred_gifs = glob.glob("assets/animations/goal/preferred/*.gif")
-        opposing_gifs = glob.glob("assets/animations/goal/opposing/*.gif")
+        ANIMATIONS = "assets/animations/{}".format(event)
+        all_gifs = glob.glob("/general/*.gif".format(ANIMATIONS))
+        preferred_gifs = glob.glob("/preferred/*.gif".format(ANIMATIONS))
+        opposing_gifs = glob.glob("/opposing/*.gif".format(ANIMATIONS))
 
-        filename = "assets/animations/goal_light_animation.gif"
+        if event == "goal":
+            filename = "{}/goal_light_animation.gif".format(ANIMATIONS)
+        elif event == "penalty":
+            filename = "{}/penalty_animation.gif".format(ANIMATIONS)
 
         # Use alternate animations if there is any in the respective folder
         if all_gifs:
@@ -314,22 +368,25 @@ class MainRenderer:
             filename = random.choice(preferred_gifs)
             debug.info("Preferred animation is: " + filename)
 
+        self.play_gif(filename)
 
-
-        im = Image.open(get_file(filename))
+    def play_gif(self, file):
+        im = Image.open(get_file(file))
 
         # Set the frame index to 0
         frame_nub = 0
-
+        numloop = 5
         self.matrix.clear()
 
         # Go through the frames
         x = 0
-        while x is not 5:
+        while x is not numloop:
             try:
                 im.seek(frame_nub)
             except EOFError:
                 x += 1
+                if x == numloop:
+                    return
                 frame_nub = 0
                 im.seek(frame_nub)
 
@@ -338,6 +395,7 @@ class MainRenderer:
 
             frame_nub += 1
             sleep(0.1)
+
 
     def draw_end_period_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""

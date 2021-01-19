@@ -191,6 +191,7 @@ class Data:
             today -= timedelta(days=1)
 
         return today.year, today.month, today.day
+        #return 2021, 1, 16
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
