@@ -11,7 +11,6 @@ from api.covid19.data import Data as covid19_data
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
-import data.refresh
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
@@ -213,7 +212,9 @@ class Data:
 
             # Reset flag
             self.all_pref_games_final = False
-
+            
+            self.refresh_daily()
+            
             return True
         else:
             debug.info("It is not a new day")
@@ -515,3 +516,17 @@ class Data:
 
         # Update games for today
         self.refresh_games()
+
+    def refresh_daily(self):
+        print('refreshing data')
+        # Update team's data
+        self.get_teams_info()
+
+        # Get the teams info
+        self.teams = self.get_teams()
+
+        # Update standings
+        self.refresh_standings()
+
+        # Fetch the playoff data
+        self.refresh_playoff()

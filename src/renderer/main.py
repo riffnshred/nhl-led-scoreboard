@@ -7,7 +7,6 @@ from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.seriesticker import Seriesticker
 from boards.team_summary import TeamSummary
-import data.refresh
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -34,11 +33,11 @@ class MainRenderer:
             debug.info("Rendering in Testing Mode")
             while True:
                 #ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
-                #data.refresh.daily(self.data)
+                refresh.daily(self.data)
                 self.data.refresh_overview()
-                self.scoreboard = Scoreboard(self.data.overview, self.data)
-                self._draw_event_animation("penalty", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
-                PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                #self.scoreboard = Scoreboard(self.data.overview, self.data)
+                #self._draw_event_animation("penalty", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
+                #PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
                 sleep(1)
                 debug.info("Testing Mode Refresh")
 
@@ -92,7 +91,6 @@ class MainRenderer:
             debug.info('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
-                data.refresh.daily(self.data)
                 return
             self.data.refresh_data()
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
@@ -394,7 +392,7 @@ class MainRenderer:
             self.matrix.render()
 
             frame_nub += 1
-            sleep(0.1)
+            self.sleepEvent.wait(0.1)
 
 
     def draw_end_period_indicator(self):
