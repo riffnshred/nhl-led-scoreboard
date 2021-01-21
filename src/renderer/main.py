@@ -45,7 +45,6 @@ class MainRenderer:
             debug.info("Rendering in Testing Mode")
             while True:
                 self._draw_event_animation("goal",id=9)
-                sleep(1)
 
         while self.data.network_issues:
             Clock(self.data, self.matrix, self.sleepEvent, duration=60)
@@ -146,16 +145,18 @@ class MainRenderer:
                 self.data.screensaver_livegame = True
                 debug.info("Game is Live")
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
-                self.check_new_goals()
+
                 self.check_new_penalty()
+                self.check_new_goals()
                 self.__render_live(self.scoreboard)
                 if self.scoreboard.intermission:
                     debug.info("Main event is in Intermission")
                     # Show Boards for Intermission
                     self.draw_end_period_indicator()
                     self.sleepEvent.wait(self.refresh_rate)
-                    self.check_new_goals()
+
                     self.check_new_penalty()
+                    self.check_new_goals()
                     self.boards._intermission(self.data, self.matrix,self.sleepEvent)
                 else:
                     self.sleepEvent.wait(self.refresh_rate)

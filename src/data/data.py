@@ -60,6 +60,17 @@ def prioritize_pref_series(series, teams):
     cleaned_series_list = list(filter(None, list(dict.fromkeys(ordered_series_list))))
     return cleaned_series_list
 
+def find_earliest_game(games):
+    date_list = []
+    for g in games:
+        date_list.append(datetime.strptime(
+        g.game_date, '%Y-%m-%dT%H:%M:%SZ'))
+    
+    print(date_list.index(min(date_list)))
+    
+    return date_list.index(min(date_list))
+
+
 
 class Data:
     def __init__(self, config):
@@ -198,6 +209,14 @@ class Data:
     def refresh_current_date(self):
         self.year, self.month, self.day = self.__parse_today()
 
+    def other_games(self):
+        game_list = []
+        for g in self.games:
+            if g.game_id != self.current_game_id:
+                game_list.append(g)
+
+        return game_list
+
     def _is_new_day(self):
         debug.info('Checking for new day')
         self.refresh_current_date()
@@ -264,16 +283,21 @@ class Data:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
 
+                    # Set the main game (top prefered team of prefered teams)
+                    self.main_game = self.pref_games[0]
+                    
+                    self.current_game_index = find_earliest_game(self.pref_games)
+
+                    # Set the current game (the earliest start)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
 
-
                     # Remove the current game id (Main event) form the list of games.
-                    if self.config.live_mode:
-                        game_list = []
-                        for game in self.games:
-                            if game.game_id != self.current_game_id:
-                                game_list.append(game)
-                        self.games = game_list
+                    # if self.config.live_mode:
+                    #     game_list = []
+                    #     for game in self.games:
+                    #         if game.game_id != self.current_game_id:
+                    #             game_list.append(game)
+                    #     self.games = game_list
 
                 self.network_issues = False
                 break
@@ -324,6 +348,18 @@ class Data:
             Get a all the data of the main event.
         :return:
         """
+        if self.main_game.game_id is not self.current_game_id:
+            #startTime = datetime.strptime(self.main_game.game_date, '%Y-%m-%dT%H:%M:%SZ')
+            startTime = datetime.strptime("2021-01-21T21:52:00Z", '%Y-%m-%dT%H:%M:%SZ')
+
+            print(startTime)
+            print(datetime.utcnow())
+            now = datetime.now()
+            if startTime <= datetime.utcnow():
+                print('team change')
+                self.current_game_id = self.main_game.game_id
+
+
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:

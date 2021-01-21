@@ -20,7 +20,7 @@ class Scoreticker:
 
     def render(self):
         self.index = 0
-        self.games = self.data.games
+        self.games = self.data.other_games()
         self.num_games = len(self.games)
         try:
             while not self.sleepEvent.is_set():
