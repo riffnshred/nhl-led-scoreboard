@@ -349,12 +349,7 @@ class Data:
         :return:
         """
         if self.main_game.game_id is not self.current_game_id:
-            #startTime = datetime.strptime(self.main_game.game_date, '%Y-%m-%dT%H:%M:%SZ')
-            startTime = datetime.strptime("2021-01-21T21:52:00Z", '%Y-%m-%dT%H:%M:%SZ')
-
-            print(startTime)
-            print(datetime.utcnow())
-            now = datetime.now()
+            startTime = datetime.strptime(self.main_game.game_date, '%Y-%m-%dT%H:%M:%SZ')
             if startTime <= datetime.utcnow():
                 print('team change')
                 self.current_game_id = self.main_game.game_id
