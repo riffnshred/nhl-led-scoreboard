@@ -2,8 +2,13 @@ from PIL import Image
 from utils import get_file
 from images.image_helper import ImageHelper
 import os
+import pwd
+import grp
 import errno
 from utils import round_normal
+
+uid = int(os.environ['SUDO_UID'])
+gid = int(os.environ['SUDO_GID'])
 
 PATH = 'assets/logos'
 LOGO_URL = 'https://assets.nhle.com/logos/nhl/svg/{}_{}.svg'
@@ -63,6 +68,7 @@ class LogoRenderer:
         if not os.path.exists(os.path.dirname(filename)):
             try:
                 os.makedirs(os.path.dirname(filename))
+                self.change_ownership(team_abbrev)
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
@@ -73,6 +79,14 @@ class LogoRenderer:
 
         self.logo.thumbnail(self.get_size())
         self.logo.save(filename)
+
+    def change_ownership(self,team_abbrev):
+        path = os.path.dirname("{}/{}".format(PATH, team_abbrev))
+        for root, dirs, files in os.walk(path):  
+            for d in dirs:  
+                os.chown(os.path.join(root, d), uid, gid)
+            for f in files:
+                os.chown(os.path.join(root, f), uid, gid)
 
     def render(self):
         self.matrix.draw_image_layout(
