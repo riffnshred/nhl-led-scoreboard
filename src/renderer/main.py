@@ -6,7 +6,7 @@ from boards.boards import Boards
 from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.seriesticker import Seriesticker
-import data.refresh
+
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -33,7 +33,6 @@ class MainRenderer:
             while True:
                 ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
                 self.matrix.render()
-                data.refresh.daily(self.data)
                 sleep(15)
                 debug.info("Testing Mode Refresh")
 
@@ -88,7 +87,6 @@ class MainRenderer:
             debug.info('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
-                data.refresh.daily(self.data)
                 return
             self.data.refresh_data()
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
