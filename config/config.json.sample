@@ -88,14 +88,14 @@
 			"owm_apikey": "",
 			"update_freq": 5,
 			"show_on_clock": true,
-			"forecast_enabled": true,
+			"forecast_enabled": false,
 			"forecast_days": 3,
 			"forecast_update": 1
 		},
         "wxalert": {
             "alert_feed": "EC",
             "update_freq": 5,
-            "show_alerts": true,
+            "show_alerts": false,
 			"nws_show_expire": false,
             "alert_title": true,
             "scroll_alert": true,
@@ -105,12 +105,12 @@
 	},
 	"sbio": {
 		"screensaver": {
-            "enabled": true,
+            "enabled": false,
 			"animations": true,
             "start": "22:00",
             "stop": "22:05",
             "data_updates": false,
-			"motionsensor": true,
+			"motionsensor": false,
             "pin": 24,
             "delay": 30
         },
