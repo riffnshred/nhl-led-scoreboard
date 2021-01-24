@@ -11,7 +11,6 @@ from api.covid19.data import Data as covid19_data
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
-import data.refresh
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
