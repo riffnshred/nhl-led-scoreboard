@@ -7,8 +7,8 @@ import grp
 import errno
 from utils import round_normal
 
-uid = int(os.environ['SUDO_UID'])
-gid = int(os.environ['SUDO_GID'])
+uid = int(os.stat("./VERSION").st_uid)
+gid = int(os.stat("./VERSION").st_uid)
 
 PATH = 'assets/logos'
 LOGO_URL = 'https://assets.nhle.com/logos/nhl/svg/{}_{}.svg'
