@@ -67,8 +67,9 @@ Since version V1.0.0 you need python 3.3 and up.
     - [Boards](#boards)
     - [Dimmer](#dimmer-1)
   - [Usage](#usage)
-    - [Method 1 Using Supervisor](#method-1-using-supervisor)
-    - [Method 2 Using Terminal Multiplexer](#method-2-using-terminal-multiplexer)
+    - [Method 1 Using Crontab](#method-1-using-crontab)
+    - [Method 2 Using Supervisor](#method-2-using-supervisor)
+    - [Method 3 Using Terminal Multiplexer](#method-3-using-terminal-multiplexer)
     - [Terminal Mode](#terminal-mode)
   - [Shout-out](#shout-out)
   - [Licensing](#licensing)
@@ -429,10 +430,39 @@ sudo python3 src/main.py --led-gpio-mapping=adafruit-hat --led-brightness=60 --l
 Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the 
 python script stopped.
 
-There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
+There are multiple ways to run the Scoreboard on it's own. I'm going to cover 3 ways. One that's a bit more hand's on, and the other will run the
 board automatically (and even restart in case of a crash).
 
-### Method 1 Using Supervisor
+### Method 1 Using Crontab
+
+![Crontab](https://linux.die.net/man/5/crontab) is a service in Linux that can be used to automatically start scripts or
+commands at boot or at specified intervals. Crontab uses a text file to specify what commands to run and when to run them.
+In particular, crontab offers an `@reboot` option to execute a command after the system boots up.  This can be used to
+automatically start the scoreboard after you power on the Pi.
+
+Crontab comes pre-installed with Raspbian Buster Lite.  To edit it, run:
+
+```
+crontab -e
+```
+
+If you've installed the nhl-led-scoreboard as the default pi user, you can cut/paste the following into a new line in the
+crontab file:
+
+```
+@reboot sleep 5; cd /home/pi/nhl-led-scoreboard/; sudo python3 src/main.py --led-gpio-mapping=adafruit-hat --led-brightness=60 --led-slowdown-gpio=2 &
+```
+
+The `sleep 5` give the Pi enough time to finish its startup before starting the scoreboard.  Once saved, you can view the settings of crontab by running:
+
+```
+crontab -l
+```
+
+Now, anytime you reboot or power cycle the Pi, cron will automatically start the scoreboard.
+
+
+### Method 2 Using Supervisor
 ![supervisor](assets/images/supervisor.PNG)
 
 [Supervisor](http://supervisord.org/) is a Process Control System. Once installed and configured it will run the scoreboard for you and restart it
@@ -485,7 +515,7 @@ You should be up and running now. From the supervison dashboard, you can control
 To troubleshoot the scoreboard using supervision, you can click on the name of the process to see the latest log of the scoreboard. This is really useful to know what the scoreboard
 is doing in case of a problem.
 
-### Method 2 Using Terminal Multiplexer
+### Method 3 Using Terminal Multiplexer
 To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/).
 This allows you to run the scoreboard manually in a terminal and 
 To install Screen, run the fallowing in your terminal.
