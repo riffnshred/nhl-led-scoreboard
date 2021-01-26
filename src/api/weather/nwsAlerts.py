@@ -2,8 +2,11 @@ from noaa_sdk import noaa
 import debug
 import datetime
 import json
+import requests
 from time import sleep
 
+BASE_URL = 'https://api.weather.gov/'
+REQUEST_TIMEOUT = 5
 
 # Code borrowed from https://github.com/dcshoecomp/noaa_alerts
 # A sensor created for Home Assistant.
@@ -59,17 +62,28 @@ class nwsWxAlerts(object):
         
         
         params={'point': '{0},{1}'.format(self.lat,self.lon)}
+        self.network_issues = False
         
-        #while True:
+        #See if the api.weather.gov site is available, if not throw error code and jump out of loop
         try:
-            debug.info("Checking NWS weather alerts")
-            nws = noaa.NOAA().alerts(active=1, **params)
-            self.network_issues = False
-        except Exception as err:
-            debug.error(err)
+            r = requests.get(BASE_URL, timeout=REQUEST_TIMEOUT)
+            debug.info("NWS alerts {} returned status code: {}".format(BASE_URL,r.status_code))
+        except requests.exceptions as e:
+            #raise ValueError(e)
+            debug.error(e)
             self.network_issues = True
             pass
-        #print (nws)
+
+        if not self.network_issues:
+            try:
+                debug.info("Checking NWS weather alerts")
+                nws = noaa.NOAA().alerts(active=1, **params)
+                #debug.info(nws)
+            except Exception as err:
+                debug.error(err)
+                self.network_issues = True
+                pass
+            #print (nws)
         if not self.network_issues:
             nwsalerts = []
 

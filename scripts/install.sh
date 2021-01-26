@@ -4,6 +4,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.."
 
+# Install utilities  for command line utilities
+sudo apt install jq pastebinit neofetch
+
 # Install the latest version of pip3
 sudo apt-get update
 sudo apt install git python3-pip
