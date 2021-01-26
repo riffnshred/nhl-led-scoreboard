@@ -41,6 +41,8 @@ def prioritize_pref_games(games, teams):
     produced by the'map' function.
 
     return the cleaned game list. lemony fresh!!!
+
+    TODO: For V2, this needs to be changed to return game list in different order, instead of a single way. Having that handled by different methods is the way.... this is the way !!!!
     """
 
     ordered_game_list = map(lambda team: next(
@@ -60,16 +62,12 @@ def prioritize_pref_series(series, teams):
     cleaned_series_list = list(filter(None, list(dict.fromkeys(ordered_series_list))))
     return cleaned_series_list
 
-def find_earliest_game(games):
-    date_list = []
-    for g in games:
-        date_list.append(datetime.strptime(
-        g.game_date, '%Y-%m-%dT%H:%M:%SZ'))
-    
-    print(date_list.index(min(date_list)))
-    
-    return date_list.index(min(date_list))
+def game_by_schedule(games):
+    """
+    By default, the api return the list of games ordered by start time, the first ones to finish will be put at the top. This function just fix make sure the list stay ordred by the start
+    """
 
+    return sorted(games, key=lambda x: g.game_date)
 
 
 class Data:
@@ -201,22 +199,14 @@ class Data:
         elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
-        return today.year, today.month, today.day
-        #return 2021, 1, 16
+        #return today.year, today.month, today.day
+        return 2021, 1, 26
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
 
     def refresh_current_date(self):
         self.year, self.month, self.day = self.__parse_today()
-
-    def other_games(self):
-        game_list = []
-        for g in self.games:
-            if g.game_id != self.current_game_id:
-                game_list.append(g)
-
-        return game_list
 
     def _is_new_day(self):
         debug.info('Checking for new day')
@@ -284,21 +274,8 @@ class Data:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
 
-                    # Set the main game (top prefered team of prefered teams)
-                    self.main_game = self.pref_games[0]
-                    
-                    self.current_game_index = find_earliest_game(self.pref_games)
-
                     # Set the current game (the earliest start)
                     self.current_game_id = self.pref_games[self.current_game_index].game_id
-
-                    # Remove the current game id (Main event) form the list of games.
-                    # if self.config.live_mode:
-                    #     game_list = []
-                    #     for game in self.games:
-                    #         if game.game_id != self.current_game_id:
-                    #             game_list.append(game)
-                    #     self.games = game_list
 
                 self.network_issues = False
                 break
@@ -317,13 +294,33 @@ class Data:
                 self.all_pref_games_final = True
                 self.refresh_games()
 
+    def check_game_priority(self):
+        """
+            16:00
+            [7:00, 15:00, 7:00, 8:00, 10:00]
+        """
+        for g in self.pref_games:
+            if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow() and g.status != "Final":
+                print('game change to higher priority')
+                self.current_game_id = g.game_id
+                return
+
+    def other_games(self):
+        if not self.is_pref_team_offday():
+            game_list = []
+            for g in self.games:
+                if g.game_id != self.current_game_id:
+                    game_list.append(g)
+
+            return game_list
+        return self.games
+
     def check_all_pref_games_final(self):
         for game in self.pref_games:
             if game.status != "Final":
                 return
 
         self.all_pref_games_final = True
-
 
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
@@ -349,13 +346,6 @@ class Data:
             Get a all the data of the main event.
         :return:
         """
-        if self.main_game.game_id is not self.current_game_id:
-            startTime = datetime.strptime(self.main_game.game_date, '%Y-%m-%dT%H:%M:%SZ')
-            if startTime <= datetime.utcnow():
-                print('team change')
-                self.current_game_id = self.main_game.game_id
-
-
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
