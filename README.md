@@ -472,7 +472,7 @@ autostart=true
 autorestart=true
 ```
 Than fill in the missing information. For the `command`, insert the command that worked for you when you tested the scoreboard. If
-you used the same as mine then this line should look like, `command=sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2`.
+you used the same as mine then this line should look like, `command=python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2`.
 Lastly, for the `directory`, insert the location of the scoreboard directory. It should be something like `/home/{user}/nhl-led-scoreboard`. If you use the base account "pi" then
 the `{user}` will be `pi`.
 
