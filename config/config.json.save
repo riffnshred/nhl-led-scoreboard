@@ -27,7 +27,7 @@
             "standings",
             "scoreticker",
             "clock"
-s        ],
+        ],
         "intermission": [
             "scoreticker",
             "team_summary"
