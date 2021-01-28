@@ -4,6 +4,7 @@ import datetime
 import json
 import requests
 from time import sleep
+from api.weather.wx_utils import get_csv
 
 BASE_URL = 'https://api.weather.gov/'
 REQUEST_TIMEOUT = 5
@@ -24,6 +25,8 @@ class nwsWxAlerts(object):
         self.lat = self.data.latlng[0]
         self.lon = self.data.latlng[1]
         self.network_issues = False
+        
+        self.nws_colors = get_csv("nws_colors.csv")
 
         #Testing
         #self.lat = 36.50
@@ -120,8 +123,19 @@ class nwsWxAlerts(object):
                     wx_alert_time = warn_datetime.strftime("%m/%d %H:%M")
                 else:
                     wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
-                
+                #debug.info(_attributes['event'])
                 #Strip out the string at end of string for the title
+                #Loop through the csv with the event and match to get the color
+                
+                for row in range(len(self.nws_colors)):
+                    if self.nws_colors[row]["Event"] == _attributes['event']:
+                        colorstr = self.nws_colors[row]['Color']
+                        wx_alertcolor = tuple(map(int, colorstr.split(',')))
+                        break
+                    else:
+                        wx_alertcolor = (0,0,0)
+                
+                debug.info("NWS Alert ({}) has color: {}".format(_attributes['event'],wx_alertcolor))
                 if "Warning" in _attributes['event']:
                     wx_alert_title = _attributes['event'][:-(len(" Warning"))] 
                     wx_type = "warning"
@@ -139,7 +153,7 @@ class nwsWxAlerts(object):
                 # Only create an alert for Immediate and Expected?
 
                 if wx_type != "statement":
-                    self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity']]
+                    self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity'],wx_alertcolor]
                     # Only interrupt the first time
                     if self.weather_alert == 0 and self.data.wx_updated:
                         self.data.wx_alert_interrupt = True

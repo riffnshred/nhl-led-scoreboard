@@ -139,16 +139,19 @@ class Clock:
                 # Draw Alert box (warning,watch,advisory)
                 #self.matrix.draw.rectangle([60, 25, self.matrix.width, 32], fill=(255,0,0)) # warning
                 if self.data.wx_alerts[1] == "warning":
-                    self.matrix.draw.rectangle([self.matrix.width -7, self.matrix.height -7 , self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
+                    if self.data.config.wxalert_alert_feed.lower() == "nws":
+                        self.matrix.draw.rectangle([self.matrix.width -7, self.matrix.height -7 , self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # warning
+                    else:
+                        self.matrix.draw.rectangle([self.matrix.width -7, self.matrix.height -7 , self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
                 elif self.data.wx_alerts[1] == "watch":
-                    if self.data.wx_units[5] == "us":
-                        self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height -7 , self.matrix.width, self.matrix.height], fill=(255,165,0)) # watch
+                    if self.data.config.wxalert_alert_feed.lower() == "nws":
+                        self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height -7 , self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # watch
                     else:
                         self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height - 7, self.matrix.width, self.matrix.height], fill=(255,255,0)) # watch canada
                 else:
                     if self.data.wx_alerts[1] == "advisory":
-                        if self.data.wx_units[5] == "us":
-                            self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height - 7 , self.matrix.width, self.matrix.height], fill=(255,255,0)) #advisory
+                        if self.data.config.wxalert_alert_feed.lower() == "nws":
+                            self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height - 7 , self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) #advisory
                         else:
                             self.matrix.draw.rectangle([self.matrix.width - 7, self.matrix.height - 7, self.matrix.width, self.matrix.height], fill=(169,169,169)) #advisory canada
 
