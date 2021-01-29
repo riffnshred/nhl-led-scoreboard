@@ -42,6 +42,10 @@
   "wx_alert_sm": {
     "file": "press2p.ttf",
     "size": 9
+  },
+  "wx_alert_lg": {
+    "file": "VGA.ttf",
+    "size": 16
   }
 
 }
