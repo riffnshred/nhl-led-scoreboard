@@ -35,14 +35,14 @@
             "examples": [
                 "DEBUG", 
                 "INFO", 
-                "WARN", 
+                "WARNING", 
                 "ERROR", 
                 "CRITICAL"
             ],
             "enum": [
                 "DEBUG", 
                 "INFO", 
-                "WARN", 
+                "WARNING", 
                 "ERROR", 
                 "CRITICAL"
             ]
@@ -291,7 +291,11 @@
                         ],
                         "enum": [
                             "scoreticker",
+							"seriesticker",
                             "standings",
+							"team_summary",
+							"standley_cup_champions",
+							"christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -325,7 +329,11 @@
                         ],
                         "enum": [
                             "scoreticker",
+							"seriesticker",
                             "standings",
+							"team_summary",
+							"standley_cup_champions",
+							"christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -355,7 +363,11 @@
                         ],
                         "enum": [
                             "scoreticker",
+							"seriesticker",
                             "standings",
+							"team_summary",
+							"standley_cup_champions",
+							"christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -385,7 +397,11 @@
                         ],
                         "enum": [
                             "scoreticker",
+							"seriesticker",
                             "standings",
+							"team_summary",
+							"standley_cup_champions",
+							"christmas",
                             "clock",
                             "covid19",
                             "weather"
