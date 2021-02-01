@@ -96,9 +96,15 @@ class TeamSummary:
                     im_height
                 )
                 self.matrix.clear()
+                gradient = Image.open(get_file('assets/images/64x32_scoreboard_center_gradient.png'))
 
+                #   For 128x64 use the bigger gradient image.
+                if self.matrix.height == 64:
+                    gradient = Image.open(get_file('assets/images/128x64_scoreboard_center_gradient.png'))
+                
+                
                 logo_renderer.render()
-
+                self.matrix.draw_image((25,0), gradient, align="center")
                 self.matrix.draw_image_layout(
                     self.layout.info,
                     image,
@@ -118,6 +124,7 @@ class TeamSummary:
                 self.matrix.clear()
 
                 logo_renderer.render()
+                self.matrix.draw_image((25,0), gradient, align="center")
                 self.matrix.draw_image_layout(
                 self.layout.info,
                 image,
@@ -136,10 +143,18 @@ class TeamSummary:
             self.sleepEvent.wait(5)
 
     def draw_team_summary(self, stats, prev_game_scoreboard, next_game_scoreboard, bg_color, txt_color, im_height):
-        image = Image.new('RGB', (41, im_height))
+
+        
+
+        image = Image.new('RGB', (37, im_height))
         draw = ImageDraw.Draw(image)
 
+
+
         draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+
+        
+        
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if stats:

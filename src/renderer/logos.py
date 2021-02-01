@@ -10,9 +10,12 @@ from utils import round_normal
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
+
 PATH = 'assets/logos'
 LOCAL_LOGO_URL = PATH+'/_local/{}_{}.svg'
 LOGO_URL = 'https://assets.nhle.com/logos/nhl/svg/{}_{}.svg'
+
+
 
 class LogoRenderer:
     def __init__(self, matrix, config, element_layout, team_abbrev, board, gameLocation=None):
