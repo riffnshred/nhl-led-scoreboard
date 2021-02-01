@@ -32,12 +32,12 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                #ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[1], self.data)).render()
-                refresh.daily(self.data)
+                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
                 self.data.refresh_overview()
                 #self.scoreboard = Scoreboard(self.data.overview, self.data)
                 #self._draw_event_animation("penalty", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
                 #PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                #TeamSummary(self.data, self.matrix, self.sleepEvent).render()
                 sleep(1)
                 debug.info("Testing Mode Refresh")
 
@@ -91,7 +91,6 @@ class MainRenderer:
         debug.info("Showing Game")
         # Initialize the scoreboard. get the current status at startup
         self.data.refresh_overview()
-        print("hello")
         self.scoreboard = Scoreboard(self.data.overview, self.data)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
@@ -206,7 +205,6 @@ class MainRenderer:
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
             self.data.refresh_data()
-            self.data.check_game_priority()
             self.data.refresh_overview()
             self.scoreboard = Scoreboard(self.data.overview, self.data)
             if self.data.network_issues:
@@ -304,7 +302,6 @@ class MainRenderer:
         home_data_penalties = self.scoreboard.home_team.penalties
         h_penalties = self.home_penalties
         # Display goal details that are cached if there is any
-        # GoalRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
         if self.penalties_team_cache:
             try:
                 while self.penalties_team_cache:
@@ -316,7 +313,9 @@ class MainRenderer:
                     # Remove the first cached goal
                     self.penalties_team_cache.pop(0)
             except IndexError:
-                debug.error("The Penalty object failed to get the goal details, trying on the next data refresh")
+                debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
+            except AttributeError:
+                debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
 
         if len(a_penalties) < len(away_data_penalties):
             self.away_penalties = away_data_penalties

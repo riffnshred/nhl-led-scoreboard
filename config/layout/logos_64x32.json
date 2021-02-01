@@ -7,11 +7,11 @@
       },
       "ANA": {
         "zoom": "80%",
-        "position": [3, 3]
+        "position": [0, 3]
       },
       "ARI": {
         "zoom": "120%",
-        "position": [1, -2]
+        "position": [1, 0]
       },
       "BOS": {
         "zoom": "120%",
@@ -59,7 +59,7 @@
       },
       "MIN": {
         "zoom": "120%",
-        "position": [15, -2]
+        "position": [15, 0]
       },
       "MTL": {
         "zoom": "110%",
@@ -70,8 +70,8 @@
         "position": [2, 0]
       },
       "NSH": {
-        "zoom": "100%",
-        "position": [2, 0]
+        "zoom": "95%",
+        "position": [0, 1]
       },
       "NYI": {
         "zoom": "120%",
@@ -362,7 +362,7 @@
         },
         "away": {
           "zoom": "100%",
-          "position": [3, 0]
+          "position": [7, 0]
         }
       },
       "PHI": {

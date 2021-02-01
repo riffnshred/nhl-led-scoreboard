@@ -146,6 +146,9 @@ class Data:
         # Get each team's data from the teams info
         self.get_teams_info()
 
+        # Get the status from the API
+        self.get_status()
+
         # Get favorite team's id
         self.pref_teams = self.get_pref_teams_id()
 
@@ -153,7 +156,7 @@ class Data:
         self.refresh_current_date()
 
         # Set the pointer to the first game in the list of Pref Games
-        self.current_game_index = 0
+        #self.current_game_index = 0
 
         # Fetch the games for today
         self.refresh_games()
@@ -163,9 +166,6 @@ class Data:
 
         # Today's date
         self.today = self.date()
-
-        # Get the status from the API
-        self.get_status()
 
         # Get refresh standings
         self.refresh_standings()
@@ -199,8 +199,8 @@ class Data:
         elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
-        #return today.year, today.month, today.day
-        return 2021, 1, 26
+        return today.year, today.month, today.day
+        #return 2021, 1, 26
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
@@ -215,7 +215,7 @@ class Data:
             debug.info('It is a new day, refreshing Data')
 
             # Set the pointer to the first game in the list of Pref Games
-            self.current_game_index = 0
+            #self.current_game_index = 0
 
             # Today's date
             self.today = self.date()
@@ -274,8 +274,7 @@ class Data:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
 
-                    # Set the current game (the earliest start)
-                    self.current_game_id = self.pref_games[self.current_game_index].game_id
+                    self.check_game_priority()
 
                 self.network_issues = False
                 break
@@ -290,20 +289,44 @@ class Data:
             except IndexError as error_message:
                 debug.error(error_message)
                 debug.info("All preferred games are Final, showing the top preferred game")
-                self.current_game_index = 0
+                #self.current_game_index = 0
                 self.all_pref_games_final = True
                 self.refresh_games()
 
     def check_game_priority(self):
         """
-            16:00
-            [7:00, 15:00, 7:00, 8:00, 10:00]
+
+            Function that handle the live game.
+
+            Show the earliest game until the most prefered game start. 
+            
+            Always show the top team when the other games are final.
+            
+            If a higher game in priority starts, move to that one. 
+
+            6:00 Final
+            [7:00, *3:00, 7:00, 8:00, 10:00]
+
+            9:45 (first game finished)
+            [7:00, 7:00, 8:00, 10:00]
         """
+
+        self.current_game_id = self.pref_games[0].game_id
+        earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
+        print('checking highest priority game')
         for g in self.pref_games:
-            if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow() and g.status != "Final":
-                print('game change to higher priority')
-                self.current_game_id = g.game_id
-                return
+            if not self.status.is_final(g.status):
+                # If the game started.
+                if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
+                    print('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
+                    self.current_game_id = g.game_id
+                    return
+                # If the game has not started but is ealier then the previous set game
+                if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
+                    earliest_start_time = datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ')
+                    self.current_game_id = g.game_id
+                    print('Showing earliest game. {} vs {}'.format(g.away_team_name, g.home_team_name))
+                    earliest = True
 
     def other_games(self):
         if not self.is_pref_team_offday():
@@ -322,11 +345,13 @@ class Data:
 
         self.all_pref_games_final = True
 
+    
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
     def get_status(self):
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
+                print("getting status")
                 self.status = Status()
                 break
 
@@ -363,21 +388,25 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
-    def _next_game(self):
-        """
-        function to show the next game of in the "pref_games" list.
 
-        Check the status of the current preferred game and if it's Final or between periods rotate to the next game on
-        the game list.
+    """
+        TODO: TO DELETE if the new check_game_priority() function works withtout a fuzz
+    """
+    # def _next_game(self):
+    #     """
+    #     function to show the next game of in the "pref_games" list.
 
-        :return:
-        """
-        if self.all_pref_games_final:
-            return False
+    #     Check the status of the current preferred game and if it's Final or between periods rotate to the next game on
+    #     the game list.
 
-        self.current_game_index += 1
-        self.refresh_games()
-        return True
+    #     :return:
+    #     """
+    #     if self.all_pref_games_final:
+    #         return False
+
+    #     self.current_game_index += 1
+    #     self.refresh_games()
+    #     return True
 
     #
     # Standings
@@ -541,11 +570,11 @@ class Data:
 
     def refresh_daily(self):
         print('refreshing data')
-        # Update team's data
-        self.get_teams_info()
-
         # Get the teams info
         self.teams = self.get_teams()
+        
+        # Update team's data
+        self.get_teams_info()
 
         # Update standings
         self.refresh_standings()
