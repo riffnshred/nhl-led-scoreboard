@@ -180,9 +180,6 @@ class MainRenderer:
                 self.__render_postgame(sbrenderer)
 
                 self.sleepEvent.wait(self.refresh_rate)
-                if self.data._next_game():
-                    debug.info("moving to the next preferred game")
-                    return
                 if not self.goal_team_cache:
                     self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
