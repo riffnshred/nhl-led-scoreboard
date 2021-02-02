@@ -233,7 +233,7 @@ class MainRenderer:
         sbrenderer.render()
         self.alternate_data_counter += 1
 
-    def __render_irregular(self, sbrenderers):
+    def __render_irregular(self, sbrenderer):
         debug.info("Showing Irregular")
         self.matrix.clear()
         sbrenderer.render()
