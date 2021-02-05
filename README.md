@@ -197,7 +197,7 @@ chmod +x scripts/install.sh
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
 ### *Important Step after installation.*
-If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
+If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Follow the steps in the [Configuration](#configuration) section of this documentation.
 
 
 #### Updating your software.
@@ -211,6 +211,14 @@ chmod +x scripts/install.sh
 
 If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
+#### Removing/uninstalling the software
+Sometimes, the only way to fix the issues after an update is to delete and reinstall. From the nhl-led-scoreboard folder, run these commands
+```
+cd
+sudo rm -R nhl-led-scoreboard
+```
+
+Than run the installation commands above.
 
 ## Testing and Optimization
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part. 

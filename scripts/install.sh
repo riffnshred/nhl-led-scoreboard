@@ -4,6 +4,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.."
 
+# Install utilities for command line scripts
+sudo apt install jq pastebinit neofetch
+
 # Install the latest version of pip3
 sudo apt-get update
 sudo apt install git python3-pip
@@ -48,7 +51,7 @@ sudo apt-get install python3-numpy
 sudo apt-get install libatlas3-base
 sudo pip3 install env-canada==0.0.35
 sudo pip3 install --upgrade pyowm
-sudo pip3 install noaa_sdk fastjsonschema
+sudo pip3 install --upgrade noaa_sdk fastjsonschema
 sudo apt-get install libatlas-base-dev
 
 # For update checker

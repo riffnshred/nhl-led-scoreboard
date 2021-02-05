@@ -12,6 +12,7 @@ from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
 
+
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
 
@@ -219,6 +220,9 @@ class Data:
 
             # Today's date
             self.today = self.date()
+
+            # Refresh general data.
+            self.refresh_daily()
 
             # Reset flag
             self.all_pref_games_final = False
