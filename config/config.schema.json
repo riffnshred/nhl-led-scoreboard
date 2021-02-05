@@ -5,7 +5,7 @@
     "title": "NHL LED Scoreboard configuration",
     "description": "Configuration that controls the NHL LED scoreboard rgb matrix application",
     "default": {},
-    "additionalProperties": false,
+    "additionalProperties": true,
     "required": [
         "debug",
         "loglevel",
@@ -80,7 +80,7 @@
                     }
                 }
             ],
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": [
                 "time_format",
                 "end_of_day",
@@ -214,7 +214,7 @@
                             "pref_team_only": true
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "pref_team_only"
                     ],
@@ -258,7 +258,7 @@
                     ]
                 }
             ],
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": [
                 "off_day",
                 "scheduled",
@@ -449,7 +449,7 @@
                     }
                 }
             ],
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": [
                 "scoreticker",
                 "standings",
@@ -470,7 +470,7 @@
                             "rotation_rate": 5
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "preferred_teams_only",
                         "rotation_rate"
@@ -510,7 +510,7 @@
                             "rotation_rate": 5
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "preferred_teams_only",
                         "rotation_rate"
@@ -552,7 +552,7 @@
                             "preferred_standings_only": true
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "preferred_standings_only",
                         "standing_type",
@@ -633,7 +633,7 @@
                             "flash_seconds": true
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "duration",
                         "hide_indicator",
@@ -728,7 +728,7 @@
                             "canada_enabled": false
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "worldwide_enabled",
                         "country_enabled",
@@ -871,7 +871,7 @@
                             "forecast_update": 1
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "enabled",
                         "view",
@@ -1016,7 +1016,7 @@
                             "show_alerts": true
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "alert_feed",
                         "update_freq",
@@ -1158,7 +1158,7 @@
                     }
                 }
             ],
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": [
                 "screensaver",
                 "dimmer",
@@ -1183,7 +1183,7 @@
                                 "delay": 30
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "enabled",
                         "animations",
@@ -1296,7 +1296,7 @@
                             "offset": 90
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "enabled",
                         "source",
@@ -1444,7 +1444,7 @@
                             "poweroff_override_process": ""
                         }
                     ],
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                         "enabled",
                         "bonnet",
