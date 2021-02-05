@@ -84,6 +84,51 @@
       }
     }
   },
+  "penalty":{
+    "team_name":{
+      "position": [1, 9]
+    },
+    "hashtag_dots":{
+      "position": [2, 0],
+      "align": "left",
+      "relative": {
+        "to": "team_name",
+        "align": "right"
+      } 
+    },
+    "jersey_number":{
+      "position": [9, 0],
+      "align": "left",
+      "relative": {
+        "to": "team_name",
+        "align": "right"
+      } 
+    },
+
+    "last_name":{
+      "position": [0, 7],
+      "relative": {
+        "to": "team_name",
+        "align": "bottom"
+      } 
+    },
+    "minutes":{
+      "position": [0, 6],
+      "font": "medium_2",
+      "relative": {
+        "to": "last_name",
+        "align": "bottom"
+      } 
+    },
+    "severity":{
+      "position": [2, 0],
+      "relative": {
+        "to": "minutes",
+        "align": "right"
+      } 
+    }
+    
+  },
   "scoreticker": {
     "indicator_dots": {
       "position": ["50%", ["100%", -1]],

@@ -15,3 +15,4 @@ regex==2020.4.4
 RPi.GPIO==0.7.0
 APScheduler==3.6.3
 lastversion==1.1.6
+nameparser==1.0.6
