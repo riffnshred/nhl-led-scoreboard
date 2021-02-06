@@ -290,6 +290,8 @@
                             "weather"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -328,6 +330,8 @@
                             "scoreticker"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -362,6 +366,8 @@
                             "clock"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -396,6 +402,8 @@
                             "scoreticker"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
