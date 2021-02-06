@@ -82,54 +82,49 @@ Since version V1.0.0 you need python 3.3 and up.
 ## Time and data accuracy
 The scoreboard refreshes the data at a faster rate (15 seconds by default, don't go faster than 10). This does not change the fact that the data from the API is refreshed every minute. The faster refresh rate allows catching the new data from the API faster.
 
-Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV broadcast is different depending on where you are in relation to the game's location. This also means that you will see the goal animation before it happens on TV. I'm working on this issue and looking to find a solution to implement a delay.
+Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The delay between the actual game and the TV broadcast is different depending on where you are in relation to the game's location. This also means that you will see the goal animation before it happens on TV sometimes. I'm working on this issue and looking to find a solution to implement a delay at some point. 
 
-Also, it might happen the data shown on board might be wrong for a short time, even goals. That's because the API is drunk. If you see data that might be wrong, compare it to the nhl.com and see if it's different.
+Also, it might happen the data shown on board might be wrong for a short time, even goals. That is because the API is drunk. If you see data that might be wrong, compare it to the nhl.com and see if it's different.
 
-  
 
 ## Installation
 
 ### Hardware and Assembly
 Please refer to the [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need to order and build your scoreboard.  
 
-**IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet. They have a great tutorial on how to install both of them on they website. Fallow these steps until **STEP 5** https://learn.adafruit.com/adafruit-rgb-matrix-bonnet-for-raspberry-pi/driving-matrices
+**IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet. They have a great tutorial on how to install both of them on their website. Follow these steps until **STEP 5** to assemble your setup. https://learn.adafruit.com/adafruit-rgb-matrix-bonnet-for-raspberry-pi/driving-matrices
 
 If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
 
 ### Software Installation
 
-#### Raspbian Buster Lite
+#### Step 1 -  Raspberry Pi OS Lite
 
 To be sure that you have the best performance possible, this project requires Raspberry Pi OS Lite.
 
 This version does not have a GUI which allows the Pi to dedicate as much resource as possible to the scoreboard.
 
+
+![scoreboard demo](assets/images/raspberrypi_OS_lite.png)
+
   
 
-![scoreboard demo](assets/images/raspbian_buster_lite.png)
-
-  
-
-Follow these instructions to install Raspbian Buster Lite on your Raspberry Pi and once you are up and running comeback to
+Follow these instructions to install Raspberry Pi OS Lite on your Raspberry Pi and once you are up and running comeback to
 
 this page.
-
   
 
 [Raspbian Buster Lite Installation](https://medium.com/@danidudas/install-raspbian-jessie-lite-and-setup-wi-fi-without-access-to-command-line-or-using-the-network-97f065af722e)
 
-  
-  
 
-#### Time Zones
+#### Step 2 - Time Zones
 
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
   
 
-#### Intalling Git
+#### Step 3 - Installing Git
 
 You will need to install Git on your raspberry pi in order to download the software. To do so, run this command.
 
@@ -137,7 +132,7 @@ You will need to install Git on your raspberry pi in order to download the softw
 
   
 
-#### Installing the NHL scoreboard software
+#### Step 4 - Installing the NHL scoreboard software
 
 This installation process might take some time because it will install all the dependencies listed below.
 
@@ -163,37 +158,38 @@ chmod +x scripts/install.sh
 
   
 
-### *Important Step after installation.*
+### Step 5 - Configuring your scoreboard.
+
+**note** Since V1.1.2, you won't need to reconfigure your board everytime you update, **UNLESS** we add a major feature or we make a major update. There is 2 way to configure you board:
+
+
+#### Using the nhl_setup app (recommended)
+
+![nhl setup](assets/images/nhl_setup.png)
+
+  
+
+From the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
+
+  
+
+**New with v1.5.0**
+
+You can now edit your current file instead of creating a new one.
+
+  
+
+#### Configuring manualy.
+
+If you have no issue working with json files in a prompt, you can still configure manualy.
+
+FIRST, you will need to make a copy of the config.json.sample and rename it config.json. Then open it and modify the options.
 
 If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Fallow the steps in the [Configuration](#configuration) section of this documentation.
 
-  
-  
+ 
 
-#### Updating your software.
-
-```
-
-git reset --hard
-
-git checkout master
-
-git pull
-
-chmod +x scripts/install.sh
-
-./scripts/install.sh
-
-```
-
-  
-
-If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
-
-  
-  
-
-## Testing and Optimization
+### Step 6 - Testing and Optimization 
 
 If you have been using a Led matrix on a raspberry pi before and know how to run it properly skip this part.
 
@@ -339,35 +335,6 @@ MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 ```
 
   
-
-## Configuration
-
-Since V1.1.2, you won't need to reconfigure your board everytime you update, **UNLESS** we add a major feature or we make a major update. There is 2 way to configure you board:
-
-  
-
-#### Using the nhl_setup app (recommended)
-
-![nhl setup](assets/images/nhl_setup.png)
-
-  
-
-From the root of the `nhl-led-scoreboard`, run this command: `./nhl_setup`. Please take a look at the documentation here: [src/nhl_setup/README.md](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/nhl_setup)
-
-  
-
-**New with v1.5.0**
-
-You can now edit your current file instead of creating a new one.
-
-  
-
-#### Configuring manualy.
-
-If you have no issue working with json files in a prompt, you can still configure manualy.
-
-FIRST, you will need to make a copy of the config.json.sample and rename it config.json. Then open it and modify the options.
-
   
 
 ### Modes
@@ -775,7 +742,24 @@ Note:
 * If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
 
   
-  
+## Updating your software.
+
+```
+
+git reset --hard
+
+git checkout master
+
+git pull
+
+chmod +x scripts/install.sh
+
+./scripts/install.sh
+
+```
+
+If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
+
 
 ## Shout-out
 
