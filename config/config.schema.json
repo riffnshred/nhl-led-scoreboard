@@ -606,7 +606,11 @@
                                 "central",
                                 "pacific", 
                                 "atlanic", 
-                                "metropolitan"
+                                "metropolitan",
+                                "north",
+                                "west",
+                                "south",
+                                "east"
                             ]
                         },
                         "conference": {
