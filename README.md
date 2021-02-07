@@ -612,10 +612,17 @@ and add those two lines at the bottom of the file.
 ```
 
 [inet_http_server]
-
 port=*:9001
 
+[unix_http_server]
+file=/var/run/supervisor.sock   ; (the path to the socket file)
+chmod=0770                       ; sockef file mode (default 0700)
+chown=pi:pi
+
 ```
+**Note:** if you use a different user then the default `pi` user, replace the `chown=pi:pi` with your own by filling this line with your user info
+`chown:<username>:<group name>`
+
 
 Close and save the file.
 

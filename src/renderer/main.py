@@ -366,7 +366,8 @@ class MainRenderer:
 
         # Set the frame index to 0
         frame_nub = 0
-        numloop = 5
+        # Set number of loop to 1 (if you want to play you animation more then once, change this variable)
+        numloop = 1
         self.matrix.clear()
 
         # Go through the frames
