@@ -133,7 +133,7 @@ dmypy.json
 # ignore generated logos
 assets/logos/*
 
-!assets/logos/svg/light/*
+!assets/logos/_local
 #nhl-led-scoreboard
 config/config.json
 config/config.json.backup

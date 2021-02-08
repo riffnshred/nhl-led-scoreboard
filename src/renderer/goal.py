@@ -58,7 +58,7 @@ class GoalRenderer:
         self.draw_hashtag()
         self.matrix.draw_text(
                 (11, 8), 
-                str(self.scorer["info"].primaryNumber),
+                str(self.scorer["info"].jerseyNumber),
                 font=self.font_medium, 
                 fill=(255,255,255)
             )

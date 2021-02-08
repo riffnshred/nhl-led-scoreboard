@@ -8,7 +8,8 @@
       "position": ["0%", 0]
     },
     "logo": {
-      "position": ["40%", 0]
+      "position": [["100%", 1], 0],
+      "align": "right"
     }
   },
   "scoreboard": {
@@ -46,29 +47,20 @@
       "align": "center-top"
     },
     "scheduled_time": {
-      "position": [0, 2],
-      "relative": {
-        "to": "scheduled_date",
-        "align": "center-bottom"
-      } 
+      "position": ["50%", 6],
+      "align": "center-top"
     },
     "clock": {
-      "position": [0, 2],
-      "relative": {
-        "to": "period",
-        "align": "center-bottom"
-      }
+      "position": ["50%", 6],
+      "align": "center-top"
     },
     "period": {
       "position": ["50%", 0],
       "align": "center-top"
     },
     "period_final": {
-      "position": [0, 2],
-      "relative": {
-        "to": "center_top",
-        "align": "center-bottom"
-      }
+      "position": ["50%", 6],
+      "align": "center-top"
     },
     "SOG_label": {
       "position": ["50%", 0],
@@ -79,11 +71,8 @@
       "align": "center-top"
     },
     "irregular_status": {
-      "position": [0, 2],
-      "relative": {
-        "to": "center_top",
-        "align": "center-bottom"
-      }
+      "position": ["50%", 6],
+      "align": "center-top"
     }
 
   },
@@ -139,9 +128,7 @@
         "align": "right"
       } 
     }
-    
   },
-  
   "scoreticker": {
     "indicator_dots": {
       "position": ["50%", ["100%", -1]],

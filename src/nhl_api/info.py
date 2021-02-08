@@ -1,5 +1,6 @@
 import nhl_api.data
 from nhl_api.object import Object, MultiLevelObject
+from nameparser import HumanName
 import debug
 
 
@@ -26,6 +27,7 @@ def team_info():
         conference_name = team['conference']['name']
         official_site_url = team['officialSiteUrl']
         franchise_id = team['franchiseId']
+        
 
         try:
             previous_game = team['previousGameSchedule']
@@ -46,6 +48,33 @@ def team_info():
             debug.log("No Stats detected for {}".format(team_name))
             stats = False
 
+        roster = {}
+        for p in team['roster']['roster']:
+            person = p['person']
+            person_id = person['id']
+            name = HumanName(person['fullName'])
+            first_name = name.first
+            last_name = name.last
+
+            position_name = p['position']['name']
+            position_type = p['position']['abbreviation']
+            position_abbrev = p['position']['abbreviation']
+
+            try:
+                jerseyNumber = p['jerseyNumber']
+            except KeyError:
+                jerseyNumber = ""
+            
+            roster[person_id]= {
+                'firstName': first_name,
+                'lastName': last_name,
+                'jerseyNumber': jerseyNumber,
+                'positionName': position_name,
+                'positionType': position_type,
+                'positionAbbrev': position_abbrev
+                }
+            #print('#{} {} - {} {}'.format(jerseyNumber,position_abbrev,first_name,last_name))
+        
         output = {
             'team_id': team_id,
             'name': name,
@@ -60,6 +89,7 @@ def team_info():
             'conference_name': conference_name,
             'official_site_url': official_site_url,
             'franchise_id': franchise_id,
+            'roster': roster,
             'previous_game': previous_game,
             'next_game': next_game,
             'stats': stats
