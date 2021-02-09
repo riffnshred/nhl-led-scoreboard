@@ -6,7 +6,7 @@ cd "${DIR}/.."
 
 echo "$(tput setaf 6)Installing required dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)"
 #Install all apt requirements using aptfile
-sudo aptfile 
+sudo scripts/aptfile aptfile
 
 #Install all pip3 requirements using the requirements.txt filer
 sudo pip3 install -r requirements.txt
