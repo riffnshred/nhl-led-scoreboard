@@ -1,0 +1,113 @@
+#!/usr/bin/env zsh
+# Borrowed from oh-my-zsh
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/upgrade.sh<Paste>
+
+#cd /home/pi/nhl-led-scoreboard
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "${DIR}"
+
+# Use colors, but only if connected to a terminal
+# and that terminal supports them.
+
+local -a RAINBOW
+local RED GREEN YELLOW BLUE BOLD DIM UNDER RESET
+
+if [ -t 1 ]; then
+  RAINBOW=(
+    "$(printf '\033[38;5;196m')"
+    "$(printf '\033[38;5;202m')"
+    "$(printf '\033[38;5;226m')"
+    "$(printf '\033[38;5;082m')"
+    "$(printf '\033[38;5;021m')"
+    "$(printf '\033[38;5;093m')"
+    "$(printf '\033[38;5;163m')"
+  )
+
+  RED=$(printf '\033[31m')
+  GREEN=$(printf '\033[32m')
+  YELLOW=$(printf '\033[33m')
+  BLUE=$(printf '\033[34m')
+  BOLD=$(printf '\033[1m')
+  DIM=$(printf '\033[2m')
+  UNDER=$(printf '\033[4m')
+  RESET=$(printf '\033[m')
+fi
+
+# Update upstream remote to nhl-led-scoreboard 
+git remote -v | while read remote url extra; do
+  case "$url" in
+  https://github.com/riffnshred/nhl-led-scoreboard(|.git))
+    git remote set-url "$remote" "https://github.com/riffnshred/nhl-led-scoreboard.git"
+    break ;;
+  git@github.com:riffnshred/nhl-led-scoreboard(|.git))
+    git remote set-url "$remote" "git@github.com:riffnshred/nhl-led-scoreboard.git"
+    break ;;
+  esac
+done
+
+# Set git-config values known to fix git errors
+# Line endings (#4069)
+git config core.eol lf
+git config core.autocrlf false
+# zeroPaddedFilemode fsck errors (#4963)
+git config fsck.zeroPaddedFilemode ignore
+git config fetch.fsck.zeroPaddedFilemode ignore
+git config receive.fsck.zeroPaddedFilemode ignore
+# autostash on rebase (#7172)
+resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
+git config rebase.autoStash true
+
+local ret=0
+
+# Update nhl-led-scoreboard
+printf "${BLUE}%s${RESET}\n" "Updating NHL LED Scoreboard"
+last_commit=$(git rev-parse HEAD)
+if git pull --rebase --stat origin master; then
+  # Check if it was really updated or not
+  if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
+    message="NHL LED Scoreboard is already at the latest version."
+    ret=80 # non-zero exit code to indicate no changes pulled
+  else
+    message="Hooray! NHL LED Scoreboard has been updated!"
+
+    # Save the commit prior to updating
+    git config nhl-led-scoreboard.lastVersion "$last_commit"
+
+    # Display changelog with less if available, otherwise just print it to the terminal
+    #if [[ "$1" = --interactive ]]; then
+      changelog.sh HEAD "$last_commit"
+    #fi
+
+    #printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog anytime with" "sb-changelog"
+
+    #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
+    if ! git diff -s --exit-code HEAD~1 HEAD requirements.txt; then
+       printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
+       sudo pip3 install -r requirements.txt
+    else
+       printf "${YELLOW}%s${RESET}\n" "No new python libraries required to be installed."
+    fi
+
+    #Check to see if the aptfile has changed, if so, run the sudo aptfile again
+    if ! git diff -s --exit-code HEAD~1 HEAD aptfile; then
+       printf "${GREEN}%s${RESET}\n" "New apt requirements for this version, installing now"
+       sudo scripts/aptfile apt-requirements
+    else
+       printf "${YELLOW}%s${RESET}\n" "No new apt required to be installed."
+    fi
+  fi
+
+  printf "${BLUE}%s${RESET}\n" "$message"
+else
+  ret=$?
+  printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
+fi
+
+# Unset git-config values set just for the upgrade
+case "$resetAutoStash" in
+  "") git config --unset rebase.autoStash ;;
+  *) git config rebase.autoStash "$resetAutoStash" ;;
+esac
+
+# Exit with `1` if the update failed
+exit $ret

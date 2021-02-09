@@ -16,9 +16,11 @@ package "python3-cairosvg"
 package "libatlas3-base"
 package "libatlas-base-dev"
 package "libraqm-dev"
+#For the issueUpload.sh
 package "jq"
 package "pastebinit"
 package "neofetch"
+#For the sb-upgrade
 package "zsh"
 
 # you can also execute arbitrary bash
