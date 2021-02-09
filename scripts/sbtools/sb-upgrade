@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # Borrowed from oh-my-zsh
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/upgrade.sh<Paste>
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/upgrade.sh
 
 #cd /home/pi/nhl-led-scoreboard
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
