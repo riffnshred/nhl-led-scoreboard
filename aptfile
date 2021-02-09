@@ -1,0 +1,25 @@
+#!/usr/bin/env aptfile
+
+# trigger an apt-get update
+update
+
+# install some packages
+package "build-essential"
+package "git"
+package "python3-setuptools"
+package "python3-pip"
+package "python3-dev"
+package "python3-pillow"
+package "python3-numpy"
+package "python3-gpiozero"
+package "python3-cairosvg"
+package "libatlas3-base"
+package "libatlas-base-dev"
+package "libraqm-dev"
+package "jq"
+package "pastebinit"
+package "neofetch"
+package "zsh"
+
+# you can also execute arbitrary bash
+echo "🚨  ALL GOOD TO GO"
