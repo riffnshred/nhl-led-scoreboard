@@ -89,7 +89,7 @@ if git pull --rebase --stat origin master; then
     fi
 
     #Check to see if the aptfile has changed, if so, run the sudo aptfile again
-    if ! git diff -s --exit-code HEAD~1 HEAD aptfile; then
+    if ! git diff -s --exit-code HEAD~1 HEAD apt-requirements; then
        printf "${GREEN}%s${RESET}\n" "New apt requirements for this version, installing now"
        sudo scripts/aptfile apt-requirements
     else
