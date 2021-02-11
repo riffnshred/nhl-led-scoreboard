@@ -80,20 +80,28 @@ if git pull --rebase --stat origin master; then
 
     #printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog anytime with" "sb-changelog"
 
-    #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
-    if ! git diff -s --exit-code HEAD~1 HEAD requirements.txt; then
-       printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
-       sudo pip3 install -r requirements.txt
+   if [[ -a requirements.txt ]]; then
+       #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
+       if ! git diff -s --exit-code HEAD~1 HEAD requirements.txt; then
+          printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
+          sudo pip3 install -r requirements.txt
+       else
+          printf "${YELLOW}%s${RESET}\n" "No new python libraries required to be installed."
+       fi
     else
-       printf "${YELLOW}%s${RESET}\n" "No new python libraries required to be installed."
+         printf "${RED}%s${RESET}\n" "No python requirements.txt found"
     fi
 
-    #Check to see if the aptfile has changed, if so, run the sudo aptfile again
-    if ! git diff -s --exit-code HEAD~1 HEAD apt-requirements; then
-       printf "${GREEN}%s${RESET}\n" "New apt requirements for this version, installing now"
-       sudo scripts/aptfile apt-requirements
+    #Check to see if the apt-requirements has changed, if so, run the sudo aptfile apt-requirements again
+    if [[ -a apt-requirements ]]; then 
+       if ! git diff -s --exit-code HEAD~1 HEAD apt-requirements; then
+          printf "${GREEN}%s${RESET}\n" "New apt requirements for this version, installing now"
+          sudo /usr/local/bin/aptfile apt-requirements
+       else
+          printf "${YELLOW}%s${RESET}\n" "No new apt required to be installed."
+      fi
     else
-       printf "${YELLOW}%s${RESET}\n" "No new apt required to be installed."
+          printf "${RED}%s${RESET}\n" "No apt-requirements found"
     fi
   fi
 
