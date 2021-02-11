@@ -75,7 +75,7 @@ if git pull --rebase --stat origin master; then
 
     # Display changelog with less if available, otherwise just print it to the terminal
     #if [[ "$1" = --interactive ]]; then
-      changelog.sh HEAD "$last_commit"
+      scripts/sbtools/changelog.sh HEAD "$last_commit"
     #fi
 
     #printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog anytime with" "sb-changelog"
