@@ -30,7 +30,16 @@ JJ
 
 This is a Python software made to display NHL live scores, stats, and more of your favorite teams, on a Raspberry Pi driven RGB LED matrix. An LED matrix panel (also called a Dot led matrix or dot matrix) is a panel of LEDs used to build huge displays as you see in arenas, malls, time square, etc...
 
-  
+## Skill requirements (PLEASE READ)
+I reckon that a lot of interest come from users that have little to no experience with a raspberry pi or computers and how to set up and use electronic devices in general. To help yourself here are some basic skills you need in order to set up and use this software and the device you are about to build. 
+
+* Basic knowledge of Bash command language and terminal navigation. Here is a starting point https://www.raspberrypi.org/documentation/linux/usage/commands.md
+* Basic Knowledge of Electronics. 
+* Willingness to fail and keep trying.
+* (Optional but recommended) Basic soldering skill. 
+
+This documentation offers technical information related to the installation and execution of this software only. You will need to figure out other unrelated technical processes through tutorials or searching on google.
+
 
 ## Disclaimer
 
