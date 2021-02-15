@@ -2,7 +2,7 @@
 
 # Make script work regardless of where it is run from
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-cd "${DIR}/.."
+cd "${DIR}/.." || exit
 
 echo "$(tput setaf 6)Installing required dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)"
 #Install all apt requirements using aptfile
@@ -18,12 +18,12 @@ git config submodule.matrix.ignore all
 cd submodules/matrix || exit
 echo "$(tput setaf 4)Running rgbmatrix installation...$(tput setaf 9)"
 
-make build-python PYTHON=$(which python3)
-sudo make install-python PYTHON=$(which python3)
-cd bindings
+make build-python PYTHON="$(which python3)"
+sudo make install-python PYTHON="$(which python3)"
+cd bindings || exit 
 sudo pip3 install --force-reinstall -e python/
 
-cd ../../../
+cd ../../../ || exit
 
 git reset --hard
 git fetch origin --prune
