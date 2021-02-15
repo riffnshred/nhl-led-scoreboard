@@ -97,7 +97,7 @@ def load_config(confdir,simple=False):
                     div.div('*')
                     print("Unable to load json: {0}".format(e),BOLD,RED)
                     div.div('*')
-                    sys.exit(0)
+                    sys.exit(os.EX_NOINPUT)
             else:
                 fileindex += 1
 
@@ -110,7 +110,7 @@ def save_config(nhl_config,confdir):
     if not os.path.exists(confdir):
         #os.makedirs(confdir)
         print("Directory {} does not exist.  Are you running in the right directory?".format(confdir),RED)
-        sys.exit(0)
+        sys.exit(os.EX_OSFILE)
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
     except Exception as e:
@@ -1492,7 +1492,7 @@ def main():
         # Get current working directory
         setup_cwd = os.getcwd()
         print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
-        sys.exit(0)
+        sys.exit(os.EX_OSFILE)
 
     #Check to see if the user wants to validate an existing config.json against the schema
     #Only from command line
@@ -1516,12 +1516,12 @@ def main():
             print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
         else:
             print("Your config.json fails validation: error: [{0}]".format(msg),RED)
-            sys.exit(0)
+            sys.exit(os.EX_CONFIG)
     else:
         os.remove(firstrun)
 
     if args.check:
-        sys.exit(0)
+        sys.exit(os.EX_USAGE)
 
     #Check to see if there was a team name on the command line, if so, create a new config.json from
     #config.json.sample
@@ -1533,7 +1533,7 @@ def main():
             save_config(default_config,args.confdir)
         else:
             print("Your team {0} is not in {1}.  Check the spelling and try again".format(args.team[0],TEAMS),RED)
-        sys.exit(0)
+        sys.exit(os.EX_CONFIG)
     else:
         default_config = load_config(args.confdir)
 
