@@ -1502,26 +1502,27 @@ def main():
     #Check for existence of config/.default/firstrun file, if one exists, don't try to validate
 
     firstrun = "{0}/.default/firstrun".format(args.confdir)
-    if not os.path.exists(firstrun):
-        conffile = "{0}/config.json".format(args.confdir)
-        schemafile = "{0}/config.schema.json".format(args.confdir)
-        if not os.path.exists(schemafile):
-            schemafile = "{0}/.default/config.schema.json".format(args.confdir)
+    if not args.simple:
+        if not os.path.exists(firstrun):
+            conffile = "{0}/config.json".format(args.confdir)
+            schemafile = "{0}/config.schema.json".format(args.confdir)
+            if not os.path.exists(schemafile):
+                schemafile = "{0}/.default/config.schema.json".format(args.confdir)
 
-        confpath = get_file(conffile)
-        schemapath = get_file(schemafile)
-        print("Now validating config......")
-        (valid,msg) = validateConf(confpath,schemapath)
-        if valid:
-            print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+            confpath = get_file(conffile)
+            schemapath = get_file(schemafile)
+            print("Now validating config......")
+            (valid,msg) = validateConf(confpath,schemapath)
+            if valid:
+                print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+            else:
+                print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+                sys.exit(os.EX_CONFIG)
+            
+            if args.check:
+                sys.exit(0)
         else:
-            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
-            sys.exit(os.EX_CONFIG)
-    else:
-        os.remove(firstrun)
-
-    if args.check:
-        sys.exit(os.EX_USAGE)
+            os.remove(firstrun)
 
     #Check to see if there was a team name on the command line, if so, create a new config.json from
     #config.json.sample
