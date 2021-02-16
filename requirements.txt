@@ -5,7 +5,6 @@ fastjsonschema>=2.14.4
 geocoder==1.38.1
 gpiozero==1.5.1
 noaa-sdk>=0.1.18
-pillow>=6.2.2
 printtools==1.2
 PyInstaller==3.6
 pyowm>=3.0.0
@@ -16,3 +15,4 @@ RPi.GPIO==0.7.0
 APScheduler>=3.6.3
 lastversion>=1.1.6
 nameparser==1.0.6
+pillow==7.1.2
