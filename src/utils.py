@@ -7,6 +7,13 @@ from datetime import datetime, timezone, time
 import regex
 import math
 import geocoder
+import dbus
+
+def stop_splash_service():
+    sysbus = dbus.SystemBus()
+    systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
+    manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
+    job = manager.StopUnit('sb_splash.service', 'fail')
 
 def get_lat_lng(location):
 
