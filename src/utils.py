@@ -13,7 +13,11 @@ def stop_splash_service():
     sysbus = dbus.SystemBus()
     systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
     manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
-    job = manager.StopUnit('sb_splash.service', 'fail')
+    try:
+        job = manager.StopUnit('sb_splash.service', 'fail')
+    except Exception as ex:
+        nosvc = ex
+
 
 def get_lat_lng(location):
 
