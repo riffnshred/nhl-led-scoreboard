@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ROOT=`dirname $(git rev-parse --git-dir)`
-CURRENTLY_BUILT_VER=`cat ${ROOT}/VERSION` # stored somewhere, e.g. spec file in my case
-LASTVER=$(lastversion riffnshred/nhl-led-scoreboard -gt ${CURRENTLY_BUILT_VER})
+ROOT=$(dirname "$(git rev-parse --git-dir)")
+CURRENTLY_BUILT_VER=$(cat "${ROOT}"/VERSION) # stored somewhere, e.g. spec file in my case
+LASTVER=$(lastversion riffnshred/nhl-led-scoreboard -gt "${CURRENTLY_BUILT_VER}")
 if [[ $? -eq 0 ]]; then
   # LASTVER is newer, update and trigger build
   # ....

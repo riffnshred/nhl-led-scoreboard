@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options
+from utils import args, led_matrix_options, stop_splash_service
 from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
@@ -29,6 +29,9 @@ SCRIPT_VERSION = "1.5.7"
 
 
 def run():
+    # Kill the splash screen if active
+    stop_splash_service()
+
     # Get supplied command line arguments
     commandArgs = args()
 
@@ -45,6 +48,8 @@ def run():
 
         # Initialize the matrix
         matrix = Matrix(RGBMatrix(options = matrixOptions))
+
+     #Riff to add loading screen here
 
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
