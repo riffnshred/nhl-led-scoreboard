@@ -1,4 +1,5 @@
 import sys
+import time
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
@@ -20,6 +21,7 @@ from env_canada import ECData
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
+from renderer.loading_screen import Loading
 import debug
 import os
 
@@ -50,6 +52,8 @@ def run():
         matrix = Matrix(RGBMatrix(options = matrixOptions))
 
      #Riff to add loading screen here
+    loading = Loading(matrix)
+    loading.render()
 
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
@@ -143,6 +147,7 @@ def run():
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
+    
 
     MainRenderer(matrix, data, sleepEvent).render()
 
