@@ -22,10 +22,11 @@ jobs:
         env:
           REPO: ${{ github.repository }}
       - name: Bump version
-        uses: remorses/bump-version@js
         with:
             version_file: ./VERSION
             github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ${{ github.ref }} > ./VERSION
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
