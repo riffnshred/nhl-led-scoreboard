@@ -22,9 +22,6 @@ jobs:
         env:
           REPO: ${{ github.repository }}
       - name: Bump version
-        with:
-            version_file: ./VERSION
-            github_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo ${{ github.ref }} > ./VERSION
       - name: Create Release
