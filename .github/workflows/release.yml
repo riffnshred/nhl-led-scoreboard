@@ -20,6 +20,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.github_token }}
+          output-file: "false"
       - name: Bump version
         run: |
           echo ${{ github.ref }} > ./VERSION
@@ -31,6 +32,7 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
