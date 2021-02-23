@@ -22,7 +22,7 @@ jobs:
           echo "VERSION=$VER" >> $GITHUB_ENV
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}`
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Bump version                                                                                                                                    
         run: |                                                                                                                                                
           echo "${{ steps.get_version.outputs.VERSION }}" > VERSION
