@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ beta ]
+    # branches: [ beta ]
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
@@ -16,19 +16,27 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Set current version variable
+        run: |
+          VER=$(cat VERSION)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}`
+      - name: Bump version                                                                                                                                    
+        run: |                                                                                                                                                
+          echo "${{ steps.get_version.outputs.VERSION }}" > VERSION
+      - name: Push changes                                                                                                                                    
+        uses: ad-m/github-push-action@master                                                                                                                  
+        with:                                                                                                                                                 
+          github_token: ${{ secrets.GITHUB_TOKEN }}                                                                                                           
+          branch: ${{ github.ref }}
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.github_token }}
-          output-file: "false"
-      - name: Bump version
-        run: |
-          echo ${{ github.ref }} > ./VERSION
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          fallback-version: $VER
+          output-file: "true"
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
