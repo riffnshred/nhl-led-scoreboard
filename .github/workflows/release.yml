@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ beta ]
+    # branches: [ beta ]
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
@@ -26,11 +26,12 @@ jobs:
       - name: Bump version                                                                                                                                    
         run: |                                                                                                                                                
           echo "${{ steps.get_version.outputs.VERSION }}" > VERSION
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Update to VERSION ${{ steps.get_version.outputs.VERSION }} for release " -a
+      - name: Push changes                                                                                                                                    
+        uses: ad-m/github-push-action@master                                                                                                                  
+        with:                                                                                                                                                 
+          github_token: ${{ secrets.GITHUB_TOKEN }}                                                                                                           
+          branch: ${{ github.ref }}
+          force: "true"
       - name: Build Changelog
         id: github_release
         uses: mikepenz/release-changelog-builder-action@main
@@ -47,4 +48,4 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ steps.get_version.outputs.VERSION }}
-          body: ${{steps.github_release.outputs.changelog}}
+          body: ${{ steps.github_release.outputs.changelog }}
