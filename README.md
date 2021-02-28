@@ -96,9 +96,7 @@ Syncing the scoreboard with a TV Broadcast is, to my knowledge, impossible. The 
 Also, it might happen the data shown on board might be wrong for a short time, even goals. That is because the API is drunk. If you see data that might be wrong, compare it to the nhl.com and see if it's different.
 
 
-## Installation
-
-### Hardware and Assembly
+## Hardware and Assembly
 Please refer to the [Hardware page](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Hardware) in the wiki section. You will find everything you need to order and build your scoreboard.  
 
 **IMPORTANT NOTE**: Even tho there are other ways to run an rgb led matrix, I only support for the Adafruit HAT and Adafruit Bonnet. They have a great tutorial on how to install both of them on their website. Follow these steps until **STEP 5** to assemble your setup. https://learn.adafruit.com/adafruit-rgb-matrix-bonnet-for-raspberry-pi/driving-matrices
@@ -106,9 +104,9 @@ Please refer to the [Hardware page](https://github.com/riffnshred/nhl-led-scoreb
 If you create an issue because you are having trouble running your setup and you are using something different, I will close it and tell you to buy the appropriate parts or to check the [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix) repo.
 
 
-### Software Installation
+## Software Installation
 
-#### Step 1 -  Raspberry Pi OS Lite
+### Step 1 -  Raspberry Pi OS Lite
 
 To be sure that you have the best performance possible, this project requires Raspberry Pi OS Lite.
 
@@ -127,13 +125,13 @@ this page.
 [Raspbian Buster Lite Installation](https://medium.com/@danidudas/install-raspbian-jessie-lite-and-setup-wi-fi-without-access-to-command-line-or-using-the-network-97f065af722e)
 
 
-#### Step 2 - Time Zones
+### Step 2 - Time Zones
 
 Before you start installing anything, make sure your raspberry pi is set to your local time zone. Usually, you do so when you install Raspian, but if you think you skipped that part, you can change it by running `sudo raspi-config`
 
   
 
-#### Step 3 - Installing Git
+### Step 3 - Installing Git
 
 You will need to install Git on your raspberry pi in order to download the software. To do so, run this command.
 
@@ -141,7 +139,7 @@ You will need to install Git on your raspberry pi in order to download the softw
 
   
 
-#### Step 4 - Installing the NHL scoreboard software
+### Step 4 - Installing the NHL scoreboard software
 
 This installation process might take some time because it will install all the dependencies listed below.
 
@@ -165,7 +163,22 @@ chmod +x scripts/install.sh
 
 [requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
-  
+#### Updating your software.
+
+```
+git reset --hard
+
+git checkout master
+
+git pull
+
+chmod +x scripts/install.sh
+
+./scripts/install.sh
+
+```
+
+If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
 ### Step 5 - Configuring your scoreboard.
 
@@ -246,8 +259,6 @@ sudo reboot now
 
 ```
 
-  
-
 Now let's show something on the screen. Get to the matrix submodule and run some samples.
 
   
@@ -264,14 +275,9 @@ sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-
 
 You should see "Hello World" scroll on screen.
 
-  
-  
-
 Reference the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/). Check out the section that uses the python bindings and run some of their examples on your screen. For sure you will face some issues at first, but don't worry, more than likely there's a solution you can find in their troubleshooting section.
 
 Once you found out how to make it run smoothly, come back here and do what's next.
-
-  
 
 ### Flags
 
@@ -343,438 +349,9 @@ MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 
 ```
 
-  
-  
-
-### Modes
-
-These are options to set the scoreboard to run in a certain mode. This is where you enable the live game mode
-
-while will show the scoreboard of your favorite game when it's live.
-
-| Settings | Type | Parameters | Description |
-
-|-------------|------|-------------|-----------------------------------------------------------------------|
-
-| `debug` | Bool | true, false | Python logging module and in memory logs. |
-
-| `loglevel` | String | "DEBUG", "INFO", "WARN", "ERROR", "CRITICAL" | Level of debug information. NOTE!!!! Be careful with using "debug" = true or "loglevel" = "DEBUG" in config. It logs EVERYTHING that the scoreboard code uses (all modules). Only use this if asked to for troubleshooting. So leave "debug": false in the config unless otherwise asked to set to true. You've been warned.|
-
-| `live_mode` | Bool | true, false | Enable the live mode which show live game data of your favorite team. |
 
   
 
-### Preferences
-
-  
-
-All the data related options.
-
-| Settings | Type | Parameters | Description |
-
-|--------------------------|--------|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-| `live_game_refresh_rate` | INT | `15` | The rate at which a live game will call the NHL API to catch the new data. Do not go under 10 seconds as it's pointless and will affect your scoreboard performance.(Default 15 sec) |
-
-| `time_format` | String | `"12h"` or `"24h"` | The format in which the game start time will be displayed. |
-
-| `end_of_day` | String | `"12:00"` | A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games. |
-
-| `location` | String | `"City,State/Province"`, `"49.8844,-97.147"` | Location at which you would like to get weather updates. You can use either your city and state/province (Ex `"Ottawa,ON"`) , your Latitude and Longitude (Ex `"49.8844,-97.147"`) or even your home address.
-
-| `teams` | Array | `["Canadiens", Blackhawks", "Avalanche"]` | List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in "offday" mode|
-
-| `sog_display_frequency` | INT| `4` | On data update frequency at which the Shots on goal stats appear while showing the scoreboard during a game. (Ex: the shots on goal will show every 4th data update)|
-
-### Goal Animations
-
-The goal animations is a gif image shown whene there is a new goal. You can now use you own goal animation. They need to be `.gif` animation and the resolution of the screen (64px x 32px or more if you use bigger screen) and placed into `assets/animations/goal/all`. You can also use specific animation for when your preferred team score or the opposing team score by putting the `.gif` animation into `assets/animations/goal/preferred` and/or `assets/animations/goal/opposing`. If you put multiple animation, the scoreboard will pick one rendomly everytime a new goal come up.
-
-  
-
-| Settings | Type | Parameters | Description |
-
-|------------------|------|-----------------|------------------|
-
-| `pref_team_only` | Bool | `true`, `false` | self explanatory |
-
-  
-  
-
-### Teams
-
-For the `teams` parameters, only put the team's name. You can copy and paste your team's name from this table.
-
-  
-
-| Team names | Team names |
-
-|------------------|-------------|
-
-| `Avalanche` | `Jets` |
-
-| `Blackhawks` | `Kings` |
-
-| `Blues` | `Maple Leafs` |
-
-| `Blue Jackets` | `Lightning` |
-
-| `Bruins` | `Oilers` |
-
-| `Canadiens` | `Panthers` |
-
-| `Canucks` | `Penguins` |
-
-| `Capitals` | `Predators` |
-
-| `Coyotes` | `Rangers` |
-
-| `Devils` | `Red Wings` |
-
-| `Ducks` | `Sabres` |
-
-| `Flames` | `Senators` |
-
-| `Flyers` | `Sharks` |
-
-| `Golden Knights` | `Stars` |
-
-| `Hurricanes` | `Wild` |
-
-| `Islanders` | |
-
-  
-  
-
-### States
-
-If the live mode is enabled, the scoreboard will go through different states depending on the current situation.
-
-For each state, you can define which of the available board you want the scoreboard to show. For example, if one of my preferred
-
-team has a game scheduled on the current day, during the day, the scoreboard will be in the `scheduled` state. I personally like
-
-to have all the data possible shown during the day so I'll set the all the boards in the `scheduled` setting.
-
-  
-
-| Settings | Type | Parameters | Description |
-
-|-----------------------------------------------------|-------|-----------------------------------------------|-----------------------------------------------------------|
-
-| `off_day`, `scheduled`, `intermission`, `post_game` | Array | `["scoreticker", team_summary", "standings", "clock", "covid_19]` | List of preferred boards to show for each specific state. |
-
-  
-
-### Boards
-
-Boards are essentially like pages on a website. Each of them shows something specific and the user can decide which board to display
-
-  
-  
-
-| Boards | Settings | Type | Parameters | Description|
-
-|---------------|----------------------------|--------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
-
-| `scoreticker` | `preferred_teams_only` | Bool | `true`, `false` | Choose between showing all the games of the day or just the ones your preferred teams are playing |
-
-| | `rotation_rate` | INT | `5` | Duration at witch each games are shown on screen.
-
-| `seriesticker` | `preferred_teams_only` | Bool | `true`, `false` | Choose between showing all series of the current round of playoff or just the ones your preferred teams are part of. |
-
-| | `rotation_rate` | INT | `5` | Duration at witch each series are shown on screen. |
-
-| `standings` | `preferred_standings_only` | Bool | `true`, `false` | Choose between showing all the standings or only the the preferred division and conference. |
-
-| | `standing_type` | String | `conference`, `division` , `wild_card`(Currently not available) | Option to choose the type of standings to display. `conference` if set by default. |
-
-| | `divisions` | String | `atlantic`, `metropolitan`, `central`, `pacific` | Your preferred division |
-
-| | `conference` | String | `eastern`, `western` | Your preferred conference |
-
-| `clock` | `Duration` | INT| `15`| The duration that the clock will be shown in Seconds |
-
-| | `hide_indicator` | Bool | `true`, `false`| Show top green bar if there is a new update available. |
-
-| `covid_19` | `worldwide_enabled` | Bool | `true`, `false`| Show the World wide stats |
-
-| | `country_enabled` | Bool | `true`, `false`| Show the World wide specific country stats |
-
-| | `country` | List, String | `"Canada"`, `"USA"`| List of prefered country to display when `country_enabled` is set to true|
-
-| | `us_state_enabled` | Bool | `true`, `false`| Show stats of specific states of the USA|
-
-| | `us_state` | List, String | `"New York"`, `"Minnesota"`| List of prefered states to display when `us_state_enabled` is set to true|
-
-| | `canada_enabled` | Bool | `true`, `false`| Show stats of specific states of the USA|
-
-| | `canada_prov` | List, String | `"Quebec"`, `"Manitoba"`| List of prefered states to display when `canada_enabled` is set to true|
-
-  
-
-NOTE:
-
-Check out the [Weather app](https://github.com/riffnshred/nhl-led-scoreboard/tree/master/src/api/weather) README for more all the weather board config.
-
-  
-
-### Dimmer
-
-The scoreboard can adjust the brightness of the matrix will running using the Dimmer function. By default, if enabled, the scoreboard software will detect your location using your IP address and will calculate the when the sun rise and the sun set.
-
-It will then use these moments to change the brightness of the screen depending on the parameters set in the config.
-
-  
-
-If you install the [TSL2591](https://www.adafruit.com/product/1980) lux sensor, you can tell the scoreboard to use that to
-
-control the brightness instead.
-
-  
-
-| Settings | Type | Parameters | Description |
-
-|----------------------|--------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-| `enabled` | Bool | `true`, `false` | Enable the dimmer or not |
-
-| `source` | String | `"hardware"`, `"software"` | Select the source that controle the dimmer. If set to `"software"`, the scoreboard will find your latitude and longitude based on your IP address. If an adafruit TSL2591 light sensor is connected to the Pi, you can set the source to `"hardware"` and let the sensor control the brightness. |
-
-| `light_level_lux` | INT | `400` | This is the value you want the light sensor to start changing the brightness at |
-
-| `frequency` | INT | `5` | Frequency at which the scoreboard will look if it needs to change the brightness |
-
-| `mode` | String | `"always"`, `"offday"` | Mode at which the dimmer will operate. If set at `"always"`, the dimmer will operate at all time. at `"offday"`, it will operate only when your preferred teams don't play any games. |
-
-| `sunset_brightness` | INT | `10` | The brightness level (between 5 and 100) you want when it's night. |
-
-| `sunrise_brightness` | INT | `60` | The brightness level (between 5 and 100) you want during the day. |
-
-  
-  
-
-## Usage
-
-Once you are done optimizing your setup and configuring the software, you are ready to go.
-
-  
-
-Start by running your board and see if it runs properly. If you use the typical Pi 3b+ and HAT/Bonnet setup, here's the command I use.
-
-  
-
-If you've done the anti-flickering mod, change the `--led-gpio-mapping=adafruit-hat` for `--led-gpio-mapping=adafruit-hat-pwm`
-
-```
-
-sudo python3 src/main.py --led-gpio-mapping=adafruit-hat --led-brightness=60 --led-slowdown-gpio=2
-
-```
-
-  
-
-Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the
-
-python script stopped.
-
-  
-
-There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
-
-board automatically (and even restart in case of a crash).
-
-  
-
-### Method 1 Using Supervisor
-
-![supervisor](assets/images/supervisor.PNG)
-
-  
-
-[Supervisor](http://supervisord.org/) is a Process Control System. Once installed and configured it will run the scoreboard for you and restart it
-
-in case of a crash. What's even better is that you can also control the board from your phone !!!!
-
-  
-
-To install Supervisor, run this installation command in your terminal.
-
-```
-
-sudo apt-get install supervisor
-
-```
-
-  
-
-Once the process done, open the supervisor config file,
-
-```
-
-sudo nano /etc/supervisor/supervisord.conf
-
-```
-
-and add those two lines at the bottom of the file.
-
-```
-
-[inet_http_server]
-port=*:9001
-
-[unix_http_server]
-file=/var/run/supervisor.sock   ; (the path to the socket file)
-chmod=0770                       ; sockef file mode (default 0700)
-chown=pi:pi
-
-```
-**Note:** if you use a different user then the default `pi` user, replace the `chown=pi:pi` with your own by filling this line with your user info
-`chown:<username>:<group name>`
-
-
-Close and save the file.
-
-```
-
-Press Control-x
-
-Press y
-
-Press [enter]
-
-```
-
-  
-
-Now lets create a new file called scoreboard.conf into the conf.d directory of supervisor, by running this command,
-
-```
-
-sudo nano /etc/supervisor/conf.d/scoreboard.conf
-
-```
-
-In this new file copy and past these line.
-
-```
-
-[program:scoreboard]
-
-command=[SCOREBOARD COMMAND]
-
-directory=[LOCATION OF THE SCOREBOARD DIRECTORY]
-
-autostart=true
-
-autorestart=true
-
-```
-
-Than fill in the missing information. For the `command`, insert the command that worked for you when you tested the scoreboard. If
-
-you used the same as mine then this line should look like, `command=sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2`.
-
-Lastly, for the `directory`, insert the location of the scoreboard directory. It should be something like `/home/{user}/nhl-led-scoreboard`. If you use the base account "pi" then
-
-the `{user}` will be `pi`.
-
-  
-
-Now, reboot the raspberry pi. It should run the scoreboard automatically. Open a browser and enter the ip address of your raspberry pi in the address bar
-
-fallowing of `:9001`. It should look similar to this `192.168.2.19:9001`. You will see the supervisor dashboard with the scoreboard process running.
-
-If you see the dashboard but no process, reboot the pi and refresh the page.
-
-  
-
-You should be up and running now. From the supervison dashboard, you can control the process of the scoreboard (e.g start, restart, stop).
-
-  
-
-To troubleshoot the scoreboard using supervision, you can click on the name of the process to see the latest log of the scoreboard. This is really useful to know what the scoreboard
-
-is doing in case of a problem.
-
-  
-
-### Method 2 Using Terminal Multiplexer
-
-To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/).
-
-This allows you to run the scoreboard manually in a terminal and
-
-To install Screen, run the fallowing in your terminal.
-
-```
-
-sudo apt install screen
-
-```
-
-  
-
-Then start a screen session like so
-
-```
-
-screen
-
-```
-
-  
-
-Now run the scoreboard. Once it's up and running do `Ctrl+a` then `d`. This will detach the screen session from your terminal.
-
-NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
-
-  
-
-To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
-
-This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
-
-  
-
-### Terminal Mode
-
-  
-
-Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
-
-  
-
-`sudo python3 src/main.py --terminal-mode=true`
-
-  
-
-Note:
-
-  
-
-* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
-
-* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
-
-  
-## Updating your software.
-
-```
-
-git reset --hard
-
-git checkout master
-
-git pull
-
-chmod +x scripts/install.sh
-
-./scripts/install.sh
-
-```
-
-If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
 
 ## Shout-out
