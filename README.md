@@ -143,21 +143,12 @@ You will need to install Git on your raspberry pi in order to download the softw
 
 This installation process might take some time because it will install all the dependencies listed below.
 
-  
-
 ```
-
 git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
-
 cd nhl-led-scoreboard/
-
 chmod +x scripts/install.sh
-
 ./scripts/install.sh
-
 ```
-
-  
 
 [rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
 
@@ -167,15 +158,10 @@ chmod +x scripts/install.sh
 
 ```
 git reset --hard
-
 git checkout master
-
 git pull
-
 chmod +x scripts/install.sh
-
 ./scripts/install.sh
-
 ```
 
 If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
@@ -228,9 +214,7 @@ To do so, start by disabling the audio of the raspberry pi (this is a must to ru
 From the root of the pi open the boot config file like so.
 
 ```
-
 sudo nano /boot/config.txt
-
 ```
 
   
@@ -242,33 +226,21 @@ Find `dtparam=audio=on` and change it to `dtparam=audio=off`.
 Save and close the file like so
 
 ```
-
 Press Control-x
-
 Press y
-
 Press [enter]
-
 ```
 
 reboot the pi
 
 ```
-
 sudo reboot now
-
 ```
 
 Now let's show something on the screen. Get to the matrix submodule and run some samples.
-
-  
-
 ```
-
 cd nhl-led-scoreboard/submodules/matrix/bindings/python/samples
-
 sudo python3 runtext.py --led-rows=32 --led-cols=64 --led-gpio-mapping=adafruit-hat --led-brightness=60
-
 ```
 
 **If you've done the anti-flickering mod**, use this flag instead `--led-gpio-mapping=adafruit-hat-pwm`
@@ -283,10 +255,7 @@ Once you found out how to make it run smoothly, come back here and do what's nex
 
 This is a list of Flags you can use to optimize your screen's performance. For more details check out the [rpi-rgb-led-matrix library](https://github.com/hzeller/rpi-rgb-led-matrix/).
 
-  
-
 ```
-
 --led-rows Display rows. 16 for 16x32, 32 for 32x32 and 64x32. (Default: 32)
 
 --led-cols Panel columns. Typically 32 or 64. (Default: 32)
@@ -321,13 +290,9 @@ This is a list of Flags you can use to optimize your screen's performance. For m
 
 ```
 
-  
-
 ### Best Performance
 
 Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, here's what I did to run my board properly.
-
-  
 
 - Do the hardware mod found in the [Improving flicker section](https://github.com/hzeller/rpi-rgb-led-matrix#improving-flicker).
 
@@ -335,49 +300,27 @@ Using either a raspberry Zero, 3B+, 3A+ and 4B with an Adafruit HAT or Bonnet, h
 
 - From the same section, run the command that removes the Bluetooth firmware, Unless you use any Bluetooth device with your Pi.
 
-  
-
 Finally, these are the flag I use. (ONLY USE THESE FLAGS IF YOU'VE DONE THE HARDWARD ANTI-FLICKERING
 
 MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
-
-  
 
 ```
 
 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 
 ```
-
-
-  
-
-
-
 ## Shout-out
 
-  
-
 First, these two for making this repo top notch and already working on future versions:
-
-  
 
 - [Josh Kay](https://github.com/joshkay)
 
 - [Sean Ostermann](https://github.com/falkyre)
 
-  
-  
-
 This project was inspired by the [mlb-led-scoreboard](https://github.com/MLB-LED-Scoreboard/mlb-led-scoreboard). Go check it out and try it on your board, even if you are not a baseball fan, it's amazing.
 
 I also used this [nhlscoreboard repo](https://github.com/quarterturn/nhlscoreboard) as a guide at the very beginning as I was learning python.
-
-  
-
 You all can thank [Drew Hynes](https://gitlab.com/dword4) for his hard work on documenting the free [nhl api](https://gitlab.com/dword4/nhlapi).
-
-  
 
 ## Licensing
 
