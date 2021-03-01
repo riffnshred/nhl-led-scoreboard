@@ -290,6 +290,8 @@
                             "weather"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -298,9 +300,7 @@
 							"christmas",
                             "clock",
                             "covid19",
-                            "weather",
-                            "wxforecast",
-                            "wxalert"
+                            "weather"
                         ]
                     }
                 },
@@ -330,6 +330,8 @@
                             "scoreticker"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -338,9 +340,7 @@
 							"christmas",
                             "clock",
                             "covid19",
-                            "weather",
-                            "wxforecast",
-                            "wxalert"
+                            "weather"
                         ]
                     }
                 },
@@ -366,6 +366,8 @@
                             "clock"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -374,9 +376,7 @@
 							"christmas",
                             "clock",
                             "covid19",
-                            "weather",
-                            "wxforecast",
-                            "wxalert"
+                            "weather"
                         ]
                     }
                 },
@@ -402,6 +402,8 @@
                             "scoreticker"
                         ],
                         "enum": [
+                            "wxalert",
+                            "wxforecast",
                             "scoreticker",
 							"seriesticker",
                             "standings",
@@ -410,9 +412,7 @@
 							"christmas",
                             "clock",
                             "covid19",
-                            "weather",
-                            "wxforecast",
-                            "wxalert"
+                            "weather"
                         ]
                     }
                 }
@@ -609,6 +609,7 @@
                                 "metropolitan",
                                 "north",
                                 "west",
+                                "south",
                                 "east"
                             ]
                         },
