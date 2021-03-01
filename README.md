@@ -62,13 +62,7 @@ This project is new and is in constant evolution. Please read the documentation 
 <a  href="assets/images/community_4.jpg"  target="_blank"><img  width="115"  src="assets/images/community_4.jpg"></a> <a  href="assets/images/community_2.jpg"  target="_blank"> <img  width="220"  src="assets/images/community_2.jpg"></a><a  href="assets/images/community_1.jpg"  target="_blank"> <img  width="220"  src="assets/images/community_1.jpg"></a> <a  href="assets/images/community_3.jpg"  target="_blank"> <img  width="220"  src="assets/images/community_3.jpg"></a>
 
 **NEW on MARCH 2 2020***
-We now use the new Discussions [scoreboard demo](https://github.com/riffnshred/nhl-led-scoreboard/discussions) section. If you need help, are looking for resources, show off your setup or want to keep up with what's going on with the project, this is where it's all about.
-
-We also have a Discord channel for direct chat, but we now use it strictly for general chat.
-
-[![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
-
-  
+The Discord Channel still exist, But We now use the new [Discussions](https://github.com/riffnshred/nhl-led-scoreboard/discussions) section. If you need help, are looking for resources, show off your setup or want to keep up with what's going on with the project, this is where it's all about.
 
 Want to help me turn coffee into features? Or just want to contribute
 
