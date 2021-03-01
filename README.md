@@ -134,7 +134,7 @@ You will need to install Git on your raspberry pi in order to download the softw
 
 ### Step 4 - Installing the NHL scoreboard software
 
-This installation process might take some time because it will install all the dependencies listed below.
+This installation process might take some time because it will install all the dependencies.
 
 ```
 git clone --recursive https://github.com/riffnshred/nhl-led-scoreboard
@@ -143,13 +143,11 @@ chmod +x scripts/install.sh
 ./scripts/install.sh
 ```
 
-[rpi-rgb-led-matrix ](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python#building): The open-source library that allows the Raspberry Pi to render on the LED matrix.
-[requests](https://requests.kennethreitz.org/en/master/): To call the API and manipulate the received data.
 
-### *Important Step after installation.*
+#### *Important Step after installation.*
 If it's a first install of the software, there is no config.json only a config.json.sample. This is normal. You need to configure your scoreboard. Follow the steps in the [Configuration](#configuration) section of this documentation.
 
-#### Updating your software.
+#### *Updating your software.*
 
 ```
 git reset --hard
@@ -161,7 +159,7 @@ chmod +x scripts/install.sh
 
 If you face any issue after updating, rerun the install and it should fix it. otherwise check the issue section to see if a solution as been found for your problem. If not open an issue and I'll find a solution.
 
-#### Removing/uninstalling the software
+#### *Removing/uninstalling the software*
 Sometimes, the only way to fix the issues after an update is to delete and reinstall. From the nhl-led-scoreboard folder, run these commands
 ```
 cd
