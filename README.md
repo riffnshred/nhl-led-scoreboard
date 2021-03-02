@@ -105,6 +105,10 @@ If you create an issue because you are having trouble running your setup and you
 ### Method 1 - Using the nhl-led-scoreboard-img (Recommended)
 You can now install, connect, configure and run the scoreboard using the new [nhl-led-scoreboard-img](https://github.com/falkyre/nhl-led-scoreboard-img)
 PLEASE READ THE DOCUMENTATION AND TAKE YOUR TIME TO GO THROUGH THE PROCESS.
+**NOTE**: This image has been tested but is still in Beta. If you have issues, Open a new issue on His repository. 
+
+Download the image [HERE](https://github.com/falkyre/nhl-led-scoreboard-img/releases)
+
 
 **Note that this images is generated AFTER I release a new update. keep an eye on the Badges at the top of the page or on the repository it self to see when the new image comes out**
 
