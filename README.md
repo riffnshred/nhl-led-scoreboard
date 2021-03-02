@@ -313,6 +313,109 @@ MOD. If not, replace the first flag with --led-gpio-mapping=adafruit-hat).
 --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2
 
 ```
+
+Once you are done optimizing your setup and configuring the software, you are ready to go.
+
+Start by running your board and see if it runs properly. If you use the typical Pi 3b+ and HAT/Bonnet setup, here's the command I use.
+
+If you've done the anti-flickering mod, change the `--led-gpio-mapping=adafruit-hat` for `--led-gpio-mapping=adafruit-hat-pwm`
+```
+sudo python3 src/main.py --led-gpio-mapping=adafruit-hat --led-brightness=60 --led-slowdown-gpio=2
+```
+
+### Step 7 - NOW TO RUN IT
+
+Once you know it runs well, turn off your command prompt. **SURPRISE !!!** the screen stop! That's because the SSH connection is interrupted and so the 
+python script stopped.
+
+There are multiple ways to run the Scoreboard on it's own. I'm going to cover 2 ways. One that's a bit more hand's on, and the other will run the
+board automatically (and even restart in case of a crash).
+
+#### Method 1 Using Supervisor
+
+<img  width="900" src="https://raw.githubusercontent.com/riffnshred/nhl-led-scoreboard/master/assets/images/supervisor.PNG">
+
+Supervisor is a Process Control System. Once installed and configured it will run the scoreboard for you and restart it
+in case of a crash. What's even better is that you can also control the board from your phone !!!!
+
+To install Supervisor, run this installation command in your terminal.
+```
+sudo apt-get install supervisor
+```
+
+Once the process done, open the supervisor config file,
+```
+sudo nano /etc/supervisor/supervisord.conf
+```
+and add those two lines at the bottom of the file.
+```
+[inet_http_server]
+port=*:9001
+```
+Close and save the file.
+```
+Press Control-x
+Press y
+Press [enter]
+```
+
+Now lets create a new file called scoreboard.conf into the conf.d directory of supervisor, by running this command,
+```
+sudo nano /etc/supervisor/conf.d/scoreboard.conf
+```
+In this new file copy and past these line.
+```
+[program:scoreboard]
+command=[SCOREBOARD COMMAND]
+directory=[LOCATION OF THE SCOREBOARD DIRECTORY]
+autostart=true
+autorestart=true
+```
+Than fill in the missing information. For the `command`, insert the command that worked for you when you tested the scoreboard. If
+you used the same as mine then this line should look like, `command=sudo python3 src/main.py --led-gpio-mapping=adafruit-hat-pwm --led-brightness=60 --led-slowdown-gpio=2`.
+Lastly, for the `directory`, insert the location of the scoreboard directory. It should be something like `/home/{user}/nhl-led-scoreboard`. If you use the base account "pi" then
+the `{user}` will be `pi`.
+
+Now, reboot the raspberry pi. It should run the scoreboard automatically. Open a browser and enter the ip address of your raspberry pi in the address bar
+fallowing of `:9001`. It should look similar to this `192.168.2.19:9001`. You will see the supervisor dashboard with the scoreboard process running.
+If you see the dashboard but no process, reboot the pi and refresh the page. 
+
+You should be up and running now. From the supervison dashboard, you can control the process of the scoreboard (e.g start, restart, stop).
+
+To troubleshoot the scoreboard using supervision, you can click on the name of the process to see the latest log of the scoreboard. This is really useful to know what the scoreboard
+is doing in case of a problem.
+
+#### Method 2 Using Terminal Multiplexer
+To make sure it keeps running you will need a Terminal Multiplexer like. [Screen](https://linuxize.com/post/how-to-use-linux-screen/).
+This allows you to run the scoreboard manually in a terminal and 
+To install Screen, run the fallowing in your terminal.
+```
+sudo apt install screen
+```
+
+Then start a screen session like so
+```
+screen
+```
+
+Now run the scoreboard. Once it's up and running do `Ctrl+a` then `d`. This will detach the screen session from your terminal. 
+NOW ! close the terminal. VOILA !!! The scoreboard now runs on it's own.
+
+To go back and stop the scoreboard, open your terminal again and ssh to your Pi. Once you are in, do `screen -r`. This will bring the screen session up on your terminal.
+This is useful if the scoreboard stop working for some reason, you can find out the error it returns and uses that to find a solution.
+
+#### Terminal Mode
+
+Maybe you want to debug, or you have a small screen nearby that you want to use instead. You can run this in the terminal using:
+
+`sudo python3 src/main.py --terminal-mode=true`
+
+Note:
+
+* If you want to run this straight from a raspberry pi, you will need to install a GUI and a terminal emulator that has all the colors
+* If you are using a touchscreen instead of an HDMI output, make sure the [proper drivers are installed](https://github.com/goodtft/LCD-show)
+
+
 ## Shout-out
 
 First, these two for making this repo top notch and already working on future versions:
