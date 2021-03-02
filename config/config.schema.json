@@ -15,6 +15,23 @@
         "boards",
         "sbio"
     ],
+    "definitions": {
+      	"boards_list": {
+          	"enum": [
+              "wxalert",
+              "wxforecast",
+              "scoreticker",
+              "seriesticker",
+              "standings",
+              "team_summary",
+              "stanley_cup_champions",
+              "christmas",
+              "clock",
+              "covid19",
+              "weather"
+            ]
+        }
+    },    
     "properties": {
         "debug": {
             "$id": "#/properties/debug",
@@ -295,19 +312,7 @@
                             "clock",
                             "weather"
                         ],
-                        "enum": [
-                            "wxalert",
-                            "wxforecast",
-                            "scoreticker",
-                            "seriesticker",
-                            "standings",
-                            "team_summary",
-                            "stanley_cup_champions",
-                            "christmas",
-                            "clock",
-                            "covid19",
-                            "weather"
-                        ]
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "scheduled": {
@@ -335,19 +340,7 @@
                             "standings",
                             "scoreticker"
                         ],
-                        "enum": [
-                            "wxalert",
-                            "wxforecast",
-                            "scoreticker",
-                            "seriesticker",
-                            "standings",
-                            "team_summary",
-                            "stanley_cup_champions",
-                            "christmas",
-                            "clock",
-                            "covid19",
-                            "weather"
-                        ]
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "intermission": {
@@ -371,19 +364,7 @@
                         "examples": [
                             "clock"
                         ],
-                        "enum": [
-                            "wxalert",
-                            "wxforecast",
-                            "scoreticker",
-                            "seriesticker",
-                            "standings",
-                            "team_summary",
-                            "stanley_cup_champions",
-                            "christmas",
-                            "clock",
-                            "covid19",
-                            "weather"
-                        ]
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "post_game": {
@@ -407,19 +388,7 @@
                         "examples": [
                             "scoreticker"
                         ],
-                        "enum": [
-                            "wxalert",
-                            "wxforecast",
-                            "scoreticker",
-                            "seriesticker",
-                            "standings",
-                            "team_summary",
-                            "stanley_cup_champions",
-                            "christmas",
-                            "clock",
-                            "covid19",
-                            "weather"
-                        ]
+                        "$ref": "#/definitions/boards_list"
                     }
                 }
             }
