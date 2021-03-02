@@ -52,7 +52,7 @@ class MainRenderer:
 
         while True:
             debug.info('Rendering...')
-            
+
             if self.status.is_offseason(self.data.date()):
                 # Offseason (Show offseason related stuff)
                 debug.info("It's offseason")
@@ -74,10 +74,8 @@ class MainRenderer:
                 else:
                     debug.info("Game Day Wooooo")
                     self.__render_game_day()
-            
+
             self.data.refresh_data()
-
-
 
     def __render_offday(self):
         while True:
@@ -138,7 +136,7 @@ class MainRenderer:
                 self.data.screensaver_livegame = True
                 debug.info("Game is Live")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
-                
+
                 self.check_new_penalty()
                 self.check_new_goals()
                 self.__render_live(sbrenderer)
@@ -159,11 +157,11 @@ class MainRenderer:
                 debug.info("Game Over")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
-                if self.data.isPlayoff and self.stanleycup_round:
+                if self.data.isPlayoff and self.data.stanleycup_round:
                     self.check_stanley_cup_champion()
                     if self.data.ScChampions_id:
-                        StanleyCupChampions(self.data, self.data.ScChampions_id, self.matrix, self.sleepEvent).render()
-                
+                        StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
+
                 self.__render_postgame(sbrenderer)
 
                 self.sleepEvent.wait(self.refresh_rate)
@@ -173,7 +171,7 @@ class MainRenderer:
                 debug.info("FINAL")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
-                if self.data.isPlayoff and self.stanleycup_round:
+                if self.data.isPlayoff and self.data.stanleycup_round:
                     self.check_stanley_cup_champion()
                     if self.data.ScChampions_id:
                         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
@@ -237,7 +235,7 @@ class MainRenderer:
         debug.info("Showing Irregular")
         self.matrix.clear()
         sbrenderer.render()
-    
+
 
     def check_new_goals(self):
         debug.log("Check new goal")
@@ -285,7 +283,7 @@ class MainRenderer:
                 return
             # run the goal animation
             self._draw_event_animation("goal", home_id, home_name)
-            
+
     def check_new_penalty(self):
         debug.log("Check new penalty")
 
@@ -402,4 +400,5 @@ class MainRenderer:
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
 
     def test_stanley_cup_champion(self, team_id):
-        StanleyCupChampions(self.data, team_id, self.matrix, self.sleepEvent).render()
+        self.data.ScChampions_id = team_id
+        StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
