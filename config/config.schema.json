@@ -139,7 +139,7 @@
                     "$id": "#/properties/preferences/properties/teams",
                     "type": "array",
                     "title": "teams",
-                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in offday mode",
+                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in off_day mode",
                     "default": ["Avalanche"],
                     "examples": [
                             "Jets",
@@ -283,7 +283,7 @@
                         "$id": "#/properties/states/properties/off_day/items",
                         "type": "string",
                         "title": "boards",
-                        "description": "Boards to display on offday",
+                        "description": "Boards to display on off_day",
                         "default": "",
                         "examples": [
                             "clock",
@@ -429,7 +429,7 @@
                     "standings": {
                         "standing_type": "wild_card",
                         "preferred_standings_only": true,
-                        "divisions": "central",
+                        "divisions": "north",
                         "conference": "eastern"
                     },
                     "covid19": {
@@ -554,7 +554,7 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "central",
+                            "divisions": "north",
                             "conference": "eastern",
                             "standing_type": "wild_card",
                             "preferred_standings_only": true
@@ -596,17 +596,13 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (central, pacific, atlanic, metropolitan",
+                            "title": "divisions (north, south, east, west)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "central"
+                                "north"
                             ],
                             "enum": [
-                                "central",
-                                "pacific", 
-                                "atlanic", 
-                                "metropolitan",
                                 "north",
                                 "west",
                                 "south",
@@ -1378,7 +1374,7 @@
                             ],
                             "enum": [
                                 "always",
-                                "offday"
+                                "off_day"
                             ]
                         },
                         "daytime": {
