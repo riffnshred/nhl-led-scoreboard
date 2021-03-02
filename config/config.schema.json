@@ -33,17 +33,17 @@
             "description": "Level of logs to show in output.  Can be DEBUG, INFO, WARN, ERROR, CRITICAL  DEBUG is same as setting debug to true ",
             "default": "INFO",
             "examples": [
-                "DEBUG", 
-                "INFO", 
-                "WARNING", 
-                "ERROR", 
+                "DEBUG",
+                "INFO",
+                "WARNING",
+                "ERROR",
                 "CRITICAL"
             ],
             "enum": [
-                "DEBUG", 
-                "INFO", 
-                "WARNING", 
-                "ERROR", 
+                "DEBUG",
+                "INFO",
+                "WARNING",
+                "ERROR",
                 "CRITICAL"
             ]
         },
@@ -52,7 +52,7 @@
             "type": "boolean",
             "title": "live_mode",
             "description": "Enable the live mode which show live game data of your favorite team.",
-            "default": false,
+            "default": true,
             "examples": [
                 true
             ]
@@ -98,10 +98,12 @@
                     "description": "The format in which the game start time will be displayed.",
                     "default": "12h",
                     "examples": [
-                        "12h", "24h"
+                        "12h",
+                        "24h"
                     ],
                     "enum": [
-                        "12h", "24h"
+                        "12h",
+                        "24h"
                     ]
                 },
                 "end_of_day": {
@@ -122,7 +124,9 @@
                     "description": "Overrides latitude and longitude lookup by IP address.  Used by dimmer and weather",
                     "default": "",
                     "examples": [
-                        "City,State/Province", "Winnipeg, MB", "49.8844,-97.147"
+                        "City,State/Province",
+                        "Winnipeg, MB",
+                        "49.8844,-97.147"
                     ]
                 },
                 "live_game_refresh_rate": {
@@ -139,13 +143,15 @@
                     "$id": "#/properties/preferences/properties/teams",
                     "type": "array",
                     "title": "teams",
-                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in offday mode",
-                    "default": ["Avalanche"],
+                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in off_day mode",
+                    "default": [
+                        "Avalanche"
+                    ],
                     "examples": [
-                            "Jets",
-                            "Canadiens",
-                            "Oilers"
-                        ],
+                        "Jets",
+                        "Canadiens",
+                        "Oilers"
+                    ],
                     "additionalItems": true,
                     "items": {
                         "$id": "#/properties/preferences/properties/teams/items",
@@ -159,38 +165,38 @@
                             "Oilers"
                         ],
                         "enum": [
-							"Avalanche", 
-							"Blackhawks", 
-							"Blue Jackets", 
-							"Blues", 
-							"Bruins", 
-							"Canadiens", 
-							"Canucks", 
-							"Capitals", 
-							"Coyotes", 
-							"Devils", 
-							"Ducks", 
-							"Flames", 
-							"Flyers", 
-							"Golden Knights", 
-							"Hurricanes", 
-							"Islanders", 
-							"Jets", 
-							"Kings", 
-							"Lightning", 
-							"Maple Leafs", 
-							"Oilers", 
-							"Panthers", 
-							"Penguins", 
-							"Predators", 
-							"Rangers", 
-							"Red Wings", 
-							"Sabres", 
-							"Senators", 
-							"Sharks", 
-							"Stars", 
-							"Wild"
-						]
+                            "Avalanche",
+                            "Blackhawks",
+                            "Blue Jackets",
+                            "Blues",
+                            "Bruins",
+                            "Canadiens",
+                            "Canucks",
+                            "Capitals",
+                            "Coyotes",
+                            "Devils",
+                            "Ducks",
+                            "Flames",
+                            "Flyers",
+                            "Golden Knights",
+                            "Hurricanes",
+                            "Islanders",
+                            "Jets",
+                            "Kings",
+                            "Lightning",
+                            "Maple Leafs",
+                            "Oilers",
+                            "Panthers",
+                            "Penguins",
+                            "Predators",
+                            "Rangers",
+                            "Red Wings",
+                            "Sabres",
+                            "Senators",
+                            "Sharks",
+                            "Stars",
+                            "Wild"
+                        ]
                     }
                 },
                 "sog_display_frequency": {
@@ -283,7 +289,7 @@
                         "$id": "#/properties/states/properties/off_day/items",
                         "type": "string",
                         "title": "boards",
-                        "description": "Boards to display on offday",
+                        "description": "Boards to display on off_day",
                         "default": "",
                         "examples": [
                             "clock",
@@ -293,11 +299,11 @@
                             "wxalert",
                             "wxforecast",
                             "scoreticker",
-							"seriesticker",
+                            "seriesticker",
                             "standings",
-							"team_summary",
-							"stanley_cup_champions",
-							"christmas",
+                            "team_summary",
+                            "stanley_cup_champions",
+                            "christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -333,11 +339,11 @@
                             "wxalert",
                             "wxforecast",
                             "scoreticker",
-							"seriesticker",
+                            "seriesticker",
                             "standings",
-							"team_summary",
-							"stanley_cup_champions",
-							"christmas",
+                            "team_summary",
+                            "stanley_cup_champions",
+                            "christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -369,11 +375,11 @@
                             "wxalert",
                             "wxforecast",
                             "scoreticker",
-							"seriesticker",
+                            "seriesticker",
                             "standings",
-							"team_summary",
-							"stanley_cup_champions",
-							"christmas",
+                            "team_summary",
+                            "stanley_cup_champions",
+                            "christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -405,11 +411,11 @@
                             "wxalert",
                             "wxforecast",
                             "scoreticker",
-							"seriesticker",
+                            "seriesticker",
                             "standings",
-							"team_summary",
-							"stanley_cup_champions",
-							"christmas",
+                            "team_summary",
+                            "stanley_cup_champions",
+                            "christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -429,7 +435,7 @@
                     "standings": {
                         "standing_type": "wild_card",
                         "preferred_standings_only": true,
-                        "divisions": "central",
+                        "divisions": "north",
                         "conference": "eastern"
                     },
                     "covid19": {
@@ -554,7 +560,7 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "central",
+                            "divisions": "north",
                             "conference": "eastern",
                             "standing_type": "wild_card",
                             "preferred_standings_only": true
@@ -590,27 +596,26 @@
                             "enum": [
                                 "conference",
                                 "division",
-                                "wild_card"                                
+                                "wild_card"
                             ]
                         },
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (central, pacific, atlanic, metropolitan",
+                            "title": "divisions (north, central, east, west)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "central"
+                                "north"
                             ],
                             "enum": [
-                                "central",
-                                "pacific", 
-                                "atlanic", 
-                                "metropolitan",
                                 "north",
+                                "east",
                                 "west",
-                                "south",
-                                "east"
+                                "central",
+                                "atlantic",
+                                "metropolitan",
+                                "pacific"
                             ]
                         },
                         "conference": {
@@ -1047,7 +1052,8 @@
                             "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
                             "default": "",
                             "examples": [
-                                "EC", "NWS"
+                                "EC",
+                                "NWS"
                             ]
                         },
                         "update_freq": {
@@ -1122,9 +1128,7 @@
                         }
                     }
                 }
-            
             }
-            
         },
         "sbio": {
             "$id": "#/properties/sbio",
@@ -1185,14 +1189,14 @@
                     "default": {},
                     "examples": [
                         {
-                                "enabled": true,
-                                "animations": true,
-                                "start": "22:00",
-                                "stop": "22:05",
-                                "data_updates": false,
-                                "motionsensor": true,
-                                "pin": 24,
-                                "delay": 30
+                            "enabled": true,
+                            "animations": true,
+                            "start": "22:00",
+                            "stop": "22:05",
+                            "data_updates": false,
+                            "motionsensor": true,
+                            "pin": 24,
+                            "delay": 30
                         }
                     ],
                     "additionalProperties": true,
@@ -1339,11 +1343,11 @@
                             "description": "Hardware (adafruit TSL2591 light sensor) or software (based on your IP address)",
                             "default": "",
                             "examples": [
-                                "software", 
+                                "software",
                                 "hardware"
                             ],
                             "enum": [
-                                "software", 
+                                "software",
                                 "hardware"
                             ]
                         },
@@ -1378,7 +1382,7 @@
                             ],
                             "enum": [
                                 "always",
-                                "offday"
+                                "off_day"
                             ]
                         },
                         "daytime": {
@@ -1496,7 +1500,7 @@
                             "type": "integer",
                             "title": "pin",
                             "description": "The gpiozero number pin your button is connected to",
-                            "default":25,
+                            "default": 25,
                             "examples": [
                                 25
                             ]
@@ -1571,7 +1575,6 @@
                                 "weather",
                                 "standings"
                             ]
-                            
                         },
                         "state_triggered1_process": {
                             "$id": "#/properties/sbio/properties/pushbutton/properties/state_triggered1_process",
@@ -1587,6 +1590,5 @@
                 }
             }
         }
-        
     }
 }

@@ -49,7 +49,7 @@
 		"standings": {
 			"preferred_standings_only": true,
 			"standing_type": "wild_card",
-			"divisions": "central",
+			"divisions": "north",
 			"conference": "eastern"
 		},
 		"clock": {
