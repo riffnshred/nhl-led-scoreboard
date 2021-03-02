@@ -3,7 +3,7 @@ import debug
 import geocoder
 import datetime
 from time import sleep
-from api.weather.wx_utils import wind_chill, get_icons, degrees_to_direction, dew_point, wind_kmph, usaheatindex, temp_f
+from api.weather.wx_utils import wind_chill, get_csv, degrees_to_direction, dew_point, wind_kmph, usaheatindex, temp_f
 
 class owmWxWorker(object):
     def __init__(self, data, scheduler):
@@ -11,7 +11,7 @@ class owmWxWorker(object):
         self.data = data
         self.weather_frequency = data.config.weather_update_freq
         self.time_format = data.config.time_format
-        self.icons = get_icons("ecIcons_utf8.csv")
+        self.icons = get_csv("ecIcons_utf8.csv")
         self.apikey = data.config.weather_owm_apikey
         self.network_issues = False
 

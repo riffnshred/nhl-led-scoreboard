@@ -1,0 +1,432 @@
+{
+  "_default": {
+    "position": [0, 0],
+    "align": "left-top"
+  },
+  "team_summary": {
+    "info": {
+      "position": ["0%", 0]
+    },
+    "logo": {
+      "position": [["100%", 1], 0],
+      "align": "right"
+    }
+  },
+  "scoreboard": {
+    "center_top":{
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "relative_center_top": {
+      "position": [0, 2],
+      "relative": {
+        "to": "center_top",
+        "align": "center-bottom"
+      }
+    },
+    "home_logo": {
+      "position": [["50%", 15], 0],
+      "align": "left"
+    },
+    "away_logo": {
+      "position": [["50%", -15], 0],
+      "align": "right"
+    },
+    "vs": {
+      "position": ["50%", "45%"],
+      "align": "center-top",
+      "font": "medium"
+    },
+    "score": {
+      "position": ["50%", "45%"],
+      "align": "center-top",
+      "font": "medium"
+    },
+    "scheduled_date": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "scheduled_time": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "clock": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "period": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "period_final": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "SOG_label": {
+      "position": ["50%", 0],
+      "align": "center-top"
+    },
+    "SOG": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    },
+    "irregular_status": {
+      "position": ["50%", 6],
+      "align": "center-top"
+    }
+
+  },
+  "goal":{
+    "scorer_info":{
+      "hashtag_dots":{
+        "position": [0, 8],
+        "font": "medium_2",
+        "align": "left"
+      }
+    }
+  },
+  "penalty":{
+    "team_name":{
+      "position": [1, 9]
+    },
+    "hashtag_dots":{
+      "position": [2, 0],
+      "align": "left",
+      "relative": {
+        "to": "team_name",
+        "align": "right"
+      } 
+    },
+    "jersey_number":{
+      "position": [9, 0],
+      "align": "left",
+      "relative": {
+        "to": "team_name",
+        "align": "right"
+      } 
+    },
+
+    "last_name":{
+      "position": [0, 7],
+      "relative": {
+        "to": "team_name",
+        "align": "bottom"
+      } 
+    },
+    "minutes":{
+      "position": [0, 6],
+      "font": "medium_2",
+      "relative": {
+        "to": "last_name",
+        "align": "bottom"
+      } 
+    },
+    "severity":{
+      "position": [2, 0],
+      "relative": {
+        "to": "minutes",
+        "align": "right"
+      } 
+    }
+  },
+  "scoreticker": {
+    "indicator_dots": {
+      "position": ["50%", ["100%", -1]],
+      "align": "center"
+    }
+  },
+  "clock": {
+    "time": {
+      "position": ["50%", "60%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "date": {
+      "position": [0, -2],
+      "align": "left-bottom",
+      "relative": {
+        "to": "time",
+        "align": "left-top"
+      } 
+    },
+    "meridiem": {
+      "position": [2, 0],
+      "align": "left-top",
+      "relative": {
+        "to": "time",
+        "align": "right-top"
+      } 
+    }
+  },
+  "seriesticker":{
+    "table":{
+      "position":[0,22]
+    }
+  },
+  "wx_clock": {
+    "time": {
+      "position": ["50%", "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "date": {
+      "position": [0, -2],
+      "align": "left-bottom",
+      "relative": {
+        "to": "time",
+        "align": "left-top"
+      }
+    },
+    "meridiem": {
+      "position": [2, 0],
+      "align": "left-top",
+      "relative": {
+        "to": "time",
+        "align": "right-top"
+      }
+    },
+    "wx_display": {
+      "position": ["50%", "95%"],
+      "align": "center-bottom"
+    }
+  },
+  "covid_19":{
+    "count":{
+      "position": [0, "50%"],
+      "font": "medium_2",
+      "align": "left-top"
+    },
+    "name":{
+      "position": [3, 0],
+      "align": "left-top",
+      "relative": {
+        "to": "location",
+        "align": "right"
+      }
+    },
+    "location":{
+      "position": [0, -3],
+      "align": "left-bottom",
+      "relative": {
+        "to": "count",
+        "align": "left-top"
+      }
+    },
+    "lastupdate":{
+      "position": [0, "100%"],
+      "align": "left-bottom"
+    },
+    "board_title":{
+      "position": [1, 1],
+      "align": "left-top"
+    }
+  },
+  "wx_curr_temp":{
+    "condition":{
+      "position": ["68%", "2%"],
+      "font": "wxicons_md",
+      "align": "top-right"
+    },
+    "summary":{
+      "position": ["50%", "81%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+    },
+    "update":{
+      "position": ["50%", "100%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+    },
+    "temp":{
+      "position": [-2, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "left"
+      }
+    },
+    "forecast_temp_hi":{
+      "position": [-3, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "left"
+      }
+    },
+    "forecast_hi":{
+      "position": [2, 3],
+      "font": "wx_medium",
+      "align": "left"
+    },
+
+    "forecast_temp_lo": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "forecast_temp_hi",
+        "align": "right-bottom"
+      }
+    },
+    "forecast_lo":{
+      "position": [0, 6],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "forecast_hi",
+        "align": "left-bottom"
+      }
+    },
+    "temp_app": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_hi": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    },
+    "temp_app_lo": {
+      "position": [0, 2],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "temp",
+        "align": "right-bottom"
+      }
+    }
+  },
+  "wx_curr_wind":{
+    "condition":{
+      "position": ["75%", "29%"],
+      "font": "wxicons_lg",
+      "align": "top-right"
+    },
+    "wind": {
+      "position": ["3%","6%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "gust": {
+      "position": [0,8],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "wind",
+        "align": "top"
+      }
+    },
+    "pressure": {
+      "position": [0,14],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "gust",
+        "align": "left"
+      }
+    },
+    "visibility": {
+      "position": [0,14],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "gust",
+        "align": "left"
+      }
+    }
+  },
+  "wx_curr_precip":{
+    "preciptype":{
+      "position": ["75%", "22%"],
+      "font": "wxicons_lg",
+      "align": "right"
+    },
+    "preciptype_na":{
+      "position": ["65%", "30%"],
+      "font": "wxicons_full",
+      "align": "right"
+    },
+    "precipchance":{
+      "position": ["5%", "2%"],
+      "font": "wx_medium",
+      "align": "left-top"
+    },
+    "humidity":{
+      "position": ["5%", "85%"],
+      "font": "wx_medium",
+      "align": "bottom-left"
+    },
+    "pressure": {
+      "position": ["5%","10%"],
+      "font": "wx_medium",
+      "align": "top"
+    },
+    "tendency": {
+      "position": ["90%", "10%"],
+      "font": "wxicons_lg",
+      "align": "right"
+    },
+    "dewpoint": {
+      "position": [0,"35%"],
+      "font": "wx_medium",
+      "align": "left",
+      "relative": {
+        "to": "pressure",
+        "align": "bottom-left"
+      }
+    }
+  },
+  "wx_alert":{
+    "warning": {
+      "position": ["50%","42%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "warning_date": {
+      "position": ["50%","65%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "watch_us": {
+      "position": ["50%","50%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "watch_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    }, 
+    "advisory_us": {
+      "position": ["50%","50%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },   
+    "advisory_ca": {
+      "position": ["50%","50%"],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "title_top": {
+      "position": ["50%","5%"],
+      "font": "wx_medium",
+      "align": "center-top"
+      },
+    "title_bottom": {
+      "position": ["50%","97%"],
+      "font": "wx_medium",
+      "align": "center-bottom"
+      }
+  }
+}

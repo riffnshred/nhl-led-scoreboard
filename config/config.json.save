@@ -1,7 +1,7 @@
 {
     "debug": false,
     "loglevel": "INFO",
-    "live_mode": false,
+    "live_mode": true,
     "preferences": {
         "time_format": "12h",
         "end_of_day": "8:00",
@@ -27,7 +27,7 @@
             "standings",
             "scoreticker",
             "clock"
-s        ],
+        ],
         "intermission": [
             "scoreticker",
             "team_summary"
@@ -51,7 +51,7 @@ s        ],
         "standings": {
             "preferred_standings_only": true,
             "standing_type": "wild_card",
-            "divisions": "central",
+            "divisions": "north",
             "conference": "eastern"
         },
         "clock": {

@@ -38,15 +38,22 @@ class ScoreboardRenderer:
         # bg_home = self.team_colors.color("{}.primary".format(self.scoreboard.home_team.id))
         # self.matrix.draw_rectangle((0,0), (64,64), (bg_away['r'],bg_away['g'],bg_away['b']))
         # self.matrix.draw_rectangle((64,0), (128,64), (bg_home['r'],bg_home['g'],bg_home['b']))
-        self.matrix.draw_rectangle((0,0), (32,32), (0,0,0))
+        display_width = self.matrix.width
+        display_height = self.matrix.height
+
+        self.matrix.draw_rectangle((0,0), ((display_width/2),display_height), (0,0,0))
         self.away_logo_renderer.render()
-        self.matrix.draw_rectangle((32,0), (64,32), (0,0,0))
+
+        self.matrix.draw_rectangle(((display_width/2),0), ((display_width),display_height), (0,0,0))
         self.home_logo_renderer.render()
         
-        #self.matrix.draw.polygon([(37,0), (91,0), (80,64), (48,64)], fill=(0,0,0))
-        #Work in progress. testing gradients
         gradient = Image.open(get_file('assets/images/64x32_scoreboard_center_gradient.png'))
-        self.matrix.draw_image((32,0), gradient, align="center")
+
+        # For 128x64 use the bigger gradient image.
+        if display_height == 64:
+            gradient = Image.open(get_file('assets/images/128x64_scoreboard_center_gradient.png'))
+        
+        self.matrix.draw_image((display_width/2,0), gradient, align="center")
         
         if self.status.is_scheduled(self.scoreboard.status):
             self.draw_scheduled()

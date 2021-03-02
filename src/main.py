@@ -1,9 +1,10 @@
 import sys
+import time
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options
+from utils import args, led_matrix_options, stop_splash_service
 from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
@@ -20,15 +21,19 @@ from env_canada import ECData
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
+from renderer.loading_screen import Loading
 import debug
 import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.5.7"
+SCRIPT_VERSION = "1.6.0"
 
 
 def run():
+    # Kill the splash screen if active
+    stop_splash_service()
+
     # Get supplied command line arguments
     commandArgs = args()
 
@@ -45,6 +50,10 @@ def run():
 
         # Initialize the matrix
         matrix = Matrix(RGBMatrix(options = matrixOptions))
+
+     #Riff to add loading screen here
+    loading = Loading(matrix)
+    loading.render()
 
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
@@ -63,6 +72,11 @@ def run():
 
     # Print some basic info on startup
     debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))
+    
+    if data.latlng is not None:
+        debug.info(data.latlng_msg)
+    else:
+        debug.error("Unable to find your location.")
 
     # Event used to sleep when rendering
     # Allows Web API (coming in V2) and pushbutton to cancel the sleep
@@ -76,6 +90,9 @@ def run():
 
     # Any tasks that are scheduled go below this line
 
+    # Make sure we have a valid location for the data.latlng as the geocode can return a None
+    # If there is no valid location, skip the weather boards
+    
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
@@ -130,6 +147,7 @@ def run():
         pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
+    
 
     MainRenderer(matrix, data, sleepEvent).render()
 

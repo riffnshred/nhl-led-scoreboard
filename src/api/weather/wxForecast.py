@@ -3,7 +3,7 @@ from env_canada import ECData
 import debug
 from datetime import datetime,timedelta
 from time import sleep
-from api.weather.wx_utils import cadhumidex, wind_chill, get_icons, degrees_to_direction, temp_f, wind_mph
+from api.weather.wx_utils import cadhumidex, wind_chill, get_csv, degrees_to_direction, temp_f, wind_mph
 
 class wxForecast(object):
     def __init__(self, data, scheduler):
@@ -12,7 +12,7 @@ class wxForecast(object):
         self.scheduler = scheduler
         self.weather_frequency = data.config.weather_update_freq
         self.time_format = data.config.time_format
-        self.icons = get_icons("ecIcons_utf8.csv")
+        self.icons = get_csv("ecIcons_utf8.csv")
         self.network_issues = data.network_issues
         self.currdate = datetime.now()
 

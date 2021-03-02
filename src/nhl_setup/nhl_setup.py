@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.5.1"
+SCRIPT_VERSION = "1.5.2"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -97,7 +97,7 @@ def load_config(confdir,simple=False):
                     div.div('*')
                     print("Unable to load json: {0}".format(e),BOLD,RED)
                     div.div('*')
-                    sys.exit(0)
+                    sys.exit(os.EX_NOINPUT)
             else:
                 fileindex += 1
 
@@ -110,7 +110,7 @@ def save_config(nhl_config,confdir):
     if not os.path.exists(confdir):
         #os.makedirs(confdir)
         print("Directory {} does not exist.  Are you running in the right directory?".format(confdir),RED)
-        sys.exit(0)
+        sys.exit(os.EX_OSFILE)
     try:
         shutil.copyfile("{}/config.json".format(confdir),"{}/config.json.backup".format(confdir))
     except Exception as e:
@@ -1474,24 +1474,25 @@ def sbio_settings(default_config,qmark,setup_type):
 
     return sbio_config
 
-
 def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('confdir', nargs='?',default="config", type=str, help='Input dir for config.json (defaults to config)')
     parser.add_argument('--version','-v', action='version', version='%(prog)s ' + SCRIPT_VERSION)
     parser.add_argument('--team','-t',nargs=1, action='store',type=str,help="Create simple config.json with defaults and one team")
+    parser.add_argument('--simple','-s',action='store_true',help="Launch simple setup directly")
     parser.add_argument('--check','-c',action='store_true',help="Check config.json against schema, used to see if config is out of date")
     args = parser.parse_args()
 
-    print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
-    print(SCRIPT_VERSION,UNDERLINE,BLUE)
+    if not args.simple:
+        print("NHL LED SCOREBOARD SETUP", SMSLANT,RED, BOLD)
+        print(SCRIPT_VERSION,UNDERLINE,BLUE)
 
     if not os.path.exists(args.confdir):
         # Get current working directory
         setup_cwd = os.getcwd()
         print("Directory {0}/{1} does not exist.  Are you running in the right directory?".format(setup_cwd,args.confdir),RED)
-        sys.exit(0)
+        sys.exit(os.EX_OSFILE)
 
     #Check to see if the user wants to validate an existing config.json against the schema
     #Only from command line
@@ -1499,28 +1500,29 @@ def main():
     #Change to check on running app every time, if config is not valid, exit.
 
     #Check for existence of config/.default/firstrun file, if one exists, don't try to validate
-    
+
     firstrun = "{0}/.default/firstrun".format(args.confdir)
-    if not os.path.exists(firstrun):
-        conffile = "{0}/config.json".format(args.confdir)
-        schemafile = "{0}/config.schema.json".format(args.confdir)
-        if not os.path.exists(schemafile):
-            schemafile = "{0}/.default/config.schema.json".format(args.confdir)
+    if not args.simple:
+        if not os.path.exists(firstrun):
+            conffile = "{0}/config.json".format(args.confdir)
+            schemafile = "{0}/config.schema.json".format(args.confdir)
+            if not os.path.exists(schemafile):
+                schemafile = "{0}/.default/config.schema.json".format(args.confdir)
 
-        confpath = get_file(conffile)
-        schemapath = get_file(schemafile)
-        print("Now validating config......")
-        (valid,msg) = validateConf(confpath,schemapath)
-        if valid:
-            print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+            confpath = get_file(conffile)
+            schemapath = get_file(schemafile)
+            print("Now validating config......")
+            (valid,msg) = validateConf(confpath,schemapath)
+            if valid:
+                print("Your config.json passes validation and can be used with nhl led scoreboard",GREEN)
+            else:
+                print("Your config.json fails validation: error: [{0}]".format(msg),RED)
+                sys.exit(os.EX_CONFIG)
+            
+            if args.check:
+                sys.exit(0)
         else:
-            print("Your config.json fails validation: error: [{0}]".format(msg),RED)
-            sys.exit(0)
-    else:
-        os.remove(firstrun)
-
-    if args.check:
-        sys.exit(0)
+            os.remove(firstrun)
 
     #Check to see if there was a team name on the command line, if so, create a new config.json from
     #config.json.sample
@@ -1532,19 +1534,19 @@ def main():
             save_config(default_config,args.confdir)
         else:
             print("Your team {0} is not in {1}.  Check the spelling and try again".format(args.team[0],TEAMS),RED)
-        sys.exit(0)
+        sys.exit(os.EX_CONFIG)
     else:
         default_config = load_config(args.confdir)
 
 
-    if questionary.confirm("Do you see a net,stick and horn?",style=custom_style_dope,qmark='🥅🏒🚨').ask():
+    if questionary.confirm("Do you see a net,stick and horn?",style=custom_style_dope,qmark='🥅🏒🚨').skip_if(args.simple,default=True).ask():
         qmark = '🥅'
         qmarksave = '🥅🏒🚨'
     else:
         qmark = '?'
         qmarksave = '===>'
 
-    if questionary.confirm("Do you want a simple default setup with one team selection (Y)?",style=custom_style_dope,qmark=qmark).ask():
+    if questionary.confirm("Do you want a simple default setup with one team selection (Y)?",style=custom_style_dope,qmark=qmark).skip_if(args.simple,default=True).ask():
         #Load the config.json.sample
         default_config = load_config(args.confdir,True)
         selected_teams = get_default_value(default_config,['preferences','teams'],"string")
@@ -1557,7 +1559,7 @@ def main():
 
         default_config['preferences']['teams'] = preferences_teams
 
-        if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).ask():
+        if questionary.confirm("Save {}/config.json file?".format(args.confdir),qmark=qmarksave,style=custom_style_dope).skip_if(args.simple,default=True).ask():
             save_config(default_config,args.confdir)
         sys.exit(0)
     else:
