@@ -52,7 +52,7 @@
             "type": "boolean",
             "title": "live_mode",
             "description": "Enable the live mode which show live game data of your favorite team.",
-            "default": false,
+            "default": true,
             "examples": [
                 true
             ]
@@ -405,11 +405,11 @@
                             "wxalert",
                             "wxforecast",
                             "scoreticker",
-							"seriesticker",
+			    "seriesticker",
                             "standings",
-							"team_summary",
-							"stanley_cup_champions",
-							"christmas",
+			    "team_summary",
+			    "stanley_cup_champions",
+			    "christmas",
                             "clock",
                             "covid19",
                             "weather"
@@ -596,17 +596,20 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (north, south, east, west)",
+                            "title": "divisions (north, central, east, west)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
                                 "north"
                             ],
                             "enum": [
-                                "north",
-                                "west",
-                                "south",
-                                "east"
+								"north",
+								"east",
+								"west",
+								"central",
+								"atlantic",
+								"metropolitan",
+								"pacific"
                             ]
                         },
                         "conference": {
