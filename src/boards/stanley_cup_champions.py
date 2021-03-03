@@ -4,9 +4,10 @@ import debug
 
 class StanleyCupChampions:
     def __init__(self, data, matrix, sleepEvent):
-        
+        print("Stanley cup champions id: {}".format(data.ScChampions_id))
         self.team_id = data.ScChampions_id
-        print(data.ScChampions_id)
+        if self.team_id is None:
+            return
         self.team_abbrev = data.teams_info[self.team_id].abbreviation
         self.data = data
         self.team_info = data.teams_info[self.team_id]
@@ -17,13 +18,13 @@ class StanleyCupChampions:
         self.sleepEvent.clear()
 
     def render(self):
-        print("Display stanleycup champions {} ".format(self.data.teams_info[self.team_id].abbreviation))
-        self.matrix.clear()
-        bg_img = Image.open(get_file('assets/images/stanleycupchamps_bg.png'))
-        self.matrix.draw_image((0,0), bg_img)
-
         # If there is a Stanley cup champion, show the board. Else, pass
         if self.team_id:
+            print("Display stanley cup champions {} ".format(self.data.teams_info[self.team_id].abbreviation))
+            self.matrix.clear()
+            bg_img = Image.open(get_file('assets/images/stanleycupchamps_bg.png'))
+            self.matrix.draw_image((0,0), bg_img)
+
             team_color_main = self.team_colors.color("{}.primary".format(self.team_id))
             team_color_accent = self.team_colors.color("{}.text".format(self.team_id))
 
@@ -31,7 +32,7 @@ class StanleyCupChampions:
             self.matrix.render()
             self.sleepEvent.wait(0.5)
             self.matrix.draw_text(
-                (18, 7), 
+                (18, 7),
                 self.team_abbrev,
                 font=self.font,
                 fill=(team_color_accent['r'], team_color_accent['g'], team_color_accent['b']),
@@ -41,24 +42,24 @@ class StanleyCupChampions:
             self.matrix.render()
             self.sleepEvent.wait(0.5)
             self.matrix.draw_text(
-                (37, 7), 
-                str(self.data.year), 
-                font=self.font, 
+                (37, 7),
+                str(self.data.year),
+                font=self.font,
                 fill=(0, 0, 0),
                 backgroundColor=(200,200,200)
             )
             self.matrix.render()
             self.sleepEvent.wait(0.5)
             self.matrix.draw_text(
-                (12, 14), 
-                "STANLEY CUP", 
-                font=self.font, 
+                (12, 14),
+                "STANLEY CUP",
+                font=self.font,
                 fill=(255,255,255),
             )
             self.matrix.render()
             self.sleepEvent.wait(0.5)
             self.matrix.draw_text(
-                (16, 21), 
+                (16, 21),
                 "CHAMPIONS",
                 font=self.font,
                 fill=(team_color_accent['r'], team_color_accent['g'], team_color_accent['b']),

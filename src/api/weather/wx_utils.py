@@ -1,11 +1,11 @@
 import math
 import csv
 
-def get_icons(iconfile):
-    #Load icon csv to get icons
+def get_csv(csvfile):
+    #Load csv to get data into a list
     #Make sure file exists
-    icon_path = "src/api/weather/" + iconfile
-    return list(csv.DictReader(open(icon_path)))
+    csv_path = "src/api/weather/" + csvfile
+    return list(csv.DictReader(open(csv_path)))
 
 
 #Take a degree (float) and convert to text and icon   
