@@ -22,6 +22,8 @@ package "pastebinit"
 package "neofetch"
 #For the sb-upgrade
 package "zsh"
+#For dietpi users without dbus
+package "dbus"
 
 # you can also execute arbitrary bash
 echo "🚨  ALL GOOD TO GO"
