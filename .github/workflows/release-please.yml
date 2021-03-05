@@ -9,5 +9,4 @@ jobs:
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v2
         with:
-          release-type: node
-          package-name: release-please-action
+          release-type: simple
