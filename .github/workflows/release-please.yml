@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - beta
 name: release-please
 jobs:
   release-please:
