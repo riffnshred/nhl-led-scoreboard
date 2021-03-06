@@ -136,7 +136,9 @@ assets/logos/*
 !assets/logos/_local
 #nhl-led-scoreboard
 config/config.json
+config/*.config.json
 config/config.json.backup
+config/location.json
 
 # VScode
 .vscode/*

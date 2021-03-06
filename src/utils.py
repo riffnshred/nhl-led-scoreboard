@@ -33,10 +33,10 @@ def get_lat_lng(location):
     if os.path.isfile(path):
         try:
             j = json.load(open(path))
-            msg = "json loaded OK"           
+            msg = "json loaded OK"
             #Get the city, country and latlng from the loaded json
             latlng = [j["lat"],j["lng"]]
-            message = "location is: " + j["city"] + ","+ j["country"] + " " + str(latlng)
+            message = "location loaded from cache is: " + j["city"] + ", "+ j["country"] + " " + str(latlng)
             #Check the age of the file, if it's older than 7 days, reload it.
             t = os.stat(path)[8]
             filetime = datetime.fromtimestamp(t) - today
@@ -75,6 +75,7 @@ def get_lat_lng(location):
                 g.city = "Winnipeg"
                 g.country = "CA"
                 latlng = [49.8955367, -97.1384584]
+                g.latlng = latlng
                 message = "Unable to find location, defaulting to {}, {} {}".format(g.city,g.country,str(latlng))
                 
         if g.ok:
@@ -88,12 +89,7 @@ def get_lat_lng(location):
                         print("Could not write {0}. Error Message: {1}".format(path,e))
             except Exception as e:
                 print("Could not open {0} unable to save location.json. Error Message: {1}".format(path,e))
-            #print(g.json)
-           
 
-    else:
-        #Pull the lat lon and city country from loaded json
-        reload = False
 
     return latlng,message
     
