@@ -79,7 +79,7 @@ def get_lat_lng(location):
                 g.country = "CA"
                 latlng = [49.8955367, -97.1384584]
                 g.latlng = latlng
-                message = "Unable to find location, defaulting to {}, {} {}".format(g.city,g.country,str(latlng))
+                message = "Unable to find location with open street maps or IP address, restart later to find location, defaulting to {}, {} {}".format(g.city,g.country,str(latlng))
 
         if g.ok:
             #Dump the location to a file
