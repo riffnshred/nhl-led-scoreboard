@@ -36,13 +36,16 @@ def get_lat_lng(location):
             msg = "json loaded OK"
             #Get the city, country and latlng from the loaded json
             latlng = [j["lat"],j["lng"]]
-            message = "location loaded from cache is: " + j["city"] + ", "+ j["country"] + " " + str(latlng)
             #Check the age of the file, if it's older than 7 days, reload it.
             t = os.stat(path)[8]
             filetime = datetime.fromtimestamp(t) - today
             if filetime.days <= -7:
-                print("reloading")
                 reload = True
+            
+            if reload:
+                message = "location loaded from cache has expired, reloading...."
+            else:
+                message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + j["city"] + ", "+ j["country"] + " " + str(latlng)
 
         except json.decoder.JSONDecodeError as e:
             msg = "Unable to load json: {0}".format(e)
@@ -54,9 +57,9 @@ def get_lat_lng(location):
 
     if reload:
         if len(location) > 0:
-        
+
             g = geocoder.osm(location)
-                
+
             if not g.ok:
                 ipfallback = True
                 message = "Unable to find [{}] with Open Street Map, used IP address to find your location is: ".format(location) + g.city + ","+ g.country + " " + str(g.latlng)
@@ -64,7 +67,7 @@ def get_lat_lng(location):
                 latlng = g.latlng
                 message = "location is: " + location + " " + str(g.latlng)
         else:
-            ipfallback = True        
+            ipfallback = True
 
         if ipfallback:
             g = geocoder.ip('me')
@@ -77,7 +80,7 @@ def get_lat_lng(location):
                 latlng = [49.8955367, -97.1384584]
                 g.latlng = latlng
                 message = "Unable to find location, defaulting to {}, {} {}".format(g.city,g.country,str(latlng))
-                
+
         if g.ok:
             #Dump the location to a file
             savefile = json.dumps(g.json, sort_keys=False, indent=4)
