@@ -9,6 +9,8 @@ import math
 import geocoder
 import dbus
 import json
+from iso6709 import Location
+
 
 def stop_splash_service():
     sysbus = dbus.SystemBus()
@@ -75,11 +77,21 @@ def get_lat_lng(location):
                 latlng = g.latlng
                 message = "location is: " + g.city + ","+ g.country + " " + str(g.latlng)
             else:
-                g.city = "Winnipeg"
-                g.country = "CA"
-                latlng = [49.8955367, -97.1384584]
+                # Get the location of the timezone from the /usr/share/zoneinfo/zone.tab
+
+                try:
+                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(cat /etc/timezone) | awk '{print $2}'")
+                    get_tzlatlng=stream.read().rstrip() + "/"
+                    loc=Location(get_tzlatlng)
+                    latlng = [float(loc.lat.decimal),float(loc.lng.decimal)]
+                except:
+                    #If this hits, your rpi is foobarred and locale and timezone info is missing
+                    #So, we will default to a Tragically Hip song lyric
+                    #At the 100th meridian, where the great plains begin
+                    latlng = [float(67.833333), float(-100)]
+                    
                 g.latlng = latlng
-                message = "Unable to find location with open street maps or IP address, restart later to find location, defaulting to {}, {} {}".format(g.city,g.country,str(latlng))
+                message = "Unable to find location with open street maps or IP address, using lat/lon of your timezone, {}".format(str(latlng))
 
         if g.ok:
             #Dump the location to a file
