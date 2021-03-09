@@ -134,6 +134,7 @@ dmypy.json
 config/config.json
 config/*.config.json
 config/config.json.backup
+config/location.json
 
 # ignore generated logos
 assets/logos/*
