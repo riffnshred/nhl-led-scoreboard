@@ -60,21 +60,6 @@
             "date_rgb": "",
             "flash_seconds": true
 		},
-        "covid19": {
-            "worldwide_enabled": false,
-            "country_enabled": false,
-            "country": [
-                "USA"
-            ],
-            "us_state_enabled": false,
-            "us_state": [
-                "New York"
-            ],
-            "canada_enabled": false,
-            "canada_prov": [
-                "Quebec"
-            ]
-		},
 		"weather": {
 			"enabled": false,
 			"view": "full",
