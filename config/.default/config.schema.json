@@ -15,6 +15,22 @@
         "boards",
         "sbio"
     ],
+    "definitions": {
+      	"boards_list": {
+          	"enum": [
+              "wxalert",
+              "wxforecast",
+              "scoreticker",
+              "seriesticker",
+              "standings",
+              "team_summary",
+              "stanley_cup_champions",
+              "christmas",
+              "clock",
+              "weather"
+            ]
+        }
+    },    
     "properties": {
         "debug": {
             "$id": "#/properties/debug",
@@ -33,7 +49,18 @@
             "description": "Level of logs to show in output.  Can be DEBUG, INFO, WARN, ERROR, CRITICAL  DEBUG is same as setting debug to true ",
             "default": "INFO",
             "examples": [
-                "INFO"
+                "DEBUG",
+                "INFO",
+                "WARNING",
+                "ERROR",
+                "CRITICAL"
+            ],
+            "enum": [
+                "DEBUG",
+                "INFO",
+                "WARNING",
+                "ERROR",
+                "CRITICAL"
             ]
         },
         "live_mode": {
@@ -41,7 +68,7 @@
             "type": "boolean",
             "title": "live_mode",
             "description": "Enable the live mode which show live game data of your favorite team.",
-            "default": false,
+            "default": true,
             "examples": [
                 true
             ]
@@ -87,12 +114,18 @@
                     "description": "The format in which the game start time will be displayed.",
                     "default": "12h",
                     "examples": [
-                        "12h"
+                        "12h",
+                        "24h"
+                    ],
+                    "enum": [
+                        "12h",
+                        "24h"
                     ]
                 },
                 "end_of_day": {
                     "$id": "#/properties/preferences/properties/end_of_day",
                     "type": "string",
+                    "pattern": "([01]?[0-9]|2[0-3]):[0-5][0-9]",
                     "title": "end_of_day",
                     "description": "A 24-hour time you wish to consider the end of the previous day before starting to display the current day's games.",
                     "default": "12:00",
@@ -107,7 +140,9 @@
                     "description": "Overrides latitude and longitude lookup by IP address.  Used by dimmer and weather",
                     "default": "",
                     "examples": [
-                        "Winnipeg, MB"
+                        "City,State/Province",
+                        "Winnipeg, MB",
+                        "49.8844,-97.147"
                     ]
                 },
                 "live_game_refresh_rate": {
@@ -124,14 +159,14 @@
                     "$id": "#/properties/preferences/properties/teams",
                     "type": "array",
                     "title": "teams",
-                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in offday mode",
-                    "default": [],
+                    "description": "List of preferred teams. First one in the list is considered the favorite. If left empty, the scoreboard will be in off_day mode",
+                    "default": [
+                        "Avalanche"
+                    ],
                     "examples": [
-                        [
-                            "Jets",
-                            "Canadiens",
-                            "Oilers"
-                        ]
+                        "Jets",
+                        "Canadiens",
+                        "Oilers"
                     ],
                     "additionalItems": true,
                     "items": {
@@ -139,11 +174,44 @@
                         "type": "string",
                         "title": "teams",
                         "description": "Teams selected to display",
-                        "default": "",
+                        "default": "Avalanche",
                         "examples": [
                             "Jets",
                             "Canadiens",
                             "Oilers"
+                        ],
+                        "enum": [
+                            "Avalanche",
+                            "Blackhawks",
+                            "Blue Jackets",
+                            "Blues",
+                            "Bruins",
+                            "Canadiens",
+                            "Canucks",
+                            "Capitals",
+                            "Coyotes",
+                            "Devils",
+                            "Ducks",
+                            "Flames",
+                            "Flyers",
+                            "Golden Knights",
+                            "Hurricanes",
+                            "Islanders",
+                            "Jets",
+                            "Kings",
+                            "Lightning",
+                            "Maple Leafs",
+                            "Oilers",
+                            "Panthers",
+                            "Penguins",
+                            "Predators",
+                            "Rangers",
+                            "Red Wings",
+                            "Sabres",
+                            "Senators",
+                            "Sharks",
+                            "Stars",
+                            "Wild"
                         ]
                     }
                 },
@@ -197,10 +265,9 @@
                 {
                     "off_day": [
                         "clock",
-                        "wxweather"
+                        "weather"
                     ],
                     "scheduled": [
-                        "team_summary",
                         "standings",
                         "scoreticker",
                         "clock"
@@ -230,7 +297,7 @@
                     "examples": [
                         [
                             "clock",
-                            "wxweather"
+                            "weather"
                         ]
                     ],
                     "additionalItems": true,
@@ -238,12 +305,13 @@
                         "$id": "#/properties/states/properties/off_day/items",
                         "type": "string",
                         "title": "boards",
-                        "description": "Boards to display on offday",
+                        "description": "Boards to display on off_day",
                         "default": "",
                         "examples": [
                             "clock",
-                            "wxweather"
-                        ]
+                            "weather"
+                        ],
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "scheduled": {
@@ -254,7 +322,7 @@
                     "default": [],
                     "examples": [
                         [
-                            "team_summary",
+                            "clock",
                             "standings",
                             "scoreticker"
                         ]
@@ -267,10 +335,11 @@
                         "description": "Boards to display on sceduled",
                         "default": "",
                         "examples": [
-                            "team_summary",
+                            "clock",
                             "standings",
                             "scoreticker"
-                        ]
+                        ],
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "intermission": {
@@ -293,7 +362,8 @@
                         "default": "",
                         "examples": [
                             "clock"
-                        ]
+                        ],
+                        "$ref": "#/definitions/boards_list"
                     }
                 },
                 "post_game": {
@@ -316,7 +386,8 @@
                         "default": "",
                         "examples": [
                             "scoreticker"
-                        ]
+                        ],
+                        "$ref": "#/definitions/boards_list"
                     }
                 }
             }
@@ -332,23 +403,8 @@
                     "standings": {
                         "standing_type": "wild_card",
                         "preferred_standings_only": true,
-                        "divisions": "central",
+                        "divisions": "north",
                         "conference": "eastern"
-                    },
-                    "covid19": {
-                        "country_enabled": true,
-                        "canada_prov": [
-                            "Quebec"
-                        ],
-                        "country": [
-                            "USA"
-                        ],
-                        "us_state_enabled": false,
-                        "worldwide_enabled": false,
-                        "canada_enabled": false,
-                        "us_state": [
-                            "New York"
-                        ]
                     },
                     "clock": {
                         "hide_indicator": false,
@@ -365,7 +421,6 @@
                 "scoreticker",
                 "standings",
                 "clock",
-                "covid19",
                 "weather"
             ],
             "properties": {
@@ -457,7 +512,7 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "central",
+                            "divisions": "north",
                             "conference": "eastern",
                             "standing_type": "wild_card",
                             "preferred_standings_only": true
@@ -489,16 +544,30 @@
                             "default": "conference",
                             "examples": [
                                 "wild_card"
+                            ],
+                            "enum": [
+                                "conference",
+                                "division",
+                                "wild_card"
                             ]
                         },
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (central, pacific, atlanic, metropolitan",
+                            "title": "divisions (north, central, east, west)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "central"
+                                "north"
+                            ],
+                            "enum": [
+                                "north",
+                                "east",
+                                "west",
+                                "central",
+                                "atlantic",
+                                "metropolitan",
+                                "pacific"
                             ]
                         },
                         "conference": {
@@ -509,6 +578,10 @@
                             "default": "",
                             "examples": [
                                 "eastern"
+                            ],
+                            "enum": [
+                                "eastern",
+                                "western"
                             ]
                         }
                     }
@@ -601,409 +674,265 @@
                         }
                     }
                 },
-                "covid19": {
-                    "$id": "#/properties/boards/properties/covid19",
+                "weather": {
+                    "$id": "#/properties/boards/properties/weather",
                     "type": "object",
-                    "title": "covid19",
-                    "description": "Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).",
+                    "title": "weather",
+                    "description": "Settings for the weather data provider",
                     "default": {},
                     "examples": [
                         {
-                            "us_state": [
-                                "New York"
-                            ],
-                            "country_enabled": true,
-                            "canada_prov": [
-                                "Quebec"
-                            ],
-                            "country": [
-                                "USA"
-                            ],
-                            "us_state_enabled": false,
-                            "worldwide_enabled": false,
-                            "canada_enabled": false
+                            "enabled": true,
+                            "view": "full",
+                            "data_feed": "EC",
+                            "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
+                            "units": "metric",
+                            "update_freq": 5,
+                            "duration": 30,
+                            "show_on_clock": true,
+                            "forecast_enabled": true,
+                            "forecast_days": 3,
+                            "forecast_update": 1
                         }
                     ],
                     "additionalProperties": true,
                     "required": [
-                        "worldwide_enabled",
-                        "country_enabled",
-                        "country",
-                        "us_state_enabled",
-                        "us_state",
-                        "canada_enabled",
-                        "canada_prov"
+                        "enabled",
+                        "view",
+                        "units",
+                        "duration",
+                        "data_feed",
+                        "owm_apikey",
+                        "update_freq",
+                        "show_on_clock",
+                        "forecast_enabled",
+                        "forecast_days",
+                        "forecast_update"
                     ],
                     "properties": {
-                        "worldwide_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/worldwide_enabled",
+                        "enabled": {
+                            "$id": "#/properties/boards/properties/weather/properties/enabled",
                             "type": "boolean",
-                            "title": "worldwide_enabled",
-                            "description": "Whole world wide cases",
-                            "default": false,
-                            "examples": [
-                                false
-                            ]
-                        },
-                        "country_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/country_enabled",
-                            "type": "boolean",
-                            "title": "country_enabled",
-                            "description": "Pick a country to show statistics from",
+                            "title": "enabled",
+                            "description": "Enable the weather thread to get your local weather.",
                             "default": false,
                             "examples": [
                                 true
                             ]
                         },
-                        "country": {
-                            "$id": "#/properties/boards/properties/covid19/properties/country",
-                            "type": "array",
-                            "title": "country",
-                            "description": "What country to show",
-                            "default": [],
+                        "view": {
+                            "$id": "#/properties/boards/properties/weather/properties/view",
+                            "type": "string",
+                            "title": "view",
+                            "description": "Weather board full (3 page) or summary view (1 page)",
+                            "default": "full",
                             "examples": [
-                                [
-                                    "USA"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/country/items",
-                                "type": "string",
-                                "title": "country ",
-                                "description": "What country to show",
-                                "default": "",
-                                "examples": [
-                                    "USA"
-                                ]
-                            }
-                        },
-                        "us_state_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/us_state_enabled",
-                            "type": "boolean",
-                            "title": "us_state_enabled",
-                            "description": "Show by state if USA selected as country",
-                            "default": false,
-                            "examples": [
-                                false
+                                "full"
                             ]
                         },
-                        "us_state": {
-                            "$id": "#/properties/boards/properties/covid19/properties/us_state",
-                            "type": "array",
-                            "title": "us_state",
-                            "description": "Show by state if USA selected as country",
-                            "default": [],
+                        "units": {
+                            "$id": "#/properties/boards/properties/weather/properties/units",
+                            "type": "string",
+                            "title": "units ",
+                            "description": "Units to use for displaying the weather(metric or imperial)",
+                            "default": "",
                             "examples": [
-                                [
-                                    "New York"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/us_state/items",
-                                "type": "string",
-                                "title": "state",
-                                "description": "What state to show",
-                                "default": "",
-                                "examples": [
-                                    "New York"
-                                ]
-                            }
-                        },
-                        "canada_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/canada_enabled",
-                            "type": "boolean",
-                            "title": "canada_enabled",
-                            "description": "Show Canadian provinces",
-                            "default": false,
-                            "examples": [
-                                false
+                                "metric"
                             ]
                         },
-                        "canada_prov": {
-                            "$id": "#/properties/boards/properties/covid19/properties/canada_prov",
-                            "type": "array",
-                            "title": "canada_prov ",
-                            "description": "What province to show if Canada selected as a country",
-                            "default": [],
+                        "duration": {
+                            "$id": "#/properties/boards/properties/weather/properties/duration",
+                            "type": "integer",
+                            "title": "duration ",
+                            "description": "The time to flip through the pages in the weather board.  If there are no alerts, this will be 3 pages, if there are alerts a 4th is added.  Minimum 30 seconds duration",
+                            "default": 30,
                             "examples": [
-                                [
-                                    "Quebec"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/canada_prov/items",
-                                "type": "string",
-                                "title": "province",
-                                "description": "Province to show",
-                                "default": "",
-                                "examples": [
-                                    "Quebec"
-                                ]
-                            }
+                                30
+                            ]
+                        },
+                        "data_feed": {
+                            "$id": "#/properties/boards/properties/weather/properties/data_feed",
+                            "type": "string",
+                            "title": "data_feed",
+                            "description": "Where is the observation data coming from. You can use EC for Environment Canada, OWM for Open Weather Map (requires API KEY from https://openweathermap.org/api)",
+                            "default": "",
+                            "examples": [
+                                "EC"
+                            ]
+                        },
+                        "owm_apikey": {
+                            "$id": "#/properties/boards/properties/weather/properties/owm_apikey",
+                            "type": "string",
+                            "title": "owm_apikey",
+                            "description": "API key required for when you use OpenWeatherMAP.  https://openweathermap.org/api",
+                            "default": "",
+                            "examples": [
+                                "9ffxd195ax52a315xaed823xfcf4cdxf"
+                            ]
+                        },
+                        "update_freq": {
+                            "$id": "#/properties/boards/properties/weather/properties/update_freq",
+                            "type": "integer",
+                            "title": "update_freq ",
+                            "description": "How often in minutes to refresh the weather and alerts feeds.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        },
+                        "show_on_clock": {
+                            "$id": "#/properties/boards/properties/weather/properties/show_on_clock",
+                            "type": "boolean",
+                            "title": "show_on_clock",
+                            "description": "Add the last observed temperature and humidity to the bottom of the clock board",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "forecast_enabled": {
+                            "$id": "#/properties/boards/properties/weather/properties/forecast_enabled",
+                            "type": "boolean",
+                            "title": "forecast_enabled",
+                            "description": "Enable the weather forecast thread to get your local weather forecast up to 3 days.",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "forecast_days": {
+                            "$id": "#/properties/boards/properties/weather/properties/forecast_days",
+                            "type": "integer",
+                            "title": "forecast_days",
+                            "description": "Number of forecast days to show (3 is the maximum).",
+                            "default": 3,
+                            "examples": [
+                                3
+                            ]
+                        },
+                        "forecast_update": {
+                            "$id": "#/properties/boards/properties/weather/properties/forecast_update",
+                            "type": "integer",
+                            "title": "forecast_update",
+                            "description": "How often to update forecast.  This is in hours",
+                            "default": 3,
+                            "examples": [
+                                3
+                            ]
                         }
                     }
-                }
-            },
-            "weather": {
-                "$id": "#/properties/weather",
-                "type": "object",
-                "title": "weather",
-                "description": "Settings for the weather data provider",
-                "default": {},
-                "examples": [
-                    {
-                        "enabled": true,
-                        "view": "full",
-                        "data_feed": "EC",
-                        "owm_apikey": "9faxd10xa991x305xaed8x3dfcx4cdxf",
-                        "units": "metric",
-                        "update_freq": 5,
-                        "duration": 30,
-                        "show_on_clock": true,
-                        "forecast_enabled": true,
-                        "forecast_days": 3,
-                        "forecast_update": 1
-                    }
-                ],
-                "additionalProperties": true,
-                "required": [
-                    "enabled",
-                    "view",
-                    "units",
-                    "duration",
-                    "data_feed",
-                    "owm_apikey",
-                    "update_freq",
-                    "show_on_clock",
-                    "forecast_enabled",
-                    "forecast_days",
-                    "forecast_update"
-                ],
-                "properties": {
-                    "enabled": {
-                        "$id": "#/properties/weather/properties/enabled",
-                        "type": "boolean",
-                        "title": "enabled",
-                        "description": "Enable the weather thread to get your local weather.",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "view": {
-                        "$id": "#/properties/weather/properties/view",
-                        "type": "string",
-                        "title": "view",
-                        "description": "Weather board full (3 page) or summary view (1 page)",
-                        "default": "full",
-                        "examples": [
-                            "full"
-                        ]
-                    },
-                    "units": {
-                        "$id": "#/properties/weather/properties/units",
-                        "type": "string",
-                        "title": "units ",
-                        "description": "Units to use for displaying the weather(metric or imperial)",
-                        "default": "",
-                        "examples": [
-                            "metric"
-                        ]
-                    },
-                    "duration": {
-                        "$id": "#/properties/weather/properties/duration",
-                        "type": "integer",
-                        "title": "duration ",
-                        "description": "The time to flip through the pages in the weather board.  If there are no alerts, this will be 3 pages, if there are alerts a 4th is added.  Minimum 30 seconds duration",
-                        "default": 30,
-                        "examples": [
-                            30
-                        ]
-                    },
-                    "data_feed": {
-                        "$id": "#/properties/weather/properties/data_feed",
-                        "type": "string",
-                        "title": "data_feed",
-                        "description": "Where is the observation data coming from. You can use EC for Environment Canada, OWM for Open Weather Map (requires API KEY from https://openweathermap.org/api)",
-                        "default": "",
-                        "examples": [
-                            "EC"
-                        ]
-                    },
-                    "owm_apikey": {
-                        "$id": "#/properties/weather/properties/owm_apikey",
-                        "type": "string",
-                        "title": "owm_apikey",
-                        "description": "API key required for when you use OpenWeatherMAP.  https://openweathermap.org/api",
-                        "default": "",
-                        "examples": [
-                            "9ffxd195ax52a315xaed823xfcf4cdxf"
-                        ]
-                    },
-                    "update_freq": {
-                        "$id": "#/properties/weather/properties/update_freq",
-                        "type": "integer",
-                        "title": "update_freq ",
-                        "description": "How often in minutes to refresh the weather and alerts feeds.",
-                        "default": 5,
-                        "examples": [
-                            5
-                        ]
-                    },
-                    "show_on_clock": {
-                        "$id": "#/properties/weather/properties/show_on_clock",
-                        "type": "boolean",
-                        "title": "show_on_clock",
-                        "description": "Add the last observed temperature and humidity to the bottom of the clock board",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "forecast_enabled": {
-                        "$id": "#/properties/weather/properties/forecast_enabled",
-                        "type": "boolean",
-                        "title": "forecast_enabled",
-                        "description": "Enable the weather forecast thread to get your local weather forecast up to 3 days.",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "forecast_days": {
-                        "$id": "#/properties/weather/properties/forecast_days",
-                        "type": "integer",
-                        "title": "forecast_days",
-                        "description": "Number of forecast days to show (3 is the maximum).",
-                        "default": 3,
-                        "examples": [
-                            3
-                        ]
-                    },
-                    "forecast_update": {
-                        "$id": "#/properties/weather/properties/forecast_update",
-                        "type": "integer",
-                        "title": "forecast_update",
-                        "description": "How often to update forecast.  This is in hours",
-                        "default": 3,
-                        "examples": [
-                            3
-                        ]
-                    }
-                }
-            },
-            "wxalert": {
-                "$id": "#/properties/wxalert",
-                "type": "object",
-                "title": "wxalert",
-                "description": "Settings for the alerts data provider",
-                "default": {},
-                "examples": [
-                    {
-                        "scroll_alert": true,
-                        "alert_feed": "EC",
-                        "nws_show_expire": false,
-                        "alert_duration": 5,
-                        "alert_title": true,
-                        "update_freq": 5,
-                        "show_on_clock": true,
-                        "show_alerts": true
-                    }
-                ],
-                "additionalProperties": true,
-                "required": [
-                    "alert_feed",
-                    "update_freq",
-                    "nws_show_expire",
-                    "show_alerts",
-                    "alert_title",
-                    "scroll_alert",
-                    "show_on_clock",
-                    "alert_duration"
-                ],
-                "properties": {
-                    "alert_feed": {
-                        "$id": "#/properties/weather/properties/alert_feed",
-                        "type": "string",
-                        "title": "alert_feed",
-                        "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
-                        "default": "",
-                        "examples": [
-                            "EC"
-                        ]
-                    },
-                    "update_freq": {
-                        "$id": "#/properties/weather/properties/update_freq",
-                        "type": "integer",
-                        "title": "update_freq ",
-                        "description": "How often in minutes to refresh the weather and alerts feeds.",
-                        "default": 5,
-                        "examples": [
-                            5
-                        ]
-                    },
-                    "nws_show_expire": {
-                        "$id": "#/properties/weather/properties/nws_show_expire",
-                        "type": "boolean",
-                        "title": "nws_show_expire",
-                        "description": "Show expire time (true) instead of effective time (false) of alert",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "show_alerts": {
-                        "$id": "#/properties/weather/properties/show_alerts",
-                        "type": "boolean",
-                        "title": "show_alerts",
-                        "description": "Get weather alerts and display them",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "alert_title": {
-                        "$id": "#/properties/weather/properties/alert_title",
-                        "type": "boolean",
-                        "title": "alert_title",
-                        "description": "On the initial alert page that will interrupt the normal board rotation, display on the top and bottom board the type of alert (WARNING, WATCH or ADVISORY)",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "scroll_alert": {
-                        "$id": "#/properties/weather/properties/scroll_alert",
-                        "type": "boolean",
-                        "title": "Scroll_alert",
-                        "description": "Scroll the text of the alert on the initial alert page.  If you select false, a static page will be displayed that is the same as the 4th page on the weather board",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "alert_duration": {
-                        "$id": "#/properties/weather/properties/alert_duration",
-                        "type": "integer",
-                        "title": "alert_duration",
-                        "description": "How long to display alert board (in seconds)",
-                        "default": 5,
-                        "examples": [
-                            5
-                        ]
-                    },
-                    "show_on_clock": {
-                        "$id": "#/properties/wxalert/properties/show_on_clock",
-                        "type": "boolean",
-                        "title": "show_on_clock",
-                        "description": "Show Fred (active alert color square) on the bottom right corner of the clock board",
-                        "default": false,
-                        "examples": [
-                            true
-                        ]
+                },
+                "wxalert": {
+                    "$id": "#/properties/boards/properties/wxalert",
+                    "type": "object",
+                    "title": "wxalert",
+                    "description": "Settings for the alerts data provider",
+                    "default": {},
+                    "examples": [
+                        {
+                            "scroll_alert": true,
+                            "alert_feed": "EC",
+                            "nws_show_expire": false,
+                            "alert_duration": 5,
+                            "alert_title": true,
+                            "update_freq": 5,
+                            "show_on_clock": true,
+                            "show_alerts": true
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "alert_feed",
+                        "update_freq",
+                        "nws_show_expire",
+                        "show_alerts",
+                        "alert_title",
+                        "scroll_alert",
+                        "show_on_clock",
+                        "alert_duration"
+                    ],
+                    "properties": {
+                        "alert_feed": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/alert_feed",
+                            "type": "string",
+                            "title": "alert_feed",
+                            "description": "What data feed is provide alert data.  EC for Environment Canada or NWS for the National Weather Service in the US",
+                            "default": "",
+                            "examples": [
+                                "EC",
+                                "NWS"
+                            ]
+                        },
+                        "update_freq": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/update_freq",
+                            "type": "integer",
+                            "title": "update_freq ",
+                            "description": "How often in minutes to refresh the weather and alerts feeds.",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        },
+                        "nws_show_expire": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/nws_show_expire",
+                            "type": "boolean",
+                            "title": "nws_show_expire",
+                            "description": "Show expire time (true) instead of effective time (false) of alert",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "show_alerts": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/show_alerts",
+                            "type": "boolean",
+                            "title": "show_alerts",
+                            "description": "Get weather alerts and display them",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "alert_title": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/alert_title",
+                            "type": "boolean",
+                            "title": "alert_title",
+                            "description": "On the initial alert page that will interrupt the normal board rotation, display on the top and bottom board the type of alert (WARNING, WATCH or ADVISORY)",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "scroll_alert": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/scroll_alert",
+                            "type": "boolean",
+                            "title": "Scroll_alert",
+                            "description": "Scroll the text of the alert on the initial alert page.  If you select false, a static page will be displayed that is the same as the 4th page on the weather board",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "alert_duration": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/alert_duration",
+                            "type": "integer",
+                            "title": "alert_duration",
+                            "description": "How long to display alert board (in seconds)",
+                            "default": 5,
+                            "examples": [
+                                5
+                            ]
+                        },
+                        "show_on_clock": {
+                            "$id": "#/properties/boards/properties/wxalert/properties/show_on_clock",
+                            "type": "boolean",
+                            "title": "show_on_clock",
+                            "description": "Show Fred (active alert color square) on the bottom right corner of the clock board",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
                     }
                 }
             }
@@ -1019,7 +948,7 @@
                     "screensaver": {
                         "enabled": "true",
                         "start": "22:00",
-                        "end": "22:05",
+                        "stop": "22:05",
                         "data_updates": false,
                         "motionsensor": true,
                         "pin": 24,
@@ -1067,14 +996,14 @@
                     "default": {},
                     "examples": [
                         {
-                                "enabled": true,
-                                "animations": true,
-                                "start": "22:00",
-                                "stop": "22:05",
-                                "data_updates": false,
-                                "motionsensor": true,
-                                "pin": 24,
-                                "delay": 30
+                            "enabled": true,
+                            "animations": true,
+                            "start": "22:00",
+                            "stop": "22:05",
+                            "data_updates": false,
+                            "motionsensor": true,
+                            "pin": 24,
+                            "delay": 30
                         }
                     ],
                     "additionalProperties": true,
@@ -1109,6 +1038,7 @@
                         "start": {
                             "$id": "#/properties/sbio/properties/screensaver/properties/start",
                             "type": "string",
+                            "pattern": "([01]?[0-9]|2[0-3]):[0-5][0-9]",
                             "title": "start",
                             "description": "Time to start screensaver at (12h or 24h)",
                             "default": "",
@@ -1116,10 +1046,11 @@
                                 "22:00"
                             ]
                         },
-                        "end": {
-                            "$id": "#/properties/sbio/properties/screensaver/properties/end",
+                        "stop": {
+                            "$id": "#/properties/sbio/properties/screensaver/properties/stop",
                             "type": "string",
-                            "title": "end",
+                            "pattern": "([01]?[0-9]|2[0-3]):[0-5][0-9]",
+                            "title": "stop",
                             "description": "Time to end screensaver at (12h or 24h)",
                             "default": "",
                             "examples": [
@@ -1219,7 +1150,12 @@
                             "description": "Hardware (adafruit TSL2591 light sensor) or software (based on your IP address)",
                             "default": "",
                             "examples": [
-                                "software"
+                                "software",
+                                "hardware"
+                            ],
+                            "enum": [
+                                "software",
+                                "hardware"
                             ]
                         },
                         "frequency": {
@@ -1250,6 +1186,10 @@
                             "default": "always",
                             "examples": [
                                 "always"
+                            ],
+                            "enum": [
+                                "always",
+                                "off_day"
                             ]
                         },
                         "daytime": {
@@ -1318,7 +1258,7 @@
                             "reboot_duration": 2,
                             "display_halt": true,
                             "enabled": true,
-                            "state_triggered1": "wxweather",
+                            "state_triggered1": "weather",
                             "bonnet": true,
                             "pin": 25,
                             "state_triggered1_process": "",
@@ -1367,7 +1307,7 @@
                             "type": "integer",
                             "title": "pin",
                             "description": "The gpiozero number pin your button is connected to",
-                            "default":25,
+                            "default": 25,
                             "examples": [
                                 25
                             ]
@@ -1436,10 +1376,11 @@
                             "$id": "#/properties/sbio/properties/pushbutton/properties/state_triggered1",
                             "type": "string",
                             "title": "state_triggered1",
-                            "description": "The board you want displayed on button press. If this is blank falls back to the default board which is clock. Current boards available are team_summary,standings,scoreticker,wxweather and clock",
+                            "description": "The board you want displayed on button press. If this is blank falls back to the default board which is clock. Current boards available are scoreticker, standings, clock and weather",
                             "default": "clock",
                             "examples": [
-                                "wxweather"
+                                "weather",
+                                "standings"
                             ]
                         },
                         "state_triggered1_process": {
@@ -1456,6 +1397,5 @@
                 }
             }
         }
-        
     }
 }

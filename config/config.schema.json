@@ -27,7 +27,6 @@
               "stanley_cup_champions",
               "christmas",
               "clock",
-              "covid19",
               "weather"
             ]
         }
@@ -407,21 +406,6 @@
                         "divisions": "north",
                         "conference": "eastern"
                     },
-                    "covid19": {
-                        "country_enabled": true,
-                        "canada_prov": [
-                            "Quebec"
-                        ],
-                        "country": [
-                            "USA"
-                        ],
-                        "us_state_enabled": false,
-                        "worldwide_enabled": false,
-                        "canada_enabled": false,
-                        "us_state": [
-                            "New York"
-                        ]
-                    },
                     "clock": {
                         "hide_indicator": false,
                         "duration": 60
@@ -437,7 +421,6 @@
                 "scoreticker",
                 "standings",
                 "clock",
-                "covid19",
                 "weather"
             ],
             "properties": {
@@ -688,151 +671,6 @@
                             "examples": [
                                 false
                             ]
-                        }
-                    }
-                },
-                "covid19": {
-                    "$id": "#/properties/boards/properties/covid19",
-                    "type": "object",
-                    "title": "covid19",
-                    "description": "Show the number of cases, deaths and recovered cases of the covid-19 virus in real time (API updates about every 15 min).",
-                    "default": {},
-                    "examples": [
-                        {
-                            "us_state": [
-                                "New York"
-                            ],
-                            "country_enabled": true,
-                            "canada_prov": [
-                                "Quebec"
-                            ],
-                            "country": [
-                                "USA"
-                            ],
-                            "us_state_enabled": false,
-                            "worldwide_enabled": false,
-                            "canada_enabled": false
-                        }
-                    ],
-                    "additionalProperties": true,
-                    "required": [
-                        "worldwide_enabled",
-                        "country_enabled",
-                        "country",
-                        "us_state_enabled",
-                        "us_state",
-                        "canada_enabled",
-                        "canada_prov"
-                    ],
-                    "properties": {
-                        "worldwide_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/worldwide_enabled",
-                            "type": "boolean",
-                            "title": "worldwide_enabled",
-                            "description": "Whole world wide cases",
-                            "default": false,
-                            "examples": [
-                                false
-                            ]
-                        },
-                        "country_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/country_enabled",
-                            "type": "boolean",
-                            "title": "country_enabled",
-                            "description": "Pick a country to show statistics from",
-                            "default": false,
-                            "examples": [
-                                true
-                            ]
-                        },
-                        "country": {
-                            "$id": "#/properties/boards/properties/covid19/properties/country",
-                            "type": "array",
-                            "title": "country",
-                            "description": "What country to show",
-                            "default": [],
-                            "examples": [
-                                [
-                                    "USA"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/country/items",
-                                "type": "string",
-                                "title": "country ",
-                                "description": "What country to show",
-                                "default": "",
-                                "examples": [
-                                    "USA"
-                                ]
-                            }
-                        },
-                        "us_state_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/us_state_enabled",
-                            "type": "boolean",
-                            "title": "us_state_enabled",
-                            "description": "Show by state if USA selected as country",
-                            "default": false,
-                            "examples": [
-                                false
-                            ]
-                        },
-                        "us_state": {
-                            "$id": "#/properties/boards/properties/covid19/properties/us_state",
-                            "type": "array",
-                            "title": "us_state",
-                            "description": "Show by state if USA selected as country",
-                            "default": [],
-                            "examples": [
-                                [
-                                    "New York"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/us_state/items",
-                                "type": "string",
-                                "title": "state",
-                                "description": "What state to show",
-                                "default": "",
-                                "examples": [
-                                    "New York"
-                                ]
-                            }
-                        },
-                        "canada_enabled": {
-                            "$id": "#/properties/boards/properties/covid19/properties/canada_enabled",
-                            "type": "boolean",
-                            "title": "canada_enabled",
-                            "description": "Show Canadian provinces",
-                            "default": false,
-                            "examples": [
-                                false
-                            ]
-                        },
-                        "canada_prov": {
-                            "$id": "#/properties/boards/properties/covid19/properties/canada_prov",
-                            "type": "array",
-                            "title": "canada_prov ",
-                            "description": "What province to show if Canada selected as a country",
-                            "default": [],
-                            "examples": [
-                                [
-                                    "Quebec"
-                                ]
-                            ],
-                            "additionalItems": true,
-                            "items": {
-                                "$id": "#/properties/boards/properties/covid19/properties/canada_prov/items",
-                                "type": "string",
-                                "title": "province",
-                                "description": "Province to show",
-                                "default": "",
-                                "examples": [
-                                    "Quebec"
-                                ]
-                            }
                         }
                     }
                 },
@@ -1538,7 +1376,7 @@
                             "$id": "#/properties/sbio/properties/pushbutton/properties/state_triggered1",
                             "type": "string",
                             "title": "state_triggered1",
-                            "description": "The board you want displayed on button press. If this is blank falls back to the default board which is clock. Current boards available are scoreticker, standings, clock, covid19, and weather",
+                            "description": "The board you want displayed on button press. If this is blank falls back to the default board which is clock. Current boards available are scoreticker, standings, clock and weather",
                             "default": "clock",
                             "examples": [
                                 "weather",
