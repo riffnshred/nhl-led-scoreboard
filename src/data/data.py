@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from time import sleep
 import debug
 import nhl_api
-from api.covid19.data import Data as covid19_data
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
@@ -182,9 +181,6 @@ class Data:
 
         # Stanley cup round flag
         self.stanleycup_round = False
-
-        # Get Covid 19 Data
-        self.covid19 = covid19_data()
 
     #
     # Date
