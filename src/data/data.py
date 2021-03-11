@@ -269,8 +269,7 @@ class Data:
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
-                
-                if not self.is_pref_team_offday():
+                if not self.is_pref_team_offday() and self.config.live_mode:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
 
@@ -329,7 +328,7 @@ class Data:
                     earliest = True
 
     def other_games(self):
-        if not self.is_pref_team_offday():
+        if not self.is_pref_team_offday() and self.config.live_mode:
             game_list = []
             for g in self.games:
                 if g.game_id != self.current_game_id:

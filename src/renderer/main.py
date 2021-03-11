@@ -86,12 +86,11 @@ class MainRenderer:
                 return
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
 
-            if i >= 3:
-                print("refresh")
+            if i >= 1:
+                debug.info("off day data refresh")
                 self.data.refresh_data()
                 i = 0
             else:
-                print("up")
                 i += 1
             
 
