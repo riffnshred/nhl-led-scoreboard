@@ -130,15 +130,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# ignore generated logos
-assets/logos/*
-
-!assets/logos/_local
 #nhl-led-scoreboard
 config/config.json
 config/*.config.json
 config/config.json.backup
 config/location.json
+
+# ignore generated logos
+assets/logos/*
+!assets/logos/_local
 
 # VScode
 .vscode/*
