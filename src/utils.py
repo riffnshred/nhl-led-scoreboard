@@ -11,6 +11,8 @@ import dbus
 import json
 from iso6709 import Location
 
+uid = int(os.stat("./VERSION").st_uid)
+gid = int(os.stat("./VERSION").st_uid)
 
 def stop_splash_service():
     sysbus = dbus.SystemBus()
@@ -47,7 +49,10 @@ def get_lat_lng(location):
             if reload:
                 message = "location loaded from cache has expired, reloading...."
             else:
-                message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + j["city"] + ", "+ j["country"] + " " + str(latlng)
+                if len(location) > 0:
+                    message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + location + " " + str(latlng)
+                else:
+                    message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + j["city"] + ", "+ j["country"] + " " + str(latlng)
 
         except json.decoder.JSONDecodeError as e:
             msg = "Unable to load json: {0}".format(e)
@@ -100,6 +105,8 @@ def get_lat_lng(location):
                 with open(path,'w') as f:
                     try:
                         f.write(savefile)
+                        #Change the ownership of the location.json file
+                        os.chown(path, uid, gid)
                     except Exception as e:
                         print("Could not write {0}. Error Message: {1}".format(path,e))
             except Exception as e:
