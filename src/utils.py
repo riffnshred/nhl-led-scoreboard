@@ -8,6 +8,9 @@ import regex
 import math
 import geocoder
 import dbus
+import json
+from iso6709 import Location
+
 
 def stop_splash_service():
     sysbus = dbus.SystemBus()
@@ -21,26 +24,90 @@ def stop_splash_service():
 
 def get_lat_lng(location):
 
-    if len(location) > 0:
-    
-        g = geocoder.osm(location)
+    #Check to see if a location.json is in the config folder
+    reload = False
+    ipfallback = False
+    today = datetime.today()#gets current time
+    latlng = []
+
+    j = {}
+    path = get_file("config/location.json")
+    if os.path.isfile(path):
+        try:
+            j = json.load(open(path))
+            msg = "json loaded OK"
+            #Get the city, country and latlng from the loaded json
+            latlng = [j["lat"],j["lng"]]
+            #Check the age of the file, if it's older than 7 days, reload it.
+            t = os.stat(path)[8]
+            filetime = datetime.fromtimestamp(t) - today
+            if filetime.days <= -7:
+                reload = True
             
-        if not g.ok:
-            #debug.error("Unable to find {} with Open Street Map, falling back to IP lookup for location.  Error: {}".format(location,e))
-            # error_message = "Unable to find {} with Open Street Map, falling back to IP lookup for location.".format(location)
-            g = geocoder.ip('me')
-            #debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
-            message = "Unable to find [{}] with Open Street Map, used IP address to find your location is: ".format(location) + g.city + ","+ g.country + " " + str(g.latlng)
-        else:
-            message = "location is: " + location + " " + str(g.latlng)
-            
+            if reload:
+                message = "location loaded from cache has expired, reloading...."
+            else:
+                message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + j["city"] + ", "+ j["country"] + " " + str(latlng)
+
+        except json.decoder.JSONDecodeError as e:
+            msg = "Unable to load json: {0}".format(e)
+            j = {}
+            reload = True
     else:
-        g = geocoder.ip('me')
-        #debug.info("location is: " + g.city + ","+ g.country + " " + str(g.latlng))
-        message = "location is: " + g.city + ","+ g.country + " " + str(g.latlng)
+        msg="Unable to open file {}".format(path)
+        reload = True
 
-    return g.latlng,message
+    if reload:
+        if len(location) > 0:
 
+            g = geocoder.osm(location)
+
+            if not g.ok:
+                ipfallback = True
+                message = "Unable to find [{}] with Open Street Map, used IP address to find your location is: ".format(location) + g.city + ","+ g.country + " " + str(g.latlng)
+            else:
+                latlng = g.latlng
+                message = "location is: " + location + " " + str(g.latlng)
+        else:
+            ipfallback = True
+
+        if ipfallback:
+            g = geocoder.ip('me')
+            if g.ok:
+                latlng = g.latlng
+                message = "location is: " + g.city + ","+ g.country + " " + str(g.latlng)
+            else:
+                # Get the location of the timezone from the /usr/share/zoneinfo/zone.tab
+
+                try:
+                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(cat /etc/timezone) | awk '{print $2}'")
+                    get_tzlatlng=stream.read().rstrip() + "/"
+                    loc=Location(get_tzlatlng)
+                    latlng = [float(loc.lat.decimal),float(loc.lng.decimal)]
+                except:
+                    #If this hits, your rpi is foobarred and locale and timezone info is missing
+                    #So, we will default to a Tragically Hip song lyric
+                    #At the 100th meridian, where the great plains begin
+                    latlng = [float(67.833333), float(-100)]
+                    
+                g.latlng = latlng
+                message = "Unable to find location with open street maps or IP address, using lat/lon of your timezone, {}".format(str(latlng))
+
+        if g.ok:
+            #Dump the location to a file
+            savefile = json.dumps(g.json, sort_keys=False, indent=4)
+            try:
+                with open(path,'w') as f:
+                    try:
+                        f.write(savefile)
+                    except Exception as e:
+                        print("Could not write {0}. Error Message: {1}".format(path,e))
+            except Exception as e:
+                print("Could not open {0} unable to save location.json. Error Message: {1}".format(path,e))
+
+
+    return latlng,message
+    
 # validate if a string is in 12h format or 24h format
 def timeValidator(timestr):
     #Check 24hr HH:MM

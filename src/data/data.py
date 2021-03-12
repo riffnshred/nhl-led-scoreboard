@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from time import sleep
 import debug
 import nhl_api
-from api.covid19.data import Data as covid19_data
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
@@ -183,9 +182,6 @@ class Data:
         # Stanley cup round flag
         self.stanleycup_round = False
 
-        # Get Covid 19 Data
-        self.covid19 = covid19_data()
-
     #
     # Date
 
@@ -273,8 +269,7 @@ class Data:
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
-                
-                if not self.is_pref_team_offday():
+                if not self.is_pref_team_offday() and self.config.live_mode:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
 
@@ -333,7 +328,7 @@ class Data:
                     earliest = True
 
     def other_games(self):
-        if not self.is_pref_team_offday():
+        if not self.is_pref_team_offday() and self.config.live_mode:
             game_list = []
             for g in self.games:
                 if g.game_id != self.current_game_id:

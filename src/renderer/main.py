@@ -78,12 +78,21 @@ class MainRenderer:
             self.data.refresh_data()
 
     def __render_offday(self):
+        i = 0
         while True:
             debug.info('PING !!! Render off day')
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
             self.boards._off_day(self.data, self.matrix,self.sleepEvent)
+
+            if i >= 1:
+                debug.info("off day data refresh")
+                self.data.refresh_data()
+                i = 0
+            else:
+                i += 1
+            
 
     def __render_game_day(self):
         debug.info("Showing Game")
@@ -239,7 +248,6 @@ class MainRenderer:
 
     def check_new_goals(self):
         debug.log("Check new goal")
-
         pref_team_only = self.data.config.goal_anim_pref_team_only
         away_id = self.scoreboard.away_team.id
         away_name = self.scoreboard.away_team.name
