@@ -8,7 +8,7 @@ class Loading:
         self.matrix = matrix
         self.image = Image.open(PATH)
     def render(self):
-        print('hello')
+
         self.matrix.draw_image(
             (0,0),
             self.image

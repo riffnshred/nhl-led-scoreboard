@@ -7,9 +7,13 @@ class Periods:
 
     def __init__(self, overview):
         period_info = overview.linescore
-        intermission_info = period_info.intermissionInfo
-        self.is_intermission = intermission_info.inIntermission
-        self.intermission_time_remaining = intermission_info.intermissionTimeRemaining
+        try:
+            intermission_info = period_info.intermissionInfo
+            self.is_intermission = intermission_info.inIntermission
+            self.intermission_time_remaining = intermission_info.intermissionTimeRemaining
+        except AttributeError:
+            self.is_intermission = False
+
         self.gameType = overview.game_type
         self.number = period_info.currentPeriod
         try:
