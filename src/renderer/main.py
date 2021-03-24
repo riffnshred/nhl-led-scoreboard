@@ -32,10 +32,10 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
+                #ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
                 self.data.refresh_overview()
-                #self.scoreboard = Scoreboard(self.data.overview, self.data)
-                #self._draw_event_animation("penalty", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
+                self.scoreboard = Scoreboard(self.data.overview, self.data)
+                self._draw_event_animation("goal", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
                 #PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
                 #TeamSummary(self.data, self.matrix, self.sleepEvent).render()
                 sleep(1)
@@ -340,9 +340,9 @@ class MainRenderer:
         preferred_team_only = self.data.config.goal_anim_pref_team_only
         # Get the list of gif's under the preferred and opposing directory
         ANIMATIONS = "assets/animations/{}".format(event)
-        all_gifs = glob.glob("/general/*.gif".format(ANIMATIONS))
-        preferred_gifs = glob.glob("/preferred/*.gif".format(ANIMATIONS))
-        opposing_gifs = glob.glob("/opposing/*.gif".format(ANIMATIONS))
+        general_gifs = glob.glob("{}/general/*.gif".format(ANIMATIONS))
+        preferred_gifs = glob.glob("{}/preferred/*.gif".format(ANIMATIONS))
+        opposing_gifs = glob.glob("{}/opposing/*.gif".format(ANIMATIONS))
 
         if event == "goal":
             filename = "{}/goal_light_animation.gif".format(ANIMATIONS)
@@ -350,9 +350,9 @@ class MainRenderer:
             filename = "{}/penalty_animation.gif".format(ANIMATIONS)
 
         # Use alternate animations if there is any in the respective folder
-        if all_gifs:
+        if general_gifs:
             # Set opposing team goal animation here
-            filename = random.choice(all_gifs)
+            filename = random.choice(general_gifs)
             debug.info("General animation is: " + filename)
 
         if opposing_gifs and not preferred_team_only:
