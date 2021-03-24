@@ -82,10 +82,10 @@ if git pull --rebase --stat origin master; then
     #fi
 
     #Comment out if running from repositories scripts/sbtools directory
-    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog anytime with" "sb-changelog"
+    #printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog anytime with" "sb-changelog"
    if [[ -a requirements.txt ]]; then
        #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
-       if ! git diff -s --exit-code HEAD~1 HEAD requirements.txt; then
+       if ! git diff -s --exit-code HEAD "$last_commit" requirements.txt; then
           printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
           sudo pip3 install -r requirements.txt
        else
@@ -97,10 +97,10 @@ if git pull --rebase --stat origin master; then
 
     #Check to see if the apt-requirements has changed, if so, run the sudo aptfile apt-requirements again
     if [[ -a apt-requirements ]]; then 
-       if ! git diff -s --exit-code HEAD~1 HEAD apt-requirements; then
+       if ! git diff -s --exit-code HEAD "$last_commit" apt-requirements; then
           printf "${GREEN}%s${RESET}\n" "New apt requirements for this version, installing now"
           #sudo /usr/local/bin/aptfile apt-requirements
-	  #Uncomment if running from repo scripts/sbtools, comment out above line
+	        #Uncomment if running from repo scripts/sbtools, comment out above line
           sudo scripts/sbtools/aptfile apt-requirements
        else
           printf "${YELLOW}%s${RESET}\n" "No new apt required to be installed."
@@ -110,6 +110,9 @@ if git pull --rebase --stat origin master; then
     fi
   fi
   fi
+  # Update the status of the download so image user is not asked to upgrade on login again
+  # comment the line below if running from the repo
+  #/home/pi/sbtools/checkUpdate.sh > /home/pi/.nhlledportal/status
   printf "${BLUE}%s${RESET}\n" "$message"
 else
   ret=$?

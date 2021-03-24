@@ -10,3 +10,5 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v2
         with:
           release-type: simple
+          command: release-pr
+          package-name: nhl-led-scoreboard
