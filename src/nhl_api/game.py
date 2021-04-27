@@ -102,8 +102,7 @@ class GameScoreboard(object):
 
 
 def overview(game_id):
-    data = nhl_api.data.get_overview(game_id)
-    parsed = data.json()
+    parsed = nhl_api.data.get_overview(game_id)
     # Top level information (General)
     id = parsed['gamePk']
     time_stamp = parsed['gameData']['game']

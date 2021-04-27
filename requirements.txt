@@ -17,3 +17,4 @@ nameparser==1.0.6
 pillow==7.1.2
 dbus-python
 iso6709
+dotty-dict>=1.3.0

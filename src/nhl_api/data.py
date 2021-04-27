@@ -1,6 +1,7 @@
 import json
 import requests
 import debug
+import dotty_dict
 
 """
     TODO:
@@ -13,6 +14,8 @@ SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
 TEAM_URL = '{0}teams?expand=team.roster,team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
 PLAYER_URL = '{0}people/{1}'
 OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
+DIFF_OVERVIEW_URL = BASE_URL + \
+    'game/{0}/feed/live/diffPatch?site=en_nhl&startTimecode={1}'
 STATUS_URL = BASE_URL + 'gameStatus'
 CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
 STANDINGS_URL = BASE_URL + 'standings'
@@ -22,6 +25,7 @@ SERIES_RECORD = "https://records.nhl.com/site/api/playoff-series?cayenneExp=play
 REQUEST_TIMEOUT = 5
 
 TIMEOUT_TESTING = 0.001  # TO DELETE
+scoreboards = {}
 
 
 def get_schedule(year, month, day):
@@ -47,12 +51,49 @@ def get_player(playerId):
 
 
 def get_overview(game_id):
+    if game_id in scoreboards:
+        return get_diff_overview(game_id)
+
+    return get_full_overview(game_id)
+
+
+def get_full_overview(game_id):
     try:
         data = requests.get(OVERVIEW_URL.format(game_id), timeout=REQUEST_TIMEOUT)
+        scoreboards[game_id] = data
         # data = dummie_overview()
         return data
     except requests.exceptions.RequestException as e:
         raise ValueError(e)
+
+
+def get_diff_overview(game_id):
+    try:
+        data = scoreboards[game_id]
+        startTimecode = data['metaData']['timeStamp']
+        diffs = requests.get(DIFF_OVERVIEW_URL.format(
+            game_id, startTimecode), timeout=REQUEST_TIMEOUT).json()
+        # data = dummie_overview()
+        data = apply_patches(data, diffs)
+        scoreboards[game_id] = data
+        return data
+    except requests.exceptions.RequestException as e:
+        raise ValueError(e)
+
+
+def apply_patches(data, diffs):
+    dot = dotty_dict.Dotty(data, separator='/')
+    for patches in diffs:
+        for patch in patches['diff']:
+            path = patch['path'].strip('/')
+            if patch['op'] in ['replace', 'add']:
+                dot[path] = patch['value']
+            elif patch['op'] in ['remove']:
+                if dot.get(path):
+                    del dot[path]
+            else:
+                return get_full_overview(data['gamePk'])
+    return dot.to_dict()
 
 
 def get_game_status():
