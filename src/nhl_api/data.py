@@ -2,7 +2,6 @@ import json
 import requests
 import debug
 import dotty_dict
-import logging
 
 """
     TODO:
@@ -27,7 +26,6 @@ REQUEST_TIMEOUT = 5
 
 TIMEOUT_TESTING = 0.001  # TO DELETE
 
-logger = logging.getLogger('scoreboard')
 scoreboards = {}
 
 
@@ -91,18 +89,23 @@ def get_diff_overview(game_id):
 
 def apply_patches(data, diffs):
     dot = dotty_dict.Dotty(data, separator='/')
-    for patches in diffs:
-        logger.debug(patches)
-        for patch in patches['diff']:
-            path = patch['path'].strip('/')
-            if patch['op'] in ['replace', 'add']:
-                dot[path] = patch['value']
-            elif patch['op'] in ['remove']:
-                if dot.get(path):
-                    del dot[path]
-            else:
-                return get_full_overview(data['gamePk'])
-    return dot.to_dict()
+    try:
+        for patches in diffs:
+            debug.log(patches)
+            for patch in patches['diff']:
+                path = patch['path'].strip('/')
+                if patch['op'] in ['replace', 'add']:
+                    dot[path] = patch['value']
+                elif patch['op'] in ['remove']:
+                    if dot.get(path):
+                        del dot[path]
+                else:
+                    return get_full_overview(data['gamePk'])
+        return dot.to_dict()
+    except:
+        debug.log(diffs)
+        return get_full_overview(data['gamePk'])
+
 
 
 def get_game_status():
