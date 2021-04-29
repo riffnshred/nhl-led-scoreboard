@@ -52,7 +52,12 @@ def get_player(playerId):
 
 def get_overview(game_id):
     if game_id in scoreboards:
-        return get_diff_overview(game_id)
+        try:
+          return get_diff_overview(game_id)
+        except ValueError:
+        #    return full overview if diff fails
+           return get_full_overview(game_id)
+
 
     return get_full_overview(game_id)
 
