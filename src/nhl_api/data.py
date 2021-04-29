@@ -2,6 +2,7 @@ import json
 import requests
 import debug
 import dotty_dict
+import logging
 
 """
     TODO:
@@ -25,6 +26,8 @@ SERIES_RECORD = "https://records.nhl.com/site/api/playoff-series?cayenneExp=play
 REQUEST_TIMEOUT = 5
 
 TIMEOUT_TESTING = 0.001  # TO DELETE
+
+logger = logging.getLogger('scoreboard')
 scoreboards = {}
 
 
@@ -89,6 +92,7 @@ def get_diff_overview(game_id):
 def apply_patches(data, diffs):
     dot = dotty_dict.Dotty(data, separator='/')
     for patches in diffs:
+        logger.debug(patches)
         for patch in patches['diff']:
             path = patch['path'].strip('/')
             if patch['op'] in ['replace', 'add']:
