@@ -64,7 +64,7 @@ def get_overview(game_id):
 
 def get_full_overview(game_id):
     try:
-        data = requests.get(OVERVIEW_URL.format(game_id), timeout=REQUEST_TIMEOUT)
+        data = requests.get(OVERVIEW_URL.format(game_id), timeout=REQUEST_TIMEOUT).json()
         scoreboards[game_id] = data
         # data = dummie_overview()
         return data
