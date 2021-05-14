@@ -105,7 +105,6 @@ class Scoreboard:
             plays = overview.plays
             away_scoring_plays, away_penalty_play, home_scoring_plays, home_penalty_play = filter_plays(plays,away.team.id,home.team.id)
             
-            
             # Get the Away Goal details
             # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info

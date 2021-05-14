@@ -58,6 +58,7 @@ class Status:
             regular_season_enddate = datetime.strptime(self.season_info['regularSeasonEndDate'], "%Y-%m-%d").date()
             end_of_season = datetime.strptime(self.season_info['seasonEndDate'], "%Y-%m-%d").date()
 
+            print(regular_season_enddate)
             return regular_season_enddate < date <= end_of_season and playoff_obj.rounds
         except TypeError:
             debug.error('The Argument provided for status.is_playoff is missing or not right.')

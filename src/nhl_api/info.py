@@ -141,7 +141,7 @@ def playoff_info(season):
         output['default_round'] = default_round
     except KeyError:
         debug.error("No default round for {} Playoff.".format(season))
-        default_round = 0
+        default_round = 1
         output['default_round'] = default_round
 
     return output

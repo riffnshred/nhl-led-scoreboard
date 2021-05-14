@@ -483,7 +483,7 @@ class Data:
                 self.playoffs = nhl_api.playoff(self.status.season_id)
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
-                    self.current_round = self.playoffs.rounds[str(2)]
+                    self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"

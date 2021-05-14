@@ -41,8 +41,12 @@ class Seriesticker:
             round_name = "Final" 
 
             if not self.data.current_round.number == 4:
-                color_conf = self.team_colors.color("{}.primary".format(series.conference))
-                banner_text = series.conference
+                try:
+                    color_conf = self.team_colors.color("{}.primary".format(series.conference))
+                    banner_text = series.conference
+                except:
+                    color_conf = self.team_colors.color("{}.primary".format("Western"))
+                    banner_text = "Western"
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
                 round_name = self.data.current_round_name
                 self.show_indicator(self.index, self.num_series)
