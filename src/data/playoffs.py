@@ -1,4 +1,5 @@
 from data.team import SeriesTeam
+from data.scoreboard import Scoreboard
 from utils import convert_time
 import nhl_api
 
@@ -54,6 +55,16 @@ class Series:
         self.current_game_date = convert_time(self.current_game.gameTime).strftime("%Y-%m-%d")
         self.current_game_start_time = convert_time(self.current_game.gameTime).strftime(data.config.time_format)
         self.games = nhl_api.series_game_record(self.series_code, data.playoffs.season)
+        self.game_overviews = {}
+
+    def get_game_overview(self, gameid):
+        # Request the game overview
+        overview = nhl_api.overview(gameid)
+        self.game_overviews[gameid] = overview
+        return overview
+        
+
+
 
         
 

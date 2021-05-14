@@ -51,4 +51,4 @@ def playoff(season = ""):
     return nhl_api.info.Playoff(nhl_api.info.playoff_info(season))
 
 def series_game_record(seriesCode, season):
-    return nhl_api.info.series_record(seriesCode, season)
+    return nhl_api.info.series_record(seriesCode, 20182019)
