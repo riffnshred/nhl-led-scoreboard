@@ -124,7 +124,10 @@ class Seriesticker:
                         overview = series.get_game_overview(game["gameId"])
                     
                     # get the scoreboard
-                    scoreboard = Scoreboard(overview, self.data)
+                    try:
+                        scoreboard = Scoreboard(overview, self.data)
+                    except:
+                        break
                     if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
                         if scoreboard.winning_team == series.top_team.id:
                             winning_row = top_row

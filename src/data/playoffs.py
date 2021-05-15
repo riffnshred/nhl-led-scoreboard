@@ -59,7 +59,11 @@ class Series:
 
     def get_game_overview(self, gameid):
         # Request the game overview
-        overview = nhl_api.overview(gameid)
+        overview = ""
+        try:
+            overview = nhl_api.overview(gameid)
+        except:
+            print("failed overview refresh for series game id {}".format(gameid))
         self.game_overviews[gameid] = overview
         return overview
         
