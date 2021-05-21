@@ -69,7 +69,7 @@ def get_lat_lng(location):
 
             if not g.ok:
                 ipfallback = True
-                message = "Unable to find [{}] with Open Street Map, used IP address to find your location is: ".format(location) + g.city + ","+ g.country + " " + str(g.latlng)
+                message = "Unable to find [{}] with Open Street Map".format(location)
             else:
                 latlng = g.latlng
                 message = "location is: " + location + " " + str(g.latlng)

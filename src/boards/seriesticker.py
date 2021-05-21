@@ -10,9 +10,6 @@ import debug
 import nhl_api
 
 class Seriesticker:
-    """
-        TODO: Take out the Series object and create a list of instence from the refresh_playoff in Data instead. Call the data only once a day.
-    """
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.rotation_rate = 5
@@ -41,8 +38,12 @@ class Seriesticker:
             round_name = "Final" 
 
             if not self.data.current_round.number == 4:
-                color_conf = self.team_colors.color("{}.primary".format(series.conference))
-                banner_text = series.conference
+                try:
+                    color_conf = self.team_colors.color("{}.primary".format(series.conference))
+                    banner_text = series.conference
+                except:
+                    color_conf = self.team_colors.color("{}.primary".format("Western"))
+                    banner_text = "Western"
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
                 round_name = self.data.current_round_name
                 self.show_indicator(self.index, self.num_series)
@@ -110,22 +111,23 @@ class Seriesticker:
         # text offset for loosing score if the winning team has a score of 10 or higher and loosing team 
         # have a score lower then 10
 
-        """
-            TODO: Grabbing all the games of a series cause delay up to 15 sec for certain users. I think its time to put all the data
-            refresh into a thread and refresh everything from there
-            . 
-        """
         offset_correction = 0
         for game in series.games:
             attempts_remaining = 5
             while attempts_remaining > 0:
                 try:
-                    # Request the game overview
-                    overview = nhl_api.overview(game["gameId"])
+                    if game["gameId"] in series.game_overviews:
+                        # Look if the game data is already stored in the game overviews from the series
+                        overview = series.game_overviews[game["gameId"]]
+                    else:
+                        # Request and store the game overview in the series instance
+                        overview = series.get_game_overview(game["gameId"])
                     
                     # get the scoreboard
-                    scoreboard = Scoreboard(overview, self.data)
-
+                    try:
+                        scoreboard = Scoreboard(overview, self.data)
+                    except:
+                        break
                     if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
                         if scoreboard.winning_team == series.top_team.id:
                             winning_row = top_row
