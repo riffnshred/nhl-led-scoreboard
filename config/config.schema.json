@@ -793,7 +793,6 @@
                         "start": {
                             "$id": "#/properties/sbio/properties/screensaver/properties/start",
                             "type": "string",
-                            "pattern": "([01]?[0-9]|2[0-3]):[0-5][0-9]",
                             "title": "start",
                             "description": "Time to start screensaver at (12h or 24h)",
                             "default": "01:00"
@@ -801,7 +800,6 @@
                         "stop": {
                             "$id": "#/properties/sbio/properties/screensaver/properties/stop",
                             "type": "string",
-                            "pattern": "([01]?[0-9]|2[0-3]):[0-5][0-9]",
                             "title": "stop",
                             "description": "Time to end screensaver at (12h or 24h)",
                             "default": "07:00"

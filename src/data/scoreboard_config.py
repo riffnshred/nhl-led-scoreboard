@@ -139,6 +139,66 @@ class ScoreboardConfig:
         self.clock_date_rgb =  json["boards"]["clock"]["date_rgb"]
         self.clock_flash_seconds =  json["boards"]["clock"]["flash_seconds"]
 
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
+        # Stonks
+        self.stonks_tickers = json["boards"]["stonks"]["tickers"]
+        self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
+        self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
+        self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
+
         # Fonts
         self.layout = Layout()
 

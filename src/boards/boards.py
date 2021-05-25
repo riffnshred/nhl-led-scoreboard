@@ -17,6 +17,16 @@ from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
 from time import sleep
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
+from boards.stonks import Stonks
 
 
 class Boards:
@@ -259,3 +269,33 @@ class Boards:
 
     def christmas(self, data, matrix,sleepEvent):
         Christmas(data, matrix, sleepEvent).draw()
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
+
+    def stonks(self, data, matrix, sleepEvent):
+        Stonks(data, matrix, sleepEvent)
