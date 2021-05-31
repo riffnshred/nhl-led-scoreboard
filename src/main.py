@@ -7,10 +7,12 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from utils import args, led_matrix_options, stop_splash_service
 from data.data import Data
 import threading
+import Queue
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
 from sbio.motionsensor import Motion
 from sbio.screensaver import screenSaver
+from sbio.sbMQTT import sbMQTT
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
@@ -83,8 +85,7 @@ def run():
     # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
-
-    # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
+        # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
     scheduler = BackgroundScheduler()
     scheduler.start()
 
@@ -148,6 +149,14 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
+    mqtt_enabled = False
+    if mqtt_enabled:
+        # Create a queue for scoreboard events and info to be sent to an MQTT broker
+        sbQueue = Queue.Queue()
+        sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue)
+        sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
+        sbmqttThread.daemon = True
+        sbmqttThread.start()
 
     MainRenderer(matrix, data, sleepEvent).render()
 
