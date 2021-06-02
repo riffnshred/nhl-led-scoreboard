@@ -18,13 +18,14 @@ import glob
 
 
 class MainRenderer:
-    def __init__(self, matrix, data, sleepEvent):
+    def __init__(self, matrix, data, sleepEvent,sbQueue):
         self.matrix = matrix
         self.data = data
         self.status = self.data.status
         self.refresh_rate = self.data.config.live_game_refresh_rate
         self.boards = Boards()
         self.sleepEvent = sleepEvent
+        self.sbQueue = sbQueue
         self.sog_display_frequency = data.config.sog_display_frequency
         self.alternate_data_counter = 1
 

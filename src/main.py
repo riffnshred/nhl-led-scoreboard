@@ -7,7 +7,7 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from utils import args, led_matrix_options, stop_splash_service
 from data.data import Data
 import threading
-import Queue
+import queue
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
 from sbio.motionsensor import Motion
@@ -149,16 +149,16 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
-    mqtt_enabled = False
-    if mqtt_enabled:
-        # Create a queue for scoreboard events and info to be sent to an MQTT broker
-        sbQueue = Queue.Queue()
+    mqtt_enabled = True
+    # Create a queue for scoreboard events and info to be sent to an MQTT broker
+    sbQueue = queue.Queue()
+    if mqtt_enabled:     
         sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue)
         sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
         sbmqttThread.daemon = True
         sbmqttThread.start()
 
-    MainRenderer(matrix, data, sleepEvent).render()
+    MainRenderer(matrix, data, sleepEvent,sbQueue).render()
 
 
 if __name__ == "__main__":
