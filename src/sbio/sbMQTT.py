@@ -1,5 +1,6 @@
 import paho.mqtt.client as sbmqtt
 import debug
+import json
 
 class sbMQTT(object):
     def on_connect(self,client,userdata,flags,rc):
@@ -19,12 +20,20 @@ class sbMQTT(object):
     # scoreboard/control/screen/brightness/<level, 1-100>
     # scoreboard/control/screen/off
     # scoreboard/control/screen/on
+    # scoreboard/control/screensaver/on
+    # scoreboard/control/screensaver/off
     # scoreboard/control/test/goal
     # scoreboard/control/test/penalty
+    # scoreboard/control/test/queue
     def on_message(self, client, userdata, msg):
         msg.payload = msg.payload.decode("utf-8")
-        debug.info("{0} {1}".format(msg.topic,msg.payload))
-        self.client.publish("scoreboard/live/goal/home",5)
+        debug.info("MQTT Message: Topic: {0} Payload: {1}".format(msg.topic,msg.payload))
+        
+
+        if msg.topic == "scoreboard/control/test/queue":
+            qPayload = {"preferred_team": True,"score": 5}
+            qItem = ["scoreboard/live/goal/home",qPayload]
+            self.sbQueue.put_nowait(qItem)
         
 
     def __init__(self, data, matrix,sleepEvent,sbQueue):
@@ -57,7 +66,12 @@ class sbMQTT(object):
     # scoreboard/live/end
     def run(self):
         while True:
-            self.client.publish(self.sbQueue.get())
+            #Get the topic and the payload from the queue
+            qData = self.sbQueue.get()
+            qTopic = qData[0]
+            qPayload = json.dumps(qData[1])
+            debug.info("Sending: {0} {1}".format(qTopic,qPayload))
+            self.client.publish(qTopic,qPayload)
             self.sbQueue.task_done()
         
     
