@@ -281,6 +281,12 @@ class MainRenderer:
             self.goal_team_cache.append("away")
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
+            
+            # Add goal onto queue
+            qPayload = {"preferred_team": pref_team_only,"score": self.away_score}
+            qItem = ["scoreboard/live/goal/away",qPayload]
+            self.sbQueue.put_nowait(qItem)
+            
             # run the goal animation
             self._draw_event_animation("goal", away_id, away_name)
 
@@ -290,6 +296,11 @@ class MainRenderer:
             self.goal_team_cache.append("home")
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
+            # Add goal onto queue
+            qPayload = {"preferred_team": pref_team_only,"score": self.home_score}
+            qItem = ["scoreboard/live/goal/home",qPayload]
+            self.sbQueue.put_nowait(qItem)
+
             # run the goal animation
             self._draw_event_animation("goal", home_id, home_name)
 

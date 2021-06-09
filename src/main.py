@@ -153,7 +153,7 @@ def run():
     # Create a queue for scoreboard events and info to be sent to an MQTT broker
     sbQueue = queue.Queue()
     if mqtt_enabled:     
-        sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue)
+        sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue,screensaver)
         sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
         sbmqttThread.daemon = True
         sbmqttThread.start()
