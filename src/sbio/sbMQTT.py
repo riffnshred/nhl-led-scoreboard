@@ -31,9 +31,10 @@ class sbMQTT(object):
     # test payload will be strings goal, penalty or queue
     def on_message(self, client, userdata, msg):
         msg.payload = msg.payload.decode("utf-8")
-        debug.info("MQTT Message: Topic: {0} Payload: {1}".format(msg.topic,msg.payload))
+        debug.info("MQTT:  Topic: {0} Payload: {1}".format(msg.topic,msg.payload))
         
 
+        # The test topic is used to test the queue directly without getting to a live game mode
         if msg.topic == "scoreboard/control/test":
             if msg.payload == "queue":
                 qPayload = {"preferred_team": True,"score": 5}
@@ -55,12 +56,12 @@ class sbMQTT(object):
                 if self.screensaver != None:
                     self.screensaver.runSaver()
                 else:
-                    debug.error("Screen saver not enabled")
+                    debug.error("MQTT: Screen saver not enabled")
             else:
                 if self.screensaver != None:
                     self.screensaver.stopSaver()
                 else:
-                    debug.error("Screen saver not enabled")
+                    debug.error("MQTT: Screen saver not enabled")
 
         # brightness is a number between 1-100
         # Brightness will get set on the next refresh of the board being displayed
@@ -69,16 +70,14 @@ class sbMQTT(object):
             if not self.data.config.dimmer_enabled:
                 screen_brightness = int(msg.payload)
                 
-                debug.info("Brightness set to {0} from MQTT".format(str(screen_brightness)))
-
                 if screen_brightness not in range(1,101):
                     #set the brightness to original
                     screen_brightness = self.original_brightness
-                    debug.info("Brightness set to {0} from MQTT".format(str(screen_brightness)))
+                    debug.info("MQTT: Brightness set to {0}".format(str(screen_brightness)))
 
                 self.matrix.set_brightness(screen_brightness)
             else:
-                debug.error("MQTT - brightness can not be set with dimmer enabled")
+                debug.error("MQTT: brightness can not be set with dimmer enabled")
 
         # Update the brightness for the dimmer if enabled.  Set either sunset or sunrise or both
         # payload needs to be a json
@@ -95,7 +94,7 @@ class sbMQTT(object):
                 self.data.config.dimmer_sunrise_brightness = sunrise
                 self.data.config.dimmer_sunset_brightness = sunset
 
-                debug.info("Changing dimmer brightness sunrise:{0} sunset:{1}".format(sunrise,sunset))
+                debug.info("MQTT: Changing dimmer brightness sunrise:{0} sunset:{1}".format(sunrise,sunset))
 
 
         # Trigger the display to show a board
@@ -104,11 +103,11 @@ class sbMQTT(object):
             showboard= msg.payload
             if showboard != "":
                 if showboard not in AVAIL_BOARDS:
-                    debug.error("MQTT showboard is not one of the available boards.  Defaulting to clock.  Payload must be one of " + str(AVAIL_BOARDS))
+                    debug.error("MQTT: showboard is not one of the available boards.  Defaulting to clock.  Payload must be one of " + str(AVAIL_BOARDS))
                     showboard = "clock"
 
                 self.data.mqtt_showboard = showboard
-                debug.info("MQTT payload fired...." + showboard + " will be shown on next loop. Currently displayed board " + self.data.curr_board)
+                debug.info("MQTT: payload fired...." + showboard + " will be shown on next loop. Currently displayed board " + self.data.curr_board)
                 self.data.mqtt_trigger = True
                 self.sleepEvent.set()
             
@@ -145,13 +144,15 @@ class sbMQTT(object):
     # scoreboard/live/penalty/away
     # scoreboard/live/intermission
     # scoreboard/live/end
+    # scoreboard/state
+    # States will have payload of a string: off_day, game_day, pregame,postgame
     def run(self):
         while True:
             #Get the topic and the payload from the queue
             qData = self.sbQueue.get()
             qTopic = qData[0]
             qPayload = json.dumps(qData[1])
-            debug.info("Sending: {0} {1}".format(qTopic,qPayload))
+            debug.info("MQTT: Sending: {0} {1}".format(qTopic,qPayload))
             self.client.publish(qTopic,qPayload)
             self.sbQueue.task_done()
         

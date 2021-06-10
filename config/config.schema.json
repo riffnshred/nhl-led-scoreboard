@@ -945,6 +945,11 @@
             "default": {},
             "examples": [
                 {
+                    "mqtt": {
+                        "enabled": true,
+                        "broker": "192.168.100.3",
+                        "port": 1883
+                    },
                     "screensaver": {
                         "enabled": "true",
                         "start": "22:00",
@@ -983,11 +988,65 @@
             ],
             "additionalProperties": true,
             "required": [
+                "mqtt",
                 "screensaver",
                 "dimmer",
                 "pushbutton"
             ],
             "properties": {
+                "mqtt": {
+                    "$id": "#/properties/sbio/properties/mqtt",
+                    "type": "object",
+                    "title": "mqtt",
+                    "description": "Ability to control scoreboard from MQTT and have scoreboard send events via MQTT",
+                    "default": {},
+                    "examples": [
+                        {
+                            "enabled": true,
+                            "broker": "192.168.100.3",
+                            "port": 1883
+                        }
+                    ],
+                    "additionalProperties": true,
+                    "required": [
+                        "enabled",
+                        "broker",
+                        "port"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/enabled",
+                            "type": "boolean",
+                            "title": "enabled",
+                            "description": "Use the MQTT functionality",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "animations": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/broker",
+                            "type": "string",
+                            "title": "broker",
+                            "description": "Host name or IP address of MQTT server",
+                            "default": "",
+                            "examples": [
+                                "192.168.100.3"
+                            ]
+                        },
+                        
+                        "pin": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/port",
+                            "type": "integer",
+                            "title": "port",
+                            "description": "What port number MQTT server uses",
+                            "default": 1883,
+                            "examples": [
+                                1883
+                            ]
+                        }
+                    }
+                },
                 "screensaver": {
                     "$id": "#/properties/sbio/properties/screensaver",
                     "type": "object",

@@ -337,6 +337,12 @@ class MainRenderer:
             self.penalties_team_cache.append("away")
             #if away_id not in self.data.pref_teams: and pref_team_only:
             #    return
+
+            # Add penalty onto queue
+            qPayload = away_name
+            qItem = ["scoreboard/live/penalty/away",qPayload]
+            self.sbQueue.put_nowait(qItem)
+
             # run the goal animation
             self._draw_event_animation("penalty", away_id, away_name)
 
@@ -345,6 +351,12 @@ class MainRenderer:
             self.penalties_team_cache.append("home")
             #if home_id not in self.data.pref_teams: #and pref_team_only:
             #    return
+
+            # Add penalty onto queue
+            qPayload = home_name
+            qItem = ["scoreboard/live/penalty/home",qPayload]
+            self.sbQueue.put_nowait(qItem)
+
             # run the goal animation
             self._draw_event_animation("penalty", home_id, home_name)
 

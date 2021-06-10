@@ -149,7 +149,7 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
-    mqtt_enabled = True
+    mqtt_enabled = data.config.mqtt_enabled
     # Create a queue for scoreboard events and info to be sent to an MQTT broker
     sbQueue = queue.Queue()
     if mqtt_enabled:     
