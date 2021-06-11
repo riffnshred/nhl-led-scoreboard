@@ -82,6 +82,10 @@ class MainRenderer:
         i = 0
         while True:
             debug.info('PING !!! Render off day')
+            # Add game state onto queue
+            qPayload = "off_day"
+            qItem = ["scoreboard/state",qPayload]
+            self.sbQueue.put_nowait(qItem)
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
@@ -145,6 +149,11 @@ class MainRenderer:
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
                 debug.info("Game is Live")
+                # Add game state onto queue
+                qPayload = "live"
+                qItem = ["scoreboard/state",qPayload]
+                self.sbQueue.put_nowait(qItem)
+
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
 
                 self.check_new_penalty()
@@ -152,6 +161,11 @@ class MainRenderer:
                 self.__render_live(sbrenderer)
                 if self.scoreboard.intermission:
                     debug.info("Main event is in Intermission")
+                    # Add game state onto queue
+                    qPayload = "intermission"
+                    qItem = ["scoreboard/state",qPayload]
+                    self.sbQueue.put_nowait(qItem)  
+
                     # Show Boards for Intermission
                     self.draw_end_period_indicator()
                     self.sleepEvent.wait(self.refresh_rate)
@@ -165,6 +179,11 @@ class MainRenderer:
             elif self.status.is_game_over(self.data.overview.status):
                 print(self.data.overview.status)
                 debug.info("Game Over")
+                # Add game state onto queue
+                qPayload = "gameover"
+                qItem = ["scoreboard/state",qPayload]
+                self.sbQueue.put_nowait(qItem)
+
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
@@ -199,6 +218,8 @@ class MainRenderer:
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
+                
+
 
             elif self.status.is_irregular(self.data.overview.status):
                 """ Pre-game state """
@@ -223,6 +244,11 @@ class MainRenderer:
         debug.info("Showing Pre-Game")
         self.matrix.clear()
         sbrenderer.render()
+        # Add game state onto queue
+        qPayload = "pregame"
+        qItem = ["scoreboard/state",qPayload]
+        self.sbQueue.put_nowait(qItem)
+
 
 
     def __render_postgame(self, sbrenderer):
@@ -230,6 +256,11 @@ class MainRenderer:
         self.matrix.clear()
         sbrenderer.render()
         self.draw_end_of_game_indicator()
+
+        # Add game state onto queue
+        qPayload = "postgame"
+        qItem = ["scoreboard/state",qPayload]
+        self.sbQueue.put_nowait(qItem)
 
 
     def __render_live(self, sbrenderer):
