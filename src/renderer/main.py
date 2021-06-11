@@ -148,10 +148,15 @@ class MainRenderer:
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
+                # Used for the live state payload
+                period = self.scoreboard.periods.ordinal
+                clock = self.scoreboard.periods.clock
+                score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
+        
                 debug.info("Game is Live")
                 # Add game state onto queue
-                qPayload = "live"
-                qItem = ["scoreboard/state",qPayload]
+                qPayload = {"period": period, "clock": clock,"score": score}
+                qItem = ["scoreboard/live/status",qPayload]
                 self.sbQueue.put_nowait(qItem)
 
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -314,7 +319,7 @@ class MainRenderer:
                 return
             
             # Add goal onto queue
-            qPayload = {"preferred_team": pref_team_only,"score": self.away_score}
+            qPayload = {"team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
             qItem = ["scoreboard/live/goal/away",qPayload]
             self.sbQueue.put_nowait(qItem)
             
@@ -328,7 +333,7 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # Add goal onto queue
-            qPayload = {"preferred_team": pref_team_only,"score": self.home_score}
+            qPayload = {"team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
             qItem = ["scoreboard/live/goal/home",qPayload]
             self.sbQueue.put_nowait(qItem)
 
