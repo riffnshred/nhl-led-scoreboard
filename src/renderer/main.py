@@ -319,8 +319,8 @@ class MainRenderer:
                 return
             
             # Add goal onto queue
-            qPayload = {"team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
-            qItem = ["scoreboard/live/goal/away",qPayload]
+            qPayload = {"away": True, "team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
+            qItem = ["scoreboard/live/goal",qPayload]
             self.sbQueue.put_nowait(qItem)
             
             # run the goal animation
@@ -333,8 +333,8 @@ class MainRenderer:
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # Add goal onto queue
-            qPayload = {"team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
-            qItem = ["scoreboard/live/goal/home",qPayload]
+            qPayload = {"home": True, "team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
+            qItem = ["scoreboard/live/goal",qPayload]
             self.sbQueue.put_nowait(qItem)
 
             # run the goal animation

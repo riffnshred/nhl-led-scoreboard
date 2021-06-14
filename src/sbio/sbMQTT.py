@@ -139,10 +139,14 @@ class sbMQTT(object):
 
     # Run in an endless loop consuming what's on the the queue and publishing to the MQTT broker
     # Possible topics:
-    # scoreboard/live/goal/home
-    # scoreboard/live/goal/away
-    # scoreboard/live/penalty/home
-    # scoreboard/live/penalty/away
+    # scoreboard/live/goal
+    # payload will be {"away": True, "team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
+    #              or {"home": True, "team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
+    # scoreboard/live/penalty
+    # payload will be  {"home": True, "team": home_name}
+    #              or  {"away": True, "team": away_name}
+    # scoreboard/live/status
+    # status will have a payload {"period": period, "clock": clock,"score": score}
     # scoreboard/state
     # States will have payload of a string: off_day, game_day, pregame,postgame, intermission
     def run(self):
