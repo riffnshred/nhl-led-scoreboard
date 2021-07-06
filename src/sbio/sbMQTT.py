@@ -51,7 +51,7 @@ class sbMQTT(object):
             
             if msg.payload == "penalty":
                 qPayload = {"preferred_team": True,"score": 5}
-                qItem = ["scoreboard/live/pemalty/home",qPayload]
+                qItem = ["scoreboard/live/penalty/home",qPayload]
                 self.sbQueue.put_nowait(qItem)
         
         if msg.topic == "scoreboard/control/screensaver":
