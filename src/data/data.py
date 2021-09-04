@@ -170,17 +170,19 @@ class Data:
         # Get refresh standings
         self.refresh_standings()
 
-        # Fetch the playoff data
-        self.refresh_playoff()
+        # Stanley cup round flag
+        self.stanleycup_round = False
 
         # Playoff Flag
         self.isPlayoff = False
 
+        # Fetch the playoff data
+        self.refresh_playoff()
+
         # Stanley cup champions
         self.ScChampions_id = self.check_stanley_cup_champion()
 
-        # Stanley cup round flag
-        self.stanleycup_round = False
+
 
     #
     # Date
