@@ -26,6 +26,7 @@
               "team_summary",
               "stanley_cup_champions",
               "christmas",
+              "seasoncountdown",
               "clock",
               "weather"
             ]
@@ -199,6 +200,7 @@
                             "Islanders",
                             "Jets",
                             "Kings",
+                            "Kraken",
                             "Lightning",
                             "Maple Leafs",
                             "Oilers",
