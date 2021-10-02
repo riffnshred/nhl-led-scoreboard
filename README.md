@@ -16,7 +16,7 @@ From now on, this library won't support the Raspberry Pi Zero or Zero W. For tho
 
 If you are looking to replace your raspberry pi Zero, I personally recommend the Raspberry pi 3A+. If you use the RGB Bonnet along with that, make sure to isolate the bottom of it with a few layers of Kapton tape or a layer of electrical tape.
 
-### DEVELOPPEMENT ON HOLD
+### DEVELOPMENT ON HOLD
 The development is on hold for this season. I still have a few things into works (support for a bigger screen), but the plan for this year is to maintain it and make sure you are not stuck with a black screen as much as I can. The next update will be around the Pre-season. It will be a fix to support the Seattle Kraken. Stay tuned for that.
 
 ## Description
