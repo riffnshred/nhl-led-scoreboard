@@ -148,7 +148,6 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
-
     MainRenderer(matrix, data, sleepEvent).render()
 
 
