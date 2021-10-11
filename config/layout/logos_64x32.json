@@ -172,7 +172,7 @@
       "ARI": {
         "home": {
           "zoom": "100%",
-          "position": [-14, 0]
+          "position": [-8, 0]
         },
         "away": {
           "zoom": "100%",
@@ -426,7 +426,7 @@
         },
         "away": {
           "zoom": "100%",
-          "position": [5, 0]
+          "position": [12, 0]
         }
       },
       "TOR": {

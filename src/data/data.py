@@ -324,6 +324,7 @@ class Data:
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
                     print('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
                     self.current_game_id = g.game_id
+                    print(self.current_game_id)
                     return
                 # If the game has not started but is ealier then the previous set game
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
@@ -378,6 +379,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
+                print("ping")
                 self.overview = nhl_api.overview(self.current_game_id)
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
@@ -496,7 +498,7 @@ class Data:
                         self.stanleycup_round = True
 
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
-                    
+                    8478996
                     try:
                         self.series = []
 
