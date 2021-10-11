@@ -31,7 +31,7 @@ class ecWxWorker(object):
                 debug.error("Unable to get EC current observations. Error {}".format(e))
                 
             curr_cond = self.data.ecData.conditions
-            debug.info(curr_cond)
+
             if len(curr_cond) == 0:
                 debug.error("Unable to get EC current observations")
                 self.data.wx_updated = False
