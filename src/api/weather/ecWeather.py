@@ -1,6 +1,7 @@
-from env_canada import ECData
+from env_canada import ECWeather
 import debug
 import datetime
+import asyncio
 from time import sleep
 from api.weather.wx_utils import cadhumidex, wind_chill, get_csv, degrees_to_direction, temp_f, wind_mph
 
@@ -25,11 +26,12 @@ class ecWxWorker(object):
 
         #while True:
             try:
-                self.data.ecData.update()
+                asyncio.run(self.data.ecData.update())
             except Exception as e:
                 debug.error("Unable to get EC current observations. Error {}".format(e))
                 
             curr_cond = self.data.ecData.conditions
+            debug.info(curr_cond)
             if len(curr_cond) == 0:
                 debug.error("Unable to get EC current observations")
                 self.data.wx_updated = False
@@ -64,7 +66,7 @@ class ecWxWorker(object):
                 self.data.wx_updated = False
 
             try:    
-                curr_humidity = curr_cond.get("humidity").get("value",{})
+                curr_humidity = str(curr_cond.get("humidity").get("value",{}))
             except:
                 curr_humidity = None
                 self.data.wx_updated = False
