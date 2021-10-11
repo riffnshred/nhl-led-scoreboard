@@ -98,6 +98,11 @@ class Data:
         self.curr_board = None
         self.prev_board = None
 
+        # For MQTT trigger (acts like the pb_trigger)
+        self.mqtt_trigger = False
+        # For MQTT board display - default to clock
+        self.mqtt_showboard = "clock"
+
 
         # Environment Canada manager (to share between the forecast, alerts and current obs)
         self.ecData = None
@@ -170,17 +175,18 @@ class Data:
         # Get refresh standings
         self.refresh_standings()
 
-        # Fetch the playoff data
-        self.refresh_playoff()
-
         # Playoff Flag
         self.isPlayoff = False
+
+        # Stanley cup round flag
+        self.stanleycup_round = False
+
+        # Fetch the playoff data
+        self.refresh_playoff()
 
         # Stanley cup champions
         self.ScChampions_id = self.check_stanley_cup_champion()
 
-        # Stanley cup round flag
-        self.stanleycup_round = False
 
     #
     # Date
@@ -294,7 +300,6 @@ class Data:
 
     def check_game_priority(self):
         """
-
             Function that handle the live game.
 
             Show the earliest game until the most prefered game start. 
@@ -319,6 +324,7 @@ class Data:
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
                     print('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
                     self.current_game_id = g.game_id
+                    print(self.current_game_id)
                     return
                 # If the game has not started but is ealier then the previous set game
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
@@ -373,6 +379,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
+                print("ping")
                 self.overview = nhl_api.overview(self.current_game_id)
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
@@ -483,7 +490,7 @@ class Data:
                 self.playoffs = nhl_api.playoff(self.status.season_id)
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
-                    self.current_round = self.playoffs.rounds[str(2)]
+                    self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
                     self.current_round_name = self.current_round.names.name
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
@@ -491,7 +498,7 @@ class Data:
                         self.stanleycup_round = True
 
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
-                    
+                    8478996
                     try:
                         self.series = []
 

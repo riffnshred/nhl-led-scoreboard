@@ -34,6 +34,11 @@ class ScoreboardConfig:
         # Goal animation
         self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
 
+        #MQTT settings
+        self.mqtt_enabled = json["sbio"]["mqtt"]["enabled"]
+        self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
+        self.mqtt_port = json["sbio"]["mqtt"]["port"]
+
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
         self.screensaver_animations = json["sbio"]["screensaver"]["animations"]

@@ -13,6 +13,7 @@ from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
 from boards.christmas import Christmas
+from boards.seasoncountdown import SeasonCountdown
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
@@ -56,6 +57,14 @@ class Boards:
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
 
+            if data.mqtt_trigger:
+                debug.info('MQTT triggered....will display ' + data.mqtt_showboard + ' board ' + "Overriding off_day -> " + data.config.boards_off_day[bord_index])
+                if not data.screensaver:
+                    data.mqtt_trigger = False
+                board = getattr(self,data.mqtt_showboard)
+                data.curr_board = data.mqtt_showboard
+                bord_index -= 1
+
             # Display the Weather Alert board
             if data.wx_alert_interrupt:
                 debug.info('Weather Alert triggered in off day loop....will display weather alert board')
@@ -82,7 +91,7 @@ class Boards:
             if bord_index >= (len(data.config.boards_off_day) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver or not data.mqtt_trigger:
                     bord_index += 1
 
     def _scheduled(self, data, matrix,sleepEvent):
@@ -97,6 +106,15 @@ class Boards:
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
                 bord_index -= 1
+
+            if data.mqtt_trigger:
+                debug.info('MQTT triggered....will display ' + data.mqtt_showboard + ' board ' + "Overriding scheduled -> " + data.config.boards_off_day[bord_index])
+                if not data.screensaver:
+                    data.mqtt_trigger = False
+                board = getattr(self,data.mqtt_showboard)
+                data.curr_board = data.mqtt_showboard
+                bord_index -= 1
+
 
             # Display the Weather Alert board
             if data.wx_alert_interrupt:
@@ -124,7 +142,7 @@ class Boards:
             if bord_index >= (len(data.config.boards_scheduled) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver or not data.mqtt_trigger:
                     bord_index += 1
 
     def _intermission(self, data, matrix,sleepEvent):
@@ -139,6 +157,14 @@ class Boards:
                     data.pb_trigger = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
+                bord_index -= 1
+
+            if data.mqtt_trigger:
+                debug.info('MQTT triggered....will display ' + data.mqtt_showboard + ' board ' + "Overriding intermission -> " + data.config.boards_off_day[bord_index])
+                if not data.screensaver:
+                    data.mqtt_trigger = False
+                board = getattr(self,data.mqtt_showboard)
+                data.curr_board = data.mqtt_showboard
                 bord_index -= 1
 
             # Display the Weather Alert board
@@ -167,7 +193,7 @@ class Boards:
             if bord_index >= (len(data.config.boards_intermission) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver or not data.mqtt_trigger:
                     bord_index += 1
 
     def _post_game(self, data, matrix,sleepEvent):
@@ -182,6 +208,14 @@ class Boards:
                     data.pb_trigger = False
                 board = getattr(self,data.config.pushbutton_state_triggered1)
                 data.curr_board = data.config.pushbutton_state_triggered1
+                bord_index -= 1
+
+            if data.mqtt_trigger:
+                debug.info('MQTT triggered....will display ' + data.mqtt_showboard + ' board ' + "Overriding post_game -> " + data.config.boards_off_day[bord_index])
+                if not data.screensaver:
+                    data.mqtt_trigger = False
+                board = getattr(self,data.mqtt_showboard)
+                data.curr_board = data.mqtt_showboard
                 bord_index -= 1
 
             # Display the Weather Alert board
@@ -211,7 +245,7 @@ class Boards:
             if bord_index >= (len(data.config.boards_post_game) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver or not data.mqtt_trigger:
                     bord_index += 1
 
     def fallback(self, data, matrix, sleepEvent):
@@ -221,8 +255,13 @@ class Boards:
         Scoreticker(data, matrix, sleepEvent).render()
 
     def seriesticker(self, data, matrix,sleepEvent):
-        if data.status.is_playoff(data.today, data.playoffs):
+        '''
+            forcing it to show since the playoff start and regular season end are in conflict for 2021
+        '''
+        Seriesticker(data, matrix, sleepEvent).render()
+        '''if data.status.is_playoff(data.today, data.playoffs):
             Seriesticker(data, matrix, sleepEvent).render()
+        '''    
     
     def stanley_cup_champions(self, data, matrix,sleepEvent):
         StanleyCupChampions(data, matrix, sleepEvent).render()
@@ -254,3 +293,6 @@ class Boards:
 
     def christmas(self, data, matrix,sleepEvent):
         Christmas(data, matrix, sleepEvent).draw()
+
+    def seasoncountdown(self, data, matrix,sleepEvent):
+        SeasonCountdown(data, matrix, sleepEvent).draw()

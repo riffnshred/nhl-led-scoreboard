@@ -18,3 +18,4 @@ pillow>=7.1.2
 #dbus-python
 iso6709
 RGBMatrixEmulator
+paho-mqtt

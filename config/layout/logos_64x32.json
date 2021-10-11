@@ -93,6 +93,10 @@
         "zoom": "130%",
         "position": [13,0]
       },
+      "SEA": {
+        "zoom": "125%",
+        "position": [0,-3]
+      },
       "SJS": {
         "zoom": "120%",
         "position": [3,-4]
@@ -168,7 +172,7 @@
       "ARI": {
         "home": {
           "zoom": "100%",
-          "position": [-14, 0]
+          "position": [-8, 0]
         },
         "away": {
           "zoom": "100%",
@@ -385,6 +389,16 @@
           "position": [18, 0]
         }
       },
+      "SEA": {
+        "home": {
+          "zoom": "100%",
+          "position": [-7, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [7, 0]
+        }
+      },
       "SJS": {
         "home": {
           "zoom": "100%",
@@ -412,7 +426,7 @@
         },
         "away": {
           "zoom": "100%",
-          "position": [5, 0]
+          "position": [12, 0]
         }
       },
       "TOR": {
