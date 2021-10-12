@@ -93,6 +93,10 @@
         "zoom": "130%",
         "position": [13,0]
       },
+      "SEA": {
+        "zoom": "125%",
+        "position": [0,-3]
+      },
       "SJS": {
         "zoom": "120%",
         "position": [3,-4]
@@ -383,6 +387,16 @@
         "away": {
           "zoom": "100%",
           "position": [18, 0]
+        }
+      },
+      "SEA": {
+        "home": {
+          "zoom": "100%",
+          "position": [-7, 0]
+        },
+        "away": {
+          "zoom": "100%",
+          "position": [7, 0]
         }
       },
       "SJS": {

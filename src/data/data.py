@@ -170,17 +170,18 @@ class Data:
         # Get refresh standings
         self.refresh_standings()
 
-        # Fetch the playoff data
-        self.refresh_playoff()
-
         # Playoff Flag
         self.isPlayoff = False
+
+        # Stanley cup round flag
+        self.stanleycup_round = False
+
+        # Fetch the playoff data
+        self.refresh_playoff()
 
         # Stanley cup champions
         self.ScChampions_id = self.check_stanley_cup_champion()
 
-        # Stanley cup round flag
-        self.stanleycup_round = False
 
     #
     # Date
@@ -294,7 +295,6 @@ class Data:
 
     def check_game_priority(self):
         """
-
             Function that handle the live game.
 
             Show the earliest game until the most prefered game start. 

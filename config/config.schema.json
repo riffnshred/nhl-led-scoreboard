@@ -16,18 +16,19 @@
         "sbio"
     ],
     "definitions": {
-        "boards_list": {
-            "enum": [
-                "wxalert",
-                "wxforecast",
-                "scoreticker",
-                "seriesticker",
-                "standings",
-                "team_summary",
-                "stanley_cup_champions",
-                "christmas",
-                "clock",
-                "weather"
+      	"boards_list": {
+          	"enum": [
+              "wxalert",
+              "wxforecast",
+              "scoreticker",
+              "seriesticker",
+              "standings",
+              "team_summary",
+              "stanley_cup_champions",
+              "christmas",
+              "seasoncountdown",
+              "clock",
+              "weather"
             ]
         }
     },
@@ -149,6 +150,7 @@
                             "Islanders",
                             "Jets",
                             "Kings",
+                            "Kraken",
                             "Lightning",
                             "Maple Leafs",
                             "Oilers",
