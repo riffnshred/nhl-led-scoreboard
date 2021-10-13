@@ -405,7 +405,7 @@
                     "standings": {
                         "standing_type": "wild_card",
                         "preferred_standings_only": true,
-                        "divisions": "north",
+                        "divisions": "central",
                         "conference": "eastern"
                     },
                     "clock": {
@@ -514,7 +514,7 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "north",
+                            "divisions": "central",
                             "conference": "eastern",
                             "standing_type": "wild_card",
                             "preferred_standings_only": true
@@ -556,16 +556,13 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (north, central, east, west)",
+                            "title": "divisions (metropolitan, central, atlantic, pacific)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "north"
+                                "central"
                             ],
                             "enum": [
-                                "north",
-                                "east",
-                                "west",
                                 "central",
                                 "atlantic",
                                 "metropolitan",
