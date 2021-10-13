@@ -15,10 +15,10 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.6.1"
+SCRIPT_VERSION = "1.6.2"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
-    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
+    'Golden Knights','Hurricanes','Islanders','Jets','Kings','Kraken','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
     'Rangers','Red Wings','Sabres','Senators','Sharks','Stars','Wild']
 
 #Everything that can be configured in the config.json
@@ -399,7 +399,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown']
 
         boards_selected = []
         board = None
@@ -515,7 +515,7 @@ def standings(default_config,qmark):
             'name' : 'divisions',
             'qmark': qmark,
             'message' : "Select the division to display",
-            'choices' : ['atlantic','metropolitan','central','pacific','north','west','east'],
+            'choices' : ['atlantic','metropolitan','central','pacific'],
             'default' : get_default_value(default_config,['boards','standings','divisions'],"string") or 'atlantic'
         },
         {

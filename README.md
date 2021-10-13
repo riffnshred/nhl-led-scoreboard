@@ -9,25 +9,15 @@
 [![Create Release - Image](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml/badge.svg)](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml)
 [![GitHub release (latest by date)](https://badgen.net/github/release/falkyre/nhl-led-scoreboard-img?label=Version)](https://github.com/falkyre/nhl-led-scoreboard-img/releases/latest)
 
-## UPDATE on 2021 Season (PLEASE READ)
+## UPDATE for Season 2021 - 2022 (PLEASE READ)
 
-The 2021 season is upon us. REJOICE !!!
+### RASPBERRY PI ZERO SUPPORT 
+From now on, this library won't support the Raspberry Pi Zero or Zero W. For those who are already using that model, it will work still for V1.6.5(current) but I won't give any support for it. The models we support are all the Raspberry pi 3 versions and the Pi 4. 
 
-  
+If you are looking to replace your raspberry pi Zero, I personally recommend the Raspberry pi 3A+. If you use the RGB Bonnet along with that, make sure to isolate the bottom of it with a few layers of Kapton tape or a layer of electrical tape.
 
-This project rely on the undocumented NHL API and I have no control over it. the 2021 season as we know it is a different one and that will have an effect on this software. Your board might crash and not run sometimes. I suspect most of the changes, if there is any, will be found early on and I'll publish updates accordingly. Please keep an eye on the issue sections or open a new one if you believe what you are encounting has not been reported.
-
-  
-
-I also strongly recommand joining the discord channel to keep up with the updates and whats going on. And also you know. show off your setup which I enjoy.
-
-  
-
-Cheers
-
-JJ
-
-  
+### DEVELOPMENT ON HOLD
+The development is on hold for this season. I still have a few things into works (support for a bigger screen), but the plan for this year is to maintain it and make sure you are not stuck with a black screen as much as I can. The next update will be around the Pre-season. It will be a fix to support the Seattle Kraken. Stay tuned for that.
 
 ## Description
 
