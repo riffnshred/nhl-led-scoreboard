@@ -423,9 +423,6 @@ class Data:
                 self.network_issues = True
                 debug.error("Failed to refresh the Standings. {} attempt remaining.".format(attempts_remaining))
                 debug.error(error_message)
-                attempts_remaining -= 1
-                sleep(NETWORK_RETRY_SLEEP_TIME)
-
     #
     # Teams
 
@@ -478,6 +475,9 @@ class Data:
             TODO:
                 Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
         """
+        self.current_round = None
+        self.current_round_name = None
+        self.stanleycup_round = None
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
