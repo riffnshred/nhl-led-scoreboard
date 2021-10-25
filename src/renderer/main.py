@@ -203,6 +203,8 @@ class MainRenderer:
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("FINAL")
+                #Let the screensaver run again
+                self.data.screensaver_livegame = False
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
