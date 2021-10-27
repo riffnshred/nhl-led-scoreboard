@@ -74,7 +74,7 @@ def team_info():
                     'positionType': position_type,
                     'positionAbbrev': position_abbrev
                     }
-                #print('#{} {} - {} {}'.format(jerseyNumber,position_abbrev,first_name,last_name))
+                
             
             output = {
                 'team_id': team_id,
