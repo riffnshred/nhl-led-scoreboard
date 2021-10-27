@@ -11,8 +11,10 @@
 
 ## UPDATE for Season 2021 - 2022 (PLEASE READ)
 
-### RASPBERRY PI ZERO SUPPORT 
-From now on, this library won't support the Raspberry Pi Zero or Zero W. For those who are already using that model, it will work still for V1.6.5(current) but I won't give any support for it. The models we support are all the Raspberry pi 3 versions and the Pi 4. 
+### RASPBERRY PI ZERO NO MORE SUPPORTED
+From now on, this library won't support the Raspberry Pi Zero or Zero W. This is because the project has become too complex to work properly on it. For those who are already using that model, It should still work with the latest version, but I won't give any support for it. I don't guarantee it will work from this point on.
+
+The models we support are all the Raspberry pi 3 versions and the Pi 4. 
 
 If you are looking to replace your raspberry pi Zero, I personally recommend the Raspberry pi 3A+. If you use the RGB Bonnet along with that, make sure to isolate the bottom of it with a few layers of Kapton tape or a layer of electrical tape.
 
