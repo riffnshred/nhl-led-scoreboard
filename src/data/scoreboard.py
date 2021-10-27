@@ -155,7 +155,13 @@ class Scoreboard:
         self.start_time = convert_time(overview.game_date).strftime(time_format)
         self.status = overview.status
         self.periods = Periods(overview)
-        self.intermission = linescore.intermissionInfo.inIntermission
+        
+        try:
+            self.intermission = linescore.intermissionInfo.inIntermission
+        except:
+            debug.error("Intermission data unavailable")
+            self.intermission = False
+
         if data.status.is_final(overview.status) and hasattr(overview, "w_score") and hasattr(overview, "l_score"):
             self.winning_team = overview.w_team
             self.winning_score = overview.w_score

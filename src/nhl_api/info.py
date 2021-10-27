@@ -74,7 +74,7 @@ def team_info():
                     'positionType': position_type,
                     'positionAbbrev': position_abbrev
                     }
-                #print('#{} {} - {} {}'.format(jerseyNumber,position_abbrev,first_name,last_name))
+                
             
             output = {
                 'team_id': team_id,
@@ -163,33 +163,36 @@ def standings():
     divisions = data['records']
 
     data_wildcard = nhl_api.data.get_standings_wildcard().json()
-    wildcard = data_wildcard['records']
-    for division in range(len(divisions)):
-        team_records = divisions[division]['teamRecords']
-        division_full_name = divisions[division]['division']['name'].split()
-        division_name = division_full_name[-1]
-        conference_name = divisions[division]['conference']['name']
+    try:
+        wildcard = data_wildcard['records']
+        for division in range(len(divisions)):
+            team_records = divisions[division]['teamRecords']
+            division_full_name = divisions[division]['division']['name'].split()
+            division_name = division_full_name[-1]
+            conference_name = divisions[division]['conference']['name']
 
-        for team in range(len(team_records)):
-            team_id = team_records[team]['team']['id']
-            team_name = team_records[team]['team']['name']
-            team_records[team].pop('team')
-            standing_records[team_id] = {
-                'division': division_name,
-                'conference': conference_name,
-                'team_name': team_name,
-                'team_id': team_id
-            }
-            for key, value in team_records[team].items():
-                standing_records[team_id][key] = value
+            for team in range(len(team_records)):
+                team_id = team_records[team]['team']['id']
+                team_name = team_records[team]['team']['name']
+                team_records[team].pop('team')
+                standing_records[team_id] = {
+                    'division': division_name,
+                    'conference': conference_name,
+                    'team_name': team_name,
+                    'team_id': team_id
+                }
+                for key, value in team_records[team].items():
+                    standing_records[team_id][key] = value
 
-    for record in wildcard:
-        if record['conference']['name'] == 'Eastern':
-            wildcard_records['eastern'].append(record)
-        elif record['conference']['name'] == 'Western':
-            wildcard_records['western'].append(record)
+        for record in wildcard:
+            if record['conference']['name'] == 'Eastern':
+                wildcard_records['eastern'].append(record)
+            elif record['conference']['name'] == 'Western':
+                wildcard_records['western'].append(record)
 
-    return standing_records, wildcard_records
+        return standing_records, wildcard_records
+    except KeyError:
+        return False, False
 
 
 class Standings(object):

@@ -312,20 +312,19 @@ class Data:
 
         self.current_game_id = self.pref_games[0].game_id
         earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
-        print('checking highest priority game')
+        debug.info('checking highest priority game')
         for g in self.pref_games:
             if not self.status.is_final(g.status):
                 # If the game started.
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
-                    print('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
+                    debug.info('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
                     self.current_game_id = g.game_id
-                    print(self.current_game_id)
                     return
                 # If the game has not started but is ealier then the previous set game
                 if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
                     earliest_start_time = datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ')
                     self.current_game_id = g.game_id
-                    print('Showing earliest game. {} vs {}'.format(g.away_team_name, g.home_team_name))
+                    debug.info('Showing earliest game. {} vs {}'.format(g.away_team_name, g.home_team_name))
                     earliest = True
 
     def other_games(self):
@@ -351,7 +350,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                print("getting status")
+                debug.info("getting status")
                 self.status = Status()
                 break
 
@@ -374,7 +373,6 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                print("ping")
                 self.overview = nhl_api.overview(self.current_game_id)
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
@@ -423,9 +421,6 @@ class Data:
                 self.network_issues = True
                 debug.error("Failed to refresh the Standings. {} attempt remaining.".format(attempts_remaining))
                 debug.error(error_message)
-                attempts_remaining -= 1
-                sleep(NETWORK_RETRY_SLEEP_TIME)
-
     #
     # Teams
 
@@ -478,6 +473,9 @@ class Data:
             TODO:
                 Add a refresh function to the Series object instead and trigger a refresh only at specific time in the renderer.(End of a game, new day)
         """
+        self.current_round = None
+        self.current_round_name = None
+        self.stanleycup_round = None
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -570,7 +568,7 @@ class Data:
         self.refresh_games()
 
     def refresh_daily(self):
-        print('refreshing data')
+        debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
         

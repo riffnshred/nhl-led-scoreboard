@@ -41,8 +41,11 @@ def current_season_info():
 
 
 def standings():
-    standings, wildcard = nhl_api.info.standings()
-    return nhl_api.info.Standings(standings, wildcard)
+    try:
+        standings, wildcard = nhl_api.info.standings()
+        return nhl_api.info.Standings(standings, wildcard)
+    except:
+        return False
 
 
 def playoff(season = ""):

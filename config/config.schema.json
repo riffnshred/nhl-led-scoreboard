@@ -403,9 +403,9 @@
             "examples": [
                 {
                     "standings": {
-                        "standing_type": "wild_card",
+                        "standing_type": "division",
                         "preferred_standings_only": true,
-                        "divisions": "central",
+                        "divisions": "atlantic",
                         "conference": "eastern"
                     },
                     "clock": {
@@ -514,9 +514,9 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "central",
+                            "divisions": "atlantic",
                             "conference": "eastern",
-                            "standing_type": "wild_card",
+                            "standing_type": "division",
                             "preferred_standings_only": true
                         }
                     ],
@@ -545,7 +545,7 @@
                             "description": "Option to choose the type of standings to display. conference if set by default.",
                             "default": "conference",
                             "examples": [
-                                "wild_card"
+                                "division"
                             ],
                             "enum": [
                                 "conference",
@@ -556,11 +556,11 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (metropolitan, central, atlantic, pacific)",
+                            "title": "divisions (central, atlantic, metropolitan, pacific)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "central"
+                                "atlantic"
                             ],
                             "enum": [
                                 "central",
