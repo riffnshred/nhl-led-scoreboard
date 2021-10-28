@@ -14,7 +14,7 @@ RPi.GPIO==0.7.0
 APScheduler>=3.6.3
 lastversion>=1.1.6
 nameparser==1.0.6
-pillow==7.1.2
+pillow==8.3.2
 dbus-python
 iso6709
 paho-mqtt

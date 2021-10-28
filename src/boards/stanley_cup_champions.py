@@ -4,7 +4,7 @@ import debug
 
 class StanleyCupChampions:
     def __init__(self, data, matrix, sleepEvent):
-        print("Stanley cup champions id: {}".format(data.ScChampions_id))
+        debug.info("Stanley cup champions id: {}".format(data.ScChampions_id))
         self.team_id = data.ScChampions_id
         if self.team_id is None:
             return
@@ -20,7 +20,7 @@ class StanleyCupChampions:
     def render(self):
         # If there is a Stanley cup champion, show the board. Else, pass
         if self.team_id:
-            print("Display stanley cup champions {} ".format(self.data.teams_info[self.team_id].abbreviation))
+            debug.info("Display stanley cup champions {} ".format(self.data.teams_info[self.team_id].abbreviation))
             self.matrix.clear()
             bg_img = Image.open(get_file('assets/images/stanleycupchamps_bg.png'))
             self.matrix.draw_image((0,0), bg_img)

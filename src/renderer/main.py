@@ -182,7 +182,6 @@ class MainRenderer:
                     self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_game_over(self.data.overview.status):
-                print(self.data.overview.status)
                 debug.info("Game Over")
                 # Add game state onto queue
                 qPayload = "gameover"

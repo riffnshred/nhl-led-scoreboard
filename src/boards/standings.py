@@ -17,99 +17,11 @@ class Standings:
         self.sleepEvent.clear()
 
     def render(self):
-        type = self.data.config.standing_type
-        if self.data.config.preferred_standings_only:
-            if type == 'conference':
-                conference = self.data.config.preferred_conference
-                records = getattr(self.data.standings.by_conference, conference)
-                # calculate the image height
-                im_height = (len(records) + 1) * 7
-                # Increment to move image up
-                i = 0
-                image = draw_standing(self.data, conference, records, im_height, self.matrix.width)
-                self.matrix.draw_image((0, i), image)
-                self.matrix.render()
-                #sleep(5)
-                self.sleepEvent.wait(5)
-                # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
-                    i -= 1
-                    self.matrix.draw_image((0, i), image)
-                    self.matrix.render()
-                    #sleep(0.2)
-                    self.sleepEvent.wait(0.2)
-                # Show the bottom before we change to the next table.
-                #sleep(5)
-                self.sleepEvent.wait(5)
-
-            elif type == 'division':
-                division = self.data.config.preferred_divisions
-                records = getattr(self.data.standings.by_division, division)
-                # calculate the image height
-                im_height = (len(records) + 1) * 7
-                # Increment to move image up
-                i = 0
-                image = draw_standing(self.data, division, records, im_height, self.matrix.width)
-                self.matrix.draw_image((0, i), image)
-                self.matrix.render()
-                #sleep(5)
-                self.sleepEvent.wait(5)
-
-                # Move the image up until we hit the bottom.
-                while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
-                    i -= 1
-                    self.matrix.draw_image((0, i), image)
-                    self.matrix.render()
-                    #sleep(0.2)
-                    self.sleepEvent.wait(0.2)
-                # Show the bottom before we change to the next table.
-                #sleep(5)
-                self.sleepEvent.wait(5)
-
-            elif type == 'wild_card':
-                print("hello")
-                wildcard_records = {}
-                conf_name = self.data.config.preferred_conference
-                conf_data = getattr(self.data.standings.by_wildcard, conf_name)
-                wildcard_records["conference"] = conf_name
-                division_leaders = {}
-                for record_type, value in vars(conf_data).items():
-                    if record_type == "wild_card":
-                        wildcard_records["wild_card"] = value
-                    else:
-                        for div_name, div_record in vars(value).items():
-                            division_leaders[div_name] = div_record
-
-                        wildcard_records["division_leaders"] = division_leaders
-
-                # initialize the number_of_rows at 10 (conference name + 2x Division name + wildcard title + 6x Division leaders record)
-                number_of_rows = 10 + len(wildcard_records["wild_card"])
-
-                # Space between each table in row of LED
-                table_offset = 3
-
-                # Total Height in row of LED. each record and table titles need 7 row of LED plus the space between each tables (3 tables means 2 space between each)
-                img_height = (number_of_rows * 7) + (table_offset * 2)
-
-                # Increment to move image up
-                i = 0
-                image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
-                self.matrix.draw_image((0, i), image)
-                self.matrix.render()
-                #sleep(5)
-                self.sleepEvent.wait(5)
-                # Move the image up until we hit the bottom.
-                while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
-                    i -= 1
-                    self.matrix.draw_image((0, i), image)
-                    self.matrix.render()
-                    #sleep(0.2)
-                    self.sleepEvent.wait(0.2)
-                #sleep(5)
-                self.sleepEvent.wait(5)
-        else:
-            if type == 'conference':
-                for conference in self.conferences:
+        if self.data.standings:
+            type = self.data.config.standing_type
+            if self.data.config.preferred_standings_only:
+                if type == 'conference':
+                    conference = self.data.config.preferred_conference
                     records = getattr(self.data.standings.by_conference, conference)
                     # calculate the image height
                     im_height = (len(records) + 1) * 7
@@ -118,34 +30,21 @@ class Standings:
                     image = draw_standing(self.data, conference, records, im_height, self.matrix.width)
                     self.matrix.draw_image((0, i), image)
                     self.matrix.render()
-                    if self.data.network_issues:
-                        self.matrix.network_issue_indicator()
-                    
-                    if self.data.newUpdate and not self.data.config.clock_hide_indicators:
-                        self.matrix.update_indicator()
-
                     #sleep(5)
                     self.sleepEvent.wait(5)
-
                     # Move the image up until we hit the bottom.
                     while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
                         i -= 1
                         self.matrix.draw_image((0, i), image)
                         self.matrix.render()
-                        if self.data.network_issues:
-                            self.matrix.network_issue_indicator()
-
-                        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
-                            self.matrix.update_indicator()
-                            
                         #sleep(0.2)
                         self.sleepEvent.wait(0.2)
                     # Show the bottom before we change to the next table.
                     #sleep(5)
                     self.sleepEvent.wait(5)
 
-            elif type == 'division':
-                for division in self.divisions:
+                elif type == 'division':
+                    division = self.data.config.preferred_divisions
                     records = getattr(self.data.standings.by_division, division)
                     # calculate the image height
                     im_height = (len(records) + 1) * 7
@@ -167,9 +66,11 @@ class Standings:
                     # Show the bottom before we change to the next table.
                     #sleep(5)
                     self.sleepEvent.wait(5)
-            elif type == 'wild_card':
-                wildcard_records = {}
-                for conf_name, conf_data in vars(self.data.standings.by_wildcard).items():
+
+                elif type == 'wild_card':
+                    wildcard_records = {}
+                    conf_name = self.data.config.preferred_conference
+                    conf_data = getattr(self.data.standings.by_wildcard, conf_name)
                     wildcard_records["conference"] = conf_name
                     division_leaders = {}
                     for record_type, value in vars(conf_data).items():
@@ -178,13 +79,18 @@ class Standings:
                         else:
                             for div_name, div_record in vars(value).items():
                                 division_leaders[div_name] = div_record
+
                             wildcard_records["division_leaders"] = division_leaders
+
                     # initialize the number_of_rows at 10 (conference name + 2x Division name + wildcard title + 6x Division leaders record)
                     number_of_rows = 10 + len(wildcard_records["wild_card"])
+
                     # Space between each table in row of LED
                     table_offset = 3
+
                     # Total Height in row of LED. each record and table titles need 7 row of LED plus the space between each tables (3 tables means 2 space between each)
                     img_height = (number_of_rows * 7) + (table_offset * 2)
+
                     # Increment to move image up
                     i = 0
                     image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
@@ -201,6 +107,102 @@ class Standings:
                         self.sleepEvent.wait(0.2)
                     #sleep(5)
                     self.sleepEvent.wait(5)
+            else:
+                if type == 'conference':
+                    for conference in self.conferences:
+                        records = getattr(self.data.standings.by_conference, conference)
+                        # calculate the image height
+                        im_height = (len(records) + 1) * 7
+                        # Increment to move image up
+                        i = 0
+                        image = draw_standing(self.data, conference, records, im_height, self.matrix.width)
+                        self.matrix.draw_image((0, i), image)
+                        self.matrix.render()
+                        if self.data.network_issues:
+                            self.matrix.network_issue_indicator()
+                        
+                        if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                            self.matrix.update_indicator()
+
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+
+                        # Move the image up until we hit the bottom.
+                        while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
+                            i -= 1
+                            self.matrix.draw_image((0, i), image)
+                            self.matrix.render()
+                            if self.data.network_issues:
+                                self.matrix.network_issue_indicator()
+
+                            if self.data.newUpdate and not self.data.config.clock_hide_indicators:
+                                self.matrix.update_indicator()
+                                
+                            #sleep(0.2)
+                            self.sleepEvent.wait(0.2)
+                        # Show the bottom before we change to the next table.
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+
+                elif type == 'division':
+                    for division in self.divisions:
+                        records = getattr(self.data.standings.by_division, division)
+                        # calculate the image height
+                        im_height = (len(records) + 1) * 7
+                        # Increment to move image up
+                        i = 0
+                        image = draw_standing(self.data, division, records, im_height, self.matrix.width)
+                        self.matrix.draw_image((0, i), image)
+                        self.matrix.render()
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+
+                        # Move the image up until we hit the bottom.
+                        while i > -(im_height - self.matrix.height) and not self.sleepEvent.is_set():
+                            i -= 1
+                            self.matrix.draw_image((0, i), image)
+                            self.matrix.render()
+                            #sleep(0.2)
+                            self.sleepEvent.wait(0.2)
+                        # Show the bottom before we change to the next table.
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+                elif type == 'wild_card':
+                    wildcard_records = {}
+                    for conf_name, conf_data in vars(self.data.standings.by_wildcard).items():
+                        wildcard_records["conference"] = conf_name
+                        division_leaders = {}
+                        for record_type, value in vars(conf_data).items():
+                            if record_type == "wild_card":
+                                wildcard_records["wild_card"] = value
+                            else:
+                                for div_name, div_record in vars(value).items():
+                                    division_leaders[div_name] = div_record
+                                wildcard_records["division_leaders"] = division_leaders
+                        # initialize the number_of_rows at 10 (conference name + 2x Division name + wildcard title + 6x Division leaders record)
+                        number_of_rows = 10 + len(wildcard_records["wild_card"])
+                        # Space between each table in row of LED
+                        table_offset = 3
+                        # Total Height in row of LED. each record and table titles need 7 row of LED plus the space between each tables (3 tables means 2 space between each)
+                        img_height = (number_of_rows * 7) + (table_offset * 2)
+                        # Increment to move image up
+                        i = 0
+                        image = draw_wild_card(self.data, wildcard_records, self.matrix.width, img_height, table_offset)
+                        self.matrix.draw_image((0, i), image)
+                        self.matrix.render()
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+                        # Move the image up until we hit the bottom.
+                        while i > -(img_height - self.matrix.height) and not self.sleepEvent.is_set():
+                            i -= 1
+                            self.matrix.draw_image((0, i), image)
+                            self.matrix.render()
+                            #sleep(0.2)
+                            self.sleepEvent.wait(0.2)
+                        #sleep(5)
+                        self.sleepEvent.wait(5)
+        else:
+            debug.error("Standing board unavailable due to missing information from the API")
 
 
 def draw_standing(data, name, records, img_height, width):

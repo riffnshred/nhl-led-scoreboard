@@ -187,7 +187,7 @@ class Boards:
             #         bord_index -= 1
             #     else:
             #         data.pb_trigger = False
-
+        
             board(data, matrix,sleepEvent)
 
             if bord_index >= (len(data.config.boards_intermission) - 1):

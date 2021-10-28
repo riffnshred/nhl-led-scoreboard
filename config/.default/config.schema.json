@@ -26,6 +26,7 @@
               "team_summary",
               "stanley_cup_champions",
               "christmas",
+              "seasoncountdown",
               "clock",
               "weather"
             ]
@@ -199,6 +200,7 @@
                             "Islanders",
                             "Jets",
                             "Kings",
+                            "Kraken",
                             "Lightning",
                             "Maple Leafs",
                             "Oilers",
@@ -401,9 +403,9 @@
             "examples": [
                 {
                     "standings": {
-                        "standing_type": "wild_card",
+                        "standing_type": "division",
                         "preferred_standings_only": true,
-                        "divisions": "north",
+                        "divisions": "atlantic",
                         "conference": "eastern"
                     },
                     "clock": {
@@ -512,9 +514,9 @@
                     "default": {},
                     "examples": [
                         {
-                            "divisions": "north",
+                            "divisions": "atlantic",
                             "conference": "eastern",
-                            "standing_type": "wild_card",
+                            "standing_type": "division",
                             "preferred_standings_only": true
                         }
                     ],
@@ -543,7 +545,7 @@
                             "description": "Option to choose the type of standings to display. conference if set by default.",
                             "default": "conference",
                             "examples": [
-                                "wild_card"
+                                "division"
                             ],
                             "enum": [
                                 "conference",
@@ -554,16 +556,13 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (north, central, east, west)",
+                            "title": "divisions (central, atlantic, metropolitan, pacific)",
                             "description": "Your preferred division",
                             "default": "",
                             "examples": [
-                                "north"
+                                "atlantic"
                             ],
                             "enum": [
-                                "north",
-                                "east",
-                                "west",
                                 "central",
                                 "atlantic",
                                 "metropolitan",
