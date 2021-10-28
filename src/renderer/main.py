@@ -203,8 +203,7 @@ class MainRenderer:
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("FINAL")
-                #Let the screensaver run again
-                self.data.screensaver_livegame = False
+                
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
@@ -220,6 +219,8 @@ class MainRenderer:
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
+                #blocks the screensaver from running if game is live or scheduled
+                self.data.screensaver_livegame = True
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.__render_pregame(sbrenderer)
                 #sleep(self.refresh_rate)

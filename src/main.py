@@ -1,12 +1,14 @@
 import sys
 import time
 from datetime import datetime, timedelta
+
+from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 #from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 # from utils import args, led_matrix_options, stop_splash_service
-from utils import args, led_matrix_options
+from utils import args, led_matrix_options, scheduler_event_listener
 from data.data import Data
 import threading
 import queue
@@ -88,8 +90,9 @@ def run():
     # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
-        # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
-    scheduler = BackgroundScheduler()
+    # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
+    scheduler = BackgroundScheduler(job_defaults={'misfire_grace_time': None})
+    scheduler.add_listener(scheduler_event_listener, EVENT_JOB_MISSED | EVENT_JOB_ERROR)
     scheduler.start()
 
     # Any tasks that are scheduled go below this line

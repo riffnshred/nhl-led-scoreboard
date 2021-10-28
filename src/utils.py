@@ -3,6 +3,7 @@ from RGBMatrixEmulator import RGBMatrixOptions, graphics
 import collections
 import argparse
 import os
+
 import debug
 from datetime import datetime, timezone, time
 import regex
@@ -16,6 +17,7 @@ import platform
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
+# Removed as this will not run on a Mac
 """ def stop_splash_service():
     sysbus = dbus.SystemBus()
     systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
@@ -25,6 +27,8 @@ gid = int(os.stat("./VERSION").st_uid)
     except Exception as ex:
         nosvc = ex """
 
+def scheduler_event_listener(event):
+    print(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
 
 def get_lat_lng(location):
 

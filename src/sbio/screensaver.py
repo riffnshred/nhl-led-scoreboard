@@ -1,5 +1,5 @@
 import debug
-from datetime import datetime,date,time
+from datetime import datetime,date,time,timedelta
 from utils import timeValidator
 from time import sleep
 
@@ -40,11 +40,11 @@ class screenSaver(object):
 
         if self.startsaver and self.stopsaver is not None:
             self.shifted_time = self.startsaver
-            scheduler.add_job(self.runSaver, 'cron', hour=self.startsaver.hour,minute=self.startsaver.minute,id='screenSaverON')
-            scheduler.add_job(self.stopSaver, 'cron', hour=self.stopsaver.hour, minute=self.stopsaver.minute,id='screenSaverOFF')
+            scheduler.add_job(self.runSaver, 'cron', hour=self.startsaver.hour,minute=self.startsaver.minute,id='screenSaverON',misfire_grace_time=None)
+            scheduler.add_job(self.stopSaver, 'cron', hour=self.stopsaver.hour, minute=self.stopsaver.minute,id='screenSaverOFF',misfire_grace_time=None)
             startrun = self.scheduler.get_job('screenSaverON').next_run_time
             stoprun = self.scheduler.get_job('screenSaverOFF').next_run_time
-            debug.info("Screen saver will start @ {} and end @ {}".format(startrun.strftime("%H:%M"),stoprun.strftime("%H:%M")))
+            debug.info("Screen saver will start @ {} and end @ {}".format(startrun,stoprun))
         else:
             debug.error("Start or Stop time setting for screensaver is not a valid 12h or 24h format. Screen saver will not be used, check the config.json")
 
@@ -53,32 +53,31 @@ class screenSaver(object):
 
         if not self.data.screensaver_livegame:
             if self.data.curr_board is not None:
-                #Set screen saver back to normal time and reschedule the job
-                self.shifted_time = self.startsaver
-                self.scheduler.reschedule_job('screenSaverON', trigger='cron', hour=self.shifted_time.hour,minute=self.shifted_time.minute)
                 debug.info("Screen saver started.... Currently displayed board " + self.data.curr_board)
             else:
                 debug.info("Screen saver started.... Currently displayed board is not set")
                 
             self.data.screensaver = True
             self.sleepEvent.set()
+            #Set screen saver back to normal time and reschedule the job
+            self.scheduler.reschedule_job('screenSaverON', trigger='cron', hour=self.startsaver.hour,minute=self.startsaver.minute)
+            # Shut down all scheduled jobs (except for screensaver ones)
+            if not self.data.config.screensaver_data_updates:
+                alljobs = self.scheduler.get_jobs()
+                #Loop through the jobs and pause if not named screenSaverOn or screenSaverOFF
+                debug.info("Pausing all scheduled jobs while screensaver active")
+                for job in alljobs:
+                    if "screenSaver" not in job.id:
+                        job.pause()
         else:
             # Add shifting code to change the runSaver time so it will start once game is done
             # Shift time by 5 mins
-            self.shifted_time = self.shifted_time + timedelta(minutes=5)
+            self.shifted_time = datetime.time(datetime.now() + timedelta(minutes=5))
             self.scheduler.reschedule_job('screenSaverON', trigger='cron', hour=self.shifted_time.hour,minute=self.shifted_time.minute)
             new_run = self.scheduler.get_job('screenSaverON').next_run_time
-            debug.error("Screen saver not started.... we are in a live game! Will try again @ {}".format(new_run.strftime("%H:%M")))
+            debug.error("Screen saver not started.... game is scheduled or live! Will try again @ {}".format(new_run))
 
-        # Shut down all scheduled jobs (except for screensaver ones)
-        if not self.data.config.screensaver_data_updates:
-            alljobs = self.scheduler.get_jobs()
-            #debug.info(alljobs)
-            #Loop through the jobs and pause if not named screenSaverOn or screenSaverOFF
-            debug.info("Pausing all scheduled jobs while screensaver active")
-            for job in alljobs:
-                if "screenSaver" not in job.id:
-                    job.pause()
+        
 
     def stopSaver(self):
         #Stop screen saver board, Fade brightness back to last setting
