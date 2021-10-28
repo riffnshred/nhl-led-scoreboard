@@ -1,4 +1,4 @@
-env-canada==0.0.35
+env-canada
 ephem==3.7.7.0
 fastjsonschema>=2.14.4
 geocoder==1.38.1
@@ -10,11 +10,12 @@ pyowm>=3.0.0
 python-tsl2591==0.2.0
 questionary>=1.5.2
 regex>=2020.4.4
-RPi.GPIO==0.7.0
+#RPi.GPIO==0.7.0
 APScheduler>=3.6.3
 lastversion>=1.1.6
 nameparser==1.0.6
 pillow==8.3.2
 dbus-python
 iso6709
+RGBMatrixEmulator
 paho-mqtt

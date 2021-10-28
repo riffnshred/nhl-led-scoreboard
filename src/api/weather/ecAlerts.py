@@ -1,4 +1,4 @@
-from env_canada import ECData
+from env_canada import ECWeather
 import debug
 import datetime
 from time import sleep

@@ -1,10 +1,14 @@
 import sys
 import time
 from datetime import datetime, timedelta
+
+from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service
+#from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+# from utils import args, led_matrix_options, stop_splash_service
+from utils import args, led_matrix_options, scheduler_event_listener
 from data.data import Data
 import threading
 import queue
@@ -19,7 +23,8 @@ from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
 from api.weather.wxForecast import wxForecast
-from env_canada import ECData
+import asyncio
+from env_canada import ECWeather
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,7 +39,7 @@ SCRIPT_VERSION = "1.6.8"
 
 def run():
     # Kill the splash screen if active
-    stop_splash_service()
+    # stop_splash_service()
 
     # Get supplied command line arguments
     commandArgs = args()
@@ -85,22 +90,24 @@ def run():
     # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
-        # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
-    scheduler = BackgroundScheduler()
+    # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
+    scheduler = BackgroundScheduler(job_defaults={'misfire_grace_time': None})
+    scheduler.add_listener(scheduler_event_listener, EVENT_JOB_MISSED | EVENT_JOB_ERROR)
     scheduler.start()
 
     # Any tasks that are scheduled go below this line
 
     # Make sure we have a valid location for the data.latlng as the geocode can return a None
     # If there is no valid location, skip the weather boards
-    
+   
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
-            try:
-                data.ecData = ECData(coordinates=(data.latlng))
+            try:              
+                data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
+                asyncio.run(data.ecData.update())
             except Exception as e:
-                debug.error("Unable to connect to EC, try running again in a few minutes")
+                debug.error("Unable to connect to EC, try running again in a few minutes: {}".format(e))
                 sys.exit(0)
 
     if data.config.weather_enabled:

@@ -16,15 +16,15 @@
     "size": 24
   },
   "wxicons_full": {
-    "file": "weathericons.otf",
+    "file": "weathericons.ttf",
     "size": 24
   },
   "wxicons_lg": {
-    "file": "weathericons.otf",
+    "file": "weathericons.ttf",
     "size": 20
   },
   "wxicons_md": {
-    "file": "weathericons.otf",
+    "file": "weathericons.ttf",
     "size": 18
   },
   "wx_medium": {

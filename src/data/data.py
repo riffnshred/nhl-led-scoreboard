@@ -348,6 +348,8 @@ class Data:
                 return
 
         self.all_pref_games_final = True
+        #Let the screensaver run again
+        self.screensaver_livegame = False
 
     
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
