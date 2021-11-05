@@ -11,7 +11,7 @@
 
 ## UPDATE for Season 2021 - 2022 (PLEASE READ)
 
-### RASPBERRY PI ZERO NO MORE SUPPORTED
+### RASPBERRY PI ZERO NO MORE SUPPORTED (EDIT: [use a Pi Zero 2 instead](https://github.com/riffnshred/nhl-led-scoreboard/discussions/335))
 From now on, this library won't support the Raspberry Pi Zero or Zero W. This is because the project has become too complex to work properly on it. For those who are already using that model, It should still work with the latest version, but I won't give any support for it. I don't guarantee it will work from this point on.
 
 The models we support are all the Raspberry pi 3 versions and the Pi 4. 
