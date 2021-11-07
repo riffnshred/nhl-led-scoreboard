@@ -139,6 +139,27 @@ class ScoreboardConfig:
         self.clock_date_rgb =  json["boards"]["clock"]["date_rgb"]
         self.clock_flash_seconds =  json["boards"]["clock"]["flash_seconds"]
 
+        # MQTT
+        # The entire structure is optional, so bail gracefully if not defined
+        try:
+            self.mqtt_enabled = json["mqtt"]["enabled"]
+        except KeyError:
+            self.mqtt_enabled = False
+        try:
+            self.mqtt_server = json["mqtt"]["server"]
+            try:
+                self.mqtt_port = json["mqtt"]["port"]
+            except KeyError:
+                self.mqtt_port = 1883
+            try:
+                self.mqtt_username = json["mqtt"]["credentials"]["username"]
+                self.mqtt_password = json["mqtt"]["credentials"]["password"]
+            except KeyError:
+                pass
+            self.mqtt_events = json["mqtt"]["events"]
+        except KeyError:
+            pass
+
         # Fonts
         self.layout = Layout()
 

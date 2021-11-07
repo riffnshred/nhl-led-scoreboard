@@ -11,7 +11,7 @@ from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
 from renderer.penalty import PenaltyRenderer
-from utils import get_file
+from utils import get_file, mqtt_publish
 import random
 import glob
 
@@ -277,6 +277,12 @@ class MainRenderer:
         if away_score < away_goals:
             self.away_score = away_goals
             self.goal_team_cache.append("away")
+
+            if away_id in self.data.pref_teams:
+                mqtt_publish("pref_team_scores", self.data.config, self.scoreboard)
+            else:
+                mqtt_publish("non_pref_team_scores", self.data.config, self.scoreboard)
+
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation
@@ -286,6 +292,12 @@ class MainRenderer:
         if home_score < home_goals:
             self.home_score = home_goals
             self.goal_team_cache.append("home")
+
+            if home_id in self.data.pref_teams:
+                mqtt_publish("pref_team_scores", self.data.config, self.scoreboard)
+            else:
+                mqtt_publish("non_pref_team_scores", self.data.config, self.scoreboard)
+
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
             # run the goal animation

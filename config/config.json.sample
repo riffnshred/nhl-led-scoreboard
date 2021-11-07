@@ -120,5 +120,24 @@
 			"state_triggered1": "weather",
 			"state_triggered1_process": ""
 		}
+	},
+	"mqtt": {
+		"enabled": true,
+		"server": "broker.emqx.io",
+		"port": 1883,
+		"credentials": {
+			"username": "emqx",
+			"password": "public"
+		}
+		"events": {
+			"pref_team_scores": {
+				"enabled": true,
+				"topic": "nhl/pref_team_scores"
+			},
+			"non_pref_team_scores": {
+				"enabled": false,
+				"topic": "nhl/non_pref_team_scores"
+			}
+		}
 	}
 }

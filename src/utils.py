@@ -10,6 +10,8 @@ import geocoder
 import dbus
 import json
 from iso6709 import Location
+import uuid
+from paho.mqtt import client as mqtt_client
 
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
@@ -286,3 +288,75 @@ def round_normal(n, decimals=0):
     multiplier = 10 ** decimals
     value = math.floor(n * multiplier + 0.5) / multiplier
     return int(value) if decimals == 0 else value
+
+def mqtt_publish(event_name, config, scoreboard):
+    # Validation checking
+    if not config.mqtt_enabled:
+        debug.info("mqtt not enabled in config.")
+        return
+    if not event_name:
+        debug.error("No event name given!")
+        return
+    if not hasattr(config, 'mqtt_server'):
+        debug.error("No MQTT server defined")
+        return
+    if not hasattr(config, 'mqtt_events'):
+        debug.info(f"no events defined!")
+        return
+    if not event_name in config.mqtt_events:
+        debug.info(f"no event defined for {event_name}")
+        return
+    if not 'enabled' in config.mqtt_events[event_name]:
+        debug.info(f"event {event_name} is disabled.")    
+        return
+    if not config.mqtt_events[event_name]['enabled']:
+        debug.info(f"event {event_name} is disabled.")    
+        return
+    if not 'topic' in config.mqtt_events[event_name]:
+        debug.error(f"No topic defined for event {event_name}")
+        return
+    if not scoreboard:
+        debug.warning("No scoreboard. Sending empty payload")
+        scoreboard = {} 
+
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            debug.info("Connected to MQTT broker")
+        else:
+            debug.error(f"Failed to connect to MQTT broker, return code {rc}")
+    
+    client_id = f"nhl-scoreboard-{uuid.uuid4()}"
+    client = mqtt_client.Client(client_id)
+    if hasattr(config, 'mqtt_username') and hasattr(config, 'mqtt_password'):
+        client.username_pw_set(config.mqtt_username, config.mqtt_password)
+    client.on_connect = on_connect
+    debug.info(f"connecting to {config.mqtt_server}:{config.mqtt_port}")
+    try :
+        client.connect(config.mqtt_server, config.mqtt_port)
+    except Exception as e:
+        debug.error(f"Couldn't connect to MQTT server: {e}")
+        return
+    
+    payload = {
+        'scoreboard': {
+            "away_team": {
+                "name": scoreboard.away_team.name,
+                "goals": scoreboard.away_team.goals,
+                "shots_on_goal": scoreboard.away_team.shot_on_goal
+            },
+            "home_team": {
+                "name": scoreboard.home_team.name,
+                "goals": scoreboard.home_team.goals,
+                "shots_on_goal": scoreboard.home_team.shot_on_goal
+            },
+            "status": scoreboard.status,
+            "period": scoreboard.periods.ordinal,
+            "clock": scoreboard.periods.clock
+        }
+    }
+    result = client.publish(config.mqtt_events[event_name]['topic'], json.dumps(payload))
+    status = result[0]
+    if status == 0:
+        debug.info(f"Sent MQTT payload to topic {config.mqtt_events[event_name]['topic']}")
+    else:
+        debug.error(f"Failed to send payload to topic {config.mqtt_events[event_name]['topic']}")
