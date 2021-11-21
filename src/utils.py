@@ -27,7 +27,7 @@ def stop_splash_service():
     nosvc = ex 
 
 def scheduler_event_listener(event):
-    print(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
+    debug.error(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
 
 def get_lat_lng(location):
 
@@ -90,7 +90,7 @@ def get_lat_lng(location):
                 # Get the location of the timezone from the /usr/share/zoneinfo/zone.tab
 
                 try:
-                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(cat /etc/timezone) | awk '{print $2}'")
+                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(readlink -f /etc/localtime | xargs basename) | awk '{print $2}'")
                     get_tzlatlng=stream.read().rstrip() + "/"
                     loc=Location(get_tzlatlng)
                     latlng = [float(loc.lat.decimal),float(loc.lng.decimal)]
