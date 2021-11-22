@@ -34,12 +34,12 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.6.8"
+SCRIPT_VERSION = "1.6.x.beta"
 
 
 def run():
     # Kill the splash screen if active
-    # stop_splash_service()
+    stop_splash_service()
 
     # Get supplied command line arguments
     commandArgs = args()

@@ -987,7 +987,6 @@
             ],
             "additionalProperties": true,
             "required": [
-                "mqtt",
                 "screensaver",
                 "dimmer",
                 "pushbutton"

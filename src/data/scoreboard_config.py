@@ -35,9 +35,16 @@ class ScoreboardConfig:
         self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
 
         #MQTT settings
-        self.mqtt_enabled = json["sbio"]["mqtt"]["enabled"]
-        self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
-        self.mqtt_port = json["sbio"]["mqtt"]["port"]
+        #Add in the try/except as this is not a required section in the config
+        try:
+            self.mqtt_enabled = json["sbio"]["mqtt"]["enabled"]
+        except KeyError:
+            self.mqtt_enabled = False
+
+        
+        if self.mqtt_enabled:
+            self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
+            self.mqtt_port = json["sbio"]["mqtt"]["port"]
 
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]

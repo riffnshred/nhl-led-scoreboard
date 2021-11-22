@@ -9,7 +9,7 @@ from datetime import datetime, timezone, time
 import regex
 import math
 import geocoder
-#import dbus
+import dbus
 import json
 from iso6709 import Location
 import platform
