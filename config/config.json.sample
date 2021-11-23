@@ -48,8 +48,8 @@
                 },
 		"standings": {
 			"preferred_standings_only": true,
-			"standing_type": "wild_card",
-			"divisions": "north",
+			"standing_type": "division",
+			"divisions": "atlantic",
 			"conference": "eastern"
 		},
 		"clock": {

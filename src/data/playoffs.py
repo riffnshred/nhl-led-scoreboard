@@ -2,7 +2,7 @@ from data.team import SeriesTeam
 from data.scoreboard import Scoreboard
 from utils import convert_time
 import nhl_api
-
+import debug
 
 def get_team_position(teams_info):
     """
@@ -63,7 +63,7 @@ class Series:
         try:
             overview = nhl_api.overview(gameid)
         except:
-            print("failed overview refresh for series game id {}".format(gameid))
+            debug.error("failed overview refresh for series game id {}".format(gameid))
         self.game_overviews[gameid] = overview
         return overview
         

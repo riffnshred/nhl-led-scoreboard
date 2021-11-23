@@ -50,14 +50,14 @@ class MainRenderer:
             Clock(self.data, self.matrix, self.sleepEvent, duration=60)
             self.data.refresh_data()
 
+        
         while True:
             debug.info('Rendering...')
-
-            if self.status.is_offseason(self.data.date()):
+            #if self.status.is_offseason(self.data.date()):
                 # Offseason (Show offseason related stuff)
-                debug.info("It's offseason")
-                self.__render_offday()
-            elif self.data.config.testScChampions:
+                #debug.info("It's offseason")
+                #self.__render_offday()
+            if self.data.config.testScChampions:
                 self.test_stanley_cup_champion(self.data.config.testScChampions)
 
             else:
@@ -162,7 +162,6 @@ class MainRenderer:
                     self.sleepEvent.wait(self.refresh_rate)
 
             elif self.status.is_game_over(self.data.overview.status):
-                print(self.data.overview.status)
                 debug.info("Game Over")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()

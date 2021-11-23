@@ -1,6 +1,7 @@
 import json
 from utils import round_normal
 import copy
+import debug
 
 class ConfigFile:
   def __init__(self, path, size=None, warn_if_missing=True):
@@ -18,7 +19,7 @@ class ConfigFile:
       self.data = JSONData(self.json, self.size)
     except:
       if (self.warn_if_missing):
-        print('Config file {} not found!'.format(self.path))
+        debug.info('Config file {} not found!'.format(self.path))
 
   def save(self):
     with open(self.path, 'w') as f:

@@ -108,9 +108,9 @@ def get_lat_lng(location):
                         #Change the ownership of the location.json file
                         os.chown(path, uid, gid)
                     except Exception as e:
-                        print("Could not write {0}. Error Message: {1}".format(path,e))
+                        debug.error("Could not write {0}. Error Message: {1}".format(path,e))
             except Exception as e:
-                print("Could not open {0} unable to save location.json. Error Message: {1}".format(path,e))
+                debug.error("Could not open {0} unable to save location.json. Error Message: {1}".format(path,e))
 
 
     return latlng,message

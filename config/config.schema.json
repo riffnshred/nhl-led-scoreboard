@@ -314,20 +314,23 @@
             "type": "object",
             "title": "boards",
             "description": "All possible boards that can be displayed and their settings",
-            "default": {
-                "standings": {
-                    "standing_type": "wild_card",
-                    "preferred_standings_only": true,
-                    "divisions": "north",
-                    "conference": "eastern"
-                },
-                "clock": {
-                    "hide_indicator": false,
-                    "duration": 60
-                },
-                "scoreticker": {
-                    "rotation_rate": 5,
-                    "preferred_teams_only": false
+            "default": {},
+            "examples": [
+                {
+                    "standings": {
+                        "standing_type": "division",
+                        "preferred_standings_only": true,
+                        "divisions": "atlantic",
+                        "conference": "eastern"
+                    },
+                    "clock": {
+                        "hide_indicator": false,
+                        "duration": 60
+                    },
+                    "scoreticker": {
+                        "rotation_rate": 5,
+                        "preferred_teams_only": false
+                    }
                 }
             },
             "additionalProperties": true,
@@ -407,12 +410,15 @@
                     "type": "object",
                     "title": "standings",
                     "description": "Self-explanatory, it shows the current standings. Currently, you can choose between showing standings by conference or by divisions. Wildcard standings are coming soon.",
-                    "default": {
-                        "divisions": "north",
-                        "conference": "eastern",
-                        "standing_type": "wild_card",
-                        "preferred_standings_only": true
-                    },
+                    "default": {},
+                    "examples": [
+                        {
+                            "divisions": "atlantic",
+                            "conference": "eastern",
+                            "standing_type": "division",
+                            "preferred_standings_only": true
+                        }
+                    ],
                     "additionalProperties": true,
                     "required": [
                         "preferred_standings_only",
@@ -434,6 +440,9 @@
                             "title": "standing_type",
                             "description": "Option to choose the type of standings to display. conference if set by default.",
                             "default": "conference",
+                            "examples": [
+                                "division"
+                            ],
                             "enum": [
                                 "conference",
                                 "division",
@@ -443,13 +452,13 @@
                         "divisions": {
                             "$id": "#/properties/boards/properties/standings/properties/divisions",
                             "type": "string",
-                            "title": "divisions (north, central, east, west)",
+                            "title": "divisions (central, atlantic, metropolitan, pacific)",
                             "description": "Your preferred division",
-                            "default": "north",
+                            "default": "",
+                            "examples": [
+                                "atlantic"
+                            ],
                             "enum": [
-                                "north",
-                                "east",
-                                "west",
                                 "central",
                                 "atlantic",
                                 "metropolitan",
