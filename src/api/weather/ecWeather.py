@@ -75,30 +75,8 @@ class ecWxWorker(object):
                 curr_humidity = "0"
                 wx_humidity = "N/A"
             else:
-                wx_humidity = curr_humidity + "%"
+                wx_humidity = curr_humidity + "%"   
 
-                
-
-            if curr_temp != None:
-                curr_temp = float(curr_cond["temperature"]["value"])
-                check_windchill = 10.0
-                if self.data.config.weather_units == "imperial":
-                    curr_temp = temp_f(curr_temp)
-                    check_windchill = 50.0
-
-
-                if curr_temp < check_windchill:
-                    windchill = round(wind_chill(float(curr_cond["temperature"]["value"]),float(curr_cond["wind_speed"]["value"]),self.data.wx_units[1]),1)
-                    wx_app_temp = str(windchill) + self.data.wx_units[0]
-                else:
-                    humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
-                    wx_app_temp = str(humidex) + self.data.wx_units[0]
-                wx_temp = str(round(curr_temp,1)) + self.data.wx_units[0]
-
-            else:
-                wx_temp = "N/A"
-                wx_app_temp = "N/A"
-            
             try:
                 icon_code = curr_cond.get("icon_code").get("value","90")
             except:
@@ -140,8 +118,6 @@ class ecWxWorker(object):
                 wx_dewpoint = "N/A"
             else:
                 wx_dewpoint = str(curr_dewpoint) + self.data.wx_units[0]
-
-            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
 
             try:
                 wind_bearing = curr_cond.get("wind_bearing").get("value","0")
@@ -187,6 +163,28 @@ class ecWxWorker(object):
             except:
                 wx_pressure = "N/A"
 
+            if curr_temp != None:
+                curr_temp = float(curr_cond["temperature"]["value"])
+                check_windchill = 10.0
+                if self.data.config.weather_units == "imperial":
+                    curr_temp = temp_f(curr_temp)
+                    check_windchill = 50.0
+
+
+                if curr_temp < check_windchill:
+                    windchill = round(wind_chill(curr_temp,curr_windspeed,self.data.wx_units[1]),1)
+                    wx_app_temp = str(windchill) + self.data.wx_units[0]
+                else:
+                    humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
+                    wx_app_temp = str(humidex) + self.data.wx_units[0]
+                wx_temp = str(round(curr_temp,1)) + self.data.wx_units[0]
+
+            else:
+                wx_temp = "N/A"
+                wx_app_temp = "N/A"
+
+            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
+            
             try:
                 for row in range(len(self.icons)):
                     if self.icons[row]["Description"].lower() == curr_cond.get("tendency").get("value","N/A"):
