@@ -9,6 +9,7 @@ class sbMQTT(object):
     def on_connect(self,client,userdata,flags,rc):
         if rc == 0:
             debug.info("MQTT: Connected to broker: {0}:{1}".format(self.data.config.mqtt_broker,self.data.config.mqtt_port))
+            client.publish("scoreboard/status",payload="Online", qos=0, retain=True) 
         else:
             debug.info("MQTT: Connection error code {0} to {1}:{2}".format(str(rc),self.data.config.mqtt_broker,self.data.config.mqtt_port))
 
@@ -132,6 +133,7 @@ class sbMQTT(object):
         self.client.on_publish = self.on_publish
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        self.client.will_set("scoreboard/status", payload="Offline", qos=0, retain=True)
         self.client.connect(self.data.config.mqtt_broker, port=self.data.config.mqtt_port)
         self.client.subscribe("scoreboard/control/#")
         self.client.loop_start()
