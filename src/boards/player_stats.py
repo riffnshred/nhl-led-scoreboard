@@ -20,9 +20,13 @@ class PlayerStats:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         self.font = data.config.layout.font
+        if self.data.favorite_player_data.json()["people"][0]["primaryPosition"]["code"] == "G":
+            self.isGoalie = True
+        else:
+            self.isGoalie = False
 
-
-
+        self.saves = self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["savePercentage"] * 100
+        print(int(self.saves))
             #sleep(1)
         self.draw_stats()
 
@@ -32,16 +36,6 @@ class PlayerStats:
 
     def draw_stats(self):
         self.matrix.clear()
-        self.matrix.draw_text_layout(
-            self.layout.goals_num,
-            str(self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["goals"]),
-            fillColor=(30,144,255)
-        )
-        self.matrix.draw_text_layout(
-            self.layout.assists_num,
-            str(self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["assists"]),
-            fillColor=(255, 73, 56)
-        )
         self.matrix.draw_text_layout(
             self.layout.name,
             self.data.favorite_player_data.json()["people"][0]["lastName"].upper()
@@ -57,18 +51,53 @@ class PlayerStats:
             self.data.favorite_player_data.json()["people"][0]["primaryNumber"]
 
         )
-        self.matrix.draw_text_layout(
-            self.layout.goals,
-            "GOALS",
-            fillColor=(30,144,255)
+        if self.isGoalie:
+            self.matrix.draw_text_layout(
+                self.layout.goals_num,
+                str(self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["wins"]),
+                fillColor=(30,144,255)
+            )
+            self.matrix.draw_text_layout(
+                self.layout.assists_num,
+                f".{str(int(self.saves))}",
+                fillColor=(255, 73, 56)
+            )
 
-        )   
-        self.matrix.draw_text_layout(
-            self.layout.assists,
-            "APPLES",
-            fillColor=(255, 73, 56)
+            self.matrix.draw_text_layout(
+                self.layout.goals,
+                "WINS",
+                fillColor=(30,144,255)
 
-        )   
+            )   
+            self.matrix.draw_text_layout(
+                self.layout.assists,
+                "SAVE%",
+                fillColor=(255, 73, 56)
+
+            )
+        else:
+            self.matrix.draw_text_layout(
+                self.layout.goals_num,
+                str(self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["goals"]),
+                fillColor=(30,144,255)
+            )
+            self.matrix.draw_text_layout(
+                self.layout.assists_num,
+                str(self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["assists"]),
+                fillColor=(255, 73, 56)
+            )
+            self.matrix.draw_text_layout(
+                self.layout.goals,
+                "GOALS",
+                fillColor=(30,144,255)
+
+            )   
+            self.matrix.draw_text_layout(
+                self.layout.assists,
+                "APPLES",
+                fillColor=(255, 73, 56)
+
+            )
 
         # Display curr temp and humidity on clock, bottom
        

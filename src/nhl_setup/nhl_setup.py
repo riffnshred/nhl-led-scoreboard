@@ -371,13 +371,25 @@ def preferences_settings(default_config,qmark):
             'qmark': qmark,
             'message': 'Do you want goal animations for only preferred team?',
             'default': get_default_value(default_config,['goal_animations','pref_team_only'],"bool")
-        },
+        }
     ]
 
     goal_animation_answer = prompt(questions,style=custom_style_dope)
     goal_animations_dict['goal_animations'].update(goal_animation_answer)
 
     preferences['preferences'].update(goal_animations_dict)
+
+    favorite_player = [
+        {
+            'type': 'input',
+            'name': 'favorite_player',
+            'qmark': qmark,
+            'message': 'Your favorite NHL player.',
+            'default': get_default_value(default_config,['preferences','favorite_player'],"string")
+        }
+    ]
+    get_favorite_player = prompt(favorite_player,style=custom_style_dope)
+    preferences['preferences'].update(get_favorite_player)
 
     return preferences
 
@@ -399,7 +411,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown', 'player_stats']
 
         boards_selected = []
         board = None
