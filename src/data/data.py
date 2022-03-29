@@ -587,6 +587,10 @@ class Data:
         debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
+        self.favorite_player = self.config.favorite_player
+        self.favorite_player_id = self.get_fav_players_id()
+        self.favorite_player_data = nhl_api.data.get_player(self.favorite_player_id)
+        self.favorite_player_stats = nhl_api.data.get_player_stats(self.favorite_player_id)
 
         # Update team's data
         self.get_teams_info()
