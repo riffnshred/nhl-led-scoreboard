@@ -13,6 +13,7 @@ from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
 from boards.christmas import Christmas
+from boards.player_stats import PlayerStats
 from boards.seasoncountdown import SeasonCountdown
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
@@ -242,6 +243,9 @@ class Boards:
 
     def clock(self, data, matrix,sleepEvent):
         Clock(data, matrix, sleepEvent)
+
+    def player_stats(self, data, matrix, sleepEvent):
+        PlayerStats(data, matrix, sleepEvent)
 
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)

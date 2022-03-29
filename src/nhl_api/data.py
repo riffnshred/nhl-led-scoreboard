@@ -12,6 +12,7 @@ BASE_URL = "http://statsapi.web.nhl.com/api/v1/"
 SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
 TEAM_URL = '{0}teams?expand=team.roster,team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
 PLAYER_URL = '{0}people/{1}'
+PLAYER_STATS_URL = '{0}people/{1}/{2}'
 OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
 STATUS_URL = BASE_URL + 'gameStatus'
 CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
@@ -41,6 +42,13 @@ def get_teams():
 def get_player(playerId):
     try:
         data = requests.get(PLAYER_URL.format(BASE_URL, playerId), timeout=REQUEST_TIMEOUT)
+        return data
+    except requests.exceptions.RequestException as e:
+        raise ValueError(e)
+
+def get_player_stats(playerId):
+    try:
+        data = requests.get(f"{BASE_URL}people/{playerId}/stats?stats=statsSingleSeason&season=20212022", timeout=REQUEST_TIMEOUT)
         return data
     except requests.exceptions.RequestException as e:
         raise ValueError(e)

@@ -29,11 +29,11 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
-
+        self.favorite_player = json["preferences"]["favorite_player"]
 
         # Goal animation
         self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
-
+       
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
         self.screensaver_animations = json["sbio"]["screensaver"]["animations"]

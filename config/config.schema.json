@@ -28,7 +28,8 @@
               "christmas",
               "seasoncountdown",
               "clock",
-              "weather"
+              "weather",
+              "player_stats"
             ]
         }
     },    
@@ -254,13 +255,25 @@
                             ]
                         }
                     }
+                },
+                "favorite_player": {
+                    "$id": "#/properties/preferences/properties/favorite_player",
+                    "type": "string",
+                    "title": "favorite_player",
+                    "description": "Your favorite active player's full name.",
+                    "default": "Alex Ovechkin",
+                    "examples": [
+                        "Kyle Connor",
+                        "Connor McDavid",
+                        "Auston Matthews"
+                    ]
                 }
             }
         },
         "states": {
             "$id": "#/properties/states",
             "type": "object",
-            "title": "states",
+            "title": "states",  
             "description": "If the live mode is enabled, the scoreboard will go through different states depending on the current situation. For each state, you can define which of the available board you want the scoreboard to show. For example, if one of my preferred team has a game scheduled on the current day, during the day, the scoreboard will be in the scheduled state. I personally like to have all the data possible shown during the day so I'll set the all the boards in the scheduled setting.",
             "default": {},
             "examples": [

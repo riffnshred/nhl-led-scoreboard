@@ -10,6 +10,8 @@ import nhl_api
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
+import requests
+
 
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
@@ -132,10 +134,16 @@ class Data:
 
         # Get the teams info
         self.teams = self.get_teams()
+        
 
         # Save the parsed config
         self.config = config
 
+        ####################
+        self.favorite_player = self.config.favorite_player
+        self.favorite_player_id = self.get_fav_players_id()
+        self.favorite_player_data = nhl_api.data.get_player(self.favorite_player_id)
+        self.favorite_player_stats = nhl_api.data.get_player_stats(self.favorite_player_id)
         # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
         # It shows the last time (UTC) the data was updated. EX 20200114_041103
         self.time_stamp = "00000000_000000"
@@ -433,6 +441,14 @@ class Data:
             self.teams_info = info_by_id
         except TypeError:
             self.teams_info = []
+    def get_fav_players_id(self):
+        
+        player = requests.get(f"https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/{self.config.favorite_player}/100")
+        id = player.json()["suggestions"][0][0:7]
+        # id = player.json()[0]
+        # id = id[0:7]
+        return id
+        
 
     def get_pref_teams_id(self):
         """
@@ -571,7 +587,7 @@ class Data:
         debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
-        
+
         # Update team's data
         self.get_teams_info()
 
