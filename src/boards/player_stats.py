@@ -21,12 +21,13 @@ class PlayerStats:
         self.sleepEvent.clear()
         self.font = data.config.layout.font
         if self.data.favorite_player_data.json()["people"][0]["primaryPosition"]["code"] == "G":
+            
+            self.saves = self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["savePercentage"] * 100
+
             self.isGoalie = True
         else:
             self.isGoalie = False
 
-        self.saves = self.data.favorite_player_stats.json()["stats"][0]["splits"][0]["stat"]["savePercentage"] * 100
-        print(int(self.saves))
             #sleep(1)
         self.draw_stats()
 
