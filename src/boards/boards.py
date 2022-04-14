@@ -9,6 +9,7 @@ from boards.seriesticker import Seriesticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
+from boards.league_leaders import Leaders
 from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
@@ -246,6 +247,9 @@ class Boards:
 
     def player_stats(self, data, matrix, sleepEvent):
         PlayerStats(data, matrix, sleepEvent)
+
+    def league_leaders(self, data, matrix, sleepEvent):
+        Leaders(data, matrix, sleepEvent)
 
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)
