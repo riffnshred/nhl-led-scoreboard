@@ -1,5 +1,6 @@
 ![nhl_setup](../../assets/images/nhl_setup.gif)
 ### History
+* V1.6.3 - May 14, 2022
 * V1.4.0 - September 25, 2020
 * V1.3.0 - Wx version - May 10, 2020
 * V1.2.1 - "Maple Leafs" fix - April 1, 2020
@@ -8,6 +9,12 @@
 * V1.0.0 - Initial release - March 14, 2020
   
 ### Latest Changes
+
+#### V1.6.3
+Fix for goal animations being set to an empty dictionary
+
+#### V1.4.1 - V1.6.2
+Various fixes and updates to the setup to allow for removal of convid board, the covid divisions addition to the seasoncountdown board.
 
 #### V1.4.0
 Added in new sections for screensaver board and additions to the weather, wxalerts and dimmer board.
