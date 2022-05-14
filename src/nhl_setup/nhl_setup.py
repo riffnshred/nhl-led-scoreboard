@@ -377,8 +377,6 @@ def preferences_settings(default_config,qmark):
     goal_animation_answer = prompt(questions,style=custom_style_dope)
     goal_animations_dict['goal_animations'].update(goal_animation_answer)
 
-    print(goal_animation_answer)
-    print(goal_animations_dict)
 
     preferences['preferences'].update(goal_animations_dict)
 
