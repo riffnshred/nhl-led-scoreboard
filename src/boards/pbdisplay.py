@@ -1,5 +1,11 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
-from rgbmatrix import graphics
+
+import driver
+
+if driver.is_hardware():
+    from rgbmatrix import graphics
+else:
+    from RGBMatrixEmulator import graphics
 from time import sleep
 from utils import center_text,get_file
 

@@ -164,13 +164,13 @@ class ScoreboardConfig:
 
         j = {}
         path = get_file("config/{}".format(filename))
-        if os.path.isfile(path):
-            try:
-                j = json.load(open(path))
-                msg = "json loaded OK"
-            except json.decoder.JSONDecodeError as e:
-                msg = "Unable to load json: {0}".format(e)
-                j = {}
+        try:
+            j = json.load(open(path))
+            msg = "json loaded OK"
+        except (json.decoder.JSONDecodeError, FileNotFoundError)  as e:
+            msg = "Unable to load json: {0}".format(e)
+            j = {}
+
         return j, msg
 
     def __get_config(self, base_filename, error=None):
