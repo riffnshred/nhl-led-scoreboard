@@ -409,21 +409,7 @@ def preferences_settings(default_config,qmark):
     goal_animations_dict['goal_animations'].update(goal_animation_answer)
 
     preferences['preferences'].update(goal_animations_dict)
-##########################################################################
-    # favorite_player = [
-    #     {
-    #         'type': 'input',
-    #         'name': 'favorite_player',
-    #         'qmark': qmark,
-    #         'message': 'Your favorite NHL player.',
-    #         'default': get_default_value(default_config,['preferences','favorite_player'],"string")
-    #     }
-    # ]
-    # get_favorite_player = prompt(favorite_player,style=custom_style_dope)
-    # preferences['preferences'].update(get_favorite_player)
 
-    
-############################################################################
     selected_teams = get_default_value(default_config,['preferences','favorite_player'],"string")
     preferences_players = []
 
@@ -443,7 +429,7 @@ def preferences_settings(default_config,qmark):
 
     preferences_player_dict = {'favorite_player':preferences_players}
     preferences['preferences'].update(preferences_player_dict)
-
+    # I don't completely understand how this works but it does so I'm gonna leave it...
     return preferences
 def states_settings(default_config,qmark,setup_type):
     states = STATES

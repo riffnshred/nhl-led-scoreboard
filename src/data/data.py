@@ -10,9 +10,6 @@ import nhl_api
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng
-import requests
-import json
-
 
 
 NETWORK_RETRY_SLEEP_TIME = 0.5

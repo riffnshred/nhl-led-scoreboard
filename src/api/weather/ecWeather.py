@@ -86,7 +86,7 @@ class ecWxWorker(object):
 
 
                 if curr_temp < check_windchill:
-                    windchill = 3.0
+                    windchill = round(wind_chill(float(curr_cond["temperature"]["value"]),float(curr_cond["wind_speed"]["value"]),self.data.wx_units[1]),1)
                     wx_app_temp = str(windchill) + self.data.wx_units[0]
                 else:
                     humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
