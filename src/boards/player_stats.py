@@ -98,7 +98,7 @@ class PlayerStats:
                 )   
                 self.matrix.draw_text_layout(
                     self.layout.assists,
-                    "APPLES",
+                    "ASSISTS",
                     fillColor=(255, 73, 56)
 
                 )

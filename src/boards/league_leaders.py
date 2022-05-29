@@ -17,10 +17,24 @@ class Leaders:
         self.layout = self.data.config.config.layout.get_board_layout('league_leaders')
         self.sleepEvent = sleepEvent
         self.playoff = ""
+        self.text = True
         self.image = Image.open(get_file('assets/images/stanley_cup.png'))
         self.sleepEvent.clear()
         self.draw_leaders()
-
+    def draw_stanley_cup(self):
+        if self.data.isPlayoff:
+            if self.text:
+                self.matrix.draw_text_layout(
+                    self.layout.scp,
+                    "SCP",
+                    backgroundColor = (148,148,148),
+                    fillColor = (0,0,0)
+                )
+            else:
+                self.matrix.draw_image_layout(
+                    self.layout.stanley_cup,
+                    self.image
+                )
     def draw_leaders(self):
         self.matrix.clear()
 
@@ -30,11 +44,7 @@ class Leaders:
         self.pointsColor = (232, 232, 232)
         if self.data.config.point_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
 
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -91,11 +101,7 @@ class Leaders:
             self.sleepEvent.wait(10)
         if self.data.config.goal_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -151,11 +157,7 @@ class Leaders:
             self.sleepEvent.wait(10)
         if self.data.config.assist_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:   
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -211,11 +213,7 @@ class Leaders:
             self.sleepEvent.wait(10)
         if self.data.config.win_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -271,11 +269,7 @@ class Leaders:
             self.sleepEvent.wait(10)
         if self.data.config.plus_minus_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -332,11 +326,7 @@ class Leaders:
         
         if self.data.config.penalty_minute_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,
@@ -393,11 +383,7 @@ class Leaders:
 
         if self.data.config.time_on_ice_leaders:
             self.matrix.clear()
-            if self.data.isPlayoff:
-                self.matrix.draw_image_layout(
-                    self.layout.stanley_cup,
-                    self.image
-                )
+            self.draw_stanley_cup()
             
             self.matrix.draw_text_layout(
                 self.layout.name,

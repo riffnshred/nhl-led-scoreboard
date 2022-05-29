@@ -33,7 +33,7 @@
       "align": "center-center"
     },
     "assists": {
-      "position": [["80%", -2], ["55%", 11]],
+      "position": [["80%", -3], ["55%", 11]],
       "font": "wx_medium",
       "align": "center-center"
     },
@@ -181,6 +181,10 @@
     "name":{
       "position": [1, 1],
       "align": "left"
+    },
+    "scp":{
+      "position": [["100%", -1], 1],
+      "align": "right"
     },
     "stanley_cup":{
       "position": [["75%", 5], 8],

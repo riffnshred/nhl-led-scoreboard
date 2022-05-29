@@ -206,8 +206,6 @@ class Data:
         
         if self.config.time_on_ice_leaders:
             self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
-            print(self.time_on_ice_leaders)
-            print(type(self.time_on_ice_leaders))
         # Stanley cup champions
         self.ScChampions_id = self.check_stanley_cup_champion()
 
