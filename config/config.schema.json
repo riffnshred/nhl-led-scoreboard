@@ -632,7 +632,8 @@
                         "goal_leaders",
                         "assist_leaders",
                         "point_leaders",
-                        "win_leaders"
+                        "win_leaders",
+                        "plus_minus_leaders"
                     ],
                     "properties": {
                         "goal_leaders": {
@@ -671,6 +672,36 @@
                             "type": "boolean",
                             "title": "win_leaders",
                             "description": "If true then the league leaders board will show win leaders.",
+                            "default": true,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "plus_minus_leaders": {
+                            "$id": "#/properties/boards/properties/league_leaders/properties/plus_minus_leaders",
+                            "type": "boolean",
+                            "title": "plus_minus_leaders",
+                            "description": "If true then the league leaders board will show plus minus leaders.",
+                            "default": true,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "penalty_minute_leaders": {
+                            "$id": "#/properties/boards/properties/league_leaders/properties/penalty_minute_leaders",
+                            "type": "boolean",
+                            "title": "penalty_minute_leaders",
+                            "description": "If true then the league leaders board will show penalty minute leaders.",
+                            "default": true,
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "time_on_ice_leaders": {
+                            "$id": "#/properties/boards/properties/league_leaders/properties/time_on_ice_leaders",
+                            "type": "boolean",
+                            "title": "time_on_ice_leaders",
+                            "description": "If true then the league leaders board will show time on ice leaders.",
                             "default": true,
                             "examples": [
                                 false

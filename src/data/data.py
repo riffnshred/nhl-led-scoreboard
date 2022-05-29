@@ -140,21 +140,11 @@ class Data:
         # Save the parsed config
         self.config = config
         ####################
-        self.favorite_player_id = self.get_fav_players_id()
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
         self.favorite_player_data = self.get_fav_player_data()
         self.favorite_player_stats = self.get_fav_player_stats()
 
-        if self.config.point_leaders:
-            self.point_leaders = self.get_point_leaders()
 
-        if self.config.goal_leaders:
-            self.goal_leaders = self.get_goal_leaders()
-
-        if self.config.assist_leaders:
-            self.assist_leaders = self.get_assist_leaders()
-
-        if self.config.win_leaders:
-            self.win_leaders = self.get_win_leaders()
         # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
         # It shows the last time (UTC) the data was updated. EX 20200114_041103
         self.time_stamp = "00000000_000000"
@@ -198,6 +188,29 @@ class Data:
         # Fetch the playoff data
         self.refresh_playoff()
 
+        # leaders
+        if self.config.point_leaders:
+            self.point_leaders = nhl_api.data.get_point_leaders(self.isPlayoff)
+
+        if self.config.goal_leaders:
+            self.goal_leaders = nhl_api.data.get_goal_leaders(self.isPlayoff)
+
+        if self.config.assist_leaders:
+            self.assist_leaders = nhl_api.data.get_assist_leaders(self.isPlayoff)
+
+        if self.config.win_leaders:
+            self.win_leaders = nhl_api.data.get_win_leaders(self.isPlayoff)
+
+        if self.config.plus_minus_leaders:
+            self.plus_minus_leaders = nhl_api.data.get_plus_minus_leaders(self.isPlayoff)
+        
+        if self.config.penalty_minute_leaders:
+            self.penalty_minute_leaders = nhl_api.data.get_penalty_minute_leaders(self.isPlayoff)
+        
+        if self.config.time_on_ice_leaders:
+            self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
+            print(self.time_on_ice_leaders)
+            print(type(self.time_on_ice_leaders))
         # Stanley cup champions
         self.ScChampions_id = self.check_stanley_cup_champion()
 
@@ -452,31 +465,9 @@ class Data:
             self.teams_info = info_by_id
         except TypeError:
             self.teams_info = []
-    def get_fav_players_id(self):
-        ids = []
-        for i in self.config.favorite_player:
-            player = requests.get(f"https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/{i}/100")
-            # if the suggestion key has no items move on to the next player
-            if not player.json()['suggestions']:
-                continue
-            ids.append(player.json()["suggestions"][0][0:7]) 
-        return ids
         
     
-    def get_point_leaders(self):
-        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
-        return data.json()
-        
-    def get_goal_leaders(self):
-        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
-        return data.json()
 
-    def get_assist_leaders(self):
-        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
-        return data.json()
-    def get_win_leaders(self):
-        data = requests.get("https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22wins%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
-        return data.json()
     def get_fav_player_data(self):
         data = []
         for i in self.favorite_player_id:      
@@ -538,7 +529,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                # Get the plaoffs data from the nhl api
+                # Get the playoffs data from the nhl api
                 self.playoffs = nhl_api.playoff(self.status.season_id)
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
@@ -630,7 +621,7 @@ class Data:
         debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
-        self.favorite_player_id = self.get_fav_players_id()
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
         self.favorite_player_data = self.get_fav_player_data()
         self.favorite_player_stats = self.get_fav_player_stats()
 

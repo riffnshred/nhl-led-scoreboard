@@ -136,6 +136,9 @@ class ScoreboardConfig:
         self.goal_leaders  = json["boards"]["league_leaders"]["goal_leaders"]
         self.assist_leaders = json["boards"]["league_leaders"]["assist_leaders"]
         self.win_leaders = json["boards"]["league_leaders"]["win_leaders"]
+        self.plus_minus_leaders = json["boards"]["league_leaders"]["plus_minus_leaders"]
+        self.penalty_minute_leaders = json["boards"]["league_leaders"]["penalty_minute_leaders"]
+        self.time_on_ice_leaders = json["boards"]["league_leaders"]["time_on_ice_leaders"]
 
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]

@@ -182,6 +182,10 @@
       "position": [1, 1],
       "align": "left"
     },
+    "stanley_cup":{
+      "position": [["75%", 5], 8],
+      "align": "right"
+    },
     "player1":{
       "position": [1, 8],
       "align": "left"

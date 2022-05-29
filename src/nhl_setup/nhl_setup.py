@@ -689,6 +689,27 @@ def league_leaders(default_config,qmark):
             'qmark': qmark,
             'message': "Show win leaders on the league leaders board?",
             'default': get_default_value(default_config,['boards','league_leaders','win_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'plus_minus_leaders',
+            'qmark': qmark,
+            'message': "Show plus minus leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','plus_minus_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'penalty_minute_leaders',
+            'qmark': qmark,
+            'message': "Show penalty minute leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','penalty_minute_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'time_on_ice_leaders',
+            'qmark': qmark,
+            'message': "Show time on ice leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','time_on_ice_leaders'],"bool")
         }
     ]
     league_leaders_conf = prompt(league_leaders_questions,style=custom_style_dope)

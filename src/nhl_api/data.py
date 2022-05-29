@@ -112,3 +112,67 @@ def dummie_overview():
     with open('dummie_nhl_data/overview_reg_final.json') as json_file:
         data = json.load(json_file)
         return data
+
+def get_fav_players_id(config):
+    ids = []
+    for i in config:
+        player = requests.get(f"https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/{i}/100")
+        # if the suggestion key has no items move on to the next player
+        if not player.json()['suggestions']:
+            continue
+        ids.append(player.json()["suggestions"][0][0:7]) 
+    return ids
+
+def get_point_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+    
+def get_goal_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+
+def get_assist_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+def get_win_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22wins%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22wins%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+def get_plus_minus_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22plusMinus%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22plusMinus%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+
+def get_penalty_minute_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22penaltyMinutes%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22penaltyMinutes%22,%22direction%22:%22DESC%22},{%22property%22:%22gamesPlayed%22,%22direction%22:%22ASC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
+
+def get_time_on_ice_leaders(playoffs):
+    if playoffs:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/timeonice?isAggregate=false&isGame=false&sort=[{%22property%22:%22timeOnIcePerGame%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1%20and%20gamesPlayed%3E=2&cayenneExp=gameTypeId=3%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+    else:
+        data = requests.get("https://api.nhle.com/stats/rest/en/skater/timeonice?isAggregate=false&isGame=false&sort=[{%22property%22:%22timeOnIcePerGame%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=4&factCayenneExp=gamesPlayed%3E=1%20and%20gamesPlayed%3E=2&cayenneExp=gameTypeId=2%20and%20seasonId%3C=20212022%20and%20seasonId%3E=20212022")
+
+    return data.json()
