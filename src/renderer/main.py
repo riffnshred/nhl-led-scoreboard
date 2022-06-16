@@ -167,7 +167,7 @@ class MainRenderer:
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
                     self.check_stanley_cup_champion()
-                    if self.data.ScChampions_id:
+                    if self.data.cup_winner_id:
                         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
 
                 self.__render_postgame(sbrenderer)
@@ -181,7 +181,7 @@ class MainRenderer:
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
                     self.check_stanley_cup_champion()
-                    if self.data.ScChampions_id:
+                    if self.data.cup_winner_id:
                         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
                 self.__render_postgame(sbrenderer)
 
@@ -407,5 +407,5 @@ class MainRenderer:
         self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
 
     def test_stanley_cup_champion(self, team_id):
-        self.data.ScChampions_id = team_id
+        self.data.cup_winner_id = team_id
         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
