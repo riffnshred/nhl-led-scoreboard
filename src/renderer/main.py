@@ -409,3 +409,10 @@ class MainRenderer:
     def test_stanley_cup_champion(self, team_id):
         self.data.cup_winner_id = team_id
         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
+
+    def check_stanley_cup_champion(self):
+        if self.data.isPlayoff and self.data.stanleycup_round:
+            for x in range(len(self.data.current_round.series[0].matchupTeams)):
+                if self.data.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
+                    return self.data.current_round.series[0].matchupTeams[x].team.id
+            return

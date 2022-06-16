@@ -7,7 +7,7 @@ class StanleyCupChampions:
         debug.info("Stanley cup champions id: {}".format(data.cup_winner_id))
         self.team_id = data.cup_winner_id
         if self.team_id is None:
-            pass
+            return
         self.team_abbrev = data.teams_info[self.team_id].abbreviation
         self.data = data
         self.team_info = data.teams_info[self.team_id]
