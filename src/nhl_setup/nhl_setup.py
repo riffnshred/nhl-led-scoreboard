@@ -15,7 +15,7 @@ import shutil
 
 from time import sleep
 
-SCRIPT_VERSION = "1.6.2"
+SCRIPT_VERSION = "1.6.3"
 
 TEAMS = ['Avalanche','Blackhawks','Blues','Blue Jackets','Bruins','Canadiens','Canucks','Capitals','Coyotes','Devils','Ducks','Flames','Flyers',
     'Golden Knights','Hurricanes','Islanders','Jets','Kings','Kraken','Maple Leafs','Lightning','Oilers','Panthers','Penguins','Predators',
@@ -370,12 +370,13 @@ def preferences_settings(default_config,qmark):
             'name': 'pref_team_only',
             'qmark': qmark,
             'message': 'Do you want goal animations for only preferred team?',
-            'default': get_default_value(default_config,['goal_animations','pref_team_only'],"bool")
+            'default': get_default_value(default_config,['preferences','goal_animations','pref_team_only'],"bool")
         },
     ]
 
     goal_animation_answer = prompt(questions,style=custom_style_dope)
     goal_animations_dict['goal_animations'].update(goal_animation_answer)
+
 
     preferences['preferences'].update(goal_animations_dict)
 
