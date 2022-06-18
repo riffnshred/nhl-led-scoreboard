@@ -185,7 +185,7 @@ class Data:
         self.refresh_playoff()
 
         # Stanley cup champions
-        self.ScChampions_id = self.check_stanley_cup_champion()
+        self.cup_winner_id = self.check_stanley_cup_champion()
 
 
     #
@@ -535,8 +535,7 @@ class Data:
             for x in range(len(self.current_round.series[0].matchupTeams)):
                 if self.current_round.series[0].matchupTeams[x].seriesRecord.wins >= 4:
                     return self.current_round.series[0].matchupTeams[x].team.id
-                else:
-                    return False
+                return
 
     def series_by_conference():
         """
