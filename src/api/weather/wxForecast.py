@@ -4,6 +4,7 @@ import debug
 from datetime import datetime,timedelta
 from time import sleep
 from api.weather.wx_utils import cadhumidex, wind_chill, get_csv, degrees_to_direction, temp_f, wind_mph
+import asyncio
 
 class wxForecast(object):
     def __init__(self, data, scheduler):
@@ -63,7 +64,7 @@ class wxForecast(object):
         if self.data.config.weather_data_feed.lower() == "ec":
             debug.info("Refreshing EC daily weather forecast")
             try:
-                self.data.ecData.update()
+                asyncio.run(self.data.ecData.update())
             except Exception as e:
                 debug.error("Unable to update EC forecast. Error: {}".format(e))
 
