@@ -9,7 +9,10 @@
 [![Create Release - Image](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml/badge.svg)](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml)
 [![GitHub release (latest by date)](https://badgen.net/github/release/falkyre/nhl-led-scoreboard-img?label=Version)](https://github.com/falkyre/nhl-led-scoreboard-img/releases/latest)
 
-## UPDATE for Season 2021 - 2022 (PLEASE READ)
+## IMPORTANT (PLEASE READ)
+
+### CURRENT KNOWN ISSUES (Pre-season 2022)
+At the moment, the NHL API is quite unstable and the scoreboard is confused and keep crashing. Do not adjust your set, it will get back to normal around when the season is about to start. 
 
 ### RASPBERRY PI ZERO NO MORE SUPPORTED (EDIT: [use a Pi Zero 2 instead](https://github.com/riffnshred/nhl-led-scoreboard/discussions/335))
 From now on, this library won't support the Raspberry Pi Zero or Zero W. This is because the project has become too complex to work properly on it. For those who are already using that model, It should still work with the latest version, but I won't give any support for it. I don't guarantee it will work from this point on.
@@ -17,9 +20,6 @@ From now on, this library won't support the Raspberry Pi Zero or Zero W. This is
 The models we support are all the Raspberry pi 3 versions and the Pi 4. 
 
 If you are looking to replace your raspberry pi Zero, I personally recommend the Raspberry pi 3A+. If you use the RGB Bonnet along with that, make sure to isolate the bottom of it with a few layers of Kapton tape or a layer of electrical tape.
-
-### DEVELOPMENT ON HOLD
-The development is on hold for this season. I still have a few things into works (support for a bigger screen), but the plan for this year is to maintain it and make sure you are not stuck with a black screen as much as I can. The next update will be around the Pre-season. It will be a fix to support the Seattle Kraken. Stay tuned for that.
 
 ## Description
 
