@@ -26,7 +26,7 @@ SECTIONS = ['general','preferences','states','boards','sbio']
 STATES = ['off_day','scheduled','intermission','post_game']
 #the boards listed below are what's listed in the config
 # These are boards that have configuration.  If your board does not have any config, you don't need to add it
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings', "league_leaders"]
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings', 'league_leaders']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 def getVersion():
