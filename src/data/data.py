@@ -178,13 +178,13 @@ class Data:
 
         # Playoff Flag
         self.isPlayoff = False
-
+        print(self.isPlayoff)
         # Stanley cup round flag
         self.stanleycup_round = False
 
         # Fetch the playoff data
         self.refresh_playoff()
-
+        print(self.isPlayoff)
         # leaders
         if self.config.point_leaders:
             self.point_leaders = nhl_api.data.get_point_leaders(self.isPlayoff)
@@ -208,7 +208,7 @@ class Data:
             self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
         # Stanley cup champions
         self.cup_winner_id = self.check_stanley_cup_champion()
-
+        print(self.isPlayoff)
 
     #
     # Date
@@ -338,6 +338,8 @@ class Data:
         """
 
         self.current_game_id = self.pref_games[0].game_id
+        print("GAME ID ")
+        print(self.current_game_id)
         earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
@@ -391,7 +393,7 @@ class Data:
 
     #
     # Main game event data
-
+ 
     def refresh_overview(self):
         """
             Get a all the data of the main event.
@@ -400,6 +402,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
+                print("HI")
                 self.overview = nhl_api.overview(self.current_game_id)
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
@@ -552,7 +555,8 @@ class Data:
                         
                         for s in self.series_list:
                             self.series.append(Series(s,self))
-                        
+                        print(self.series_list)
+                        print("it is the playoffs")
                         self.isPlayoff = True
                     except AttributeError:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))

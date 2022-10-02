@@ -19,6 +19,7 @@ from boards.seasoncountdown import SeasonCountdown
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
+from boards.period_summary import PeriodSummary 
 from time import sleep
 
 
@@ -241,6 +242,9 @@ class Boards:
 
     def team_summary(self, data, matrix,sleepEvent):
         TeamSummary(data, matrix, sleepEvent).render()
+
+    def period_summary(self, data, matrix, sleepEvent):
+        PeriodSummary(data, matrix, sleepEvent).render()
 
     def clock(self, data, matrix,sleepEvent):
         Clock(data, matrix, sleepEvent)
