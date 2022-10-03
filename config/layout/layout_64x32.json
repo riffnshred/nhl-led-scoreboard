@@ -12,6 +12,48 @@
       "align": "right"
     }
   },
+  "player_stats": {
+    "name": {
+      "position": [["50%", -7], 2],
+      "align": "center-top"
+    },
+    "goals_num": {
+      "position": [["20%", 2], "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "goals": {
+      "position": [["20%", 2], ["55%", 11]],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "assists_num": {
+      "position": [["80%", -2], "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "assists": {
+      "position": [["80%", -3], ["55%", 11]],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "hashtag": {
+      "position": [ 4, 0],
+      "relative": {
+        "to": "name",
+        "align": "right"
+      }
+    },
+      "number": {
+        "position": [ 1, 0],
+        "relative": {
+          "to": "hashtag",
+          "align": "right"
+      }
+      
+
+    }
+  },
   "scoreboard": {
     "center_top":{
       "position": ["50%", 0],
@@ -134,6 +176,53 @@
       "position": ["50%", ["100%", -1]],
       "align": "center"
     }
+  },
+  "league_leaders":{
+    "name":{
+      "position": [1, 1],
+      "align": "left"
+    },
+    "scp":{
+      "position": [["100%", -1], 1],
+      "align": "right"
+    },
+    "stanley_cup":{
+      "position": [["75%", 5], 8],
+      "align": "right"
+    },
+    "player1":{
+      "position": [1, 8],
+      "align": "left"
+    },
+    "player2":{
+      "position": [1, 14],
+      "align": "left"
+    },
+    "player3":{
+      "position": [1, 20],
+      "align": "left"
+    },
+    "player4":{
+      "position": [1, 26],
+      "align": "left"
+    },
+    "points1":{
+      "position": ["100%", 8],
+      "align": "right"
+    },
+    "points2":{
+      "position": ["100%", 14],
+      "align": "right"
+    },
+    "points3":{
+      "position": ["100%", 20],
+      "align": "right"
+    },
+    "points4":{
+      "position": ["100%", 26],
+      "align": "right"
+    }
+
   },
   "clock": {
     "time": {

@@ -137,9 +137,15 @@ class Data:
 
         # Get the teams info
         self.teams = self.get_teams()
+        
 
         # Save the parsed config
         self.config = config
+        ####################
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
+        self.favorite_player_data = self.get_fav_player_data()
+        self.favorite_player_stats = self.get_fav_player_stats()
+
 
         # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
         # It shows the last time (UTC) the data was updated. EX 20200114_041103
@@ -177,16 +183,37 @@ class Data:
 
         # Playoff Flag
         self.isPlayoff = False
-
+        print(self.isPlayoff)
         # Stanley cup round flag
         self.stanleycup_round = False
 
         # Fetch the playoff data
         self.refresh_playoff()
+        print(self.isPlayoff)
+        # leaders
+        if self.config.point_leaders:
+            self.point_leaders = nhl_api.data.get_point_leaders(self.isPlayoff)
 
+        if self.config.goal_leaders:
+            self.goal_leaders = nhl_api.data.get_goal_leaders(self.isPlayoff)
+
+        if self.config.assist_leaders:
+            self.assist_leaders = nhl_api.data.get_assist_leaders(self.isPlayoff)
+
+        if self.config.win_leaders:
+            self.win_leaders = nhl_api.data.get_win_leaders(self.isPlayoff)
+
+        if self.config.plus_minus_leaders:
+            self.plus_minus_leaders = nhl_api.data.get_plus_minus_leaders(self.isPlayoff)
+        
+        if self.config.penalty_minute_leaders:
+            self.penalty_minute_leaders = nhl_api.data.get_penalty_minute_leaders(self.isPlayoff)
+        
+        if self.config.time_on_ice_leaders:
+            self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
         # Stanley cup champions
         self.cup_winner_id = self.check_stanley_cup_champion()
-
+        print(self.isPlayoff)
 
     #
     # Date
@@ -316,6 +343,8 @@ class Data:
         """
 
         self.current_game_id = self.pref_games[0].game_id
+        print("GAME ID ")
+        print(self.current_game_id)
         earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
@@ -371,7 +400,7 @@ class Data:
 
     #
     # Main game event data
-
+ 
     def refresh_overview(self):
         """
             Get a all the data of the main event.
@@ -380,6 +409,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
+                print("HI")
                 self.overview = nhl_api.overview(self.current_game_id)
                 if self.time_stamp != self.overview.time_stamp:
                     self.time_stamp = self.overview.time_stamp
@@ -440,6 +470,24 @@ class Data:
             self.teams_info = info_by_id
         except TypeError:
             self.teams_info = []
+        
+    
+
+    def get_fav_player_data(self):
+        data = []
+        for i in self.favorite_player_id:      
+            e = nhl_api.data.get_player(i)
+            data.append(e.json())
+        return data
+
+    def get_fav_player_stats(self):
+        stats = []
+        for i in self.favorite_player_id:      
+            e = nhl_api.data.get_player_stats(i)
+            stats.append(e.json())
+        return stats
+
+
 
     def get_pref_teams_id(self):
         """
@@ -486,7 +534,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                # Get the plaoffs data from the nhl api
+                # Get the playoffs data from the nhl api
                 self.playoffs = nhl_api.playoff(self.status.season_id)
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
@@ -514,7 +562,8 @@ class Data:
                         
                         for s in self.series_list:
                             self.series.append(Series(s,self))
-                        
+                        print(self.series_list)
+                        print("it is the playoffs")
                         self.isPlayoff = True
                     except AttributeError:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
@@ -577,7 +626,10 @@ class Data:
         debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
-        
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
+        self.favorite_player_data = self.get_fav_player_data()
+        self.favorite_player_stats = self.get_fav_player_stats()
+
         # Update team's data
         self.get_teams_info()
 
