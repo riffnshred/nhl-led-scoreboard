@@ -1,5 +1,6 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
+#from RGBMatrixEmulator import graphics
 from time import sleep
 import debug
 from utils import center_text,get_file
@@ -51,7 +52,7 @@ class screenSaver:
 
                 # Go through the frames
                 x = 0
-                while x is not 10:
+                while x != 10:
                     try:
                         toaster.seek(frame_nub)
                     except EOFError:

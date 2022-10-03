@@ -1,8 +1,8 @@
-from env_canada import ECData
+from env_canada import ECWeather
 import debug
 import datetime
 from time import sleep
-
+import asyncio
 
 class ecWxAlerts(object):
     def __init__(self, data, scheduler,sleepEvent):
@@ -31,7 +31,7 @@ class ecWxAlerts(object):
 
         debug.info("Checking for EC weather alerts")
         #ecData = ECData(coordinates=(self.data.latlng))
-        self.data.ecData.update()
+        asyncio.run(self.data.ecData.update())
         curr_alerts = self.data.ecData.alerts
         self.network_issues = False
 
