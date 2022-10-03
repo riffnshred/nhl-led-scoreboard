@@ -212,17 +212,24 @@ def led_matrix_options(args):
     options.row_address_type = args.led_row_addr_type
     options.multiplexing = args.led_multiplexing
     options.pwm_bits = args.led_pwm_bits
+    options.scan_mode = args.led_scan_mode
     options.brightness = args.led_brightness
     options.pwm_lsb_nanoseconds = args.led_pwm_lsb_nanoseconds
     options.led_rgb_sequence = args.led_rgb_sequence
     options.panel_type = args.led_panel_type
     options.limit_refresh_rate_hz = args.led_limit_refresh
+
     try:
         options.pixel_mapper_config = args.led_pixel_mapper
     except AttributeError:
         debug.warning("Your compiled RGB Matrix Library is out of date.")
         debug.warning("The --led-pixel-mapper argument will not work until it is updated.")
-    
+
+    try:
+        options.pwm_dither_bits = args.led_pwm_dither_bits
+    except AttributeError:
+        debug.warning("Your compiled RGB Matrix Library is out of date.")
+        debug.warning("The --led-pwm-dither-bits argument will not work until it is updated.")
 
     if args.led_show_refresh:
         options.show_refresh_rate = 1
