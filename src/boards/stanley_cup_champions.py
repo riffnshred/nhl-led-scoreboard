@@ -4,9 +4,9 @@ import debug
 
 class StanleyCupChampions:
     def __init__(self, data, matrix, sleepEvent):
-        debug.info("Stanley cup champions id: {}".format(data.cup_winner_id))
-        self.team_id = data.cup_winner_id
-        if self.team_id is None:
+        debug.info("Stanley cup champions id: {}".format(data.ScChampions_id))
+        self.team_id = data.ScChampions_id
+        if self.team_id is None or self.team_id is False:
             return
         self.team_abbrev = data.teams_info[self.team_id].abbreviation
         self.data = data

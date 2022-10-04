@@ -98,6 +98,11 @@ class Data:
         self.curr_board = None
         self.prev_board = None
 
+        # For MQTT trigger (acts like the pb_trigger)
+        self.mqtt_trigger = False
+        # For MQTT board display - default to clock
+        self.mqtt_showboard = "clock"
+
 
         # Environment Canada manager (to share between the forecast, alerts and current obs)
         self.ecData = None
@@ -372,6 +377,8 @@ class Data:
                 return
 
         self.all_pref_games_final = True
+        #Let the screensaver run again
+        self.screensaver_livegame = False
 
     
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
