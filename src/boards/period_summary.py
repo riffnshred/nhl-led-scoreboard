@@ -15,15 +15,21 @@ class PeriodSummary:
     def __init__(self, data, matrix,sleepEvent):
         '''
             TODO:
-                Need to move the Previous/Next game info in the data section. I think loading it in the data section
-                and then taking that info here would make sense
+                Clean up
+                Add color
+                rename stuff from the team summary board 
+                only show after game + after periods
+                loop thru all favorite teams
         '''
         self.data = data
         self.teams_info = data.teams_info
         self.preferred_teams = data.pref_teams
         self.matrix = matrix
         self.team_colors = data.config.team_colors
-        self.overview = nhl_api.overview(2022010056)
+        #Do not forget to change this \/
+        self.overview = nhl_api.overview(2022010065) #this is just so I could use any game overview, CHANGE LATER!!!!!!!!!
+        # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        #self.data.overview
         self.font = data.config.layout.font
         self.layout = data.config.config.layout.get_board_layout('team_summary')
 
@@ -31,24 +37,24 @@ class PeriodSummary:
         self.sleepEvent.clear()
         print("OVERVIEW")
         print(self.overview.home_team_name)
+        self.away_color = self.team_colors.color("{}.primary".format(self.overview.away_team_id))
+        self.home_color = self.team_colors.color("{}.primary".format(self.overview.home_team_id))
+        print('PLAYS')
+        print(self.overview.plays['scoringPlays'])
 
     def render(self):
         self.matrix.clear()
         for team_id in self.preferred_teams:
             self.team_id = team_id
 
-            team_colors = self.data.config.team_colors
-            bg_color = team_colors.color("{}.primary".format(team_id))
-            txt_color = team_colors.color("{}.text".format(team_id))
 
-            im_height = 67
+
+            im_height = 56
 
             i = 0
 
             if not self.sleepEvent.is_set():
-                image = self.draw_team_summary(
-                    bg_color,
-                    txt_color,
+                image = self.draw_period_summary(
                     im_height
                 )
                 self.matrix.clear()
@@ -87,40 +93,80 @@ class PeriodSummary:
 
             # Show the bottom before we change to the next table.
             self.sleepEvent.wait(5)
-    def draw_team_summary(self, bg_color, txt_color, im_height):
+    def draw_period_summary(self, im_height):
         image = Image.new('RGB', (64, im_height))
         draw = ImageDraw.Draw(image)
-        # draw.rectangle([0, 6, 100, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        
         awayTeamStats = self.overview.boxscore['teams']['away']['teamStats']['teamSkaterStats']
         homeTeamStats = self.overview.boxscore['teams']['home']['teamStats']['teamSkaterStats']
-        draw.text((1, 1), self.overview.away_team_abrev, fill=(255, 255, 255), font=self.font)
-        draw.text((52, 1), self.overview.home_team_abrev, fill=(255,255,255), font=self.font)
+        draw.text((1, 1), self.overview.away_team_abrev, fill=(self.away_color['r'], self.away_color['g'],self.away_color['b']), font=self.font)
+        draw.text((52, 1), self.overview.home_team_abrev, fill=(self.home_color['r'], self.home_color['g'],self.home_color['b']), font=self.font)
         
-        draw.text((19, 0), "2nd END".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=self.font)
+        #!!!
+        draw.text((19, 0), "2nd END".format(), fill=(255,255,255), font=self.font) #GET THIS TO ACTUALLY WORK
+        #!!!
 
-        draw.text((24, 7), f"{self.overview.away_score} - {self.overview.home_score}", fill=(255, 255, 255), font=self.font)
+        # score
+        draw.text((27, 8), f"{self.overview.away_score}", fill=(255, 255, 255), font=self.font, anchor='rt')
+        draw.text((37, 7), f"{self.overview.home_score}", fill=(255, 255, 255), font=self.font)
+        draw.text((30, 7), f"-", fill=(255, 255, 255), font=self.font)
+
+        # SHOTS
         away_sog = awayTeamStats['shots']
         home_sog = homeTeamStats['shots']
-        draw.text((14, 14), f"{away_sog}  SOG  {home_sog}", fill=(255, 255, 255), font=self.font)
-        home_pp = f"{int(homeTeamStats['powerPlayGoals'])}/{int(homeTeamStats['powerPlayOpportunities'])}"
+        draw.text((26, 14), f"SOG", fill=(255, 255, 255), font=self.font)
+        draw.text((19, 15), f"{away_sog}", fill=(255, 255, 255), font=self.font, anchor='rt')
+        draw.text((43, 14), f"{home_sog}", fill=(255, 255, 255), font=self.font)
+
+
+        # PP
         away_pp = f"{int(awayTeamStats['powerPlayGoals'])}/{int(awayTeamStats['powerPlayOpportunities'])}"
-        draw.text((13, 21), f"{away_pp}  PP  {home_pp}", fill=(255, 255, 255), font=self.font)
-        away_hits = awayTeamStats['hits']
-        home_hits = homeTeamStats['hits']
-        draw.text((13, 28), f"{away_hits}  HITS  {home_hits}", fill=(255, 255, 255), font=self.font)
+        home_pp = f"{int(homeTeamStats['powerPlayGoals'])}/{int(homeTeamStats['powerPlayOpportunities'])}"
+        draw.text((19, 22), away_pp, fill=(255, 255, 255), font=self.font, anchor='rt')  
+        draw.text((43, 21), home_pp, fill=(255, 255, 255), font=self.font)
+        draw.text((28, 21), f"PP", fill=(255, 255, 255), font=self.font)
 
-        away_fo = awayTeamStats['faceOffWinPercentage']
-        home_fo = homeTeamStats['faceOffWinPercentage']
-        draw.text((10, 35), f"{away_fo}  FO%  {home_fo}", fill=(255, 255, 255), font=self.font)
-
-        away_pim = awayTeamStats['pim']
-        home_pim = homeTeamStats['pim']
-        draw.text((14, 42), f"{away_pim}  PIM  {home_pim}", fill=(255, 255, 255), font=self.font)
-
-        
+        #HITS
+        away_hits = str(awayTeamStats['hits'])
+        home_hits = str(homeTeamStats['hits'])
+        draw.text((25, 28), f"HITS", fill=(255, 255, 255), font=self.font)
+        draw.text((19, 29), away_hits, fill=(255,255,255), font=self.font, anchor = 'rt')
+        draw.text((43, 28), home_hits, fill=(255,255,255), font=self.font)
 
 
+        # FO%
+        away_fo = str(awayTeamStats['faceOffWinPercentage'])
+        home_fo = str(homeTeamStats['faceOffWinPercentage'])
+        draw.text((19, 36), away_fo, fill=(255,255,255), font=self.font, anchor = 'rt')
+        draw.text((43, 35), home_fo, fill=(255,255,255), font=self.font)        
+        draw.text((26, 35), f"FO%", fill=(255, 255, 255), font=self.font)
 
+        # PIM
+        away_pim = str(awayTeamStats['pim'])
+        home_pim = str(homeTeamStats['pim'])
+        draw.text((19, 43), away_pim, fill=(255,255,255), font=self.font, anchor = 'rt')
+        draw.text((43, 42), home_pim, fill=(255,255,255), font=self.font)
+        draw.text((27, 42), f"PIM", fill=(255, 255, 255), font=self.font)
+
+        # Blocks
+        away_blk = str(awayTeamStats['blocked'])
+        home_blk = str(homeTeamStats['blocked'])
+        draw.text((19, 50), away_blk, fill=(255,255,255), font=self.font, anchor = 'rt')
+        draw.text((43, 49), home_blk, fill=(255,255,255), font=self.font)        
+        draw.text((24, 49), f"bLKS", fill=(255, 255, 255), font=self.font)
+
+
+        # Getting all goals
+        # for i in self.overview.plays['scoringPlays']:
+        #     player = self.overview.plays['allPlays'][i]['players'][0]['fullName']
+        #     totals = self.overview.plays['allPlays'][i]['players'][0]['seasonTotal']
+        #     period = self.overview.plays['allPlays'][i]['about']['ordinalNum']
+
+
+
+        # draw.text((26, 56), f"SV%", fill=(255, 255, 255), font=self.font)
+
+        #testing stuff
         # draw.text((18, 35), "SCORERS", fill=(255, 255, 255), font=self.font)
         # draw.text((26, 42), "1st", fill=(255, 255, 255), font=self.font)
         # draw.text((16, 49), "8:47  (PP)", fill=(255, 255, 255), font=self.font)
@@ -129,4 +175,3 @@ class PeriodSummary:
         # draw.text((1, 56), "Marchessault (99)", fill=(255, 255, 255), font=self.font)
             
         return image
-    # def draw_scorers(draw, )
