@@ -29,7 +29,7 @@ class ScoreboardConfig:
         self.live_game_refresh_rate = json["preferences"]["live_game_refresh_rate"]
         self.preferred_teams = json["preferences"]["teams"]
         self.sog_display_frequency = json["preferences"]["sog_display_frequency"]
-        self.favorite_player = json["preferences"]["favorite_player"]
+
 
         # Goal animation
         self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
@@ -142,15 +142,6 @@ class ScoreboardConfig:
         self.standing_type = json["boards"]["standings"]["standing_type"]
         self.preferred_divisions = json["boards"]["standings"]["divisions"]
         self.preferred_conference = json["boards"]["standings"]["conference"]
-        
-        # League leaders
-        self.point_leaders = json["boards"]["league_leaders"]["point_leaders"]
-        self.goal_leaders  = json["boards"]["league_leaders"]["goal_leaders"]
-        self.assist_leaders = json["boards"]["league_leaders"]["assist_leaders"]
-        self.win_leaders = json["boards"]["league_leaders"]["win_leaders"]
-        self.plus_minus_leaders = json["boards"]["league_leaders"]["plus_minus_leaders"]
-        self.penalty_minute_leaders = json["boards"]["league_leaders"]["penalty_minute_leaders"]
-        self.time_on_ice_leaders = json["boards"]["league_leaders"]["time_on_ice_leaders"]
 
         # Clock
         self.clock_board_duration = json["boards"]["clock"]["duration"]
