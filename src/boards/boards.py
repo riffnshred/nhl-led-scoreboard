@@ -9,17 +9,14 @@ from boards.seriesticker import Seriesticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
-from boards.league_leaders import Leaders
 from boards.pbdisplay import pbDisplay
 from boards.wxWeather import wxWeather
 from boards.wxAlert import wxAlert
 from boards.christmas import Christmas
-from boards.player_stats import PlayerStats
 from boards.seasoncountdown import SeasonCountdown
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
-from boards.period_summary import PeriodSummary 
 from time import sleep
 
 
@@ -276,17 +273,8 @@ class Boards:
     def team_summary(self, data, matrix,sleepEvent):
         TeamSummary(data, matrix, sleepEvent).render()
 
-    def period_summary(self, data, matrix, sleepEvent):
-        PeriodSummary(data, matrix, sleepEvent).render()
-
     def clock(self, data, matrix,sleepEvent):
         Clock(data, matrix, sleepEvent)
-
-    def player_stats(self, data, matrix, sleepEvent):
-        PlayerStats(data, matrix, sleepEvent)
-
-    def league_leaders(self, data, matrix, sleepEvent):
-        Leaders(data, matrix, sleepEvent)
 
     def pbdisplay(self, data, matrix,sleepEvent):
         pbDisplay(data, matrix, sleepEvent)
