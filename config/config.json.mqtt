@@ -5,7 +5,7 @@
 	"preferences": {
 		"time_format": "12h",
 		"end_of_day": "7:00",
-		"location": "507 Raquette Street",
+		"location": "",
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Jets"
