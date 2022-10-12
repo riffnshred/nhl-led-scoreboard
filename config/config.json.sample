@@ -85,11 +85,6 @@
         }
 	},
 	"sbio": {
-		"mqtt": {
-            "enabled": false,
-            "broker": "test.mosquitto.org",
-            "port": 1883
-        },
 		"screensaver": {
             "enabled": false,
 			"animations": true,

@@ -1,6 +1,5 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from rgbmatrix import graphics
-#from RGBMatrixEmulator import graphics
 import datetime
 import re
 import debug
@@ -95,14 +94,14 @@ class Clock:
                 self.time = datetime.datetime.now().strftime(self.time_format.replace(":", " "))
             else:
                 self.time = datetime.datetime.now().strftime(self.time_format)
-            self.meridiem = datetime.datetime.now().strftime("%p")
+            self.meridiem = datetime.datetime.now().strftime("%P")
             display_time += 1
             self.draw_clock()
             #sleep(1)
             self.sleepEvent.wait(1)
             if self.data.config.clock_flash_seconds:
                 self.time = datetime.datetime.now().strftime(self.time_format)
-            self.meridiem = datetime.datetime.now().strftime("%p")
+            self.meridiem = datetime.datetime.now().strftime("%P")
             self.draw_clock()
             display_time += 1
             #sleep(1)

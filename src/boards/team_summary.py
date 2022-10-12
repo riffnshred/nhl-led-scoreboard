@@ -4,7 +4,6 @@
 """
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 from rgbmatrix import graphics
-#from RGBMatrixEmulator import graphics
 import nhl_api
 from data.scoreboard import Scoreboard
 from data.team import Team

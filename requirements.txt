@@ -1,4 +1,4 @@
-env-canada
+env-canada==0.0.35
 ephem==3.7.7.0
 fastjsonschema>=2.14.4
 geocoder==1.38.1
@@ -17,5 +17,3 @@ nameparser==1.0.6
 pillow==8.3.2
 dbus-python
 iso6709
-#RGBMatrixEmulator
-paho-mqtt

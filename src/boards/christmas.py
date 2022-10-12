@@ -1,5 +1,4 @@
 from rgbmatrix import graphics
-#from RGBMatrixEmulator import graphics
 from PIL import ImageFont, Image
 from utils import center_text
 import datetime

@@ -1,6 +1,5 @@
 from PIL import Image, ImageDraw
 from rgbmatrix import graphics
-#from RGBMatrixEmulator import graphics
 import math
 from utils import round_normal
 import sys

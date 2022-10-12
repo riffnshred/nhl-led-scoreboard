@@ -1,9 +1,7 @@
 from rgbmatrix import RGBMatrixOptions, graphics
-#from RGBMatrixEmulator import RGBMatrixOptions, graphics
 import collections
 import argparse
 import os
-
 import debug
 from datetime import datetime, timezone, time
 import regex
@@ -12,22 +10,19 @@ import geocoder
 import dbus
 import json
 from iso6709 import Location
-import platform
 
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
 def stop_splash_service():
-  sysbus = dbus.SystemBus()
-  systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
-  manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
-  try:
-    job = manager.StopUnit('sb_splash.service', 'fail')
-  except Exception as ex:
-    nosvc = ex 
+    sysbus = dbus.SystemBus()
+    systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
+    manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
+    try:
+        job = manager.StopUnit('sb_splash.service', 'fail')
+    except Exception as ex:
+        nosvc = ex
 
-def scheduler_event_listener(event):
-    debug.error(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
 
 def get_lat_lng(location):
 
@@ -90,7 +85,7 @@ def get_lat_lng(location):
                 # Get the location of the timezone from the /usr/share/zoneinfo/zone.tab
 
                 try:
-                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(readlink -f /etc/localtime | xargs basename) | awk '{print $2}'")
+                    stream=os.popen("cat /usr/share/zoneinfo/zone.tab | grep $(cat /etc/timezone) | awk '{print $2}'")
                     get_tzlatlng=stream.read().rstrip() + "/"
                     loc=Location(get_tzlatlng)
                     latlng = [float(loc.lat.decimal),float(loc.lng.decimal)]

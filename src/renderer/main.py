@@ -18,14 +18,13 @@ import glob
 
 
 class MainRenderer:
-    def __init__(self, matrix, data, sleepEvent,sbQueue):
+    def __init__(self, matrix, data, sleepEvent):
         self.matrix = matrix
         self.data = data
         self.status = self.data.status
         self.refresh_rate = self.data.config.live_game_refresh_rate
         self.boards = Boards()
         self.sleepEvent = sleepEvent
-        self.sbQueue = sbQueue
         self.sog_display_frequency = data.config.sog_display_frequency
         self.alternate_data_counter = 1
 
@@ -82,10 +81,6 @@ class MainRenderer:
         i = 0
         while True:
             debug.info('PING !!! Render off day')
-            # Add game state onto queue
-            qPayload = "off_day"
-            qItem = ["scoreboard/state",qPayload]
-            self.sbQueue.put_nowait(qItem)
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
@@ -148,17 +143,7 @@ class MainRenderer:
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
-                # Used for the live state payload
-                period = self.scoreboard.periods.ordinal
-                clock = self.scoreboard.periods.clock
-                score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
-        
                 debug.info("Game is Live")
-                # Add game state onto queue
-                qPayload = {"period": period, "clock": clock,"score": score}
-                qItem = ["scoreboard/live/status",qPayload]
-                self.sbQueue.put_nowait(qItem)
-
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
 
                 self.check_new_penalty()
@@ -166,11 +151,6 @@ class MainRenderer:
                 self.__render_live(sbrenderer)
                 if self.scoreboard.intermission:
                     debug.info("Main event is in Intermission")
-                    # Add game state onto queue
-                    qPayload = "intermission"
-                    qItem = ["scoreboard/state",qPayload]
-                    self.sbQueue.put_nowait(qItem)  
-
                     # Show Boards for Intermission
                     self.draw_end_period_indicator()
                     self.sleepEvent.wait(self.refresh_rate)
@@ -183,11 +163,6 @@ class MainRenderer:
 
             elif self.status.is_game_over(self.data.overview.status):
                 debug.info("Game Over")
-                # Add game state onto queue
-                qPayload = "gameover"
-                qItem = ["scoreboard/state",qPayload]
-                self.sbQueue.put_nowait(qItem)
-
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
@@ -202,7 +177,6 @@ class MainRenderer:
             elif self.status.is_final(self.data.overview.status):
                 """ Post Game state """
                 debug.info("FINAL")
-                
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
                 if self.data.isPlayoff and self.data.stanleycup_round:
@@ -218,15 +192,11 @@ class MainRenderer:
             elif self.status.is_scheduled(self.data.overview.status):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
-                #blocks the screensaver from running if game is live or scheduled
-                self.data.screensaver_livegame = True
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.__render_pregame(sbrenderer)
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
-                
-
 
             elif self.status.is_irregular(self.data.overview.status):
                 """ Pre-game state """
@@ -251,11 +221,6 @@ class MainRenderer:
         debug.info("Showing Pre-Game")
         self.matrix.clear()
         sbrenderer.render()
-        # Add game state onto queue
-        qPayload = "pregame"
-        qItem = ["scoreboard/state",qPayload]
-        self.sbQueue.put_nowait(qItem)
-
 
 
     def __render_postgame(self, sbrenderer):
@@ -263,11 +228,6 @@ class MainRenderer:
         self.matrix.clear()
         sbrenderer.render()
         self.draw_end_of_game_indicator()
-
-        # Add game state onto queue
-        qPayload = "postgame"
-        qItem = ["scoreboard/state",qPayload]
-        self.sbQueue.put_nowait(qItem)
 
 
     def __render_live(self, sbrenderer):
@@ -319,12 +279,6 @@ class MainRenderer:
             self.goal_team_cache.append("away")
             if away_id not in self.data.pref_teams and pref_team_only:
                 return
-            
-            # Add goal onto queue
-            qPayload = {"away": True, "team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
-            qItem = ["scoreboard/live/goal",qPayload]
-            self.sbQueue.put_nowait(qItem)
-            
             # run the goal animation
             self._draw_event_animation("goal", away_id, away_name)
 
@@ -334,11 +288,6 @@ class MainRenderer:
             self.goal_team_cache.append("home")
             if home_id not in self.data.pref_teams and pref_team_only:
                 return
-            # Add goal onto queue
-            qPayload = {"home": True, "team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
-            qItem = ["scoreboard/live/goal",qPayload]
-            self.sbQueue.put_nowait(qItem)
-
             # run the goal animation
             self._draw_event_animation("goal", home_id, home_name)
 
@@ -375,12 +324,6 @@ class MainRenderer:
             self.penalties_team_cache.append("away")
             #if away_id not in self.data.pref_teams: and pref_team_only:
             #    return
-
-            # Add penalty onto queue
-            qPayload = away_name
-            qItem = ["scoreboard/live/penalty/away",qPayload]
-            self.sbQueue.put_nowait(qItem)
-
             # run the goal animation
             self._draw_event_animation("penalty", away_id, away_name)
 
@@ -389,12 +332,6 @@ class MainRenderer:
             self.penalties_team_cache.append("home")
             #if home_id not in self.data.pref_teams: #and pref_team_only:
             #    return
-
-            # Add penalty onto queue
-            qPayload = home_name
-            qItem = ["scoreboard/live/penalty/home",qPayload]
-            self.sbQueue.put_nowait(qItem)
-
             # run the goal animation
             self._draw_event_animation("penalty", home_id, home_name)
 

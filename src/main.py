@@ -1,30 +1,23 @@
 import sys
 import time
 from datetime import datetime, timedelta
-
-from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-#from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
-#from utils import args, led_matrix_options, scheduler_event_listener
+from utils import args, led_matrix_options, stop_splash_service
 from data.data import Data
 import threading
-import queue
 from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
 from sbio.motionsensor import Motion
 from sbio.screensaver import screenSaver
-from sbio.sbMQTT import sbMQTT
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
 from api.weather.wxForecast import wxForecast
-import asyncio
-from env_canada import ECWeather
+from env_canada import ECData
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,7 +27,7 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.6.x.beta"
+SCRIPT_VERSION = "1.6.10"
 
 
 def run():
@@ -90,24 +83,23 @@ def run():
     # Will also allow for weather alert to interrupt display board if you want
     sleepEvent = threading.Event()
 
+
     # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
-    scheduler = BackgroundScheduler(job_defaults={'misfire_grace_time': None})
-    scheduler.add_listener(scheduler_event_listener, EVENT_JOB_MISSED | EVENT_JOB_ERROR)
+    scheduler = BackgroundScheduler()
     scheduler.start()
 
     # Any tasks that are scheduled go below this line
 
     # Make sure we have a valid location for the data.latlng as the geocode can return a None
     # If there is no valid location, skip the weather boards
-   
+    
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
-            try:              
-                data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
-                asyncio.run(data.ecData.update())
+            try:
+                data.ecData = ECData(coordinates=(data.latlng))
             except Exception as e:
-                debug.error("Unable to connect to EC, try running again in a few minutes: {}".format(e))
+                debug.error("Unable to connect to EC, try running again in a few minutes")
                 sys.exit(0)
 
     if data.config.weather_enabled:
@@ -156,16 +148,7 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
-    mqtt_enabled = data.config.mqtt_enabled
-    # Create a queue for scoreboard events and info to be sent to an MQTT broker
-    sbQueue = queue.Queue()
-    if mqtt_enabled:     
-        sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue,screensaver)
-        sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
-        sbmqttThread.daemon = True
-        sbmqttThread.start()
-
-    MainRenderer(matrix, data, sleepEvent,sbQueue).render()
+    MainRenderer(matrix, data, sleepEvent).render()
 
 
 if __name__ == "__main__":
