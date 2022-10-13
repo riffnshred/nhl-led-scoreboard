@@ -32,6 +32,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from renderer.loading_screen import Loading
 import debug
 import os
+# If you want real fancy stack trace dumps, uncomment these two lines
+#from rich.traceback import install
+#install(show_locals=True)  
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
@@ -105,7 +108,10 @@ def run():
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":           
              data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
-             asyncio.run(data.ecData.update())
+             try:
+                asyncio.run(data.ecData.update())
+             except Exception as e:
+                debug.error("Unable to connect to EC .. will try on next refresh : {}".format(e))
             
     if data.config.weather_enabled:
         if data.config.weather_data_feed.lower() == "ec":
@@ -171,7 +177,7 @@ def run():
             sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
             sbmqttThread.daemon = True
             sbmqttThread.start()
-
+    
     MainRenderer(matrix, data, sleepEvent,sbQueue).render()
 
 
