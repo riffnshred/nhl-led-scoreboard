@@ -3,6 +3,7 @@ import data
 import time
 import sys
 import logging
+from rich.logging import RichHandler
 
 debug_enabled = False
 
@@ -35,7 +36,7 @@ def set_debug_status(config,logcolor=False,loglevel='INFO'):
 		if colorAvail:
 			coloredlogs.install(level='DEBUG',fmt='%(asctime)s %(name)s %(levelname)s %(message)s',stream=sys.stdout)
 		else:
-			logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG, datefmt='%y-%m-%d %H:%M:%S')
+			logging.basicConfig(format='%(message)s', level=logging.DEBUG, datefmt='%y-%m-%d %H:%M:%S',handlers=[RichHandler(omit_repeated_times=False,tracebacks_show_locals=True,rich_tracebacks=True)])
 
 	else:
 		if colorAvail:
@@ -44,7 +45,8 @@ def set_debug_status(config,logcolor=False,loglevel='INFO'):
 			handler = logging.StreamHandler(sys.stdout)
 			formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 			handler.setFormatter(formatter)
-			logger.addHandler(handler)
+			#logger.addHandler(handler)
+			logger.addHandler(RichHandler(show_path=False,omit_repeated_times=False,tracebacks_show_locals=True,rich_tracebacks=True))
 			logger.setLevel(loglevel)
 
 
@@ -56,6 +58,12 @@ def log(text):
 	if debug_enabled:
 		#__debugprint("DEBUG ({}): {}".format(__timestamp(), text))
 		logger.debug(text)
+
+def critical(text):
+	logger.critical(text,stack_info=True)
+
+def exception(text,e):
+  logger.exception(text,exc_info=e)
 
 def warning(text):
   #__debugprint("WARNING ({}): {}".format(__timestamp(), text))
