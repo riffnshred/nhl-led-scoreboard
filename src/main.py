@@ -16,7 +16,7 @@ from sbio.dimmer import Dimmer
 from sbio.pushbutton import PushButton
 from sbio.motionsensor import Motion
 from sbio.screensaver import screenSaver
-from sbio.sbMQTT import sbMQTT
+#from sbio.sbMQTT import sbMQTT
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
@@ -27,6 +27,7 @@ import asyncio
 from env_canada import ECWeather
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
+import tzlocal
 from apscheduler.schedulers.background import BackgroundScheduler
 from renderer.loading_screen import Loading
 import debug
@@ -91,7 +92,7 @@ def run():
     sleepEvent = threading.Event()
 
     # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
-    scheduler = BackgroundScheduler(job_defaults={'misfire_grace_time': None})
+    scheduler = BackgroundScheduler(timezone=str(tzlocal.get_localzone()), job_defaults={'misfire_grace_time': None})
     scheduler.add_listener(scheduler_event_listener, EVENT_JOB_MISSED | EVENT_JOB_ERROR)
     scheduler.start()
 
@@ -102,14 +103,10 @@ def run():
    
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
-        if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
-            try:              
-                data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
-                asyncio.run(data.ecData.update())
-            except Exception as e:
-                debug.error("Unable to connect to EC, try running again in a few minutes: {}".format(e))
-                sys.exit(0)
-
+        if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":           
+             data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
+             asyncio.run(data.ecData.update())
+            
     if data.config.weather_enabled:
         if data.config.weather_data_feed.lower() == "ec":
             ecWxWorker(data,scheduler)
@@ -159,11 +156,21 @@ def run():
     mqtt_enabled = data.config.mqtt_enabled
     # Create a queue for scoreboard events and info to be sent to an MQTT broker
     sbQueue = queue.Queue()
+    pahoAvail = False
     if mqtt_enabled:     
-        sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue,screensaver)
-        sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
-        sbmqttThread.daemon = True
-        sbmqttThread.start()
+        # Only import if we are actually using mqtt, that way paho_mqtt doesn't need to be installed
+        try:
+            from sbio.sbMQTT import sbMQTT
+            pahoAvail = True
+        except Exception as e:
+            debug.error("MQTT (paho-mqtt): is disabled.  Unable to import module: {}  Did you install paho-mqtt?".format(e))
+            pahoAvail = False   
+        
+        if pahoAvail:
+            sbmqtt = sbMQTT(data,matrix,sleepEvent,sbQueue,screensaver)
+            sbmqttThread = threading.Thread(target=sbmqtt.run, args=())
+            sbmqttThread.daemon = True
+            sbmqttThread.start()
 
     MainRenderer(matrix, data, sleepEvent,sbQueue).render()
 
