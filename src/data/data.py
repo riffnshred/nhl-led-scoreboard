@@ -178,13 +178,11 @@ class Data:
 
         # Playoff Flag
         self.isPlayoff = False
-        print(self.isPlayoff)
         # Stanley cup round flag
         self.stanleycup_round = False
 
         # Fetch the playoff data
         self.refresh_playoff()
-        print(self.isPlayoff)
         # leaders
         if self.config.point_leaders:
             self.point_leaders = nhl_api.data.get_point_leaders(self.isPlayoff)
@@ -208,7 +206,7 @@ class Data:
             self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
         # Stanley cup champions
         self.cup_winner_id = self.check_stanley_cup_champion()
-        print(self.isPlayoff)
+
 
     #
     # Date
