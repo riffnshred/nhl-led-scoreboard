@@ -1,5 +1,11 @@
-from rgbmatrix import RGBMatrixOptions, graphics
-#from RGBMatrixEmulator import RGBMatrixOptions, graphics
+import driver
+
+if driver.is_hardware():
+    from rgbmatrix import RGBMatrixOptions, graphics
+    import dbus
+else:
+    from RGBMatrixEmulator import RGBMatrixOptions, graphics
+
 import collections
 import argparse
 import os
@@ -9,7 +15,6 @@ from datetime import datetime, timezone, time
 import regex
 import math
 import geocoder
-import dbus
 import json
 from iso6709 import Location
 import platform
@@ -111,7 +116,8 @@ def get_lat_lng(location):
                     try:
                         f.write(savefile)
                         #Change the ownership of the location.json file
-                        os.chown(path, uid, gid)
+                        if hasattr(os, "chown"):
+                            os.chown(path, uid, gid)
                     except Exception as e:
                         debug.error("Could not write {0}. Error Message: {1}".format(path,e))
             except Exception as e:
@@ -193,7 +199,7 @@ def args():
                         default=0, type=int)
 
     parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
-    parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
+    parser.add_argument("--emulated", action="store_true", help="Run in software emulation mode.")                     
     parser.add_argument("--updatecheck", action="store_true", help="Check for updates (Default: False)", default=False)
     parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
     parser.add_argument("--ghtoken", action="store", help="Github API token for doing update checks(Default: blank)", default="", type=str)

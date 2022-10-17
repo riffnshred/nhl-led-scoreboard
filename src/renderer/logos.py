@@ -2,8 +2,8 @@ from PIL import Image
 from utils import get_file
 from images.image_helper import ImageHelper
 import os
-import pwd
-import grp
+# import pwd
+# import grp
 import errno
 from utils import round_normal
 
@@ -89,12 +89,14 @@ class LogoRenderer:
         self.logo.save(filename)
 
     def change_ownership(self,team_abbrev):
-        path = os.path.dirname("{}/{}".format(PATH, team_abbrev))
-        for root, dirs, files in os.walk(path):  
-            for d in dirs:  
-                os.chown(os.path.join(root, d), uid, gid)
-            for f in files:
-                os.chown(os.path.join(root, f), uid, gid)
+        # If we're not on a Unix distro, this won't do anything and will crash.
+        if hasattr(os, "chown"):
+            path = os.path.dirname("{}/{}".format(PATH, team_abbrev))
+            for root, dirs, files in os.walk(path):  
+                for d in dirs:
+                    os.chown(os.path.join(root, d), uid, gid)
+                for f in files:
+                    os.chown(os.path.join(root, f), uid, gid)
 
     def render(self):
         self.matrix.draw_image_layout(

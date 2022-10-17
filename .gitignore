@@ -136,6 +136,9 @@ config/*.config.json
 config/config.json.backup
 config/location.json
 
+# RGBMatrixEmulator
+emulator_config.json
+
 # ignore generated logos
 assets/logos/*
 !assets/logos/_local
