@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-from utils import args, led_matrix_options, stop_splash_service
+from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
 from data.data import Data
+import queue
 import threading
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
@@ -30,7 +31,7 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.6.x.beta"
+SCRIPT_VERSION = "1.7.0.beta"
 
 # Conditionally load the appropriate driver classes and set the global driver mode based on command line flags
 if args().emulated:

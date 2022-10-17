@@ -4,11 +4,8 @@ fastjsonschema>=2.14.4
 geocoder==1.38.1
 gpiozero==1.5.1
 noaa-sdk>=0.1.18
-printtools==1.2
-PyInstaller==3.6
 pyowm>=3.0.0
 python-tsl2591==0.2.0
-questionary>=1.5.2
 regex>=2020.4.4
 RPi.GPIO==0.7.0
 APScheduler==3.9.1
@@ -17,6 +14,5 @@ nameparser==1.0.6
 pillow==8.3.2
 dbus-python
 iso6709
-#RGBMatrixEmulator
 paho-mqtt
 rich
