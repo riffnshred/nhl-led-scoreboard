@@ -1,18 +1,15 @@
 from PIL import Image
+import cairosvg
 from io import BytesIO
-import requests
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
-
-
 class ImageHelper:
 
 
   
   def image_from_svg(url):
-    response = requests.get(url)
-    bytes = BytesIO(response.content)
-    drawing = svg2rlg(bytes)
-    renderPM.drawToFile(drawing, "_tmp.png", fmt="PNG")
+    out = BytesIO()
+    cairosvg.svg2png(url=url, write_to=out)
+    
+    img = Image.open(out)
+    img = img.crop(img.getbbox())
 
-    return Image.open("_tmp.png")
+    return img

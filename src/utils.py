@@ -1,11 +1,3 @@
-import driver
-
-if driver.is_hardware():
-    from rgbmatrix import RGBMatrixOptions, graphics
-    import dbus
-else:
-    from RGBMatrixEmulator import RGBMatrixOptions, graphics
-
 import collections
 import argparse
 import os
@@ -18,11 +10,14 @@ import geocoder
 import json
 from iso6709 import Location
 import platform
+import driver
+
 
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
 def stop_splash_service():
+  import dbus
   sysbus = dbus.SystemBus()
   systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
   manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
@@ -206,11 +201,16 @@ def args():
     parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
     parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
 
-
     return parser.parse_args()
 
 
 def led_matrix_options(args):
+    print(driver.mode)
+    if driver.is_hardware():
+        from rgbmatrix import RGBMatrixOptions
+    else:
+        from RGBMatrixEmulator import RGBMatrixOptions
+       
     options = RGBMatrixOptions()
 
     if args.led_gpio_mapping != None:

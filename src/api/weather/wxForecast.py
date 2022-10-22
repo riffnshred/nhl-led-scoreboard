@@ -207,4 +207,5 @@ class wxForecast(object):
 
         debug.info(self.data.wx_forecast)
         nextrun = self.scheduler.get_job('forecast').next_run_time
-        debug.info("Weather forecast next update @ {}".format(nextrun.strftime("%H:%M")))
+        if nextrun == True:
+            debug.info("Weather forecast next update @ {}".format(nextrun.strftime("%H:%M")))

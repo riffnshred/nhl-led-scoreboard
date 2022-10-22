@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
+from utils import args, led_matrix_options, scheduler_event_listener
 from data.data import Data
 import queue
 import threading
@@ -18,7 +18,6 @@ from api.weather.nwsAlerts import nwsWxAlerts
 from api.weather.wxForecast import wxForecast
 import asyncio
 from env_canada import ECWeather
-from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 import tzlocal
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,6 +33,7 @@ SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 SCRIPT_VERSION = "1.7.0.beta"
 
 # Conditionally load the appropriate driver classes and set the global driver mode based on command line flags
+
 if args().emulated:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 
@@ -41,6 +41,7 @@ if args().emulated:
 else:
     try:
         from rgbmatrix import RGBMatrix, RGBMatrixOptions
+        from utils import stop_splash_service
 
         driver.mode = driver.DriverMode.HARDWARE
     except ImportError:
@@ -49,12 +50,11 @@ else:
         driver.mode = driver.DriverMode.SOFTWARE_EMULATION
 
 def run():
+    # Get supplied command line arguments
+    commandArgs = args()
     if driver.is_hardware():
         # Kill the splash screen if active
         stop_splash_service()
-
-    # Get supplied command line arguments
-    commandArgs = args()
 
     # Check for led configuration arguments
     matrixOptions = led_matrix_options(commandArgs)
