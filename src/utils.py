@@ -1,5 +1,3 @@
-from rgbmatrix import RGBMatrixOptions, graphics
-#from RGBMatrixEmulator import RGBMatrixOptions, graphics
 import collections
 import argparse
 import os
@@ -9,15 +7,17 @@ from datetime import datetime, timezone, time
 import regex
 import math
 import geocoder
-import dbus
 import json
 from iso6709 import Location
 import platform
+import driver
+
 
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
 def stop_splash_service():
+  import dbus
   sysbus = dbus.SystemBus()
   systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
   manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
@@ -111,7 +111,8 @@ def get_lat_lng(location):
                     try:
                         f.write(savefile)
                         #Change the ownership of the location.json file
-                        os.chown(path, uid, gid)
+                        if hasattr(os, "chown"):
+                            os.chown(path, uid, gid)
                     except Exception as e:
                         debug.error("Could not write {0}. Error Message: {1}".format(path,e))
             except Exception as e:
@@ -193,18 +194,23 @@ def args():
                         default=0, type=int)
 
     parser.add_argument("--led-panel-type", action="store", help="Needed to initialize special panels. Supported: 'FM6126A'", default="", type=str)
-    parser.add_argument("--terminal-mode", action="store", help="Run on terminal instead of matrix. (Default: False)", default=False, type=bool)                     
+    parser.add_argument("--emulated", action="store_true", help="Run in software emulation mode.")                     
     parser.add_argument("--updatecheck", action="store_true", help="Check for updates (Default: False)", default=False)
     parser.add_argument("--updaterepo", action="store", help="Github repo (Default: riffnshred/nhl-scoreboard)", default="riffnshred/nhl-led-scoreboard", type=str)
     parser.add_argument("--ghtoken", action="store", help="Github API token for doing update checks(Default: blank)", default="", type=str)
     parser.add_argument("--logcolor", action="store_true", help="Display log in color (command line only)")
     parser.add_argument("--loglevel", action="store", help="log level to display (INFO,WARN,ERROR,CRITICAL,DEBUG)", type=str)
 
-
     return parser.parse_args()
 
 
 def led_matrix_options(args):
+    print(driver.mode)
+    if driver.is_hardware():
+        from rgbmatrix import RGBMatrixOptions
+    else:
+        from RGBMatrixEmulator import RGBMatrixOptions
+       
     options = RGBMatrixOptions()
 
     if args.led_gpio_mapping != None:

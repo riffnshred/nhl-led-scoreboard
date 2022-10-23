@@ -13,5 +13,3 @@ class ImageHelper:
     img = img.crop(img.getbbox())
 
     return img
-
-  

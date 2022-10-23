@@ -1,22 +1,15 @@
 import sys
 import time
+import driver
 from datetime import datetime, timedelta
 
 from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
-#from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
-#from utils import args, led_matrix_options, scheduler_event_listener
+from utils import args, led_matrix_options, scheduler_event_listener
 from data.data import Data
-import threading
 import queue
-from sbio.dimmer import Dimmer
-from sbio.pushbutton import PushButton
-from sbio.motionsensor import Motion
-from sbio.screensaver import screenSaver
-#from sbio.sbMQTT import sbMQTT
+import threading
 from renderer.matrix import Matrix, TermMatrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
@@ -25,7 +18,6 @@ from api.weather.nwsAlerts import nwsWxAlerts
 from api.weather.wxForecast import wxForecast
 import asyncio
 from env_canada import ECWeather
-from renderer.matrix import Matrix
 from update_checker import UpdateChecker
 import tzlocal
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -38,29 +30,38 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.6.x.beta"
+SCRIPT_VERSION = "1.7.0.beta"
 
+# Conditionally load the appropriate driver classes and set the global driver mode based on command line flags
+
+if args().emulated:
+    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+
+    driver.mode = driver.DriverMode.SOFTWARE_EMULATION
+else:
+    try:
+        from rgbmatrix import RGBMatrix, RGBMatrixOptions
+        from utils import stop_splash_service
+
+        driver.mode = driver.DriverMode.HARDWARE
+    except ImportError:
+        from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+
+        driver.mode = driver.DriverMode.SOFTWARE_EMULATION
 
 def run():
-    # Kill the splash screen if active
-    stop_splash_service()
-
     # Get supplied command line arguments
     commandArgs = args()
+    if driver.is_hardware():
+        # Kill the splash screen if active
+        stop_splash_service()
 
-    if commandArgs.terminal_mode and sys.stdin.isatty():
-        height, width = os.popen('stty size', 'r').read().split()
-        termMatrix = TermMatrix()
-        termMatrix.width = int(width)
-        termMatrix.height = int(height)
-        matrix = Matrix(termMatrix)
-    else:
-        # Check for led configuration arguments
-        matrixOptions = led_matrix_options(commandArgs)
-        matrixOptions.drop_privileges = False
+    # Check for led configuration arguments
+    matrixOptions = led_matrix_options(commandArgs)
+    matrixOptions.drop_privileges = False
 
-        # Initialize the matrix
-        matrix = Matrix(RGBMatrix(options = matrixOptions))
+    # Initialize the matrix
+    matrix = Matrix(RGBMatrix(options = matrixOptions))
 
      #Riff to add loading screen here
     loading = Loading(matrix)
@@ -141,23 +142,31 @@ def run():
         data.UpdateRepo = commandArgs.updaterepo
         checkupdate = UpdateChecker(data,scheduler,commandArgs.ghtoken)
 
-    if data.config.dimmer_enabled:
-        dimmer = Dimmer(data, matrix,scheduler)
+    # If the driver is running on actual hardware, these files contain libs that should be installed.
+    # For other platforms, they probably don't exist and will crash.
+    if driver.is_hardware():
+        from sbio.dimmer import Dimmer
+        from sbio.pushbutton import PushButton
+        from sbio.motionsensor import Motion
+        from sbio.screensaver import screenSaver
 
-    screensaver = None
-    if data.config.screensaver_enabled:
-        screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
-        if data.config.screensaver_motionsensor:
-            motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
-            motionsensorThread = threading.Thread(target=motionsensor.run, args=())
-            motionsensorThread.daemon = True
-            motionsensorThread.start()
+        if data.config.dimmer_enabled:
+            dimmer = Dimmer(data, matrix,scheduler)
 
-    if data.config.pushbutton_enabled:
-        pushbutton = PushButton(data,matrix,sleepEvent)
-        pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
-        pushbuttonThread.daemon = True
-        pushbuttonThread.start()
+        screensaver = None
+        if data.config.screensaver_enabled:
+            screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
+            if data.config.screensaver_motionsensor:
+                motionsensor = Motion(data,matrix,sleepEvent,scheduler,screensaver)
+                motionsensorThread = threading.Thread(target=motionsensor.run, args=())
+                motionsensorThread.daemon = True
+                motionsensorThread.start()
+
+        if data.config.pushbutton_enabled:
+            pushbutton = PushButton(data,matrix,sleepEvent)
+            pushbuttonThread = threading.Thread(target=pushbutton.run, args=())
+            pushbuttonThread.daemon = True
+            pushbuttonThread.start()
     
     mqtt_enabled = data.config.mqtt_enabled
     # Create a queue for scoreboard events and info to be sent to an MQTT broker

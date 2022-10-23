@@ -24,6 +24,7 @@ package "neofetch"
 package "zsh"
 #For dietpi users without dbus
 package "dbus"
-
+#For RGBMatrixEmulator
+package "python3-tk"
 # you can also execute arbitrary bash
 echo "🚨  ALL GOOD TO GO"
