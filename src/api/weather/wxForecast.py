@@ -170,6 +170,9 @@ class wxForecast(object):
                 elif icon_code in range(600,699):
                     # Rain Class
                     owm_icon = 600
+                elif icon_code in range(700,741):
+                    # Rain Class
+                    owm_icon = 741
                 elif icon_code in range(800,805):
                     # Rain Class
                     owm_icon = 801
