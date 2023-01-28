@@ -26,5 +26,6 @@ package "zsh"
 package "dbus"
 #For RGBMatrixEmulator
 package "python3-tk"
+package "libsdl2-2.0-0"
 # you can also execute arbitrary bash
 echo "🚨  ALL GOOD TO GO"
