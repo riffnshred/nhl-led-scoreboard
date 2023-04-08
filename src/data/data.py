@@ -181,6 +181,28 @@ class Data:
 
         # Stanley cup champions
         self.cup_winner_id = self.check_stanley_cup_champion()
+        
+        # leaders
+        if self.config.point_leaders:
+            self.point_leaders = nhl_api.data.get_point_leaders(self.isPlayoff)
+
+        if self.config.goal_leaders:
+            self.goal_leaders = nhl_api.data.get_goal_leaders(self.isPlayoff)
+
+        if self.config.assist_leaders:
+            self.assist_leaders = nhl_api.data.get_assist_leaders(self.isPlayoff)
+
+        if self.config.win_leaders:
+            self.win_leaders = nhl_api.data.get_win_leaders(self.isPlayoff)
+
+        if self.config.plus_minus_leaders:
+            self.plus_minus_leaders = nhl_api.data.get_plus_minus_leaders(self.isPlayoff)
+        
+        if self.config.penalty_minute_leaders:
+            self.penalty_minute_leaders = nhl_api.data.get_penalty_minute_leaders(self.isPlayoff)
+        
+        if self.config.time_on_ice_leaders:
+            self.time_on_ice_leaders = nhl_api.data.get_time_on_ice_leaders(self.isPlayoff)
 
 
     #

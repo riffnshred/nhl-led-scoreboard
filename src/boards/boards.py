@@ -17,6 +17,7 @@ from boards.seasoncountdown import SeasonCountdown
 from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
+from boards.league_leaders import Leaders
 from time import sleep
 
 
@@ -263,3 +264,6 @@ class Boards:
 
     def seasoncountdown(self, data, matrix,sleepEvent):
         SeasonCountdown(data, matrix, sleepEvent).draw()
+        
+    def league_leaders(self, data, matrix, sleepEvent):
+        Leaders(data, matrix, sleepEvent)

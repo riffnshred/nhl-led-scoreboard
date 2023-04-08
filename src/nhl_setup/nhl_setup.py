@@ -26,7 +26,7 @@ SECTIONS = ['general','preferences','states','boards','sbio']
 STATES = ['off_day','scheduled','intermission','post_game']
 #the boards listed below are what's listed in the config
 # These are boards that have configuration.  If your board does not have any config, you don't need to add it
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings']
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings', 'league_leaders']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 def getVersion():
@@ -400,7 +400,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown', 'league_leaders']
 
         boards_selected = []
         board = None
@@ -594,6 +594,66 @@ def clock(default_config,qmark):
     clock_default.update(clock_conf)
 
     return clock_default
+
+def league_leaders(default_config,qmark):
+    league_leaders_default = get_default_value(default_config,['boards','league_leaders'],"string")
+
+    league_leaders_questions = [
+        {
+            'type': 'confirm',
+            'name': 'point_leaders',
+            'qmark': qmark,
+            'message': "Show point leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','point_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'goal_leaders',
+            'qmark': qmark,
+            'message': "Show goal leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','goal_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'assist_leaders',
+            'qmark': qmark,
+            'message': "Show assist leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','assist_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'win_leaders',
+            'qmark': qmark,
+            'message': "Show win leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','win_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'plus_minus_leaders',
+            'qmark': qmark,
+            'message': "Show plus minus leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','plus_minus_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'penalty_minute_leaders',
+            'qmark': qmark,
+            'message': "Show penalty minute leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','penalty_minute_leaders'],"bool")
+        },
+        {
+            'type': 'confirm',
+            'name': 'time_on_ice_leaders',
+            'qmark': qmark,
+            'message': "Show time on ice leaders on the league leaders board?",
+            'default': get_default_value(default_config,['boards','league_leaders','time_on_ice_leaders'],"bool")
+        }
+    ]
+    league_leaders_conf = prompt(league_leaders_questions,style=custom_style_dope)
+
+    league_leaders_default.update(league_leaders_conf)
+
+    return league_leaders_default
 
 def weather(default_config,qmark):
 
@@ -829,6 +889,8 @@ def board_settings(default_config,qmark,setup_type):
             boards_config['weather'] = weather(default_config,qmark)
         if aboard == 'wxalert':
             boards_config['wxalert'] = wxalert(default_config,qmark)
+        if aboard == 'league_leaders':
+            boards_config['league_leaders'] = league_leaders(default_config,qmark)
 
     #boards_dict = {'boards':{}}
     #boards_dict = boards_config

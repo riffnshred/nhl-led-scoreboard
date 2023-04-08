@@ -135,6 +135,53 @@
       "align": "center"
     }
   },
+  "league_leaders":{
+    "name":{
+      "position": [1, 1],
+      "align": "left"
+    },
+    "scp":{
+      "position": [["100%", -1], 1],
+      "align": "right"
+    },
+    "stanley_cup":{
+      "position": [["75%", 5], 8],
+      "align": "right"
+    },
+    "player1":{
+      "position": [1, 8],
+      "align": "left"
+    },
+    "player2":{
+      "position": [1, 14],
+      "align": "left"
+    },
+    "player3":{
+      "position": [1, 20],
+      "align": "left"
+    },
+    "player4":{
+      "position": [1, 26],
+      "align": "left"
+    },
+    "points1":{
+      "position": ["100%", 8],
+      "align": "right"
+    },
+    "points2":{
+      "position": ["100%", 14],
+      "align": "right"
+    },
+    "points3":{
+      "position": ["100%", 20],
+      "align": "right"
+    },
+    "points4":{
+      "position": ["100%", 26],
+      "align": "right"
+    }
+
+  },
   "clock": {
     "time": {
       "position": ["50%", "60%"],
