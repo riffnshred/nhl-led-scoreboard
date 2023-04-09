@@ -13,7 +13,11 @@
 		"sog_display_frequency": 4,
 		"goal_animations": {
         	"pref_team_only": true
-    	}
+    	},
+		"favorite_player": [
+            "Connor Hellebuyck",
+            "Connor Mcdavid"
+        ]
 	},
 
 	"states":{
@@ -60,6 +64,15 @@
             "date_rgb": "",
             "flash_seconds": true
 		},
+        "league_leaders": {
+            "goal_leaders": true,
+            "assist_leaders": true,
+            "point_leaders": true,
+            "win_leaders": true,
+            "plus_minus_leaders": false,
+            "penalty_minute_leaders": false,
+            "time_on_ice_leaders": false
+        },
 		"weather": {
 			"enabled": false,
 			"view": "full",
