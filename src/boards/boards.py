@@ -18,6 +18,7 @@ from boards.wxForecast import wxForecast
 from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.league_leaders import Leaders
+from boards.player_stats import PlayerStats
 from time import sleep
 
 
@@ -267,3 +268,6 @@ class Boards:
         
     def league_leaders(self, data, matrix, sleepEvent):
         Leaders(data, matrix, sleepEvent)
+        
+    def player_stats(self, data, matrix, sleepEvent):
+        PlayerStats(data, matrix, sleepEvent)

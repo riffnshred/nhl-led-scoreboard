@@ -12,6 +12,48 @@
       "align": "right"
     }
   },
+  "player_stats": {
+    "name": {
+      "position": [["50%", -7], 2],
+      "align": "center-top"
+    },
+    "goals_num": {
+      "position": [["20%", 2], "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "goals": {
+      "position": [["20%", 2], ["55%", 11]],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "assists_num": {
+      "position": [["80%", -2], "55%"],
+      "font": "large",
+      "align": "center-center"
+    },
+    "assists": {
+      "position": [["80%", -3], ["55%", 11]],
+      "font": "wx_medium",
+      "align": "center-center"
+    },
+    "hashtag": {
+      "position": [ 4, 0],
+      "relative": {
+        "to": "name",
+        "align": "right"
+      }
+    },
+      "number": {
+        "position": [ 1, 0],
+        "relative": {
+          "to": "hashtag",
+          "align": "right"
+      }
+      
+
+    }
+  },
   "scoreboard": {
     "center_top":{
       "position": ["50%", 0],

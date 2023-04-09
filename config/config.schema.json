@@ -29,7 +29,8 @@
               "seasoncountdown",
               "clock",
               "weather",
-              "league_leaders"
+              "league_leaders",
+              "player_stats"
             ]
         }
     },    
@@ -254,6 +255,33 @@
                                 true
                             ]
                         }
+                    }
+                },
+                "favorite_player": {
+                    "$id": "#/properties/preferences/properties/favorite_player",
+                    "type": "array",
+                    "title": "favorite_player",
+                    "description": "Your favorite active player's full name.",
+                    "default": [],
+                    "examples": [
+                        "Kyle Connor",
+                        "Connor McDavid",
+                        "Frederik Andersen",
+                        "Auston Matthews"
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/preferences/properties/favorite_player/items",
+                        "type": "string",
+                        "title": "favorite_player",
+                        "description": "Your favorite active player's full name.",
+                        "default": "Alex Ovechkin",
+                        "examples": [
+                            "Kyle Connor",
+                            "Connor McDavid",
+                            "Frederik Andersen",
+                            "Auston Matthews"
+                        ]
                     }
                 }
             }

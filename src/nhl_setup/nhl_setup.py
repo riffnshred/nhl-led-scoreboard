@@ -26,7 +26,7 @@ SECTIONS = ['general','preferences','states','boards','sbio']
 STATES = ['off_day','scheduled','intermission','post_game']
 #the boards listed below are what's listed in the config
 # These are boards that have configuration.  If your board does not have any config, you don't need to add it
-BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings', 'league_leaders']
+BOARDS = ['clock','weather','wxalert','scoreticker','seriesticker','standings', 'league_leaders', 'player_stats']
 SBIO = ['pushbutton','dimmer','screensaver']
 
 def getVersion():
@@ -169,6 +169,20 @@ def select_teams(qmark):
 
     return answer['team_select']
 
+def select_players(qmark):
+    player_select_answer = [
+        {
+            'type': 'confirm',
+            'name': 'player_select',
+            'qmark': qmark,
+            'message': 'Add another player?',
+            'default': True
+        }
+    ]
+    answer = prompt(player_select_answer)
+
+    return answer['player_select']
+
 def select_boards(qmark):
     board_select_answer = [
         {
@@ -182,6 +196,25 @@ def select_boards(qmark):
     answer = prompt(board_select_answer)
 
     return answer['board_select']
+
+def get_player(player_index,default_config,qmark):
+
+    if player_index == 0:
+        message = "Enter your favorite player:"
+    else:
+        message = "Enter a player:"
+
+    player_prompt = [
+        {
+            'type': 'input',
+            'name': 'player',
+            'qmark': qmark,
+            'message': message,
+            'default': "",
+        }
+    ]
+    answers = prompt(player_prompt,style=custom_style_dope)
+    return answers['player']
 
 def get_team(team_index,team_choices,pref_teams,qmark):
 
@@ -379,6 +412,28 @@ def preferences_settings(default_config,qmark):
 
 
     preferences['preferences'].update(goal_animations_dict)
+    
+
+    selected_teams = get_default_value(default_config,['preferences','favorite_player'],"string")
+    preferences_players = []
+
+    player_index=0
+    player = None
+    player = get_player(player_index,default_config,qmark)
+
+
+    preferences_players.append(player)
+    player_select = select_players(qmark)
+
+    while player_select:
+        player_index += 1
+        player = get_player(player_index,default_config,qmark)
+        preferences_players.append(player)
+        player_select = select_players(qmark)
+
+    preferences_player_dict = {'favorite_player':preferences_players}
+    preferences['preferences'].update(preferences_player_dict)
+    # I don't completely understand how this works but it does so I'm gonna leave it...
 
     return preferences
 
@@ -400,7 +455,7 @@ def states_settings(default_config,qmark,setup_type):
         thestates = STATES
 
     for astate in thestates:
-        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown', 'league_leaders']
+        board_list = ['clock','weather','wxalert','wxforecast','scoreticker','seriesticker','standings','team_summary','stanley_cup_champions','christmas','seasoncountdown', 'league_leaders', 'player_stats']
 
         boards_selected = []
         board = None

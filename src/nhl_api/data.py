@@ -12,6 +12,7 @@ BASE_URL = "http://statsapi.web.nhl.com/api/v1/"
 SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
 TEAM_URL = '{0}teams?expand=team.roster,team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
 PLAYER_URL = '{0}people/{1}'
+PLAYER_STATS_URL = '{0}people/{1}/{2}'
 OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
 STATUS_URL = BASE_URL + 'gameStatus'
 CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
@@ -46,6 +47,13 @@ def get_player(playerId):
         raise ValueError(e)
 
 
+def get_player_stats(playerId):
+    try:
+        data = requests.get(f"{BASE_URL}people/{playerId}/stats?stats=statsSingleSeason&season=20222023", timeout=REQUEST_TIMEOUT)
+        return data
+    except requests.exceptions.RequestException as e:
+        raise ValueError(e)
+    
 def get_overview(game_id):
     try:
         data = requests.get(OVERVIEW_URL.format(game_id), timeout=REQUEST_TIMEOUT)
@@ -104,6 +112,16 @@ def dummie_overview():
     with open('dummie_nhl_data/overview_reg_final.json') as json_file:
         data = json.load(json_file)
         return data
+
+def get_fav_players_id(config):
+    ids = []
+    for i in config:
+        player = requests.get(f"https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/{i}/100")
+        # if the suggestion key has no items move on to the next player
+        if not player.json()['suggestions']:
+            continue
+        ids.append(player.json()["suggestions"][0][0:7]) 
+    return ids
 
 def get_point_leaders(playoffs):
     if playoffs:

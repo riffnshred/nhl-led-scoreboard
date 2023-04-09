@@ -135,6 +135,10 @@ class Data:
 
         # Save the parsed config
         self.config = config
+        
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
+        self.favorite_player_data = self.get_fav_player_data()
+        self.favorite_player_stats = self.get_fav_player_stats()
 
         # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
         # It shows the last time (UTC) the data was updated. EX 20200114_041103
@@ -455,6 +459,21 @@ class Data:
             self.teams_info = info_by_id
         except TypeError:
             self.teams_info = []
+            
+    
+    def get_fav_player_data(self):
+        data = []
+        for i in self.favorite_player_id:      
+            e = nhl_api.data.get_player(i)
+            data.append(e.json())
+        return data
+
+    def get_fav_player_stats(self):
+        stats = []
+        for i in self.favorite_player_id:      
+            e = nhl_api.data.get_player_stats(i)
+            stats.append(e.json())
+        return stats
 
     def get_pref_teams_id(self):
         """
@@ -592,6 +611,9 @@ class Data:
         debug.info('refreshing daily data')
         # Get the teams info
         self.teams = self.get_teams()
+        self.favorite_player_id = nhl_api.data.get_fav_players_id(self.config.favorite_player)
+        self.favorite_player_data = self.get_fav_player_data()
+        self.favorite_player_stats = self.get_fav_player_stats()
         
         # Update team's data
         self.get_teams_info()
