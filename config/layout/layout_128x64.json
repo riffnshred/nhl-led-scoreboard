@@ -155,7 +155,7 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -2],
+      "position": [0, -3],
       "align": "left-bottom",
       "relative": {
         "to": "time",
@@ -183,7 +183,7 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -2],
+      "position": [0, -3],
       "align": "left-bottom",
       "relative": {
         "to": "time",

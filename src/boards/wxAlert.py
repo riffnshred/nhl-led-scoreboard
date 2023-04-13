@@ -75,11 +75,11 @@ class wxAlert:
             #self.matrix.draw.rectangle([60, 25, 64, 32], fill=(255,0,0)) # warning
             if self.data.wx_alerts[1] == "warning":
                 if self.data.config.wxalert_alert_feed.lower() == "nws":
-                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=self.data.wx_alerts[5]) # warning
-                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # warning    
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 15], fill=self.data.wx_alerts[5]) # warning
+                    self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # warning    
                 else:
-                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,0,0)) # warning
-                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 15], fill=(255,0,0)) # warning
+                    self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=(255,0,0)) # warning
                 
                 if self.drawtitle:     
                     self.matrix.draw_text_layout(
@@ -93,11 +93,11 @@ class wxAlert:
 
             elif self.data.wx_alerts[1] == "watch":
                 if self.data.config.wxalert_alert_feed.lower() == "nws":
-                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=self.data.wx_alerts[5]) # watch
-                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # watch
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 15], fill=self.data.wx_alerts[5]) # watch
+                    self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) # watch
                 else:
-                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(255,255,0)) # watch canada
-                    self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(255,255,0)) # watch canada
+                    self.matrix.draw.rectangle([0, 0, self.matrix.width, 15], fill=(255,255,0)) # watch canada
+                    self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=(255,255,0)) # watch canada
                 if self.drawtitle:   
                     self.matrix.draw_text_layout(
                         self.layout4.title_top,
@@ -110,11 +110,11 @@ class wxAlert:
             else:
                 if self.data.wx_alerts[1] == "advisory":
                     if self.data.config.wxalert_alert_feed.lower() == "nws":
-                        self.matrix.draw.rectangle([0, 0, self.matrix.width,8], fill=self.data.wx_alerts[5]) #advisory
-                        self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) #advisory
+                        self.matrix.draw.rectangle([0, 0, self.matrix.width,15], fill=self.data.wx_alerts[5]) #advisory
+                        self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) #advisory
                     else:
-                        self.matrix.draw.rectangle([0, 0, self.matrix.width, 8], fill=(169,169,169)) #advisory canada
-                        self.matrix.draw.rectangle([0, self.matrix.height - 8, self.matrix.width, self.matrix.height], fill=(169,169,169)) #advisory canada
+                        self.matrix.draw.rectangle([0, 0, self.matrix.width, 15], fill=(169,169,169)) #advisory canada
+                        self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=(169,169,169)) #advisory canada
                     
                     if self.drawtitle:
                         self.matrix.draw_text_layout(

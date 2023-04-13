@@ -20,26 +20,26 @@
 		"off_day": [
 			"wxalert",
 			"clock",
-			"weather
+			"weather"
 		],
 		"scheduled": [
 			"wxalert",
 			"clock",
-			"weather
+			"weather"
 		],
 		"intermission": [
 			"scoreticker",
 			"team_summary",
 			"wxalert",
 			"clock",
-			"weather
+			"weather"
 		],
 		"post_game": [
 			"scoreticker",
 			"team_summary",
 			"wxalert",
 			"clock",
-			"weather
+			"weather"
 		]
 	},
 
