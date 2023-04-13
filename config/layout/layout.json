@@ -42,7 +42,7 @@
       "font": "medium"
     },
     "scheduled_date": {
-      "position": ["50%", 0],
+      "position": ["50%", 1],
       "align": "center-top"
     },
     "scheduled_time": {

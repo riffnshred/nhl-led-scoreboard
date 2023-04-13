@@ -32,7 +32,7 @@
       "align": "right"
     },
     "vs": {
-      "position": ["50%", "45%"],
+      "position": ["50%", "50%"],
       "align": "center-top",
       "font": "medium"
     },
@@ -42,7 +42,7 @@
       "font": "medium"
     },
     "scheduled_date": {
-      "position": ["50%", 0],
+      "position": ["50%", 8],
       "align": "center-top"
     },
     "scheduled_time": {
@@ -53,7 +53,7 @@
       } 
     },
     "clock": {
-      "position": [0, 2],
+      "position": [0, 12],
       "relative": {
         "to": "period",
         "align": "center-bottom"
@@ -118,14 +118,14 @@
     },
 
     "last_name":{
-      "position": [0, 7],
+      "position": [0, 10],
       "relative": {
         "to": "team_name",
         "align": "bottom"
       } 
     },
     "minutes":{
-      "position": [0, 6],
+      "position": [0, 10],
       "font": "medium_2",
       "relative": {
         "to": "last_name",
@@ -155,7 +155,7 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -3],
+      "position": [0, -2],
       "align": "left-bottom",
       "relative": {
         "to": "time",
@@ -183,7 +183,7 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -3],
+      "position": [0, -2],
       "align": "left-bottom",
       "relative": {
         "to": "time",
@@ -199,7 +199,7 @@
       }
     },
     "wx_display": {
-      "position": ["50%", "95%"],
+      "position": ["50%", "96%"],
       "align": "center-bottom"
     }
   },
@@ -236,22 +236,22 @@
   },
   "wx_curr_temp":{
     "condition":{
-      "position": ["68%", "2%"],
+      "position": ["72%", "8%"],
       "font": "wxicons_md",
       "align": "top-right"
     },
     "summary":{
-      "position": ["50%", "81%"],
+      "position": ["50%", "70%"],
       "font": "wx_medium",
       "align": "center-bottom"
     },
     "update":{
-      "position": ["50%", "100%"],
+      "position": ["50%", "90%"],
       "font": "wx_medium",
       "align": "center-bottom"
     },
     "temp":{
-      "position": [-2, 0],
+      "position": [-6, 0],
       "font": "wx_large",
       "align": "right",
       "relative": {
@@ -332,7 +332,7 @@
       "align": "top"
     },
     "gust": {
-      "position": [0,8],
+      "position": [0,14],
       "font": "wx_medium",
       "align": "left",
       "relative": {
@@ -350,7 +350,7 @@
       }
     },
     "visibility": {
-      "position": [0,14],
+      "position": [0,28],
       "font": "wx_medium",
       "align": "left",
       "relative": {
@@ -376,7 +376,7 @@
       "align": "left-top"
     },
     "humidity":{
-      "position": ["5%", "85%"],
+      "position": ["5%", "80%"],
       "font": "wx_medium",
       "align": "bottom-left"
     },
@@ -437,7 +437,7 @@
       "align": "center-top"
       },
     "title_bottom": {
-      "position": ["50%","97%"],
+      "position": ["50%","98%"],
       "font": "wx_medium",
       "align": "center-bottom"
       }
