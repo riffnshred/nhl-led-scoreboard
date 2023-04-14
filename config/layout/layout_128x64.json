@@ -53,14 +53,14 @@
       } 
     },
     "clock": {
-      "position": [0, 12],
+      "position": [0, 2],
       "relative": {
         "to": "period",
         "align": "center-bottom"
       }
     },
     "period": {
-      "position": ["50%", 0],
+      "position": ["50%", 2],
       "align": "center-top"
     },
     "period_final": {
@@ -71,11 +71,11 @@
       }
     },
     "SOG_label": {
-      "position": ["50%", 0],
+      "position": ["50%", 2],
       "align": "center-top"
     },
     "SOG": {
-      "position": ["50%", 6],
+      "position": ["50%", 13],
       "align": "center-top"
     },
     "irregular_status": {
@@ -109,7 +109,7 @@
       } 
     },
     "jersey_number":{
-      "position": [9, 0],
+      "position": [9, 2],
       "align": "left",
       "relative": {
         "to": "team_name",
@@ -118,14 +118,14 @@
     },
 
     "last_name":{
-      "position": [0, 10],
+      "position": [0, 14],
       "relative": {
         "to": "team_name",
         "align": "bottom"
       } 
     },
     "minutes":{
-      "position": [0, 10],
+      "position": [0, 14],
       "font": "medium_2",
       "relative": {
         "to": "last_name",
@@ -133,7 +133,7 @@
       } 
     },
     "severity":{
-      "position": [2, 0],
+      "position": [2, 2],
       "relative": {
         "to": "minutes",
         "align": "right"
