@@ -4,8 +4,8 @@
 	"live_mode": true,
 	"preferences": {
 		"time_format": "12h",
-		"end_of_day": "23:59",
-		"location": "42.025417, -93.646020",
+		"end_of_day": "0:01",
+		"location": "",
 		"live_game_refresh_rate": 10,
 		"teams": [
 			"Wild"
@@ -72,7 +72,7 @@
 			"units": "imperial",
 			"duration": 15,
 			"data_feed": "OWM",
-			"owm_apikey": "aabe59c88de37e7d89ce00594a4b35e0",
+			"owm_apikey": "",
 			"update_freq": 5,
 			"show_on_clock": true,
 			"forecast_enabled": true,
