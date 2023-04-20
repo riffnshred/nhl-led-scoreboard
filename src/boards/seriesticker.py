@@ -18,7 +18,7 @@ class Seriesticker:
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
         
-        self.font = data.config.layout.font
+        self.font = data.config.layout.font_series_128  #data.config.layout.font
         self.layout = self.data.config.config.layout.get_board_layout('scoreticker')
         self.team_colors = self.data.config.team_colors
 
@@ -49,13 +49,13 @@ class Seriesticker:
                 self.show_indicator(self.index, self.num_series)
             
             self.matrix.draw_text(
-                (1, 7),
+                (1, 17),
                 round_name,
                 font=self.font,
                 fill=(255,255,255)
             )
             # Conference banner, Round Title
-            self.matrix.draw.rectangle([0,0,self.matrix.width,5], fill=color_banner_bg)
+            self.matrix.draw.rectangle([0,0,self.matrix.width,11], fill=color_banner_bg)
             self.matrix.draw_text(
                 (1, 1), 
                 banner_text, 
@@ -84,28 +84,28 @@ class Seriesticker:
         color_bottom_team = self.team_colors.color("{}.text".format(series.bottom_team.id))
 
         # Table
-        self.matrix.draw.line([(0,21),(self.matrix.width,21)], width=1, fill=(150,150,150))
+        self.matrix.draw.line([(0,44),(self.matrix.width,44)], width=1, fill=(150,150,150))
 
         # use rectangle because I want to keep symmetry for the background of team's abbrev
-        self.matrix.draw.rectangle([0,14,12,20], fill=(color_top_bg['r'], color_top_bg['g'], color_top_bg['b']))
+        self.matrix.draw.rectangle([0,42,28,31], fill=(color_top_bg['r'], color_top_bg['g'], color_top_bg['b']))
         self.matrix.draw_text(
-            (1, 15), 
+            (1, 32), 
             series.top_team.abbrev, 
             font=self.font, 
             fill=(color_top_team['r'], color_top_team['g'], color_top_team['b'])
         )
 
-        self.matrix.draw.rectangle([0,22,12,28], fill=(color_bottom_bg['r'], color_bottom_bg['g'], color_bottom_bg['b']))
+        self.matrix.draw.rectangle([0,57,28,46], fill=(color_bottom_bg['r'], color_bottom_bg['g'], color_bottom_bg['b']))
         self.matrix.draw_text(
-            (1, 23), 
+            (1, 47), 
             series.bottom_team.abbrev, 
             font=self.font, 
             fill=(color_bottom_team['r'], color_bottom_team['g'], color_bottom_team['b'])
         )
         
-        rec_width = 0
-        top_row = 15
-        bottom_row = 23
+        rec_width = 16
+        top_row = 32
+        bottom_row = 47
         loosing_color = (150,150,150)
 
         # text offset for loosing score if the winning team has a score of 10 or higher and loosing team 

@@ -23,9 +23,9 @@ class wxWeather:
         self.sleepEvent.clear()
     
         self.duration = data.config.weather_duration
-        if self.duration < 30:
-            debug.error("Duration is less than 30 seconds, defaulting to 30 seconds")
-            self.duration = 30
+        if self.duration < 10:
+            debug.error("Duration is less than 10 seconds, defaulting to 10 seconds")
+            self.duration = 10
 
         display_wx = 0
         display_sleep = self.duration/3

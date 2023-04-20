@@ -32,17 +32,17 @@
     "forecast_lo": [0,0,255]
   },
   "wx_curr_wind": {
-    "wind": [255,255,0],
-    "gust": [173,255,47],
+    "wind": [200,16,46],
+    "gust": [241,190,72],
     "pressure": [218,165,32],
-    "visibility": [218,165,32]
+    "visibility": [200,16,46]
   },
   "wx_curr_precip": {
     "precipchance": [0,191,255],
-    "humidity": [0,255,255],
+    "humidity": [200,16,46],
     "preciptype_na": [0,206,235],
-    "pressure": [218,165,32],
-    "dewpoint": [24,252,0]
+    "pressure": [200,16,46],
+    "dewpoint": [241,190,72]
   },
   "wx_alert": {
     "watch_us": [255,165,0],
