@@ -1,18 +1,18 @@
 {
   "_default": {
-    "file": "04B_24__.TTF",
+    "file": "runescape_uf.ttf",
     "size": 16
   },
   "medium": {
-    "file": "score_large.otf",
+    "file": "Perfect DOS VGA 437.ttf",
     "size": 32
   },
   "medium_2": {
-    "file": "04B_24__.TTF",
+    "file": "07558_CenturyGothic.ttf",
     "size": 16
   },
   "large": {
-    "file": "04B_24__.TTF",
+    "file": "07558_CenturyGothic.ttf",
     "size": 40
   },
   "wxicons_full": {
@@ -28,7 +28,7 @@
     "size": 18
   },
   "wx_medium": {
-    "file": "Perfect DOS VGA 437.ttf",
+    "file": "runescape_uf.ttf",
     "size": 16
   },
   "wx_large": {

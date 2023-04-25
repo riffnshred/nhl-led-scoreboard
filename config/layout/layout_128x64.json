@@ -46,7 +46,7 @@
       "align": "center-top"
     },
     "scheduled_time": {
-      "position": [0, 2],
+      "position": [1, 2],
       "relative": {
         "to": "scheduled_date",
         "align": "center-bottom"
@@ -155,12 +155,8 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -2],
-      "align": "left-bottom",
-      "relative": {
-        "to": "time",
-        "align": "left-top"
-      } 
+      "position": ["50%", "1%"],
+      "align": "center-bottom"
     },
     "meridiem": {
       "position": [2, 0],
@@ -183,15 +179,12 @@
       "align": "center-center"
     },
     "date": {
-      "position": [0, -2],
-      "align": "left-bottom",
-      "relative": {
-        "to": "time",
-        "align": "left-top"
+      "position": ["40%", "-11%"],
+      "align": "center-center"
       }
     },
     "meridiem": {
-      "position": [2, 0],
+      "position": [2, 14],
       "align": "left-top",
       "relative": {
         "to": "time",
@@ -201,8 +194,7 @@
     "wx_display": {
       "position": ["50%", "96%"],
       "align": "center-bottom"
-    }
-  },
+    },
   "covid_19":{
     "count":{
       "position": [0, "50%"],
@@ -236,21 +228,30 @@
   },
   "wx_curr_temp":{
     "condition":{
-      "position": ["72%", "8%"],
+      "position": ["72%", "33%"],
       "font": "wxicons_md",
       "align": "top-right"
     },
     "summary":{
-      "position": ["50%", "70%"],
+      "position": ["50%", "92%"],
       "font": "wx_medium",
       "align": "center-bottom"
     },
     "update":{
-      "position": ["50%", "90%"],
+      "position": ["50%", "25%"],
       "font": "wx_medium",
       "align": "center-bottom"
     },
     "temp":{
+      "position": [-5, 0],
+      "font": "wx_large",
+      "align": "right",
+      "relative": {
+        "to": "condition",
+        "align": "Center"
+      }
+    },
+    "forecast_temp_hi":{
       "position": [-6, 0],
       "font": "wx_large",
       "align": "right",
@@ -259,17 +260,8 @@
         "align": "left"
       }
     },
-    "forecast_temp_hi":{
-      "position": [-3, 0],
-      "font": "wx_large",
-      "align": "right",
-      "relative": {
-        "to": "condition",
-        "align": "left"
-      }
-    },
-    "forecast_hi":{
-      "position": [2, 3],
+    "forecast_hi":{  
+      "position": [45, 21],
       "font": "wx_medium",
       "align": "left"
     },
@@ -284,7 +276,7 @@
       }
     },
     "forecast_lo":{
-      "position": [0, 6],
+      "position": [0, 2],
       "font": "wx_medium",
       "align": "left",
       "relative": {
@@ -381,7 +373,7 @@
       "align": "bottom-left"
     },
     "pressure": {
-      "position": ["5%","10%"],
+      "position": ["5%","12%"],
       "font": "wx_medium",
       "align": "top"
     },
