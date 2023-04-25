@@ -8,11 +8,11 @@
     "size": 16
   },
   "medium_2": {
-    "file": "04B_24__.TTF",
+    "file": "04b24.otf",
     "size": 16
   },
   "large": {
-    "file": "04B_24__.TTF",
+    "file": "04b24.otf",
     "size": 24
   },
   "wxicons_full": {
@@ -28,23 +28,23 @@
     "size": 18
   },
   "wx_medium": {
-    "file": "04B_03B_.TTF",
-    "size": 8
+    "file": "Perfect DOS VGA 437.ttf",
+    "size": 16
   },
   "wx_large": {
-    "file": "04B_03B_.TTF",
-    "size": 14
+    "file": "Perfect DOS VGA 437.ttf",
+    "size": 16
   },
   "wx_alert": {
-    "file": "vcr_mono.ttf",
-    "size": 14
+    "file": "Perfect DOS VGA 437.ttf",
+    "size": 16
   },
   "wx_alert_sm": {
-    "file": "press2p.ttf",
-    "size": 9
+    "file": "Perfect DOS VGA 437.ttf",
+    "size": 16
   },
   "wx_alert_lg": {
-    "file": "VGA.ttf",
+    "file": "Perfect DOS VGA 437.ttf",
     "size": 16
   }
 

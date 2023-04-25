@@ -13,3 +13,5 @@ class Layout:
         self.font_large_2 = ImageFont.truetype(get_file("assets/fonts/04B_24__.TTF"), 24)
         self.font_medium = ImageFont.truetype(get_file("assets/fonts/04B_24__.TTF"), 16)
         self.font_xmas = ImageFont.truetype(get_file("assets/fonts/vcr_mono.ttf"),24)
+        self.font_series_128 = ImageFont.truetype(get_file("assets/fonts/Perfect DOS VGA 437.ttf"), 16)
+       
