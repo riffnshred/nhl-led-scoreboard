@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service
+from utils import args, led_matrix_options
 from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
@@ -32,7 +32,7 @@ SCRIPT_VERSION = "1.6.10"
 
 def run():
     # Kill the splash screen if active
-    stop_splash_service()
+    # stop_splash_service()
 
     # Get supplied command line arguments
     commandArgs = args()

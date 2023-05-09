@@ -7,21 +7,21 @@ from datetime import datetime, timezone, time
 import regex
 import math
 import geocoder
-import dbus
+# import dbus
 import json
 from iso6709 import Location
 
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
-def stop_splash_service():
-    sysbus = dbus.SystemBus()
-    systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
-    manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
-    try:
-        job = manager.StopUnit('sb_splash.service', 'fail')
-    except Exception as ex:
-        nosvc = ex
+#def stop_splash_service():
+#    sysbus = dbus.SystemBus()
+#    systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
+#    manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
+#    try:
+#        job = manager.StopUnit('sb_splash.service', 'fail')
+#    except Exception as ex:
+#        nosvc = ex
 
 
 def get_lat_lng(location):
