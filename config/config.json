@@ -5,7 +5,7 @@
     "preferences": {
         "time_format": "12h",
         "end_of_day": "0:01",
-        "location": "42.965293, -88.253364",
+        "location": "xx.xxxxxx, -xx.xxxxxx",
         "live_game_refresh_rate": 10,
         "teams": [
             "Wild"
