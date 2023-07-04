@@ -74,6 +74,8 @@ class TeamSummary:
             except ValueError:
                 prev_game_scoreboard = False
                 self.data.network_issues = True
+            except (TypeError, KeyError):
+                prev_game_scoreboard = False
 
             try:
                 if next_game:
@@ -86,6 +88,8 @@ class TeamSummary:
             except ValueError:
                 next_game_scoreboard = False
                 self.data.network_issues = True
+            except (TypeError, KeyError):
+                next_game_scoreboard = False
 
             stats = team.stats
             im_height = 67
