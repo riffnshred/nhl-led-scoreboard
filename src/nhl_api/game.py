@@ -106,12 +106,14 @@ def overview(game_id):
     parsed = data.json()
     # Top level information (General)
     id = parsed['gamePk']
+
     time_stamp = parsed['gameData']['game']
     game_type = parsed['gameData']['game']['type']
     status = parsed['gameData']['status']['detailedState']
     status_code = parsed['gameData']['status']['statusCode']
     status_abstract_state = parsed['gameData']['status']['abstractGameState']
     game_date = parsed['gameData']['datetime']['dateTime']
+
 
     # Sub level information (Details)
     plays = parsed['liveData']['plays']
