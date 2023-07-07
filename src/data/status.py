@@ -29,7 +29,9 @@ class Status:
                     self.Final.append(status['detailedState'])
         
         # Make sure that the next_season_info is not an empty list, if it is, make next_season = to current season
+        
         if not self.next_season_info:
+            debug.info("Next season info unavailable, defaulting to Oct 1 of current year as start of new season")
             self.next_season_info = self.season_info
             # Arbitrarily set the regularSeasonStartDate to Oct 1 of current year
             self.next_season_info['regularSeasonStartDate'] = "{0}-10-01".format(date.today().year)
