@@ -119,6 +119,10 @@ def current_season():
     data = nhl_api.data.get_current_season().json()
     return data
 
+def next_season():
+    data = nhl_api.data.get_next_season().json()
+    return data
+
 
 def playoff_info(season):
     data = nhl_api.data.get_playoff_data(season)
