@@ -55,7 +55,7 @@ class SeasonCountdown:
 
         self.matrix.draw_image((15,0), nhl_logo)
         
-        debug.info("{0}} season has begun".format(self.nextseason))
+        debug.info("{0} season has begun".format(self.nextseason))
 
         self.matrix.render()
         self.sleepEvent.wait(0.5)

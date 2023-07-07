@@ -226,6 +226,9 @@ class Data:
             
             self.refresh_daily()
             
+            # Update next season info (for seasoncountdown board)
+            nhl_api.get_next_season()
+            
             return True
         else:
             debug.info("It is not a new day")
