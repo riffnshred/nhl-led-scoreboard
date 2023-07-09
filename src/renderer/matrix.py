@@ -93,9 +93,15 @@ class Matrix:
         for index, chars in enumerate(text_chars):
             spacing = 0 if index == 0 else 1
 
-            offset = font.getoffset(chars)
-            offset_x = offset[0]
-            offset_y = offset[1] - height - spacing
+            # This requires pillow V9.5.0 or less
+            #offset = font.getoffset(chars)
+            #offset_x = offset[0]
+            #offset_y = offset[1] - height - spacing
+
+            # This requires pillow V10.0.0 or greater
+            left, top, right, bottom = font.getbbox(chars)
+            offset_x = left
+            offset_y = top - height - spacing
 
             offsets.append((offset_x, offset_y))
 
