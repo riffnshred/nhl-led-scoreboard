@@ -231,7 +231,7 @@ class Data:
             
             #Don't think this is needed to be called a second time
            #self.refresh_daily()           
-           self.status.refresh_next_season()
+            self.status.refresh_next_season()
            
             return True
         else:
