@@ -82,7 +82,7 @@ class MainRenderer:
         i = 0
         while True:
             debug.info('PING !!! Render off day')
-            # Add game state onto queue
+            
             qPayload = "off_day"
             qItem = ["scoreboard/state",qPayload]
             self.sbQueue.put_nowait(qItem)

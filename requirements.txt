@@ -1,7 +1,7 @@
 env-canada
-ephem==3.7.7.0
+ephem
 fastjsonschema>=2.14.4
-geocoder==1.38.1
+geocoder>=1.38.1
 gpiozero==1.5.1
 noaa-sdk>=0.1.18
 pyowm>=3.0.0
@@ -10,7 +10,7 @@ regex>=2020.4.4
 RPi.GPIO==0.7.0
 APScheduler==3.9.1
 lastversion>=1.1.6
-nameparser==1.0.6
+nameparser>=1.0.6
 pillow>=10.0.0
 dbus-python
 iso6709

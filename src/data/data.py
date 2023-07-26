@@ -229,14 +229,14 @@ class Data:
             # Reset flag
             self.all_pref_games_final = False
             
-            self.refresh_daily()
-            
-            # Update next season info (for seasoncountdown board)
-            nhl_api.get_next_season()
-            
+            #Don't think this is needed to be called a second time
+           #self.refresh_daily()           
+           self.status.refresh_next_season()
+           
             return True
         else:
             debug.info("It is not a new day")
+                        
             return False
 
     #
@@ -589,3 +589,6 @@ class Data:
 
         # Fetch the playoff data
         self.refresh_playoff()
+        
+ 
+        
