@@ -4,11 +4,11 @@
 	"live_mode": true,
 	"preferences": {
 		"time_format": "12h",
-		"end_of_day": "8:00",
-		"location": "",
+		"end_of_day": "7:00",
+		"location": "507 Raquette Street",
 		"live_game_refresh_rate": 10,
 		"teams": [
-			"Canadiens"
+			"Jets"
 		],
 		"sog_display_frequency": 4,
 		"goal_animations": {
@@ -18,14 +18,17 @@
 
 	"states":{
 		"off_day": [
+			"clock",
+			"weather",
+			"wxforecast",
 			"team_summary",
-			"clock"
+			"seasoncountdown"
 		],
 		"scheduled": [
-			"team_summary",
-			"scoreticker",
-			"clock"
+			"clock",
+			"team_summary"
 		],
+
 		"intermission": [
 			"scoreticker",
 			"team_summary"
@@ -48,9 +51,9 @@
                 },
 		"standings": {
 			"preferred_standings_only": true,
-			"standing_type": "division",
-			"divisions": "atlantic",
-			"conference": "eastern"
+			"standing_type": "wild_card",
+			"divisions": "central",
+			"conference": "western"
 		},
 		"clock": {
 			"duration": 15,
@@ -69,7 +72,7 @@
 			"owm_apikey": "",
 			"update_freq": 5,
 			"show_on_clock": true,
-			"forecast_enabled": false,
+			"forecast_enabled": true,
 			"forecast_days": 3,
 			"forecast_update": 1
 		},
@@ -85,16 +88,16 @@
         }
 	},
 	"sbio": {
-		"mqtt": {
-            "enabled": false,
-            "broker": "test.mosquitto.org",
-            "port": 1883
-        },
+			"mqtt": {
+				"enabled": true,
+				"broker": "192.168.100.3",
+				"port": 1883
+			},
 		"screensaver": {
-            "enabled": false,
+            "enabled": true,
 			"animations": true,
-            "start": "22:00",
-            "stop": "08:00",
+            "start": "21:00",
+            "stop": "05:00",
             "data_updates": false,
 			"motionsensor": false,
             "pin": 7,
@@ -127,3 +130,4 @@
 		}
 	}
 }
+

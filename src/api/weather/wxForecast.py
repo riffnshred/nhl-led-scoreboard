@@ -1,9 +1,10 @@
 from pyowm.owm import OWM
-from env_canada import ECData
+from env_canada import ECWeather
 import debug
 from datetime import datetime,timedelta
 from time import sleep
 from api.weather.wx_utils import cadhumidex, wind_chill, get_csv, degrees_to_direction, temp_f, wind_mph
+import asyncio
 
 class wxForecast(object):
     def __init__(self, data, scheduler):
@@ -63,7 +64,7 @@ class wxForecast(object):
         if self.data.config.weather_data_feed.lower() == "ec":
             debug.info("Refreshing EC daily weather forecast")
             try:
-                self.data.ecData.update()
+                asyncio.run(self.data.ecData.update())
             except Exception as e:
                 debug.error("Unable to update EC forecast. Error: {}".format(e))
 
@@ -95,10 +96,10 @@ class wxForecast(object):
                             #print(day_forecast)
                             summary = day_forecast['text_summary']
                             icon_code = day_forecast['icon_code']
-                            temp_high = day_forecast['temperature'] + self.data.wx_units[0]
+                            temp_high = str(day_forecast['temperature']) + self.data.wx_units[0]
                             # Get the nextdate_name + " night"
                             night_forecast = next((sub for sub in forecasts if sub['period'] == nextdate_name + " night"), None)
-                            temp_low = night_forecast['temperature'] + self.data.wx_units[0]
+                            temp_low = str(night_forecast['temperature']) + self.data.wx_units[0]
                             break
 
                 if icon_code == None:
@@ -169,6 +170,9 @@ class wxForecast(object):
                 elif icon_code in range(600,699):
                     # Rain Class
                     owm_icon = 600
+                elif icon_code in range(700,741):
+                    # Rain Class
+                    owm_icon = 741
                 elif icon_code in range(800,805):
                     # Rain Class
                     owm_icon = 801
@@ -206,4 +210,5 @@ class wxForecast(object):
 
         debug.info(self.data.wx_forecast)
         nextrun = self.scheduler.get_job('forecast').next_run_time
-        debug.info("Weather forecast next update @ {}".format(nextrun.strftime("%H:%M")))
+        if nextrun == True:
+            debug.info("Weather forecast next update @ {}".format(nextrun.strftime("%H:%M")))

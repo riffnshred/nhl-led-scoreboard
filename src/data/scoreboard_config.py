@@ -34,6 +34,18 @@ class ScoreboardConfig:
         # Goal animation
         self.goal_anim_pref_team_only = json["preferences"]["goal_animations"]["pref_team_only"]
 
+        #MQTT settings
+        #Add in the try/except as this is not a required section in the config
+        try:
+            self.mqtt_enabled = json["sbio"]["mqtt"]["enabled"]
+        except KeyError:
+            self.mqtt_enabled = False
+
+        
+        if self.mqtt_enabled:
+            self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
+            self.mqtt_port = json["sbio"]["mqtt"]["port"]
+
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
         self.screensaver_animations = json["sbio"]["screensaver"]["animations"]
@@ -164,13 +176,13 @@ class ScoreboardConfig:
 
         j = {}
         path = get_file("config/{}".format(filename))
-        if os.path.isfile(path):
-            try:
-                j = json.load(open(path))
-                msg = "json loaded OK"
-            except json.decoder.JSONDecodeError as e:
-                msg = "Unable to load json: {0}".format(e)
-                j = {}
+        try:
+            j = json.load(open(path))
+            msg = "json loaded OK"
+        except (json.decoder.JSONDecodeError, FileNotFoundError)  as e:
+            msg = "Unable to load json: {0}".format(e)
+            j = {}
+
         return j, msg
 
     def __get_config(self, base_filename, error=None):

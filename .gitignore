@@ -136,6 +136,9 @@ config/*.config.json
 config/config.json.backup
 config/location.json
 
+# RGBMatrixEmulator
+emulator_config.json
+
 # ignore generated logos
 assets/logos/*
 !assets/logos/_local
@@ -159,3 +162,4 @@ src/renderer/boarddev
 
 # Custom_logos to overwrite the standard one
 config/custom_logos.json
+.vscode/settings.json

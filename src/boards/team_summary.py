@@ -3,7 +3,14 @@
 
 """
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-from rgbmatrix import graphics
+
+import driver
+
+if driver.is_hardware():
+    from rgbmatrix import graphics
+else:
+    from RGBMatrixEmulator import graphics
+
 import nhl_api
 from data.scoreboard import Scoreboard
 from data.team import Team
@@ -83,7 +90,7 @@ class TeamSummary:
                 self.data.network_issues = True
             except (TypeError, KeyError):
                 next_game_scoreboard = False
-
+                
             stats = team.stats
             im_height = 67
             team_abbrev = team.abbreviation

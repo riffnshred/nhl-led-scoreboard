@@ -109,6 +109,32 @@ This is the classic way to install and configure the scoreboard. If you want to 
 
 [Step by step installation guide](https://github.com/riffnshred/nhl-led-scoreboard/wiki/Step-by-step-guide.)
 
+### Method 3 - Software Emulation
+You can install the software to run in an emulated mode via a variety of display adapters by using [RGBMatrixEmulator](https://github.com/ty-porter/RGBMatrixEmulator).
+
+Installation is straight-forward using the emulator installer script appropriate for your operating system:
+
+MacOS / Linux:
+
+```sh
+sh scripts/emulator_setup.sh
+```
+
+Windows:
+
+```sh
+TODO
+```
+
+Once your emulated software is installed, you can continue with [Step 5 of the manual setup guide].
+
+Running the emulated version of the board is easy:
+
+```sh
+python3 src/main.py --emulated
+```
+
+See [RGBMatrixEmulator customization options] for further customization of the display.
 
 ## Shout-out
 

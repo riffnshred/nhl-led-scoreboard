@@ -1,4 +1,10 @@
-from rgbmatrix import graphics
+import driver
+
+if driver.is_hardware():
+    from rgbmatrix import graphics
+else:
+    from RGBMatrixEmulator import graphics
+
 from PIL import ImageFont, Image
 from utils import center_text
 import datetime

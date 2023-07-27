@@ -1,5 +1,12 @@
 from utils import get_file
-from rgbmatrix import graphics
+
+import driver
+
+if driver.is_hardware():
+    from rgbmatrix import graphics
+else:
+    from RGBMatrixEmulator import graphics
+  
 import json
 import debug
 import os.path

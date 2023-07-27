@@ -98,6 +98,11 @@ class Data:
         self.curr_board = None
         self.prev_board = None
 
+        # For MQTT trigger (acts like the pb_trigger)
+        self.mqtt_trigger = False
+        # For MQTT board display - default to clock
+        self.mqtt_showboard = "clock"
+
 
         # Environment Canada manager (to share between the forecast, alerts and current obs)
         self.ecData = None
@@ -224,14 +229,14 @@ class Data:
             # Reset flag
             self.all_pref_games_final = False
             
-            self.refresh_daily()
-            
-            # Update next season info (for seasoncountdown board)
-            nhl_api.get_next_season()
-            
+            #Don't think this is needed to be called a second time
+           #self.refresh_daily()           
+            self.status.refresh_next_season()
+           
             return True
         else:
             debug.info("It is not a new day")
+                        
             return False
 
     #
@@ -346,6 +351,8 @@ class Data:
                 return
 
         self.all_pref_games_final = True
+        #Let the screensaver run again
+        self.screensaver_livegame = False
 
     
     # This is the function that will determine the state of the board (Offday, Gameday, Live etc...).
@@ -582,3 +589,6 @@ class Data:
 
         # Fetch the playoff data
         self.refresh_playoff()
+        
+ 
+        
