@@ -28,6 +28,10 @@ class MainRenderer:
         self.sbQueue = sbQueue
         self.sog_display_frequency = data.config.sog_display_frequency
         self.alternate_data_counter = 1
+        # For use for publishing to mqtt broker on offday.
+        # Only send payload every 5 minutes  
+        self.mqtt_counter = 0
+        self.mqtt_counter_time = 300
 
     def render(self):
         if self.data.config.testing_mode:
@@ -82,10 +86,16 @@ class MainRenderer:
         i = 0
         while True:
             debug.info('PING !!! Render off day')
-            
+            debug.info(self.mqtt_counter)
             qPayload = "off_day"
             qItem = ["scoreboard/state",qPayload]
-            self.sbQueue.put_nowait(qItem)
+            if self.mqtt_counter == 0:
+                self.sbQueue.put_nowait(qItem)
+            else:
+                self.mqtt_counter += 1
+                
+                if self.mqtt_counter == self.mqtt_counter_time: self.mqtt_counter = 0
+        
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
