@@ -1,6 +1,7 @@
 import paho.mqtt.client as sbmqtt
 import debug
 import json
+import uuid
 from sbio.screensaver import screenSaver
 
 
@@ -128,8 +129,9 @@ class sbMQTT(object):
 
         self.sleepEvent.clear()
 
+        clientID = "nhl-led-scoreboard-{0}".format(uuid.uuid1())
 
-        self.client = sbmqtt.Client("nhl-led-scoreboard",clean_session=True)
+        self.client = sbmqtt.Client(clientID,clean_session=True)
         self.client.on_publish = self.on_publish
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message

@@ -247,7 +247,8 @@ def draw_standing(data, name, records, img_height, width):
         team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))
-        draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        # draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, row_pos, 12, top + row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
         if len(points) == 3:
             draw.text((54, row_pos), points, font=layout.font)
@@ -296,7 +297,8 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
             team_colors = data.config.team_colors
             bg_color = team_colors.color("{}.primary".format(team_id))
             txt_color = team_colors.color("{}.text".format(team_id))
-            draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+            # draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+            draw.rectangle([0, row_pos, 12, top + row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
             draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
             if len(points) == 3:
                 draw.text((54, row_pos), points, font=layout.font)
@@ -319,7 +321,8 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
         team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))
-        draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        # draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, row_pos, 12, top + row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
         if len(points) == 3:
             draw.text((54, row_pos), points, font=layout.font)
