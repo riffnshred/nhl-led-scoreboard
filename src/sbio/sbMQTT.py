@@ -10,7 +10,7 @@ class sbMQTT(object):
     def on_connect(self,client,userdata,flags,rc):
         if rc == 0:
             debug.info("MQTT: Connected to broker: {0}:{1}".format(self.data.config.mqtt_broker,self.data.config.mqtt_port))
-            client.publish("scoreboard/status",payload="Online", qos=0, retain=True) 
+            client.publish("{0}/status".format(self.data.config.mqtt_main_topic),payload="Online", qos=0, retain=True) 
         else:
             debug.info("MQTT: Connection error code {0} to {1}:{2}".format(str(rc),self.data.config.mqtt_broker,self.data.config.mqtt_port))
 
@@ -40,23 +40,23 @@ class sbMQTT(object):
         
 
         # The test topic is used to test the queue directly without getting to a live game mode
-        if msg.topic == "scoreboard/control/test":
+        if msg.topic == "{0}/control/test".format(self.data.config.mqtt_main_topic):
             if msg.payload == "queue":
                 qPayload = {"preferred_team": True,"score": 5}
-                qItem = ["scoreboard/live/goal/home",qPayload]
+                qItem = ["{0}/live/goal/home".format(self.data.config.mqtt_main_topic),qPayload]
                 self.sbQueue.put_nowait(qItem)
             
             if msg.payload == "goal":
                 qPayload = {"preferred_team": True,"score": 5}
-                qItem = ["scoreboard/live/goal/home",qPayload]
+                qItem = ["{0}/live/goal/home".format(self.data.config.mqtt_main_topic),qPayload]
                 self.sbQueue.put_nowait(qItem)
             
             if msg.payload == "penalty":
                 qPayload = {"preferred_team": True,"score": 5}
-                qItem = ["scoreboard/live/penalty/home",qPayload]
+                qItem = ["{0}/live/penalty/home".format(self.data.config.mqtt_main_topic),qPayload]
                 self.sbQueue.put_nowait(qItem)
         
-        if msg.topic == "scoreboard/control/screensaver":
+        if msg.topic == "{0}/control/screensaver".format(self.data.config.mqtt_main_topic):
             if msg.payload == "on":
                 if self.screensaver != None:
                     self.screensaver.runSaver()
@@ -71,7 +71,7 @@ class sbMQTT(object):
         # brightness is a number between 1-100
         # Brightness will get set on the next refresh of the board being displayed
         # Also, if you have automatic dimmer enabled, it will go back to the brightness values it uses
-        if msg.topic == "scoreboard/control/brightness":
+        if msg.topic == "{0}/control/brightness".format(self.data.config.mqtt_main_topic):
             if not self.data.config.dimmer_enabled:
                 screen_brightness = int(msg.payload)
                 
@@ -91,7 +91,7 @@ class sbMQTT(object):
         #   "sunset": 40 
         # }
 
-        if msg.topic == "scoreboard/control/dimmer":
+        if msg.topic == "{0}/control/dimmer".format(self.data.config.mqtt_main_topic):
             dimmer_payload=json.loads(msg.payload)
             sunrise=dimmer_payload["sunrise"]
             sunset=dimmer_payload["sunset"]
@@ -104,7 +104,7 @@ class sbMQTT(object):
 
         # Trigger the display to show a board
 
-        if msg.topic == "scoreboard/control/showboard":
+        if msg.topic == "{0}/control/showboard".format(self.data.config.mqtt_main_topic):
             showboard= msg.payload
             if showboard != "":
                 if showboard not in AVAIL_BOARDS:
@@ -135,9 +135,9 @@ class sbMQTT(object):
         self.client.on_publish = self.on_publish
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
-        self.client.will_set("scoreboard/status", payload="Offline", qos=0, retain=True)
+        self.client.will_set("{0}/status".format(self.data.config.mqtt_main_topic), payload="Offline", qos=0, retain=True)
         self.client.connect(self.data.config.mqtt_broker, port=self.data.config.mqtt_port)
-        self.client.subscribe("scoreboard/control/#")
+        self.client.subscribe("{0}/control/#".format(self.data.config.mqtt_main_topic))
         self.client.loop_start()
 
 
@@ -162,5 +162,3 @@ class sbMQTT(object):
             debug.info("MQTT: Sending: {0} {1}".format(qTopic,qPayload))
             self.client.publish(qTopic,qPayload)
             self.sbQueue.task_done()
-        
-    

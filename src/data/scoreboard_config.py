@@ -45,6 +45,11 @@ class ScoreboardConfig:
         if self.mqtt_enabled:
             self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
             self.mqtt_port = json["sbio"]["mqtt"]["port"]
+            # Check and see if there is a main_topic in the config.json
+            try:
+                self.mqtt_main_topic =  json["sbio"]["mqtt"]["main_topic"]
+            except KeyError:
+                self.mqtt_main_topic = "scoreboard"
 
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
