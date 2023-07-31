@@ -1,11 +1,12 @@
-from datetime import datetime
-from nhl_api import game_status_info, current_season_info
+from datetime import datetime, date
+from nhl_api import game_status_info, current_season_info, next_season_info
 import debug
 
 class Status:
     def __init__(self):
         game_status = game_status_info()
         self.season_info = current_season_info()['seasons'][0]
+        #self.next_season_info = next_season_info()['seasons'][0]
         self.season_id = self.season_info["seasonId"]
         self.Preview = []
         self.Live = []
@@ -26,7 +27,17 @@ class Status:
                     self.GameOver.append(status['detailedState'])
                 else:
                     self.Final.append(status['detailedState'])
-
+        
+        # # Make sure that the next_season_info is not an empty list, if it is, make next_season = to current season
+        
+        # if not self.next_season_info:
+        #     debug.info("Next season info unavailable, defaulting to Oct 1 of current year as start of new season")
+        #     self.next_season_info = self.season_info
+        #     # Arbitrarily set the regularSeasonStartDate to Oct 1 of current year
+        #     self.next_season_info['regularSeasonStartDate'] = "{0}-10-01".format(date.today().year)
+        
+        self.refresh_next_season()
+        
 
     def is_scheduled(self, status):
         return status in self.Preview
@@ -62,5 +73,21 @@ class Status:
         except TypeError:
             debug.error('The Argument provided for status.is_playoff is missing or not right.')
             return False
+     
+    def refresh_next_season(self):
+        debug.info("Updating next season info")
+        self.season_info = current_season_info()['seasons'][0]
+        self.next_season_info = next_season_info()['seasons'][0]
+        # Make sure that the next_season_info is not an empty list, if it is, make next_season = to current season
+        
+        if not self.next_season_info:
+            debug.info("Next season info unavailable, defaulting to Oct 1 of current year as start of new season")
+            self.next_season_info = self.season_info
+            # Arbitrarily set the regularSeasonStartDate to Oct 1 of current year
+            self.next_season_info['regularSeasonStartDate'] = "{0}-10-01".format(date.today().year)
+            
+           
+    def next_season_start(self):
+        return self.next_season_info['regularSeasonStartDate']
 
     
