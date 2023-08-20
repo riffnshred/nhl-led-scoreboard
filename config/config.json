@@ -19,16 +19,15 @@
         "off_day": [ 
             "clock",
             "wxalert",
-            "weather",
-            "wxforecast",
-            "seriesticker"
-        ],
+            "wxforecast"
+
+       ],
         "scheduled": [
             "clock",
             "wxalert",
             "weather",
-            "wxforecast",
-            "seriesticker"       
+            "wxforecast"
+                 
            
         ],
         "intermission": [
@@ -64,7 +63,7 @@
             "conference": "western"
         },
         "clock": {
-            "duration": 5,
+            "duration": 15,
             "hide_indicator": false,
             "preferred_team_colors": false,
             "clock_rgb": "200,16,46",
@@ -81,8 +80,8 @@
             "update_freq": 10,
             "show_on_clock": true,
             "forecast_enabled": true,
-            "forecast_days": 5,
-            "forecast_update": 20
+            "forecast_days": 1,
+            "forecast_update": 1
         },
         "wxalert": {
             "alert_feed": "NWS",
@@ -92,7 +91,7 @@
             "alert_title": true,
             "scroll_alert": false,
             "alert_duration": 5,
-            "show_on_clock": false
+            "show_on_clock": true
         }
     },
     "sbio": {
@@ -116,7 +115,7 @@
             "light_level_lux": 400,
             "mode": "always",
             "sunset_brightness": 5,
-            "sunrise_brightness": 30
+            "sunrise_brightness": 20
         },
         "pushbutton": {
             "enabled": false,

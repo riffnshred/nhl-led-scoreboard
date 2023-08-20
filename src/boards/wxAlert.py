@@ -108,7 +108,7 @@ class wxAlert:
                         "Watch"
                     )  
             else:
-                if self.data.wx_alerts[1] == "advisory":
+                if self.data.wx_alerts[1] == "statement": #advisory
                     if self.data.config.wxalert_alert_feed.lower() == "nws":
                         self.matrix.draw.rectangle([0, 0, self.matrix.width,15], fill=self.data.wx_alerts[5]) #advisory
                         self.matrix.draw.rectangle([0, self.matrix.height - 15, self.matrix.width, self.matrix.height], fill=self.data.wx_alerts[5]) #advisory

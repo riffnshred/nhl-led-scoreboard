@@ -146,13 +146,13 @@ class nwsWxAlerts(object):
                     wx_alert_title = _attributes['event'][:-(len(" Advisory"))]
                     wx_type = "advisory"
                 else:
-                    wx_alert_title = _attributes['event']
+                    wx_alert_title = _attributes['event'][:-(len(" Statement"))]
                     wx_type = "statement"
                 
 
                 # Only create an alert for Immediate and Expected?
 
-                if wx_type != "statement":
+                if wx_type != "statements":
                     self.data.wx_alerts = [wx_alert_title,wx_type,wx_alert_time,_attributes['urgency'],_attributes['event_severity'],wx_alertcolor]
                     # Only interrupt the first time
                     if self.weather_alert == 0 and self.data.wx_updated:

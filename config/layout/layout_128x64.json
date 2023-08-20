@@ -414,7 +414,7 @@
       "align": "center-center"
     }, 
     "advisory_us": {
-      "position": ["50%","50%"],
+      "position": ["50%","60%"],
       "font": "wx_medium",
       "align": "center-center"
     },   
@@ -429,7 +429,7 @@
       "align": "center-top"
       },
     "title_bottom": {
-      "position": ["50%","98%"],
+      "position": ["50%","99%"],
       "font": "wx_medium",
       "align": "center-bottom"
       }

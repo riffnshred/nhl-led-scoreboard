@@ -79,8 +79,8 @@ class wxForecast(object):
 
             #Loop through the data and create the forecast
             #Number of days to add to current day for the date string, this will be incremented
-            index = 1
-            forecast_day = 1
+            index = 0
+            forecast_day = 0
             while index <= self.max_days and forecasts_updated:
             #Create the date
                 nextdate = self.currdate + timedelta(days=forecast_day)
@@ -139,7 +139,7 @@ class wxForecast(object):
                 self.network_issues = True
                 return
 
-            index=1
+            index=0
             forecast = []
             while index <= self.max_days:
                 nextdate = self.currdate + timedelta(days=index)
