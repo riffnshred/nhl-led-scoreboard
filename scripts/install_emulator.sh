@@ -6,7 +6,7 @@ cd "${DIR}/.." || exit
 
 echo "$(tput setaf 6)Installing required dependencies. This may take some time...$(tput setaf 9)"
 #Install all pip3 requirements using the emulator_requirements.txt filer
-pip3 install -r emulator_requirements.txt
+sudo pip3 install -r emulator_requirements.txt
 
 git reset --hard
 git fetch origin --prune

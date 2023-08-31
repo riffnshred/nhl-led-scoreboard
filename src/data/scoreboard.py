@@ -88,12 +88,20 @@ class Scoreboard:
         linescore = overview.linescore
 
         away = linescore.teams.away
-        away_abbrev = data.teams_info[away.team.id].abbreviation
-        self.away_roster = data.teams_info[away.team.id].roster
+        try:
+            away_abbrev = data.teams_info[away.team.id].abbreviation
+            self.away_roster = data.teams_info[away.team.id].roster
+        except KeyError:
+            away_abbrev = "NHL"
+            self.away_roster = {}
 
         home = linescore.teams.home
-        home_abbrev = data.teams_info[home.team.id].abbreviation
-        self.home_roster = data.teams_info[home.team.id].roster
+        try:
+            home_abbrev = data.teams_info[home.team.id].abbreviation
+            self.home_roster = data.teams_info[home.team.id].roster
+        except KeyError:
+            home_abbrev = "NHL"
+            self.home_roster = {}
 
         away_goal_plays = []
         home_goal_plays = []
