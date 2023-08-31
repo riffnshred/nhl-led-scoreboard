@@ -15,14 +15,6 @@ import numpy as np
 DEBUG = False
 
 
-# A fake class to fill in the __init__ of Matrix
-class TermMatrix:
-    def __init__(self):
-        self.width = 0
-        self.height = 0
-    def SetImage(self, img):
-        show_image(img)
-
 class Matrix:
     def __init__(self, matrix):
         self.matrix = matrix

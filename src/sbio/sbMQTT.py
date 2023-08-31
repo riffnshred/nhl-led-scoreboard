@@ -136,6 +136,10 @@ class sbMQTT(object):
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.will_set("{0}/status".format(self.data.config.mqtt_main_topic), payload="Offline", qos=0, retain=True)
+        # User name and password set here
+        if hasattr(self.data.config, 'mqtt_username') and hasattr(self.data.config, 'mqtt_password'):
+            self.client.username_pw_set(self.data.config.mqtt_username, self.data.config.mqtt_password)
+        
         self.client.connect(self.data.config.mqtt_broker, port=self.data.config.mqtt_port)
         self.client.subscribe("{0}/control/#".format(self.data.config.mqtt_main_topic))
         self.client.loop_start()

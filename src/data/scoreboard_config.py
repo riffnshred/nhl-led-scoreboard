@@ -51,6 +51,12 @@ class ScoreboardConfig:
             except KeyError:
                 self.mqtt_main_topic = "scoreboard"
 
+            try:
+                self.mqtt_username = json["mqtt"]["auth"]["username"]
+                self.mqtt_password = json["mqtt"]["auth"]["password"]
+            except KeyError:
+                pass
+
         #Screen Saver entries
         self.screensaver_enabled = json["sbio"]["screensaver"]["enabled"]
         self.screensaver_animations = json["sbio"]["screensaver"]["animations"]
