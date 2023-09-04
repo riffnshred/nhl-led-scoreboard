@@ -89,7 +89,11 @@
             "enabled": false,
             "broker": "test.mosquitto.org",
             "port": 1883,
-	    "main_topic": "scoreboard"
+			"auth": {
+				"username": "",
+				"password": ""
+			},
+	        "main_topic": "scoreboard"
         },
 		"screensaver": {
             "enabled": false,
