@@ -947,7 +947,12 @@
                     "mqtt": {
                         "enabled": true,
                         "broker": "192.168.100.3",
-                        "port": 1883
+                        "port": 1883,
+                        "auth": {
+				            "username": "",
+				            "password": ""
+			            },
+	                    "main_topic": "scoreboard"
                     },
                     "screensaver": {
                         "enabled": "true",
@@ -1003,7 +1008,12 @@
                         {
                             "enabled": true,
                             "broker": "192.168.100.3",
-                            "port": 1883
+                            "port": 1883,
+                            "auth": {
+				              "username": "",
+				              "password": ""
+			                },
+	                        "main_topic": "scoreboard"
                         }
                     ],
                     "additionalProperties": true,
@@ -1023,7 +1033,7 @@
                                 true
                             ]
                         },
-                        "animations": {
+                        "broker": {
                             "$id": "#/properties/sbio/properties/mqtt/properties/broker",
                             "type": "string",
                             "title": "broker",
@@ -1034,7 +1044,7 @@
                             ]
                         },
                         
-                        "pin": {
+                        "port": {
                             "$id": "#/properties/sbio/properties/mqtt/properties/port",
                             "type": "integer",
                             "title": "port",
@@ -1042,6 +1052,36 @@
                             "default": 1883,
                             "examples": [
                                 1883
+                            ]
+                        } ,
+                        "username": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/auth/properties/username",
+                            "type": "string",
+                            "title": "username",
+                            "description": "Username to use with broker",
+                            "default": "",
+                            "examples": [
+                                "username"
+                            ]
+                        },
+                        "password": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/auth/properties/password",
+                            "type": "string",
+                            "title": "password",
+                            "description": "Password to use with broker",
+                            "default": "",
+                            "examples": [
+                                "password"
+                            ]
+                        },
+                        "main_topic": {
+                            "$id": "#/properties/sbio/properties/mqtt/properties/main_topic",
+                            "type": "string",
+                            "title": "main_topic",
+                            "description": "Main topic to use with broker",
+                            "default": "scoreboard",
+                            "examples": [
+                                "scoreboard"
                             ]
                         }
                     }
