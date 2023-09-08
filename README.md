@@ -11,8 +11,8 @@
 
 ## IMPORTANT (PLEASE READ)
 
-### CURRENT KNOWN ISSUES (Pre-season 2022)
-At the moment, the NHL API is quite unstable and the scoreboard is confused and keep crashing. Do not adjust your set, it will get back to normal around when the season is about to start. 
+## Compatible Raspberry pi OS
+For v1.6.x and lower, use Raspberry Pi OS Lite (Legacy). The newer version of Raspberry pi OS (Bullseye) is not supported at the moment.
 
 ### RASPBERRY PI ZERO NO MORE SUPPORTED (EDIT: [use a Pi Zero 2 instead](https://github.com/riffnshred/nhl-led-scoreboard/discussions/335))
 From now on, this library won't support the Raspberry Pi Zero or Zero W. This is because the project has become too complex to work properly on it. For those who are already using that model, It should still work with the latest version, but I won't give any support for it. I don't guarantee it will work from this point on.
