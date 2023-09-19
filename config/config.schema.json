@@ -30,7 +30,8 @@
               "clock",
               "weather",
               "league_leaders",
-              "player_stats"
+              "player_stats",
+              "period_summary"
             ]
         }
     },    

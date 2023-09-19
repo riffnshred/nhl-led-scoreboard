@@ -158,6 +158,9 @@ class ecWxWorker(object):
 
             if wind_speed == None:
                 wind_speed = "0.0"
+            if wind_speed == "calm":
+                wind_speed = "0.0"
+                #something about the wind being calm was crashing my board so I put this in
                 
             curr_windspeed = float(wind_speed)
             

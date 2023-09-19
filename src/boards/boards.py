@@ -19,6 +19,7 @@ from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.league_leaders import Leaders
 from boards.player_stats import PlayerStats
+from boards.period_summary import PeriodSummary 
 from time import sleep
 
 
@@ -271,3 +272,6 @@ class Boards:
         
     def player_stats(self, data, matrix, sleepEvent):
         PlayerStats(data, matrix, sleepEvent)
+
+    def period_summary(self, data, matrix, sleepEvent):
+        PeriodSummary(data, matrix, sleepEvent).render()

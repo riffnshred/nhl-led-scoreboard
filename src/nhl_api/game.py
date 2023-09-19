@@ -107,6 +107,7 @@ def overview(game_id):
     # Top level information (General)
     id = parsed['gamePk']
     time_stamp = parsed['gameData']['game']
+    players = parsed['gameData']['players']
     game_type = parsed['gameData']['game']['type']
     status = parsed['gameData']['status']['detailedState']
     status_code = parsed['gameData']['status']['statusCode']
@@ -144,6 +145,7 @@ def overview(game_id):
         'time_stamp': time_stamp,  # Last time the data was refreshed (UTC)
         # Type of game ("R" for Regular season, "P" for Post season or playoff)
         'game_type': game_type,
+        'players': players,
         'status': status,   # Status of the game.
         'status_code': status_code,
         'status_abstract_state': status_abstract_state,
