@@ -11,6 +11,9 @@
 
 ## IMPORTANT (PLEASE READ)
 
+## (2023-09-21) Major changes on the NHL API, Project on hold.
+We just found out the NHL API as changed considerably, which affects this project. We are currently investigating and will do our best to fix the issues. 
+
 ## Compatible Raspberry pi OS
 For v1.6.x and lower, use Raspberry Pi OS Lite (Legacy). The newer version of Raspberry pi OS (Bullseye) is not supported at the moment.
 
