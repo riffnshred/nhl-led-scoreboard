@@ -1,5 +1,5 @@
 
-# NHL-LED-scoreboard
+# NHL-LED-scoreboard (On hold, NHL DATA broken)
 
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
