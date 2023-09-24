@@ -116,11 +116,12 @@ def dummie_overview():
 def get_fav_players_id(config):
     ids = []
     for i in config:
-        player = requests.get(f"https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/{i}/100")
-        # if the suggestion key has no items move on to the next player
-        if not player.json()['suggestions']:
+        player = requests.get(f"https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=20&q={i}&active=true")
+        # if the response has no items move on to the next player
+        if not player.json():
             continue
-        ids.append(player.json()["suggestions"][0][0:7]) 
+        else:
+            ids.append(player.json()[0]["playerId"]) 
     return ids
 
 def get_point_leaders(playoffs):

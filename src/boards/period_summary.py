@@ -20,7 +20,7 @@ class PeriodSummary:
         self.preferred_teams = data.pref_teams
         self.matrix = matrix
         self.team_colors = data.config.team_colors
-        self.overview = nhl_api.overview(2022021278)  # Change this to your desired game ID
+        self.overview = nhl_api.overview(2022021212)  # Change this to your desired game ID
         #self.data.pref_games[0].game_id
 
         self.period_instance = Periods(self.overview)

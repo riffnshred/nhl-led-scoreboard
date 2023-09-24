@@ -24,7 +24,7 @@ class PlayerStats:
 
     def draw_stats(self):
         self.matrix.clear()
-        for i in range(len(self.data.config.favorite_player)):
+        for i, _ in enumerate(self.data.favorite_player_id):
             self.matrix.clear()
             if self.data.favorite_player_data[i]["people"][0]["primaryPosition"]["code"] == "G":
                 self.matrix.draw_text_layout(
