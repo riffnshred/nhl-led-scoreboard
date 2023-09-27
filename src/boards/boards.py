@@ -133,6 +133,7 @@ class Boards:
 
     def _intermission(self, data, matrix,sleepEvent):
         bord_index = 0
+        period_summary_trigger = data.config.show_period_summary
         while True:
             board = getattr(self, data.config.boards_intermission[bord_index])
             data.curr_board = data.config.boards_intermission[bord_index]
@@ -153,6 +154,15 @@ class Boards:
                 board = getattr(self,"wxalert")
                 data.curr_board = "wxalert"
                 bord_index -= 1
+                
+            # Display the Period Summary board
+            if period_summary_trigger:
+                debug.info('Period summary triggered in intermission....will display period summary board')
+                period_summary_trigger = False
+                #Display the board from the config
+                board = getattr(self,"period_summary")
+                data.curr_board = "period_summary"
+                bord_index -= 1
 
             ## Don't Display the Screensaver Board in "live game mode"
             # if data.screensaver:
@@ -171,11 +181,12 @@ class Boards:
             if bord_index >= (len(data.config.boards_intermission) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver or not period_summary_trigger:
                     bord_index += 1
 
     def _post_game(self, data, matrix,sleepEvent):
         bord_index = 0
+        period_summary_trigger = data.config.show_period_summary
         while True:
             board = getattr(self, data.config.boards_post_game[bord_index])
             data.curr_board = data.config.boards_post_game[bord_index]
@@ -196,6 +207,15 @@ class Boards:
                 board = getattr(self,"wxalert")
                 data.curr_board = "wxalert"
                 bord_index -= 1
+                
+            # Display the Period Summary board
+            if period_summary_trigger:
+                debug.info('Period summary triggered in post game....will display period summary board')
+                period_summary_trigger = False
+                #Display the board from the config
+                board = getattr(self,"period_summary")
+                data.curr_board = "period_summary"
+                bord_index -= 1
 
             # Display the Screensaver Board
             if data.screensaver:
@@ -215,7 +235,7 @@ class Boards:
             if bord_index >= (len(data.config.boards_post_game) - 1):
                 return
             else:
-                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaver:
+                if not data.pb_trigger or not data.wx_alert_interrupt or not data.screensaveror not period_summary_trigger:
                     bord_index += 1
 
     def fallback(self, data, matrix, sleepEvent):

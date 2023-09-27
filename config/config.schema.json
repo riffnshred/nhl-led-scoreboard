@@ -30,8 +30,7 @@
               "clock",
               "weather",
               "league_leaders",
-              "player_stats",
-              "period_summary"
+              "player_stats"
             ]
         }
     },    
@@ -284,6 +283,16 @@
                             "Auston Matthews"
                         ]
                     }
+                },
+                "show_period_summary": {
+                    "$id": "#/properties/preferences/properties/show_period_summary",
+                    "type": "boolean",
+                    "title": "show_period_summary",
+                    "description": "Enable showing you teams game stats during the intermission",
+                    "default": true,
+                    "examples": [
+                        true
+                    ]
                 }
             }
         },
