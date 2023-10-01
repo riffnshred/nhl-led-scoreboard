@@ -12,6 +12,7 @@ class TeamScore(Team):
             goal_plays = []
         if penalties is None:
             penalties = []
+            
         self.goals = goals
         self.goal_plays = goal_plays
         self.shot_on_goal = sog

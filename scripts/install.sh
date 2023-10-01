@@ -8,6 +8,9 @@ echo "$(tput setaf 6)Installing required dependencies. This may take some time (
 #Install all apt requirements using aptfile
 sudo scripts/aptfile apt-requirements
 
+# Update pip3 to latest version
+python3 -m pip install --upgrade pip
+
 #Install all pip3 requirements using the requirements.txt filer
 sudo pip3 install -r requirements.txt
 
@@ -17,12 +20,13 @@ git config submodule.matrix.ignore all
 
 echo "$(tput setaf 4)Running rgbmatrix installation...$(tput setaf 9)"
 
+# No longer needed for newer version of the rgb matric repo as of Dec 2021
 # Recompile the cpp files to build library with newest cython.  See https://github.com/hzeller/rpi-rgb-led-matrix/issues/1298
 
-cd submodules/matrix/bindings/python/rgbmatrix/ || exit
+# cd submodules/matrix/bindings/python/rgbmatrix/ || exit
 
-python3 -m pip install --no-cache-dir cython
-python3 -m cython -2 --cplus *.pyx
+# python3 -m pip install --no-cache-dir cython
+# python3 -m cython -2 --cplus *.pyx
 
 cd ../../../ || exit
 

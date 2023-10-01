@@ -82,10 +82,10 @@ class MainRenderer:
         i = 0
         while True:
             debug.info('PING !!! Render off day')
-            # Add game state onto queue
             qPayload = "off_day"
-            qItem = ["scoreboard/state",qPayload]
+            qItem = ["{0}/state".format(self.data.config.mqtt_main_topic),qPayload]
             self.sbQueue.put_nowait(qItem)
+        
             if self.data._is_new_day():
                 debug.info('This is a new day')
                 return
@@ -156,7 +156,7 @@ class MainRenderer:
                 debug.info("Game is Live")
                 # Add game state onto queue
                 qPayload = {"period": period, "clock": clock,"score": score}
-                qItem = ["scoreboard/live/status",qPayload]
+                qItem = ["{0}/live/status".format(self.data.config.mqtt_main_topic),qPayload]
                 self.sbQueue.put_nowait(qItem)
 
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -168,7 +168,7 @@ class MainRenderer:
                     debug.info("Main event is in Intermission")
                     # Add game state onto queue
                     qPayload = "intermission"
-                    qItem = ["scoreboard/state",qPayload]
+                    qItem = ["{0}/state".format(self.data.config.mqtt_main_topic),qPayload]
                     self.sbQueue.put_nowait(qItem)  
 
                     # Show Boards for Intermission
@@ -185,7 +185,7 @@ class MainRenderer:
                 debug.info("Game Over")
                 # Add game state onto queue
                 qPayload = "gameover"
-                qItem = ["scoreboard/state",qPayload]
+                qItem = ["{0}/state".format(self.data.config.mqtt_main_topic),qPayload]
                 self.sbQueue.put_nowait(qItem)
 
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -253,7 +253,7 @@ class MainRenderer:
         sbrenderer.render()
         # Add game state onto queue
         qPayload = "pregame"
-        qItem = ["scoreboard/state",qPayload]
+        qItem = ["{0}/state".format(self.data.config.mqtt_main_topic),qPayload]
         self.sbQueue.put_nowait(qItem)
 
 
@@ -266,7 +266,7 @@ class MainRenderer:
 
         # Add game state onto queue
         qPayload = "postgame"
-        qItem = ["scoreboard/state",qPayload]
+        qItem = ["{0}/state".format(self.data.config.mqtt_main_topic),qPayload]
         self.sbQueue.put_nowait(qItem)
 
 
@@ -322,7 +322,7 @@ class MainRenderer:
             
             # Add goal onto queue
             qPayload = {"away": True, "team": away_name, "preferred_team": pref_team_only,"score": self.away_score}
-            qItem = ["scoreboard/live/goal",qPayload]
+            qItem = ["{0}/live/goal".format(self.data.config.mqtt_main_topic),qPayload]
             self.sbQueue.put_nowait(qItem)
             
             # run the goal animation
@@ -336,7 +336,7 @@ class MainRenderer:
                 return
             # Add goal onto queue
             qPayload = {"home": True, "team": home_name, "preferred_team": pref_team_only,"score": self.home_score}
-            qItem = ["scoreboard/live/goal",qPayload]
+            qItem = ["{0}/live/goal".format(self.data.config.mqtt_main_topic),qPayload]
             self.sbQueue.put_nowait(qItem)
 
             # run the goal animation
@@ -378,7 +378,7 @@ class MainRenderer:
 
             # Add penalty onto queue
             qPayload = away_name
-            qItem = ["scoreboard/live/penalty/away",qPayload]
+            qItem = ["{0}/live/penalty/away".format(self.data.config.mqtt_main_topic),qPayload]
             self.sbQueue.put_nowait(qItem)
 
             # run the goal animation
@@ -392,7 +392,7 @@ class MainRenderer:
 
             # Add penalty onto queue
             qPayload = home_name
-            qItem = ["scoreboard/live/penalty/home",qPayload]
+            qItem = ["{0}/live/penalty/home".format(self.data.config.mqtt_main_topic),qPayload]
             self.sbQueue.put_nowait(qItem)
 
             # run the goal animation

@@ -77,6 +77,7 @@ class TeamSummary:
             except (TypeError, KeyError):
                 prev_game_scoreboard = False
 
+
             try:
                 if next_game:
                     next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
@@ -90,7 +91,7 @@ class TeamSummary:
                 self.data.network_issues = True
             except (TypeError, KeyError):
                 next_game_scoreboard = False
-
+                
             stats = team.stats
             im_height = 67
             team_abbrev = team.abbreviation
@@ -161,10 +162,9 @@ class TeamSummary:
         draw = ImageDraw.Draw(image)
 
 
-
-        draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-
-        
+       # draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+       
+        draw.rectangle([0, -1, 26, 6], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
@@ -176,7 +176,9 @@ class TeamSummary:
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        # draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 21, 36, 27], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+
         draw.text((1, 21), "LAST GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if prev_game_scoreboard:
@@ -206,7 +208,8 @@ class TeamSummary:
         else:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        # draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 42, 36, 48], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
 

@@ -10,7 +10,7 @@ from utils import args, led_matrix_options, scheduler_event_listener
 from data.data import Data
 import queue
 import threading
-from renderer.matrix import Matrix, TermMatrix
+from renderer.matrix import Matrix
 from api.weather.ecWeather import ecWxWorker
 from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
@@ -144,6 +144,8 @@ def run():
 
     # If the driver is running on actual hardware, these files contain libs that should be installed.
     # For other platforms, they probably don't exist and will crash.
+    screensaver = None 
+    
     if driver.is_hardware():
         from sbio.dimmer import Dimmer
         from sbio.pushbutton import PushButton
@@ -153,7 +155,7 @@ def run():
         if data.config.dimmer_enabled:
             dimmer = Dimmer(data, matrix,scheduler)
 
-        screensaver = None
+        
         if data.config.screensaver_enabled:
             screensaver = screenSaver(data, matrix, sleepEvent, scheduler)
             if data.config.screensaver_motionsensor:
