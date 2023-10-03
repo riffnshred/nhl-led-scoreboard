@@ -41,6 +41,9 @@ class ScoreboardConfig:
         except KeyError:
             self.mqtt_enabled = False
 
+        self.mqtt_main_topic = ""
+        self.mqtt_username = ""
+        self.mqtt_password = ""
         
         if self.mqtt_enabled:
             self.mqtt_broker = json["sbio"]["mqtt"]["broker"]
