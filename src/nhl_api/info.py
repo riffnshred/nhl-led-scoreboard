@@ -1,107 +1,61 @@
 import nhl_api.data
 from nhl_api.object import Object, MultiLevelObject
 from nameparser import HumanName
-import debug
+import json
 
+def team_roster_info(team_abbrev):
+    data = nhl_api.data.get_team_roster(team_abbrev).json()
+    return data
 
 def team_info():
     """
         Returns a list of team information dictionaries
     """
-    data = nhl_api.data.get_teams()
-    parsed = data.json()
+    # Potential replacement https://api-web.nhle.com/v1/schedule-calendar/now
+    f = open('src/nhl_api/teams.json')
+    #data = nhl_api.data.get_teams()
+    parsed = json.load(f)
     teams_data = parsed["teams"]
     teams = []
 
     for team in teams_data:
-        try:
-            team_id = team['id']
-            name = team['name']
-            abbreviation = team['abbreviation']
-            team_name = team['teamName']
-            location_name = team['locationName']
-            short_name = team['shortName']
-            division_id = team['division']['id']
-            division_name = team['division']['name']
-            division_abbrev = team['division']['abbreviation']
-            conference_id = team['conference']['id']
-            conference_name = team['conference']['name']
-            official_site_url = team['officialSiteUrl']
-            franchise_id = team['franchiseId']
-            
+        team_id = team['id']
+        name = team['name']
+        abbreviation = team['abbreviation']
+        team_name = team['teamName']
+        location_name = team['locationName']
+        short_name = team['shortName']
+        division_id = team['division']['id']
+        division_name = team['division']['name']
+        division_abbrev = team['division']['abbreviation']
+        conference_id = team['conference']['id']
+        conference_name = team['conference']['name']
+        official_site_url = team['officialSiteUrl']
+        franchise_id = team['franchiseId']
+        roster = team_roster_info(abbreviation)
 
-            try:
-                previous_game = team['previousGameSchedule']
-                # previous_game = False
-            except:
-                debug.log("No next game detected for {}".format(team_name))
-                previous_game = False
-
-            try:
-                next_game = team['nextGameSchedule']
-            except:
-                debug.log("No next game detected for {}".format(team_name))
-                next_game = False
-
-            try:
-                stats = team['teamStats'][0]['splits'][0]['stat']
-            except:
-                debug.log("No Stats detected for {}".format(team_name))
-                stats = False
-
-            roster = {}
-            for p in team['roster']['roster']:
-                person = p['person']
-                person_id = person['id']
-                name = HumanName(person['fullName'])
-                first_name = name.first
-                last_name = name.last
-
-                position_name = p['position']['name']
-                position_type = p['position']['abbreviation']
-                position_abbrev = p['position']['abbreviation']
-
-                try:
-                    jerseyNumber = p['jerseyNumber']
-                except KeyError:
-                    jerseyNumber = ""
-                
-                roster[person_id]= {
-                    'firstName': first_name,
-                    'lastName': last_name,
-                    'jerseyNumber': jerseyNumber,
-                    'positionName': position_name,
-                    'positionType': position_type,
-                    'positionAbbrev': position_abbrev
-                    }
-                
-            
-            output = {
-                'team_id': team_id,
-                'name': name,
-                'abbreviation': abbreviation,
-                'team_name': team_name,
-                'location_name': location_name,
-                'short_name': short_name,
-                'division_id': division_id,
-                'division_name': division_name,
-                'division_abbrev': division_abbrev,
-                'conference_id': conference_id,
-                'conference_name': conference_name,
-                'official_site_url': official_site_url,
-                'franchise_id': franchise_id,
-                'roster': roster,
-                'previous_game': previous_game,
-                'next_game': next_game,
-                'stats': stats
-            }
-
-            # put this dictionary into the larger dictionary
-            teams.append(output)
-        except:
-            debug.error("Missing data in current team info")
+        output = {
+            'team_id': team_id,
+            'name': name,
+            'abbreviation': abbreviation,
+            'team_name': team_name,
+            'location_name': location_name,
+            'short_name': short_name,
+            'division_id': division_id,
+            'division_name': division_name,
+            'division_abbrev': division_abbrev,
+            'conference_id': conference_id,
+            'conference_name': conference_name,
+            'official_site_url': official_site_url,
+            'franchise_id': franchise_id,
+            'roster': roster
+        }
+        # put this dictionary into the larger dictionary
+        teams.append(output)
 
     return teams
+
+
 
 def player_info(playerId):
     data = nhl_api.data.get_player(playerId)
@@ -115,8 +69,8 @@ def status():
     return data
 
 
-def current_season():
-    data = nhl_api.data.get_current_season().json()
+def current_season(season_id):
+    data = nhl_api.data.get_season_info(season_id).json()
     return data
 
 def next_season():
@@ -137,14 +91,14 @@ def playoff_info(season):
         
         output['rounds'] = rounds
     except KeyError:
-        debug.error("No data for {} Playoff".format(season))
+        #debug.error("No data for {} Playoff".format(season))
         output['rounds'] = False
 
     try:
         default_round = parsed["defaultRound"]
         output['default_round'] = default_round
     except KeyError:
-        debug.error("No default round for {} Playoff.".format(season))
+        #debug.error("No default round for {} Playoff.".format(season))
         default_round = 1
         output['default_round'] = default_round
 

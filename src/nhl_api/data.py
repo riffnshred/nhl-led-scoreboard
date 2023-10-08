@@ -1,6 +1,5 @@
 import json
 import requests
-import debug
 from datetime import date
 
 """
@@ -10,12 +9,16 @@ from datetime import date
 """
 
 BASE_URL = "http://statsapi.web.nhl.com/api/v1/"
-SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
-TEAM_URL = '{0}teams?expand=team.roster,team.stats,team.schedule.previous,team.schedule.next'.format(BASE_URL)
+#SCHEDULE_URL = BASE_URL + 'schedule?date={0}-{1}-{2}&expand=schedule.linescore'
+SCHEDULE_URL = "https://api-web.nhle.com/v1/score/{0}-{1}-{2}"
+TEAM_URL = "https://api-web.nhle.com/v1/schedule-calendar/now"
+TEAM_ROSTER = "https://api-web.nhle.com/v1/roster/{0}/current"
 PLAYER_URL = '{0}people/{1}'
-OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
+# OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
+OVERVIEW_URL = "https://api-web.nhle.com/v1/gamecenter/{0}/landing"
 STATUS_URL = BASE_URL + 'gameStatus'
-CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
+#CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
+SEASON_URL = 'https://api.nhle.com/stats/rest/en/season?cayenneExp=id={0}'
 NEXT_SEASON_URL = BASE_URL + 'seasons/{0}'
 STANDINGS_URL = BASE_URL + 'standings'
 STANDINGS_WILD_CARD = STANDINGS_URL + '/wildCardWithLeaders'
@@ -28,7 +31,7 @@ TIMEOUT_TESTING = 0.001  # TO DELETE
 
 def get_schedule(year, month, day):
     try:
-        data = requests.get(SCHEDULE_URL.format(year, month, day), timeout=REQUEST_TIMEOUT)
+        data = requests.get(SCHEDULE_URL.format(f"{year:04}", f"{month:02}", f"{day:02}"), timeout=REQUEST_TIMEOUT)
         return data
     except requests.exceptions.RequestException as e:
         raise ValueError(e)
@@ -36,6 +39,13 @@ def get_schedule(year, month, day):
 def get_teams():
     try:
         data = requests.get(TEAM_URL, timeout=REQUEST_TIMEOUT)
+        return data
+    except requests.exceptions.RequestException as e:
+        raise ValueError(e)
+    
+def get_team_roster(team_abbrev):
+    try:
+        data = requests.get(TEAM_ROSTER.format(team_abbrev), timeout=REQUEST_TIMEOUT)
         return data
     except requests.exceptions.RequestException as e:
         raise ValueError(e)
@@ -65,14 +75,16 @@ def get_game_status():
         raise ValueError(e)
 
 
-def get_current_season():
+def get_season_info(season_id):
     try:
-        data = requests.get(CURRENT_SEASON_URL, timeout=REQUEST_TIMEOUT)
+        data = requests.get(SEASON_URL.format(season_id), timeout=REQUEST_TIMEOUT)
         return data
     except requests.exceptions.RequestException as e:
         raise ValueError(e)
-    
-def get_next_season():
+   
+   
+# TODO: Depricated since new API    
+""" def get_next_season():
     # Create the next seasonID from the current year and curent year +1 eg: 20232024 is seasonID for 2023-2024 season
     # This will return an empty set for seasons data if the seasonID has nothing, a 200 response will always occur
     current_year = date.today().year
@@ -84,7 +96,7 @@ def get_next_season():
         data = requests.get(NEXT_SEASON_URL.format(nextseasonID), timeout=REQUEST_TIMEOUT)
         return data
     except requests.exceptions.RequestException as e:
-        raise ValueError(e)
+        raise ValueError(e) """
 
 
 def get_standings():

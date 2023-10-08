@@ -87,18 +87,18 @@ class Scoreboard:
         time_format = data.config.time_format
         linescore = overview.linescore
 
-        away = linescore.teams.away
+        away_team_id = overview.away_team_id
         try:
-            away_abbrev = data.teams_info[away.team.id].abbreviation
-            self.away_roster = data.teams_info[away.team.id].roster
+            away_abbrev = data.teams_info[away_team_id].abbreviation
+            self.away_roster = data.teams_info[away_team_id].roster
         except KeyError:
             away_abbrev = "NHL"
             self.away_roster = {}
 
-        home = linescore.teams.home
+        home_team_id = overview.home_team_id
         try:
-            home_abbrev = data.teams_info[home.team.id].abbreviation
-            self.home_roster = data.teams_info[home.team.id].roster
+            home_abbrev = data.teams_info[home_team_id].abbreviation
+            self.home_roster = data.teams_info[home_team_id].roster
         except KeyError:
             home_abbrev = "NHL"
             self.home_roster = {}
@@ -109,7 +109,8 @@ class Scoreboard:
         away_penalties = []
         home_penalties = []
 
-        if hasattr(overview,"plays"):
+        # TODO: API FIX (Plays, Goals Penalties)
+        """if hasattr(overview,"plays"):
             plays = overview.plays
             away_scoring_plays, away_penalty_play, home_scoring_plays, home_penalty_play = filter_plays(plays,away.team.id,home.team.id)
             
@@ -158,7 +159,9 @@ class Scoreboard:
                             away.numSkaters, away.goaliePulled, away_goal_plays)
         self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home_penalties, home.powerPlay,
                             home.numSkaters, home.goaliePulled, home_goal_plays)
-
+        """    
+        self.away_team = TeamScore(overview.away_team_id, overview.away_team_abrev, overview.away_team_name, overview.away_score)
+        self.home_team = TeamScore(overview.home_team_id, overview.home_team_abrev, overview.home_team_name, overview.home_score)
         self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")
         self.start_time = convert_time(overview.game_date).strftime(time_format)
         self.status = overview.status

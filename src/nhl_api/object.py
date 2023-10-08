@@ -9,6 +9,7 @@ class Object(object):
 
     def convert_json(self, d):
         self.__dict__ = {}
+        
         for key, value in d.items():
             if type(value) is dict:
                 value = Object(value)

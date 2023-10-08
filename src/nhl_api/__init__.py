@@ -22,6 +22,9 @@ def teams():
     """Return list of Info objects for each team"""
     return [nhl_api.info.Info(x) for x in nhl_api.info.team_info()]
 
+def team_roster(teamId):
+    return nhl_api.info.team_roster_info(teamId)
+
 def player(playerId):
     """Return an Info object of a player information"""
     return nhl_api.info.player_info(playerId)
@@ -35,9 +38,8 @@ def overview(game_id):
 def game_status_info():
     return nhl_api.info.status()
 
-
-def current_season_info():
-    return nhl_api.info.current_season()
+def current_season_info(season_id):
+    return nhl_api.info.current_season(season_id)["data"][-1]
 
 def next_season_info():
     return nhl_api.info.next_season()
@@ -48,7 +50,6 @@ def standings():
         return nhl_api.info.Standings(standings, wildcard)
     except:
         return False
-
 
 def playoff(season = ""):
     return nhl_api.info.Playoff(nhl_api.info.playoff_info(season))

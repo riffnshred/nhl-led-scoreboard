@@ -2,6 +2,59 @@ from datetime import datetime, date
 from nhl_api import game_status_info, current_season_info, next_season_info
 import debug
 
+class SeasonInfo():
+    def __init__(self):
+        current_year = datetime.now().year
+        next_year = current_year + 1
+        
+        self.currentseasonid = int(f"{current_year}{next_year}")
+        self.data = current_season_info(self.currentseasonid)
+        
+        self.preseason_start_date = self.data["preseasonStartdate"]
+        self.start_date = self.data["startDate"] # Regular season start
+        self.regular_season_end_date = self.data["regularSeasonEndDate"]
+        self.end_date = self.data["endDate"] # Official Season end date (end of playoff)
+        
+
+class Status(SeasonInfo):
+    def __init__(self):
+        super().__init__()
+        
+        # Game States
+        self.preview = ["FUT","PRE"]
+        self.live = ["LIVE","CRIT"]
+        self.over = ["OVER"]
+        self.final = ["FINAL","OFF"]
+        
+        # Game Schedule States
+        self.scheduled = "OK",
+        self.toBeDetermined = "TBD",
+        self.postponed = "PPD",
+        self.suspended = "SUSP",
+        self.cancelled = "CNCL"
+        
+        # Game Outcome States
+        self.regulation = "REG",
+        self.overtime = "OT",
+        self.shootout = "SO"
+        
+    def is_scheduled(self, status):
+        return status == self.scheduled
+    
+    def is_pregame(self, status):
+        return status in self.preview
+
+    def is_live(self, status):
+        return status in self.live
+
+    def is_game_over(self, status):
+        return status in self.over
+
+    def is_final(self, status):
+        return status in self.final
+    
+"""
+
 class Status:
     def __init__(self):
         game_status = game_status_info()
@@ -90,4 +143,4 @@ class Status:
     def next_season_start(self):
         return self.next_season_info['regularSeasonStartDate']
 
-    
+"""

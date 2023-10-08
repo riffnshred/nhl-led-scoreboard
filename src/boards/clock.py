@@ -30,8 +30,7 @@ class Clock:
         #Get team colors to use for the clock
         self.team_colors = data.config.team_colors
         self.preferred_teams = data.pref_teams
-
-
+        
         #Select the first preferred team for clock setting
         self.clock_color = self.team_colors.color("{}.primary".format(self.preferred_teams[0]))
         self.wxdt_color = self.team_colors.color("{}.text".format(self.preferred_teams[0]))

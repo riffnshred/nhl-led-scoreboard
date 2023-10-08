@@ -14,12 +14,14 @@ class TeamScore(Team):
             penalties = []
             
         self.goals = goals
-        self.goal_plays = goal_plays
+    
+    #TODO: API FIX (TEAM SCORE SOG, Penalties, Powerplay etc...)
+"""         self.goal_plays = goal_plays
         self.shot_on_goal = sog
         self.penalties = penalties
         self.powerplay = powerplay
         self.num_skaters = num_skaters
-        self.pulled_goalie = pulled_goalie
+        self.pulled_goalie = pulled_goalie """
 
 
 class SeriesTeam(Team):

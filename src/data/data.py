@@ -182,7 +182,7 @@ class Data:
         self.stanleycup_round = False
 
         # Fetch the playoff data
-        self.refresh_playoff()
+        # self.refresh_playoff() TODO: API FIX
 
         # Stanley cup champions
         self.cup_winner_id = self.check_stanley_cup_champion()
@@ -384,9 +384,6 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
-                if self.time_stamp != self.overview.time_stamp:
-                    self.time_stamp = self.overview.time_stamp
-                    self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False
                 break
