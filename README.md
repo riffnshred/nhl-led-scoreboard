@@ -11,7 +11,7 @@
 
 # IMPORTANT (PLEASE READ)
 
-## (2023-10-11) Indefinitly on Hold. More changes and complication. Limited free time. Future uncertain (Don't build this for a friend).
+## (2023-10-11) Indefinitly on Hold. More changes and complications. Limited free time. Future uncertain (Don't build this for a friend).
 Over the last few weeks, we discovered that the NHL API has changed to a new one and the previous version is now unreliable (even tho it came back to life after being out for a few days). More so, a lot of packages, plugins and more recently, the OS we use had a major update and the software stack we use to make this project work changed a lot. This means that the current documentation of this project is now partially deprecated. If you have enough know-how, you can make the project work. Due to unforeseen events in my life, I no longer have the same amount of free time to dedicate to this project, keep it up to date and make it easy to use. 
 
 The current situation is, that if you have a working scoreboard, it should be fine while the previous NHL API is operational. If your scoreboard is not working at the moment, you may try the image version of the scoreboard offered by Falkyre. He's currently working on fixing a few things related to software changes and OS changes, but I believe he will have it up and running in the coming days. Again, this uses the previous version of the NHL API and thus, its fate is the same. 
@@ -65,18 +65,6 @@ This project is new and is in constant evolution. Please read the documentation 
 
 **NEW on MARCH 2 2020***
 The Discord Channel still exist, But We now use the new [Discussions](https://github.com/riffnshred/nhl-led-scoreboard/discussions) section. If you need help, are looking for resources, show off your setup or want to keep up with what's going on with the project, this is where it's all about.
-
-Want to help me turn coffee into features? Or just want to contribute
-
-for my work?
-
-  
-
-<a  href="https://www.buymeacoffee.com/MgDa5sr"  target="_blank"><img  src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png"  alt="Buy Me A Coffee"  style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-  
-  
-  
 
 ## Requirements
 
