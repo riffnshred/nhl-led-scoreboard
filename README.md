@@ -1,5 +1,5 @@
 
-# NHL-LED-scoreboard (THIS PROJECT IS INDEFINITLY HOLD) 
+# NHL-LED-scoreboard (THIS PROJECT IS INDEFINITLY ON HOLD) 
 
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
