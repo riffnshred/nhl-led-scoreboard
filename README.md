@@ -1,5 +1,5 @@
 
-# NHL-LED-scoreboard (On hold, NHL DATA broken)
+# NHL-LED-scoreboard (THIS PROJECT IS INDEFINITLY HOLD) 
 
 ![scoreboard demo](assets/images/scoreboard.jpg)
 
@@ -9,18 +9,22 @@
 [![Create Release - Image](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml/badge.svg)](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml)
 [![GitHub release (latest by date)](https://badgen.net/github/release/falkyre/nhl-led-scoreboard-img?label=Version)](https://github.com/falkyre/nhl-led-scoreboard-img/releases/latest)
 
-## IMPORTANT (PLEASE READ)
+# IMPORTANT (PLEASE READ)
 
-## (2023-09-21) Major changes on the NHL API, Project on hold.
-We just found out the NHL API as changed considerably, which affects this project. We are currently investigating and will do our best to fix the issues. 
+## (2023-10-11) Indefinitly on Hold. More changes and complication. Limited free time. Future uncertain (Don't build this for a friend).
+Over the last few weeks, we discovered that the NHL API has changed to a new one and the previous version is now unreliable (even tho it came back to life after being out for a few days). More so, a lot of packages, plugins and more recently, the OS we use had a major update and the software stack we use to make this project work changed a lot. This means that the current documentation of this project is now partially deprecated. If you have enough know-how, you can make the project work. Due to unforeseen events in my life, I no longer have the same amount of free time to dedicate to this project, keep it up to date and make it easy to use. 
+
+The current situation is, that if you have a working scoreboard, it should be fine while the previous NHL API is operational. If your scoreboard is not working at the moment, you may try the image version of the scoreboard offered by Falkyre. He's currently working on fixing a few things related to software changes and OS changes, but I believe he will have it up and running in the coming days. Again, this uses the previous version of the NHL API and thus, its fate is the same. 
+
+What I'm focusing on with the little time I find is fixing the code of this project to use the new NHL API. This will take a bit of time. 
+
 
 ## Compatible Raspberry pi OS
 For v1.6.x and lower, use Raspberry Pi OS Lite (Legacy). The newer version of Raspberry pi OS (Bullseye) is not supported at the moment.
 
-### RASPBERRY PI ZERO NO MORE SUPPORTED (EDIT: [use a Pi Zero 2 instead](https://github.com/riffnshred/nhl-led-scoreboard/discussions/335))
-From now on, this library won't support the Raspberry Pi Zero or Zero W. This is because the project has become too complex to work properly on it. For those who are already using that model, It should still work with the latest version, but I won't give any support for it. I don't guarantee it will work from this point on.
+### Supported Raspberry Pi models
 
-The models we support are all the Raspberry pi 3 versions and the Pi 4. 
+The models we support are the Raspberry Pi Zero 2W, all the Raspberry pi 3 and the Pi 4 models. 
 
 If you are looking to replace your raspberry pi Zero, I personally recommend the Raspberry pi 3A+. If you use the RGB Bonnet along with that, make sure to isolate the bottom of it with a few layers of Kapton tape or a layer of electrical tape.
 
