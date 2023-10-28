@@ -52,8 +52,11 @@ class TeamSummary:
             team_colors = self.data.config.team_colors
             bg_color = team_colors.color("{}.primary".format(team_id))
             txt_color = team_colors.color("{}.text".format(team_id))
-            prev_game = team.previous_game
-            next_game = team.next_game
+            #prev_game = team.previous_game
+            #next_game = team.next_game
+            
+            prev_game = False
+            next_game = False
 
             logo_renderer = LogoRenderer(
                 self.matrix,

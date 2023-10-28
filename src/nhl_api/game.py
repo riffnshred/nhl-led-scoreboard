@@ -114,10 +114,11 @@ def overview(game_id):
     # time_stamp = parsed['gameData']['game'] # Not used and depricated
     game_type = parsed['gameType']
     status = parsed['gameState']
+    schedule_state = parsed['gameScheduleState']
     # status_code = parsed['gameData']['status']['statusCode'] # Not used and depricated
     # status_abstract_state = parsed['gameData']['status']['abstractGameState'] # Not used and depricated
     game_date = parsed['startTimeUTC']
-
+    clock = parsed['clock']
     # Team details
     away_team_id = parsed['awayTeam']['id']
     away_team_name = parsed['awayTeam']['name']
@@ -129,15 +130,21 @@ def overview(game_id):
     try:
         # Sub level information (Details)
         linescore = parsed['summary']['linescore'] # Completly different on the new API
-        clock = parsed['clock'] # use to be part of the linescore, but is now appart
+         # use to be part of the linescore, but is now appart
         #boxscore = parsed['liveData']['boxscore']
-        away_score = linescore['totals']['away']
-        home_score = linescore['totals']['home']
+        away_score = parsed['awayTeam']['away']
+        home_score = parsed['homeTeam']['home']
     except:
         linescore = {}
-        clock = "00:00"
         away_score = 0
         home_score = 0
+    
+    try:
+        current_period = parsed["period"]
+        pariod_descriptor = parsed["periodDescriptor"]
+    except:
+        current_period = 0
+        pariod_descriptor = {}
         
     # 3 stars (if any available)
     try:
@@ -156,7 +163,7 @@ def overview(game_id):
         # Type of game ("R" for Regular season, "P" for Post season or playoff)
         'game_type': game_type,
         'status': status,   # Status of the game.
-        
+        'schedule_state': schedule_state,
         #'status_code': status_code,
         #'status_abstract_state': status_abstract_state,
         'game_date': game_date,  # Date and time of the game

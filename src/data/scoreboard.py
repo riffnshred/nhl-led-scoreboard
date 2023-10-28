@@ -168,7 +168,7 @@ class Scoreboard:
         self.periods = Periods(overview)
         
         try:
-            self.intermission = linescore.intermissionInfo.inIntermission
+            self.intermission = overview.clock.inIntermission
         except:
             debug.error("Intermission data unavailable")
             self.intermission = False

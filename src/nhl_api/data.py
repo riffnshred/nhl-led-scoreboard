@@ -15,7 +15,7 @@ TEAM_URL = "https://api-web.nhle.com/v1/schedule-calendar/now"
 TEAM_ROSTER = "https://api-web.nhle.com/v1/roster/{0}/current"
 PLAYER_URL = '{0}people/{1}'
 # OVERVIEW_URL = BASE_URL + 'game/{0}/feed/live?site=en_nhl'
-OVERVIEW_URL = "https://api-web.nhle.com/v1/gamecenter/{0}/landing"
+OVERVIEW_URL = "https://api-web.nhle.com/v1/gamecenter/{0}/play-by-play"
 STATUS_URL = BASE_URL + 'gameStatus'
 #CURRENT_SEASON_URL = BASE_URL + 'seasons/current'
 SEASON_URL = 'https://api.nhle.com/stats/rest/en/season?cayenneExp=id={0}'

@@ -291,7 +291,6 @@ class Data:
                 self.network_issues = True
                 debug.error("Failed to refresh the list of games. {} attempt remaining.".format(attempts_remaining))
                 debug.error(error_message)
-                attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
             except IndexError as error_message:
@@ -299,7 +298,8 @@ class Data:
                 debug.info("All preferred games are Final, showing the top preferred game")
                 #self.current_game_index = 0
                 self.all_pref_games_final = True
-                self.refresh_games()
+            
+            attempts_remaining -= 1
 
     def check_game_priority(self):
         """

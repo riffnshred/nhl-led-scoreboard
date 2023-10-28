@@ -30,6 +30,7 @@ class MainRenderer:
         self.alternate_data_counter = 1
 
     def render(self):
+        
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
@@ -53,6 +54,7 @@ class MainRenderer:
 
         
         while True:
+            
             debug.info('Rendering...')
             #if self.status.is_offseason(self.data.date()):
                 # Offseason (Show offseason related stuff)
@@ -106,8 +108,12 @@ class MainRenderer:
         self.scoreboard = Scoreboard(self.data.overview, self.data)
         self.away_score = self.scoreboard.away_team.goals
         self.home_score = self.scoreboard.home_team.goals
-        self.away_penalties = self.scoreboard.away_team.penalties
-        self.home_penalties = self.scoreboard.home_team.penalties
+        # self.away_penalties = self.scoreboard.away_team.penalties
+        # self.home_penalties = self.scoreboard.home_team.penalties
+        
+        self.away_penalties = []
+        self.home_penalties = []
+        
         # Cache to save goals and penalties and allow all the details to be collected on the API.
         self.goal_team_cache = []
         self.penalties_team_cache = []
@@ -145,6 +151,7 @@ class MainRenderer:
                     self.data.pb_trigger = False
 
             if self.status.is_live(self.data.overview.status):
+                print("hello")
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
@@ -228,14 +235,14 @@ class MainRenderer:
                 
 
 
-            elif self.status.is_irregular(self.data.overview.status):
-                """ Pre-game state """
-                debug.info("Game is irregular")
-                sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
-                self.__render_irregular(sbrenderer)
-                #sleep(self.refresh_rate)
-                self.sleepEvent.wait(self.refresh_rate)
-                self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
+            # elif self.status.is_irregular(self.data.overview.status):
+            #     """ Pre-game state """
+            #     debug.info("Game is irregular")
+            #     sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
+            #     self.__render_irregular(sbrenderer)
+            #     #sleep(self.refresh_rate)
+            #     self.sleepEvent.wait(self.refresh_rate)
+            #     self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
             self.data.refresh_data()
             self.data.refresh_overview()

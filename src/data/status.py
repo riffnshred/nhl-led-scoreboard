@@ -6,16 +6,13 @@ class SeasonInfo():
     def __init__(self):
         current_year = datetime.now().year
         next_year = current_year + 1
-        
         self.currentseasonid = int(f"{current_year}{next_year}")
         self.data = current_season_info(self.currentseasonid)
-        
         self.preseason_start_date = self.data["preseasonStartdate"]
         self.start_date = self.data["startDate"] # Regular season start
         self.regular_season_end_date = self.data["regularSeasonEndDate"]
         self.end_date = self.data["endDate"] # Official Season end date (end of playoff)
         
-
 class Status(SeasonInfo):
     def __init__(self):
         super().__init__()
