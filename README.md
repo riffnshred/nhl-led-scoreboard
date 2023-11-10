@@ -11,6 +11,9 @@
 
 # IMPORTANT (PLEASE READ)
 
+## (2023-11-09)
+old stats api is officially dead. please read below on the current state of the project. only thing that change is that the plan is that Ill start from scratch for the next version. No time frame on anything for now for reasons stated below
+
 ## (2023-10-11) Indefinitly on Hold. More changes and complications. Limited free time. Future uncertain (Don't build this for a friend).
 Over the last few weeks, we discovered that the NHL API has changed to a new one and the previous version is now unreliable (even tho it came back to life after being out for a few days). More so, a lot of packages, plugins and more recently, the OS we use had a major update and the software stack we use to make this project work changed a lot. This means that the current documentation of this project is now partially deprecated. If you have enough know-how, you can make the project work. Due to unforeseen events in my life, I no longer have the same amount of free time to dedicate to this project, keep it up to date and make it easy to use. 
 
