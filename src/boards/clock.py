@@ -26,8 +26,10 @@ class Clock:
 
 
         #Select the first preferred team for clock setting
-        self.clock_color = self.team_colors.color("{}.primary".format(self.preferred_teams[0]))
-        self.wxdt_color = self.team_colors.color("{}.text".format(self.preferred_teams[0]))
+        self.clock_color = self.data.config.clock_clock_rgb # self.team_colors.color(self.data.config.clock_clock_rgb)
+        # self.clock_color = self.team_colors.color("{}.primary".format(self.preferred_teams[0]))
+        self.wxdt_color = self.data.config.clock_clock_rgb #self.team_colors.color("{}.text".format(0))
+        # self.wxdt_color = self.team_colors.color("{}.text".format(self.preferred_teams[0]))
 
         #If text of team is black, force to white
         if self.wxdt_color == {'r': 0, 'b': 0, 'g': 0}:
@@ -36,8 +38,8 @@ class Clock:
         r = r"(\d+),\s*(\d+),\s*(\d+)"
 
         if self.data.config.clock_team_colors:
-            self.clockfill = (self.clock_color['r'],self.clock_color['g'],self.clock_color['b'])
-            self.wxdtfill = (self.wxdt_color['r'],self.wxdt_color['g'],self.wxdt_color['b'])
+            self.clockfill = (234,234,78)
+            self.wxdtfill = (78,234,234)
         elif len(self.data.config.clock_clock_rgb) > 0 or len(self.data.config.clock_date_rgb) > 0:
             if len(self.data.config.clock_clock_rgb) > 0:
                 #Test string to make sure it's in rgb format

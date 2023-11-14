@@ -29,7 +29,7 @@ def player(playerId):
 
 def overview(game_id):
     """Return Overview object that contains game information."""
-    return nhl_api.game.Overview(nhl_api.game.overview(game_id))
+    return nhl_api.game.overview(game_id)
 
 
 def game_status_info():

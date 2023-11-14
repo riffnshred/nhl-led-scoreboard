@@ -6,18 +6,21 @@ class Periods:
     ORDINAL_PLAYOFF = ['Scheduled', '1st', '2nd', '3rd', 'OT', '2OT', '3OT', '4OT', '5OT']
 
     def __init__(self, overview):
-        period_info = overview.linescore
-        try:
-            intermission_info = period_info.intermissionInfo
-            self.is_intermission = intermission_info.inIntermission
-            self.intermission_time_remaining = intermission_info.intermissionTimeRemaining
-        except AttributeError:
-            self.is_intermission = False
-
+        # period_info = overview.linescore
+        # try:
+        #     intermission_info = period_info.intermissionInfo
+        #     self.is_intermission = intermission_info.inIntermission
+        #     self.intermission_time_remaining = intermission_info.intermissionTimeRemaining
+        # except AttributeError:
+        #     self.is_intermission = False
+        self.is_intermission = False
         self.gameType = overview.game_type
-        self.number = period_info.currentPeriod
+        self.number = 0
+        if overview.game_state != "FUT":
+            self.number = overview.period_descriptor.number
+
         try:
-            self.clock = period_info.currentPeriodTimeRemaining
+            self.clock = overview.clock.time_remaining
         except AttributeError:
             self.clock = '00:00'
         self.get_ordinal()

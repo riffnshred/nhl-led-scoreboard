@@ -3,7 +3,6 @@ from data.periods import Periods
 from utils import convert_time
 from time import sleep
 import debug
-import nhl_api
 
 """
     TODO:
@@ -20,28 +19,26 @@ def filter_plays(plays, away_id, home_id):
         Take a list of scoring plays and split them into their cooresponding team.
         return two list, one for each team.
     """
-    all_plays = plays.allPlays
     scoring_plays = []
     penalty_plays = []
-    away_goals = []
+    away_goal_plays = []
     away_penalties  = []
-    home_goals = []
+    home_goal_plays = []
     home_penalties = []
 
     # Filter the scoring plays out of all the plays
-    for i in plays.scoringPlays:
-        scoring_plays.append(all_plays[i])
+    for play in plays:
+        if play.type_desc_key == "goal":
+            scoring_plays.append(play)
+        if play.type_desc_key == "penalty":
+            penalty_plays.append(play)
     
-    # Filter the Penalty plays out of all the plays
-    for i in plays.penaltyPlays:
-        penalty_plays.append(all_plays[i])
+    away_goal_plays = [ x for x in scoring_plays if x.details.event_owner_team_id == away_id]
+    home_goal_plays = [ x for x in scoring_plays if x.details.event_owner_team_id == home_id]
+    away_penalties = [ x for x in penalty_plays if x.details.event_owner_team_id == away_id]
+    home_penalties = [ x for x in penalty_plays if x.details.event_owner_team_id == home_id]
 
-    away_goals = [ x for x in scoring_plays if x['team']['id'] == away_id]
-    home_goals = [ x for x in scoring_plays if x['team']['id'] == home_id]
-    away_penalties = [ x for x in penalty_plays if x['team']['id'] == away_id]
-    home_penalties = [ x for x in penalty_plays if x['team']['id'] == home_id]
-
-    return away_goals, away_penalties, home_goals, home_penalties
+    return away_goal_plays, away_penalties, home_goal_plays, home_penalties
 
 
 def get_goal_players(players_list, roster, opposing_roster):
@@ -85,15 +82,21 @@ def get_penalty_players(players_list, roster):
 class Scoreboard:
     def __init__(self, overview, data):
         time_format = data.config.time_format
-        linescore = overview.linescore
+        # linescore = overview.linescore
 
-        away = linescore.teams.away
-        away_abbrev = data.teams_info[away.team.id].abbreviation
-        self.away_roster = data.teams_info[away.team.id].roster
+        # away = linescore.teams.away
+        away_team = overview.away_team
+        away_team_id = away_team.id
+        away_team_name = away_team.name
+        away_abbrev = data.teams_info[away_team_id].short_name
+        # self.away_roster = data.teams_info[away_team_id].roster
 
-        home = linescore.teams.home
-        home_abbrev = data.teams_info[home.team.id].abbreviation
-        self.home_roster = data.teams_info[home.team.id].roster
+        # home = linescore.teams.home
+        home_team = overview.home_team
+        home_team_id = home_team.id
+        home_team_name = home_team.name
+        home_abbrev = data.teams_info[home_team_id].short_name
+        # self.home_roster = data.teams_info[home_team_id].roster
 
         away_goal_plays = []
         home_goal_plays = []
@@ -101,9 +104,9 @@ class Scoreboard:
         away_penalties = []
         home_penalties = []
 
-        if hasattr(overview,"plays"):
+        if len(overview.plays) > 0:
             plays = overview.plays
-            away_scoring_plays, away_penalty_play, home_scoring_plays, home_penalty_play = filter_plays(plays,away.team.id,home.team.id)
+            away_scoring_plays, away_penalty_play, home_scoring_plays, home_penalty_play = filter_plays(plays,away_team.id,home_team.id)
             
             # Get the Away Goal details
             # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
@@ -146,27 +149,31 @@ class Scoreboard:
                     home_penalties = []
                     break
 
-        self.away_team = TeamScore(away.team.id, away_abbrev, away.team.name, away.goals, away.shotsOnGoal, away_penalties, away.powerPlay,
-                            away.numSkaters, away.goaliePulled, away_goal_plays)
-        self.home_team = TeamScore(home.team.id, home_abbrev, home.team.name, home.goals, home.shotsOnGoal, home_penalties, home.powerPlay,
-                            home.numSkaters, home.goaliePulled, home_goal_plays)
+        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, 0, False, 0, False, [])
+        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, 0, False, 0, False, [])
 
-        self.date = convert_time(overview.game_date).strftime("%Y-%m-%d")
-        self.start_time = convert_time(overview.game_date).strftime(time_format)
-        self.status = overview.status
+        self.date = overview.game_date #convert_time(overview.game_date).strftime("%Y-%m-%d")
+        self.start_time = overview.start_time_utc # convert_time(overview.game_date).strftime(time_format)
+        self.status = overview.game_state
+        overview.game_state
         self.periods = Periods(overview)
-        
-        try:
-            self.intermission = linescore.intermissionInfo.inIntermission
-        except:
-            debug.error("Intermission data unavailable")
-            self.intermission = False
+        # try:
+        #     self.intermission = linescore.intermissionInfo.inIntermission
+        # except:
+        #     debug.error("Intermission data unavailable")
+        self.intermission = False
 
-        if data.status.is_final(overview.status) and hasattr(overview, "w_score") and hasattr(overview, "l_score"):
-            self.winning_team = overview.w_team
-            self.winning_score = overview.w_score
-            self.loosing_team = overview.l_team
-            self.loosing_score = overview.l_score
+        if overview.game_state == "OFF":
+            if away_team.score > home_team.score:
+                self.winning_team_id = overview.away_team.id
+                self.winning_score = overview.away_team.score
+                self.losing_team_id = overview.home_team.id
+                self.losing_score = overview.home_team.score
+            else:
+                self.losing_team_id = overview.away_team.id
+                self.losing_score = overview.away_team.score
+                self.winning_team_id = overview.home_team.id
+                self.winning_score = overview.home_team.score
 
     
 

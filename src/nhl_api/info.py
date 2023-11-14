@@ -2,106 +2,135 @@ import nhl_api.data
 from nhl_api.object import Object, MultiLevelObject
 from nameparser import HumanName
 import debug
-
+import datetime
 
 def team_info():
     """
         Returns a list of team information dictionaries
     """
+    # return []
     data = nhl_api.data.get_teams()
     parsed = data.json()
-    teams_data = parsed["teams"]
+    teams_data = parsed["data"]
     teams = []
 
     for team in teams_data:
         try:
             team_id = team['id']
-            name = team['name']
-            abbreviation = team['abbreviation']
-            team_name = team['teamName']
-            location_name = team['locationName']
-            short_name = team['shortName']
-            division_id = team['division']['id']
-            division_name = team['division']['name']
-            division_abbrev = team['division']['abbreviation']
-            conference_id = team['conference']['id']
-            conference_name = team['conference']['name']
-            official_site_url = team['officialSiteUrl']
-            franchise_id = team['franchiseId']
+            name = team['fullName']
+            # abbreviation = team['abbreviation']
+            # team_name = team['teamName']
+            # location_name = team['locationName']
+            short_name = team['triCode']
+            # division_id = team['division']['id']
+            # division_name = team['division']['name']
+            # division_abbrev = team['division']['abbreviation']
+            # conference_id = team['conference']['id']
+            # conference_name = team['conference']['name']
+            # official_site_url = team['officialSiteUrl']
+            # franchise_id = team['franchiseId']
             
-
+            pg, ng = team_previous_game(short_name, 20232024)
+            # print(pg, ng)
             try:
-                previous_game = team['previousGameSchedule']
-                # previous_game = False
+                previous_game = pg
             except:
-                debug.log("No next game detected for {}".format(team_name))
+                debug.log("No next game detected for {}".format(name))
                 previous_game = False
 
             try:
-                next_game = team['nextGameSchedule']
+                next_game = ng
             except:
                 debug.log("No next game detected for {}".format(team_name))
                 next_game = False
 
-            try:
-                stats = team['teamStats'][0]['splits'][0]['stat']
-            except:
-                debug.log("No Stats detected for {}".format(team_name))
-                stats = False
+            # try:
+            #     stats = team['teamStats'][0]['splits'][0]['stat']
+            # except:
+            #     debug.log("No Stats detected for {}".format(team_name))
+            #     stats = False
 
-            roster = {}
-            for p in team['roster']['roster']:
-                person = p['person']
-                person_id = person['id']
-                name = HumanName(person['fullName'])
-                first_name = name.first
-                last_name = name.last
+            # roster = {}
+            # for p in team['roster']['roster']:
+            #     person = p['person']
+            #     person_id = person['id']
+            #     name = HumanName(person['fullName'])
+            #     first_name = name.first
+            #     last_name = name.last
 
-                position_name = p['position']['name']
-                position_type = p['position']['abbreviation']
-                position_abbrev = p['position']['abbreviation']
+            #     position_name = p['position']['name']
+            #     position_type = p['position']['abbreviation']
+            #     position_abbrev = p['position']['abbreviation']
 
-                try:
-                    jerseyNumber = p['jerseyNumber']
-                except KeyError:
-                    jerseyNumber = ""
+            #     try:
+            #         jerseyNumber = p['jerseyNumber']
+            #     except KeyError:
+            #         jerseyNumber = ""
                 
-                roster[person_id]= {
-                    'firstName': first_name,
-                    'lastName': last_name,
-                    'jerseyNumber': jerseyNumber,
-                    'positionName': position_name,
-                    'positionType': position_type,
-                    'positionAbbrev': position_abbrev
-                    }
+            #     roster[person_id]= {
+            #         'firstName': first_name,
+            #         'lastName': last_name,
+            #         'jerseyNumber': jerseyNumber,
+            #         'positionName': position_name,
+            #         'positionType': position_type,
+            #         'positionAbbrev': position_abbrev
+            #         }
                 
             
             output = {
                 'team_id': team_id,
                 'name': name,
-                'abbreviation': abbreviation,
-                'team_name': team_name,
-                'location_name': location_name,
+                # 'abbreviation': abbreviation,
+                'team_name': name,
+                # 'location_name': location_name,
                 'short_name': short_name,
-                'division_id': division_id,
-                'division_name': division_name,
-                'division_abbrev': division_abbrev,
-                'conference_id': conference_id,
-                'conference_name': conference_name,
-                'official_site_url': official_site_url,
-                'franchise_id': franchise_id,
-                'roster': roster,
+                # 'division_id': division_id,
+                # 'division_name': division_name,
+                # 'division_abbrev': division_abbrev,
+                # 'conference_id': conference_id,
+                # 'conference_name': conference_name,
+                # 'official_site_url': official_site_url,
+                # 'franchise_id': franchise_id,
+                # 'roster': roster,
                 'previous_game': previous_game,
                 'next_game': next_game,
-                'stats': stats
+                # 'stats': stats
             }
 
             # put this dictionary into the larger dictionary
             teams.append(output)
         except:
+            print(team)
             debug.error("Missing data in current team info")
 
     return teams
+
+def team_previous_game(team_code, season_code):
+    if team_code != "COL":
+        return False, False
+
+    data = nhl_api.data.get_team_schedule(team_code, season_code)
+    parsed = data.json()
+
+
+    print(team_code)
+    games = parsed["games"]
+    if len(games) == 0:
+        return False, False
+
+    previous_game = games[0]
+    next_game = games[1]
+    # if team_code == "COL":
+    #     import pdb; pdb.set_trace()
+    #     print("test")
+
+    for i in range(len(games)):
+        previous_game = games[i]
+        next_game = games[i+1]
+        if datetime.datetime.strptime(next_game["startTimeUTC"], "%Y-%m-%dT%H:%M:%SZ") > datetime.datetime.today():
+            return previous_game, next_game
+
+    return False, False
 
 def player_info(playerId):
     data = nhl_api.data.get_player(playerId)

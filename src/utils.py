@@ -286,8 +286,7 @@ def center_obj(screen_w, lenght):
     return int((screen_w - lenght)/2)
 
 def convert_date_format(date):
-    d = datetime.strptime(date, '%Y-%m-%d')
-    return d.strftime('%b %d')
+    return date.strftime('%b %d')
 
 def round_normal(n, decimals=0):
     multiplier = 10 ** decimals

@@ -21,7 +21,18 @@ def filter_list_of_games(games, teams):
     """
     Filter the list 'games' and keep only the games which the teams in the list 'teams' are part of.
     """
-    return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
+    # print(games)
+    # print(game['awayTeam']['id'], game['homeTeam']['id'])
+    pref_games = []
+    for game in games:
+        if game['homeTeam']['id'] == 30:
+            pref_games.append(game)
+        if game['awayTeam']['id'] == 30:
+            pref_games.append(game)
+    # return list(game for game in games if {game['awayTeam']['id'], game['homeTeam']['id']}.intersection(set(30)))
+    return pref_games
+
+    # return list(game for game in set(games) if {game.away_team_id, game.home_team_id}.intersection(set(teams)))
 
 def filter_list_of_series(series, teams):
     """
@@ -44,9 +55,8 @@ def prioritize_pref_games(games, teams):
 
     TODO: For V2, this needs to be changed to return game list in different order, instead of a single way. Having that handled by different methods is the way.... this is the way !!!!
     """
-
     ordered_game_list = map(lambda team: next(
-        (game for game in games if game.away_team_id == team or game.home_team_id == team), None),
+        (game for game in games if game["awayTeam"]["id"] == team or game["homeTeam"]["id"] == team), None),
                             teams)
     cleaned_game_list = list(filter(None, list(dict.fromkeys(ordered_game_list))))
     return cleaned_game_list
@@ -177,10 +187,10 @@ class Data:
         self.stanleycup_round = False
 
         # Fetch the playoff data
-        self.refresh_playoff()
+        # self.refresh_playoff()
 
         # Stanley cup champions
-        self.cup_winner_id = self.check_stanley_cup_champion()
+        # self.cup_winner_id = self.check_stanley_cup_champion()
 
 
     #
@@ -269,14 +279,17 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                self.games = nhl_api.day(self.year, self.month, self.day)
+                data = nhl_api.data.get_schedule(self.year, self.month, self.day) #  nhl_api.day(self.year, self.month, self.day)
+                if not data:
+                    return data
+                parsed = data.json()
+                self.games = parsed['games']
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
                 if not self.is_pref_team_offday() and self.config.live_mode:
                     self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
-
                     self.check_game_priority()
 
                 self.network_issues = False
@@ -313,6 +326,8 @@ class Data:
             [7:00, 7:00, 8:00, 10:00]
         """
 
+        if len(self.pref_games) == 0:
+            return
         self.current_game_id = self.pref_games[0].game_id
         earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
@@ -451,7 +466,8 @@ class Data:
             pref_teams_id = []
             # Put all the team's in a dict with there name as KEY and ID as value.
             for team in allteams:
-                allteams_id[team.team_name] = team.team_id
+                name = team.team_name.split(" ")[-1]
+                allteams_id[name] = team.team_id
 
             # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
             if pref_teams:

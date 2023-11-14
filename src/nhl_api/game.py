@@ -7,6 +7,11 @@ from nhl_api.utils import convert_time
 import nhl_api.data
 import nhl_api.object
 
+from nhl_api_client import Client
+# from nhl_api_client.api.play_by_play import get_schedule_by_date
+from nhl_api_client.api.game import get_game_play_by_play_by_id
+from nhl_api_client.models import PlayByPlay
+from nhl_api_client.types import Response
 
 def scoreboard(year, month, day):
     """
@@ -18,26 +23,27 @@ def scoreboard(year, month, day):
         return data
     parsed = data.json()
 
-    if parsed["dates"]:
-        games_data = parsed["dates"][0]["games"]
+    if parsed["games"]:
+        games_data = parsed["games"]
         games = {}
         for game in games_data:
-            game_id = game['gamePk']
+            game_id = game['id']
             season = game['season']
             game_type = game['gameType']
             game_date = game['gameDate']
 
-            home_team_id = int(game['teams']['home']['team']['id'])
-            home_team_name = game['teams']['home']['team']['name']
-            away_team_id = int(game['teams']['away']['team']['id'])
-            away_team_name = game['teams']['away']['team']['name']
-            home_score = game['teams']['home']['score']
-            away_score = game['teams']['away']['score']
+            htd = game['homeTeam']
+            home_team_id = int(htd['id'])
+            home_team_name = htd['abbrev']
+            away_team_id = int(game['awayTeam']['id'])
+            away_team_name = game['awayTeam']['abbrev']
+            home_score = htd['score'] if 'score' in htd else 0
+            away_score = 0 # game['awayTeam']['score']
 
-            status = game['status']['detailedState']
-            status_code = game['status']['statusCode']
-            status_abstract_state = game['status']['abstractGameState']
-            linescore = game['linescore']
+            status = game['gameState']
+            # status_code = game['status']['statusCode']
+            # status_abstract_state = game['status']['abstractGameState']
+            # linescore = game['linescore']
 
             output = {
                 'game_id': game_id,
@@ -51,10 +57,10 @@ def scoreboard(year, month, day):
                 'home_score': home_score,
                 'away_score': away_score,
                 'status': status,
-                'status_code': status_code,
-                'status_abstract_state': status_abstract_state,
+                # 'status_code': status_code,
+                # 'status_abstract_state': status_abstract_state,
                 # All the linescore information (goals, sog, periods etc...)
-                'linescore': linescore,
+                # 'linescore': linescore,
             }
 
             # put this dictionary into the larger dictionary
@@ -102,70 +108,12 @@ class GameScoreboard(object):
 
 
 def overview(game_id):
-    data = nhl_api.data.get_overview(game_id)
-    parsed = data.json()
-    # Top level information (General)
-    id = parsed['gamePk']
-    time_stamp = parsed['gameData']['game']
-    game_type = parsed['gameData']['game']['type']
-    status = parsed['gameData']['status']['detailedState']
-    status_code = parsed['gameData']['status']['statusCode']
-    status_abstract_state = parsed['gameData']['status']['abstractGameState']
-    game_date = parsed['gameData']['datetime']['dateTime']
+    client = Client(base_url="https://api-web.nhle.com")
+    game_details = {}
+    with client as client:
+        game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
 
-    # Sub level information (Details)
-    plays = parsed['liveData']['plays']
-    linescore = parsed['liveData']['linescore']
-    boxscore = parsed['liveData']['boxscore']
-    away_score = linescore['teams']['away']['goals']
-    home_score = linescore['teams']['home']['goals']
-
-    # Team details
-    away_team_id = parsed['gameData']['teams']['away']['id']
-    away_team_name = parsed['gameData']['teams']['away']['name']
-    away_team_abrev = parsed['gameData']['teams']['away']['abbreviation']
-    home_team_id = parsed['gameData']['teams']['home']['id']
-    home_team_name = parsed['gameData']['teams']['home']['name']
-    home_team_abrev = parsed['gameData']['teams']['home']['abbreviation']
-
-    # 3 stars (if any available)
-    try:
-        first_star = parsed['liveData']['decisions']['firstStar']
-        second_star = parsed['liveData']['decisions']['secondStar']
-        third_star = parsed['liveData']['decisions']['thirdStar']
-
-    except:
-        first_star = {}
-        second_star = {}
-        third_star = {}
-
-    output = {
-        'id': id,  # ID of the game
-        'time_stamp': time_stamp,  # Last time the data was refreshed (UTC)
-        # Type of game ("R" for Regular season, "P" for Post season or playoff)
-        'game_type': game_type,
-        'status': status,   # Status of the game.
-        'status_code': status_code,
-        'status_abstract_state': status_abstract_state,
-        'game_date': game_date,  # Date and time of the game
-        'away_team_id': away_team_id,  # ID of the Away team
-        'away_team_name': away_team_name,  # Away team name
-        'away_team_abrev': away_team_abrev,  # Away team name abbreviation
-        'home_team_id': home_team_id,  # ID of the Home team
-        'home_team_name': home_team_name,  # Home team name
-        'home_team_abrev': home_team_abrev,  # Home team name abbreviation
-        # All the linescore information (goals, sog, periods etc...)
-        'linescore': linescore,
-        # All the boxscore information (players, onice, team's stats, penalty box etc...)
-        'boxscore': boxscore,
-        'away_score': away_score,  # Away team goals
-        'home_score': home_score,  # Home team goals
-        'plays': plays,  # Dictionary of all the plays of the game.
-        'first_star': first_star,
-        'second_star': second_star,
-        'third_star': third_star
-    }
-    return output
+    return game_details
 
 
 class Overview(object):
@@ -184,15 +132,15 @@ class Overview(object):
             except TypeError:
                 obj = nhl_api.object.Object(data[x])
                 setattr(self, x, obj)
-        
+
         # calculate the winning team
-        if self.home_score > self.away_score:
-            self.w_team = self.home_team_id
-            self.w_score = self.home_score
-            self.l_team = self.away_team_id
-            self.l_score = self.away_score
-        elif self.away_score > self.home_score:
-            self.w_team = self.away_team_id
-            self.w_score = self.away_score
-            self.l_team = self.home_team_id
-            self.l_score = self.home_score
+        if data['home_score'] > data['away_score']:
+            self.w_team = data['home_team_id']
+            self.w_score = data['home_score']
+            self.l_team = data['away_team_id']
+            self.l_score = data['away_score']
+        elif data['away_score'] > data['home_score']:
+            self.w_team = data['away_team_id']
+            self.w_score = data['away_score']
+            self.l_team = data['home_team_id']
+            self.l_score = data['home_score']

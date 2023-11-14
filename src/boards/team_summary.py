@@ -38,7 +38,7 @@ class TeamSummary:
             team = self.teams_info[team_id]
             team_data = Team(
                 team.team_id,
-                team.abbreviation,
+                team.short_name,
                 team.name
             )
 
@@ -56,24 +56,25 @@ class TeamSummary:
                 'team_summary'
             )
 
-            try:
-                if prev_game:
-                    prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
-                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.data)
-                else:
-                    prev_game_scoreboard = False
+            # try:
+            if prev_game:
+                prev_game_id = self.teams_info[team_id].previous_game["id"]
+                prev_game_scoreboard = Scoreboard(nhl_api.game.overview(prev_game_id), self.data)
+            else:
+                prev_game_scoreboard = False
 
-                self.data.network_issues = False
-            except ValueError:
-                prev_game_scoreboard = False
-                self.data.network_issues = True
-            except (TypeError, KeyError):
-                prev_game_scoreboard = False
+            self.data.network_issues = False
+            # except ValueError => e:
+            #     print(e)
+            #     prev_game_scoreboard = False
+            #     self.data.network_issues = True
+            # except (TypeError, KeyError):
+            #     prev_game_scoreboard = False
 
             try:
                 if next_game:
-                    next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
-                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.data)
+                    next_game_id = self.teams_info[team_id].next_game["id"]
+                    next_game_scoreboard = Scoreboard(nhl_api.game.overview(next_game_id), self.data)
                 else:
                     next_game_scoreboard = False
 
@@ -84,15 +85,16 @@ class TeamSummary:
             except (TypeError, KeyError):
                 next_game_scoreboard = False
 
-            stats = team.stats
+            # stats = team.stats
             im_height = 67
-            team_abbrev = team.abbreviation
+            # team_abbrev = team.short_name
 
             i = 0
 
+            # print(prev_game_scoreboard)
             if not self.sleepEvent.is_set():
                 image = self.draw_team_summary(
-                    stats,
+                    {}, # stats
                     prev_game_scoreboard,
                     next_game_scoreboard,
                     bg_color,
@@ -184,13 +186,13 @@ class TeamSummary:
                 draw.text((0, 34), prev_game_scoreboard.status, fill=(255, 0, 0), font=self.font)
 
             else:
-                if prev_game_scoreboard.winning_team == self.team_id:
+                if prev_game_scoreboard.winning_team_id == self.team_id:
                     draw.text((0, 34), "W", fill=(50, 255, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
                                                         prev_game_scoreboard.home_team.goals),
                             fill=(255, 255, 255), font=self.font)
 
-                if prev_game_scoreboard.loosing_team == self.team_id:
+                if prev_game_scoreboard.losing_team_id == self.team_id:
                     draw.text((0, 34), "L", fill=(255, 50, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
                                                         prev_game_scoreboard.home_team.goals),
