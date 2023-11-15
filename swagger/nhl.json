@@ -141,27 +141,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "previousSeason": {
-                      "type": "string"
-                    },
-                    "currentSeason": {
-                      "type": "string"
-                    },
-                    "clubTimezone": {
-                      "type": "string"
-                    },
-                    "clubUTCOffset": {
-                      "type": "string"
-                    },
-                    "games": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Game"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/SeasonSchedule"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/club-schedule/{team_abbrev}/week/{date}": {
+      "get": {
+        "summary": "/v1/club-schedule-season/COL/20232024",
+        "description": "**Host**: http://api-web.nhle.com",
+        "operationId": "getTeamWeekScheduleByDate",
+        "parameters": [{
+            "name": "team_abbrev",
+            "in": "path",
+            "required": true,
+            "description": "The three letter code of the team",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "description": "Y-M-D",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Season schedule of a team",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeekSchedule"
                 }
               }
             }
@@ -5646,7 +5664,9 @@
           "200": {
             "content": {
               "application/json": {
-                "$ref": "./standings-response.json"
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonStandings"
+                }
               }
             },
             "description": "",
@@ -6384,6 +6404,340 @@
                   }
                 }
               }
+            }
+          }
+        }
+      },
+      "SeasonStandings": {
+        "type": "object",
+        "properties": {
+          "wildCardIndicator": {
+            "type": "boolean"
+          },
+          "standings": {
+            "type": "array",
+            "items":{
+              "$ref": "#/components/schemas/TeamSeasonStandings"
+            }
+          }
+        }
+      },
+      "TeamSeasonStandings": {
+        "properties": {
+          "conferenceAbbrev": {
+            "type": "string"
+          },
+          "conferenceHomeSequence": {
+            "type": "integer"
+          },
+          "conferenceL10Sequence": {
+            "type": "integer"
+          },
+          "conferenceName": {
+            "type": "string"
+          },
+          "conferenceRoadSequence": {
+            "type": "integer"
+          },
+          "conferenceSequence": {
+            "type": "integer"
+          },
+          "date": {
+            "type": "string"
+          },
+          "divisionAbbrev": {
+            "type": "string"
+          },
+          "divisionHomeSequence": {
+            "type": "integer"
+          },
+          "divisionL10Sequence": {
+            "type": "integer"
+          },
+          "divisionName": {
+            "type": "string"
+          },
+          "divisionRoadSequence": {
+            "type": "integer"
+          },
+          "divisionSequence": {
+            "type": "integer"
+          },
+          "gameTypeId": {
+            "type": "integer"
+          },
+          "gamesPlayed": {
+            "type": "integer"
+          },
+          "goalDifferential": {
+            "type": "integer"
+          },
+          "goalDifferentialPctg": {
+            "type": "number"
+          },
+          "goalAgainst": {
+            "type": "integer"
+          },
+          "goalFor": {
+            "type": "integer"
+          },
+          "goalsForPctg": {
+            "type": "number"
+          },
+          "homeGamesPlayed": {
+            "type": "integer"
+          },
+          "homeGoalDifferential": {
+            "type": "integer"
+          },
+          "homeGoalsAgainst": {
+            "type": "integer"
+          },
+          "homeGoalsFor": {
+            "type": "integer"
+          },
+          "homeLosses": {
+            "type": "integer"
+          },
+          "homeOtLosses": {
+            "type": "integer"
+          },
+          "homePoints": {
+            "type": "integer"
+          },
+          "homeRegulationPlusOtWins": {
+            "type": "integer"
+          },
+          "homeRegulationWins": {
+            "type": "integer"
+          },
+          "homeTies": {
+            "type": "integer"
+          },
+          "homeWins": {
+            "type": "integer"
+          },
+          "l10GamesPlayed": {
+            "type": "integer"
+          },
+          "l10GoalDifferential": {
+            "type": "integer"
+          },
+          "l10GoalsAgainst": {
+            "type": "integer"
+          },
+          "l10GoalsFor": {
+            "type": "integer"
+          },
+          "l10Losses": {
+            "type": "integer"
+          },
+          "l10OtLosses": {
+            "type": "integer"
+          },
+          "l10Points": {
+            "type": "integer"
+          },
+          "l10RegulationPlusOtWins": {
+            "type": "integer"
+          },
+          "l10RegulationWins": {
+            "type": "integer"
+          },
+          "l10Ties": {
+            "type": "integer"
+          },
+          "l10Wins": {
+            "type": "integer"
+          },
+          "leagueHomeSequence": {
+            "type": "integer"
+          },
+          "leagueL10Sequence": {
+            "type": "integer"
+          },
+          "leagueRoadSequence": {
+            "type": "integer"
+          },
+          "leagueSequence": {
+            "type": "integer"
+          },
+          "losses": {
+            "type": "integer"
+          },
+          "otLosses": {
+            "type": "integer"
+          },
+          "placeName": {
+            "type": "object",
+            "properties": {
+              "default": {
+                "type": "string"
+              },
+              "fr": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "pointPctg": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "regulationPlusOtWinPctg": {
+            "type": "number"
+          },
+          "regulationPlusOtWins": {
+            "type": "integer"
+          },
+          "regulationWinPctg": {
+            "type": "number"
+          },
+          "regulationWins": {
+            "type": "integer"
+          },
+          "roadGamesPlayed": {
+            "type": "integer"
+          },
+          "roadGoalDifferential": {
+            "type": "integer"
+          },
+          "roadGoalsAgainst": {
+            "type": "integer"
+          },
+          "roadGoalsFor": {
+            "type": "integer"
+          },
+          "roadLosses": {
+            "type": "integer"
+          },
+          "roadOtLosses": {
+            "type": "integer"
+          },
+          "roadPoints": {
+            "type": "integer"
+          },
+          "roadRegulationPlusOtWins": {
+            "type": "integer"
+          },
+          "roadRegulationWins": {
+            "type": "integer"
+          },
+          "roadTies": {
+            "type": "integer"
+          },
+          "roadWins": {
+            "type": "integer"
+          },
+          "seasonId": {
+            "type": "integer"
+          },
+          "shootoutLosses": {
+            "type": "integer"
+          },
+          "shootoutWins": {
+            "type": "integer"
+          },
+          "streakCode": {
+            "type": "string"
+          },
+          "streakCount": {
+            "type": "integer"
+          },
+          "teamName": {
+            "type": "object",
+            "properties": {
+              "default": {
+                "type": "string"
+              },
+              "fr": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "default",
+              "fr"
+            ]
+          },
+          "teamAbbrev": {
+            "type": "object",
+            "properties": {
+              "default": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "teamLogo": {
+            "type": "string"
+          },
+          "ties": {
+            "type": "integer"
+          },
+          "waiversSequence": {
+            "type": "integer"
+          },
+          "wildcardSequence": {
+            "type": "integer"
+          },
+          "winPctg": {
+            "type": "number"
+          },
+          "wins": {
+            "type": "integer"
+          }
+        }
+      },
+      "SeasonSchedule": {
+        "type": "object",
+        "properties": {
+          "previousSeason": {
+            "type": "string"
+          },
+          "currentSeason": {
+            "type": "string"
+          },
+          "clubTimezone": {
+            "type": "string"
+          },
+          "clubUTCOffset": {
+            "type": "string"
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "WeekSchedule": {
+        "type": "object",
+        "properties": {
+          "previousStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "currentStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "clubTimezone": {
+            "type": "string"
+          },
+          "clubUTCOffset": {
+            "type": "string"
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
             }
           }
         }

@@ -4,6 +4,12 @@ from nameparser import HumanName
 import debug
 import datetime
 
+from nhl_api_client import Client
+# from nhl_api_client.api.play_by_play import get_schedule_by_date
+from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
+from nhl_api_client.models import SeasonStandings, WeekSchedule
+# from nhl_api_client.types import Response
+
 def team_info():
     """
         Returns a list of team information dictionaries
@@ -11,126 +17,145 @@ def team_info():
     # return []
     data = nhl_api.data.get_teams()
     parsed = data.json()
-    teams_data = parsed["data"]
-    teams = []
+    teams = parsed["data"]
+    team_dict = {}
+    for team in teams:
+        team_dict[team["triCode"]] = team["id"]
 
-    for team in teams_data:
-        try:
-            team_id = team['id']
-            name = team['fullName']
-            # abbreviation = team['abbreviation']
-            # team_name = team['teamName']
-            # location_name = team['locationName']
-            short_name = team['triCode']
-            # division_id = team['division']['id']
-            # division_name = team['division']['name']
-            # division_abbrev = team['division']['abbreviation']
-            # conference_id = team['conference']['id']
-            # conference_name = team['conference']['name']
-            # official_site_url = team['officialSiteUrl']
-            # franchise_id = team['franchiseId']
+
+    client = Client(base_url="https://api-web.nhle.com")
+    teams_data = {}
+    teams_response = {}
+    with client as client:
+        teams_response: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
+    for team in teams_response.standings:
+        raw_team_id = team_dict[team.team_abbrev.default]
+        pg, ng = team_previous_game(team.team_abbrev.default, str(datetime.date.today()))
+        team_details = TeamDetails(raw_team_id, team.team_name.default, team.team_abbrev.default, pg, ng)
+        team_info = TeamInfo(team, team_details)
+        teams_data[raw_team_id] = team_info
+
+    # TODO: I think most of this is now held in the TeamStandings object, but leaving here for reference
+    # for team in teams_data:
+    #     try:
+    #         team_id = team['id']
+    #         name = team['fullName']
+    #         # abbreviation = team['abbreviation']
+    #         # team_name = team['teamName']
+    #         # location_name = team['locationName']
+    #         short_name = team['triCode']
+    #         # division_id = team['division']['id']
+    #         # division_name = team['division']['name']
+    #         # division_abbrev = team['division']['abbreviation']
+    #         # conference_id = team['conference']['id']
+    #         # conference_name = team['conference']['name']
+    #         # official_site_url = team['officialSiteUrl']
+    #         # franchise_id = team['franchiseId']
             
-            pg, ng = team_previous_game(short_name, 20232024)
-            # print(pg, ng)
-            try:
-                previous_game = pg
-            except:
-                debug.log("No next game detected for {}".format(name))
-                previous_game = False
+    #         pg, ng = team_previous_game(short_name, 20232024)
+    #         # print(pg, ng)
+    #         try:
+    #             previous_game = pg
+    #         except:
+    #             debug.log("No next game detected for {}".format(name))
+    #             previous_game = False
 
-            try:
-                next_game = ng
-            except:
-                debug.log("No next game detected for {}".format(team_name))
-                next_game = False
+    #         try:
+    #             next_game = ng
+    #         except:
+    #             debug.log("No next game detected for {}".format(team_name))
+    #             next_game = False
 
-            # try:
-            #     stats = team['teamStats'][0]['splits'][0]['stat']
-            # except:
-            #     debug.log("No Stats detected for {}".format(team_name))
-            #     stats = False
+    #         # try:
+    #         #     stats = team['teamStats'][0]['splits'][0]['stat']
+    #         # except:
+    #         #     debug.log("No Stats detected for {}".format(team_name))
+    #         #     stats = False
 
-            # roster = {}
-            # for p in team['roster']['roster']:
-            #     person = p['person']
-            #     person_id = person['id']
-            #     name = HumanName(person['fullName'])
-            #     first_name = name.first
-            #     last_name = name.last
+    #         # roster = {}
+    #         # for p in team['roster']['roster']:
+    #         #     person = p['person']
+    #         #     person_id = person['id']
+    #         #     name = HumanName(person['fullName'])
+    #         #     first_name = name.first
+    #         #     last_name = name.last
 
-            #     position_name = p['position']['name']
-            #     position_type = p['position']['abbreviation']
-            #     position_abbrev = p['position']['abbreviation']
+    #         #     position_name = p['position']['name']
+    #         #     position_type = p['position']['abbreviation']
+    #         #     position_abbrev = p['position']['abbreviation']
 
-            #     try:
-            #         jerseyNumber = p['jerseyNumber']
-            #     except KeyError:
-            #         jerseyNumber = ""
+    #         #     try:
+    #         #         jerseyNumber = p['jerseyNumber']
+    #         #     except KeyError:
+    #         #         jerseyNumber = ""
                 
-            #     roster[person_id]= {
-            #         'firstName': first_name,
-            #         'lastName': last_name,
-            #         'jerseyNumber': jerseyNumber,
-            #         'positionName': position_name,
-            #         'positionType': position_type,
-            #         'positionAbbrev': position_abbrev
-            #         }
+    #         #     roster[person_id]= {
+    #         #         'firstName': first_name,
+    #         #         'lastName': last_name,
+    #         #         'jerseyNumber': jerseyNumber,
+    #         #         'positionName': position_name,
+    #         #         'positionType': position_type,
+    #         #         'positionAbbrev': position_abbrev
+    #         #         }
                 
             
-            output = {
-                'team_id': team_id,
-                'name': name,
-                # 'abbreviation': abbreviation,
-                'team_name': name,
-                # 'location_name': location_name,
-                'short_name': short_name,
-                # 'division_id': division_id,
-                # 'division_name': division_name,
-                # 'division_abbrev': division_abbrev,
-                # 'conference_id': conference_id,
-                # 'conference_name': conference_name,
-                # 'official_site_url': official_site_url,
-                # 'franchise_id': franchise_id,
-                # 'roster': roster,
-                'previous_game': previous_game,
-                'next_game': next_game,
-                # 'stats': stats
-            }
+    #         output = {
+    #             'team_id': team_id,
+    #             'name': name,
+    #             # 'abbreviation': abbreviation,
+    #             'team_name': name,
+    #             # 'location_name': location_name,
+    #             'short_name': short_name,
+    #             # 'division_id': division_id,
+    #             # 'division_name': division_name,
+    #             # 'division_abbrev': division_abbrev,
+    #             # 'conference_id': conference_id,
+    #             # 'conference_name': conference_name,
+    #             # 'official_site_url': official_site_url,
+    #             # 'franchise_id': franchise_id,
+    #             # 'roster': roster,
+    #             'previous_game': previous_game,
+    #             'next_game': next_game,
+    #             # 'stats': stats
+    #         }
 
-            # put this dictionary into the larger dictionary
-            teams.append(output)
-        except:
-            print(team)
-            debug.error("Missing data in current team info")
+    #         # put this dictionary into the larger dictionary
+    #         teams.append(output)
+    #     except:
+    #         print(team)
+    #         debug.error("Missing data in current team info")
 
-    return teams
+    return teams_data
 
-def team_previous_game(team_code, season_code):
+# This one is a little funky for the time. I'll loop through the what and why
+def team_previous_game(team_code, date, pg = None, ng = None):
+    # TODO For ease just doing my preferred team
     if team_code != "COL":
         return False, False
 
-    data = nhl_api.data.get_team_schedule(team_code, season_code)
-    parsed = data.json()
+    # This response returns the next three games, starting from the date given
+    client = Client(base_url="https://api-web.nhle.com")
+    teams_response = {}
+    with client as client:
+        teams_response: WeekSchedule = get_team_week_schedule_by_date.sync(team_code, date, client=client)
 
+    pg = teams_response.games[0]
+    # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
+    if pg.game_state == "FUT":
+        ng = pg
+        # Then we take the previous_start_date given from the response and run through it again
+        pg, ng = team_previous_game(team_code, teams_response.previous_start_date, None, ng)
+    else:
+        # I _think_ that realistically the previous_game will always be the last game in this list, but
+        # I'm going to simply loop through for now.
+        for game in teams_response.games[1:]:
+            if game.game_state == "OFF" and game.game_date > pg.game_date:
+                pg = game
 
-    print(team_code)
-    games = parsed["games"]
-    if len(games) == 0:
-        return False, False
-
-    previous_game = games[0]
-    next_game = games[1]
-    # if team_code == "COL":
-    #     import pdb; pdb.set_trace()
-    #     print("test")
-
-    for i in range(len(games)):
-        previous_game = games[i]
-        next_game = games[i+1]
-        if datetime.datetime.strptime(next_game["startTimeUTC"], "%Y-%m-%dT%H:%M:%SZ") > datetime.datetime.today():
-            return previous_game, next_game
-
-    return False, False
+    # Then return. I'd like to say we could be smart and take a few days off from the initial request,
+    # but I'm already questioning how that'd act with the likes of the all-star break.
+    # I think two requests is fine for now
+    return pg, ng
 
 def player_info(playerId):
     data = nhl_api.data.get_player(playerId)
@@ -372,6 +397,19 @@ class Playoff():
 
     def __repr__(self):
         return self.__str__()
+
+class TeamInfo:
+    def __init__(self, standings, team_details):
+        self.record = standings
+        self.details = team_details
+
+class TeamDetails:
+    def __init__(self, id, name, abbrev, previous_game, next_game):
+        self.id = id
+        self.name = name
+        self.abbrev = abbrev
+        self.previous_game = previous_game
+        self.next_game = next_game
 
 class Info(nhl_api.object.Object):
     pass

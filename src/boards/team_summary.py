@@ -36,30 +36,23 @@ class TeamSummary:
             self.team_id = team_id
 
             team = self.teams_info[team_id]
-            team_data = Team(
-                team.team_id,
-                team.short_name,
-                team.name
-            )
-
             team_colors = self.data.config.team_colors
             bg_color = team_colors.color("{}.primary".format(team_id))
             txt_color = team_colors.color("{}.text".format(team_id))
-            prev_game = team.previous_game
-            next_game = team.next_game
+            prev_game = team.details.previous_game
+            next_game = team.details.next_game
 
             logo_renderer = LogoRenderer(
                 self.matrix,
                 self.data.config,
                 self.layout.logo,
-                team_data.abbrev,
+                team.details.abbrev,
                 'team_summary'
             )
 
             # try:
             if prev_game:
-                prev_game_id = self.teams_info[team_id].previous_game["id"]
-                prev_game_scoreboard = Scoreboard(nhl_api.game.overview(prev_game_id), self.data)
+                prev_game_scoreboard = Scoreboard(nhl_api.game.overview(prev_game.id), self.data)
             else:
                 prev_game_scoreboard = False
 
@@ -71,19 +64,18 @@ class TeamSummary:
             # except (TypeError, KeyError):
             #     prev_game_scoreboard = False
 
-            try:
-                if next_game:
-                    next_game_id = self.teams_info[team_id].next_game["id"]
-                    next_game_scoreboard = Scoreboard(nhl_api.game.overview(next_game_id), self.data)
-                else:
-                    next_game_scoreboard = False
+            # try:
+            if next_game:
+                next_game_scoreboard = Scoreboard(nhl_api.game.overview(next_game.id), self.data)
+            else:
+                next_game_scoreboard = False
 
                 self.data.network_issues = False
-            except ValueError:
-                next_game_scoreboard = False
-                self.data.network_issues = True
-            except (TypeError, KeyError):
-                next_game_scoreboard = False
+            # except ValueError:
+            #     next_game_scoreboard = False
+            #     self.data.network_issues = True
+            # except (TypeError, KeyError):
+            #     next_game_scoreboard = False
 
             # stats = team.stats
             im_height = 67
@@ -94,7 +86,7 @@ class TeamSummary:
             # print(prev_game_scoreboard)
             if not self.sleepEvent.is_set():
                 image = self.draw_team_summary(
-                    {}, # stats
+                    team.record,
                     prev_game_scoreboard,
                     next_game_scoreboard,
                     bg_color,
@@ -164,9 +156,9 @@ class TeamSummary:
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if stats:
-            draw.text((0, 7), "GP:{} P:{}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
+            draw.text((0, 7), "GP:{} P:{}".format(stats.games_played, stats.points), fill=(255, 255, 255),
                 font=self.font)
-            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
+            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ties), fill=(255, 255, 255),
                 font=self.font)
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)

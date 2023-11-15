@@ -258,8 +258,7 @@ def deep_update(source, overrides):
 
 
 def convert_time(utc_dt):
-    local_dt = datetime.strptime(utc_dt, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc).astimezone(tz=None)
-    return local_dt
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 
 def is_empty_list(list):

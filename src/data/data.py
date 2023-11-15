@@ -251,7 +251,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                teams = nhl_api.teams()
+                teams = nhl_api.info.team_info()
                 self.network_issues = False
                 return teams
 
@@ -443,14 +443,8 @@ class Data:
     # Teams
 
     def get_teams_info(self):
-        try:
-            info_by_id = {}
-            for team in self.teams:
-                info_by_id[team.team_id] = team
-
-            self.teams_info = info_by_id
-        except TypeError:
-            self.teams_info = []
+        # TODO Refactor and remove this
+        self.teams_info = self.teams
 
     def get_pref_teams_id(self):
         """
@@ -459,29 +453,25 @@ class Data:
 
         :return: list of the preferred team's ID in order
         """
-        try:
-            allteams = self.teams
-            pref_teams = self.config.preferred_teams
-            allteams_id = {}
-            pref_teams_id = []
-            # Put all the team's in a dict with there name as KEY and ID as value.
-            for team in allteams:
-                name = team.team_name.split(" ")[-1]
-                allteams_id[name] = team.team_id
+        pref_teams = self.config.preferred_teams
+        allteams_id = {}
+        pref_teams_id = []
+        # Put all the team's in a dict with there name as KEY and ID as value.
+        for team_id, team in self.teams.items():
+            name = team.details.name.split(" ")[-1]
+            allteams_id[name] = team_id
 
-            # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
-            if pref_teams:
-                for team in pref_teams:
-                    if team in allteams_id:
-                        pref_teams_id.append(allteams_id[team])
-                    else:
-                        debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
+        # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
+        if pref_teams:
+            for team in pref_teams:
+                if team in allteams_id:
+                    pref_teams_id.append(allteams_id[team])
+                else:
+                    debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
 
-                return pref_teams_id
-            else:
-                return False
-        except TypeError:
-            return []
+            return pref_teams_id
+        else:
+            return False
 
     #
     # Playoffs

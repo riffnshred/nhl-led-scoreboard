@@ -88,14 +88,14 @@ class Scoreboard:
         away_team = overview.away_team
         away_team_id = away_team.id
         away_team_name = away_team.name
-        away_abbrev = data.teams_info[away_team_id].short_name
+        away_abbrev = data.teams_info[away_team_id].details.abbrev
         # self.away_roster = data.teams_info[away_team_id].roster
 
         # home = linescore.teams.home
         home_team = overview.home_team
         home_team_id = home_team.id
         home_team_name = home_team.name
-        home_abbrev = data.teams_info[home_team_id].short_name
+        home_abbrev = data.teams_info[home_team_id].details.abbrev
         # self.home_roster = data.teams_info[home_team_id].roster
 
         away_goal_plays = []
@@ -152,8 +152,8 @@ class Scoreboard:
         self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, 0, False, 0, False, [])
         self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, 0, False, 0, False, [])
 
-        self.date = overview.game_date #convert_time(overview.game_date).strftime("%Y-%m-%d")
-        self.start_time = overview.start_time_utc # convert_time(overview.game_date).strftime(time_format)
+        self.date = overview.game_date
+        self.start_time = convert_time(overview.start_time_utc).strftime(time_format)
         self.status = overview.game_state
         overview.game_state
         self.periods = Periods(overview)
