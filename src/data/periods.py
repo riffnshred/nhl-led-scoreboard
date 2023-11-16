@@ -16,7 +16,8 @@ class Periods:
         self.is_intermission = False
         self.gameType = overview.game_type
         self.number = 0
-        if overview.game_state != "FUT":
+        # Possible states. FUT, PRE, OFF, LIVE, CRIT, FINAL
+        if overview.game_state == "LIVE" or overview.game_state == "CRIT":
             self.number = overview.period_descriptor.number
 
         try:

@@ -74,19 +74,19 @@ class GameScoreboard(object):
 
     def __init__(self, data):
         # loop through data
-        for x in data:
-            # set information as correct data type
-            try:
-                setattr(self, x, int(data[x]))
-            except ValueError:
-                try:
-                    setattr(self, x, float(data[x]))
-                except ValueError:
-                    # string if not number
-                    setattr(self, x, str(data[x]))
-            except TypeError:
-                obj = nhl_api.object.Object(data[x])
-                setattr(self, x, obj)
+        # for x in data:
+        #     # set information as correct data type
+        #     try:
+        #         setattr(self, x, int(data[x]))
+        #     except ValueError:
+        #         try:
+        #             setattr(self, x, float(data[x]))
+        #         except ValueError:
+        #             # string if not number
+        #             setattr(self, x, str(data[x]))
+        #     except TypeError:
+        #         obj = nhl_api.object.Object(data[x])
+        #         setattr(self, x, obj)
 
         # calculate the winning team
         if self.home_score > self.away_score:
@@ -114,33 +114,3 @@ def overview(game_id):
         game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
 
     return game_details
-
-
-class Overview(object):
-    def __init__(self, data):
-        # loop through data
-        for x in data:
-            # set information as correct data type
-            try:
-                setattr(self, x, int(data[x]))
-            except ValueError:
-                try:
-                    setattr(self, x, float(data[x]))
-                except ValueError:
-                    # string if not number
-                    setattr(self, x, str(data[x]))
-            except TypeError:
-                obj = nhl_api.object.Object(data[x])
-                setattr(self, x, obj)
-
-        # calculate the winning team
-        if data['home_score'] > data['away_score']:
-            self.w_team = data['home_team_id']
-            self.w_score = data['home_score']
-            self.l_team = data['away_team_id']
-            self.l_score = data['away_score']
-        elif data['away_score'] > data['home_score']:
-            self.w_team = data['away_team_id']
-            self.w_score = data['away_score']
-            self.l_team = data['home_team_id']
-            self.l_score = data['home_score']

@@ -279,7 +279,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                data = nhl_api.data.get_schedule("{}-{}-{}".format(self.year, self.month, self.day)) #  nhl_api.day(self.year, self.month, self.day)
+                data = nhl_api.data.get_schedule("{}-{}-{}".format(self.year, self.month, self.day))
                 if not data:
                     return data
 
@@ -460,7 +460,8 @@ class Data:
         pref_teams_id = []
         # Put all the team's in a dict with there name as KEY and ID as value.
         for team_id, team in self.teams.items():
-            name = team.details.name.split(" ")[-1]
+            name_array = team.details.name.split(" ")
+            name = ' '.join(name_array[1:])
             allteams_id[name] = team_id
 
         # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.

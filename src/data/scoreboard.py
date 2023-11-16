@@ -51,14 +51,21 @@ def get_goal_players(play_details, roster, opposing_roster):
     
     scorer["info"] = roster[play_details.scoring_player_id]
     # Likely need to check if these are None first
-    assists.append({"info": roster[play_details.assist_1_player_id]})
-    assists.append({"info": roster[play_details.assist_2_player_id]})
+    if play_details.assist_1_player_id:
+        assists.append({"info": roster[play_details.assist_1_player_id]})
+    if play_details.assist_2_player_id:
+        assists.append({"info": roster[play_details.assist_2_player_id]})
     goalie = opposing_roster[play_details.goalie_in_net_id]
 
     return {"scorer":scorer, "assists":assists, "goalie":goalie}
 
 def get_penalty_players(play_details, roster):
-    return roster[play_details.committed_by_player_id]
+    player_id = ""
+    if play_details.committed_by_player_id:
+        player_id = play_details.committed_by_player_id
+    if play_details.served_by_player_id:
+        player_id = play_details.served_by_player_id
+    return roster[player_id]
 
 class Scoreboard:
     def __init__(self, overview, data):
@@ -137,17 +144,27 @@ class Scoreboard:
                 #     home_penalties = []
                 #     break
 
-        # TODO: Pass goal/penalty plays back in
-        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, 0, False, 0, False, [])
+        home_skaters = 5
+        home_pp = False
+        away_skaters = 5
+        away_pp = False
+        if overview.situation:
+            home_skaters = overview.situation.home_team.strength
+            away_skaters = overview.situation.away_team.strength
+            if "pp" in overview.situation.home_team.situation_descriptions:
+                home_pp = True
+            if "pp" in overview.situation.away_team.situation_descriptions:
+                away_pp = True
+
+        # TODO: Figure out what it looks like when the goalie is pulled. Likely something with the situation_descriptions
+        # We also have the time left on the situation (probably when it's a penalty)
         goalie_pulled = False
-        num_skaters = 5
-        pp = False
-        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, home_penalties, pp, num_skaters, goalie_pulled, home_goal_plays)
+        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, away_penalty_plays, away_pp, away_skaters, goalie_pulled, away_goal_plays)
+        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, home_penalties, home_pp, home_skaters, goalie_pulled, home_goal_plays)
 
         self.date = overview.game_date
         self.start_time = convert_time(overview.start_time_utc).strftime(time_format)
         self.status = overview.game_state
-        overview.game_state
         self.periods = Periods(overview)
         # try:
         #     self.intermission = linescore.intermissionInfo.inIntermission

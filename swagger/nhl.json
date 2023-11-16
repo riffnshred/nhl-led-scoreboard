@@ -4977,6 +4977,40 @@
               }
             }
           },
+          "situation": {
+            "type": "object",
+            "properties": {
+              "homeTeam": {
+                "type": "object",
+                "properties": {
+                  "abbrev":{ "type": "string" },
+                  "situationDescriptions":{
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "strength": { "type": "integer"}
+                }
+              },
+              "awayTeam": {
+                "type": "object",
+                "properties": {
+                  "abbrev":{ "type": "string" },
+                  "situationDescriptions":{
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "strength": { "type": "integer"}
+                }
+              }
+            }
+          },
+          "situationCode": {"type": "string"},
+          "timeRemaining": {"type": "string"},
+          "secondsRemaining": {"type": "integer"},
           "rosterSpots": {
             "type": "array",
             "items": {
@@ -5120,6 +5154,10 @@
                       "nullable": true
                     },
                     "committedByPlayerId": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "servedByPlayerId": {
                       "type": "integer",
                       "nullable": true
                     },

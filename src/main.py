@@ -58,6 +58,8 @@ def run():
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
+    # This data will get passed throughout the entirety of this program.
+    # It initializes all sorts of things like current season, teams, helper functions
     data = Data(config)
 
     #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)
@@ -148,6 +150,7 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
+    # Then the main everything runs here.
     MainRenderer(matrix, data, sleepEvent).render()
 
 

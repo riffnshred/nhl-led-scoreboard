@@ -43,13 +43,13 @@ class Status:
         return status in self.Preview
 
     def is_live(self, status):
-        return status in self.Live
+        return status == "LIVE" or status == "CRIT"
 
     def is_game_over(self, status):
-        return status in self.GameOver
+        return status == "OFF"
 
     def is_final(self, status):
-        return status in self.Final
+        return status == "FINAL"
 
     def is_irregular(self, status):
         return status in self.Irregular

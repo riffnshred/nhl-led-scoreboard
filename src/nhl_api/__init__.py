@@ -2,26 +2,6 @@ import nhl_api.game
 import nhl_api.info
 import calendar
 
-
-def day(year, month, day):
-    """
-        Return a list of games for a certain day.
-    """
-
-    # get the days per month
-    daysinmonth = calendar.monthrange(year, month)[1]
-    # do not even try to get data if day is too high
-    if daysinmonth < day:
-        return []
-    # get data
-    data = nhl_api.game.scoreboard(year, month, day)
-    return [nhl_api.game.GameScoreboard(data[x]) for x in data]
-
-
-def teams():
-    """Return list of Info objects for each team"""
-    return [nhl_api.info.Info(x) for x in nhl_api.info.team_info()]
-
 def player(playerId):
     """Return an Info object of a player information"""
     return nhl_api.info.player_info(playerId)
