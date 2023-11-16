@@ -25,9 +25,9 @@ def filter_list_of_games(games, teams):
     # print(game['awayTeam']['id'], game['homeTeam']['id'])
     pref_games = []
     for game in games:
-        if game['homeTeam']['id'] == 30:
+        if game.home_team.id in teams:
             pref_games.append(game)
-        if game['awayTeam']['id'] == 30:
+        if game.away_team.id in teams:
             pref_games.append(game)
     # return list(game for game in games if {game['awayTeam']['id'], game['homeTeam']['id']}.intersection(set(30)))
     return pref_games
@@ -56,7 +56,7 @@ def prioritize_pref_games(games, teams):
     TODO: For V2, this needs to be changed to return game list in different order, instead of a single way. Having that handled by different methods is the way.... this is the way !!!!
     """
     ordered_game_list = map(lambda team: next(
-        (game for game in games if game["awayTeam"]["id"] == team or game["homeTeam"]["id"] == team), None),
+        (game for game in games if game.away_team.id == team or game.home_team.id == team), None),
                             teams)
     cleaned_game_list = list(filter(None, list(dict.fromkeys(ordered_game_list))))
     return cleaned_game_list
@@ -279,16 +279,17 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                data = nhl_api.data.get_schedule(self.year, self.month, self.day) #  nhl_api.day(self.year, self.month, self.day)
+                data = nhl_api.data.get_schedule("{}-{}-{}".format(self.year, self.month, self.day)) #  nhl_api.day(self.year, self.month, self.day)
                 if not data:
                     return data
-                parsed = data.json()
-                self.games = parsed['games']
+
+                self.games = data.games
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
+
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
                 if not self.is_pref_team_offday() and self.config.live_mode:
-                    self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
+                    # self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
                     self.check_game_priority()
 
@@ -328,28 +329,28 @@ class Data:
 
         if len(self.pref_games) == 0:
             return
-        self.current_game_id = self.pref_games[0].game_id
-        earliest_start_time = datetime.strptime(self.pref_games[0].game_date, '%Y-%m-%dT%H:%M:%SZ')
+        self.current_game_id = self.pref_games[0].id
+        earliest_start_time = datetime.strptime(self.pref_games[0].start_time_utc, '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
-            if not self.status.is_final(g.status):
+            if not self.status.is_final(g.game_state):
                 # If the game started.
-                if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
-                    debug.info('Showing highest priority live game. {} vs {}'.format(g.away_team_name, g.home_team_name))
-                    self.current_game_id = g.game_id
+                if datetime.strptime(g.start_time_utc, '%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
+                    debug.info('Showing highest priority live game. {} vs {}'.format(g.away_team.name.default, g.home_team.name.default))
+                    self.current_game_id = g.id
                     return
                 # If the game has not started but is ealier then the previous set game
-                if datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
-                    earliest_start_time = datetime.strptime(g.game_date, '%Y-%m-%dT%H:%M:%SZ')
-                    self.current_game_id = g.game_id
-                    debug.info('Showing earliest game. {} vs {}'.format(g.away_team_name, g.home_team_name))
+                if datetime.strptime(g.start_time_utc, '%Y-%m-%dT%H:%M:%SZ') < earliest_start_time:
+                    earliest_start_time = datetime.strptime(g.start_time_utc, '%Y-%m-%dT%H:%M:%SZ')
+                    self.current_game_id = g.id
+                    debug.info('Showing earliest game. {} vs {}'.format(g.away_team.name.default, g.home_team.name.default))
                     earliest = True
 
     def other_games(self):
         if not self.is_pref_team_offday() and self.config.live_mode:
             game_list = []
             for g in self.games:
-                if g.game_id != self.current_game_id:
+                if g.id != self.current_game_id:
                     game_list.append(g)
 
             return game_list
@@ -357,7 +358,7 @@ class Data:
 
     def check_all_pref_games_final(self):
         for game in self.pref_games:
-            if game.status != "Final":
+            if game.game_state != "OFF":
                 return
 
         self.all_pref_games_final = True
@@ -392,8 +393,9 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
-                if self.time_stamp != self.overview.time_stamp:
-                    self.time_stamp = self.overview.time_stamp
+                # TODO: Not sure what was going on here
+                if self.time_stamp != self.overview.clock.time_remaining:
+                    self.time_stamp = self.overview.clock.time_remaining
                     self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False

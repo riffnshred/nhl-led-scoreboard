@@ -5,10 +5,8 @@ import debug
 import datetime
 
 from nhl_api_client import Client
-# from nhl_api_client.api.play_by_play import get_schedule_by_date
 from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
-from nhl_api_client.models import SeasonStandings, WeekSchedule
-# from nhl_api_client.types import Response
+from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
 
 def team_info():
     """
@@ -404,7 +402,7 @@ class TeamInfo:
         self.details = team_details
 
 class TeamDetails:
-    def __init__(self, id, name, abbrev, previous_game, next_game):
+    def __init__(self, id: int, name: str, abbrev: str, previous_game: Game, next_game: Game):
         self.id = id
         self.name = name
         self.abbrev = abbrev

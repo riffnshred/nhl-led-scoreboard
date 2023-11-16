@@ -139,7 +139,7 @@ class MainRenderer:
                 else:
                     self.data.pb_trigger = False
 
-            if self.status.is_live(self.data.overview.status):
+            if self.status.is_live(self.data.overview.game_state):
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
@@ -161,7 +161,7 @@ class MainRenderer:
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
 
-            elif self.status.is_game_over(self.data.overview.status):
+            elif self.status.is_game_over(self.data.overview.game_state):
                 debug.info("Game Over")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
@@ -174,7 +174,7 @@ class MainRenderer:
 
                 self.sleepEvent.wait(self.refresh_rate)
 
-            elif self.status.is_final(self.data.overview.status):
+            elif self.status.is_final(self.data.overview.game_state):
                 """ Post Game state """
                 debug.info("FINAL")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -189,7 +189,7 @@ class MainRenderer:
                 if not self.goal_team_cache:
                     self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_scheduled(self.data.overview.status):
+            elif self.status.is_scheduled(self.data.overview.game_state):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -198,7 +198,7 @@ class MainRenderer:
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_irregular(self.data.overview.status):
+            elif self.status.is_irregular(self.data.overview.game_state):
                 """ Pre-game state """
                 debug.info("Game is irregular")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
