@@ -3,6 +3,7 @@ from nhl_api.object import Object, MultiLevelObject
 from nameparser import HumanName
 import debug
 import datetime
+import json
 
 from nhl_api_client import Client
 from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
@@ -12,9 +13,11 @@ def team_info():
     """
         Returns a list of team information dictionaries
     """
-    # return []
-    data = nhl_api.data.get_teams()
-    parsed = data.json()
+    # data = nhl_api.data.get_teams()
+    # parsed = data.json()
+    # Falling back to this for now until NHL stops screwing up their own API
+    f = open('src/data/backup_teams_data.json')
+    parsed = json.load(f)
     teams = parsed["data"]
     team_dict = {}
     for team in teams:
@@ -32,6 +35,7 @@ def team_info():
         team_info = TeamInfo(team, team_details)
         teams_data[raw_team_id] = team_info
 
+    return teams_data
     # TODO: I think most of this is now held in the TeamStandings object, but leaving here for reference
     # for team in teams_data:
     #     try:
@@ -122,7 +126,6 @@ def team_info():
     #         print(team)
     #         debug.error("Missing data in current team info")
 
-    return teams_data
 
 # This one is a little funky for the time. I'll loop through the what and why
 def team_previous_game(team_code, date, pg = None, ng = None):
@@ -142,8 +145,11 @@ def team_previous_game(team_code, date, pg = None, ng = None):
         # I _think_ that realistically the previous_game will always be the last game in this list, but
         # I'm going to simply loop through for now.
         for game in teams_response.games[1:]:
-            if game.game_state == "OFF" and game.game_date > pg.game_date:
+            if (game.game_state == "FINAL" or game.game_state == "OFF") and game.game_date > pg.game_date:
                 pg = game
+            else:
+                if ng is None or ng.game_date < game.game_date:
+                    ng = game
 
     # Then return. I'd like to say we could be smart and take a few days off from the initial request,
     # but I'm already questioning how that'd act with the likes of the all-star break.
