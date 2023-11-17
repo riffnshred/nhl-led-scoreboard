@@ -171,8 +171,9 @@ class MainRenderer:
                         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
 
                 self.__render_postgame(sbrenderer)
-
                 self.sleepEvent.wait(self.refresh_rate)
+                if not self.goal_team_cache:
+                    self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
             elif self.status.is_final(self.data.overview.game_state):
                 """ Post Game state """
@@ -307,26 +308,26 @@ class MainRenderer:
         h_penalties = self.home_penalties
         # Display goal details that are cached if there is any
         if self.penalties_team_cache:
-            try:
-                while self.penalties_team_cache:
-                    # create a goal object first to see if there are any missing data
-                    if self.penalties_team_cache[0] == "away":
-                        PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
-                    else:
-                        PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.home_team).render()
-                    # Remove the first cached goal
-                    self.penalties_team_cache.pop(0)
-            except IndexError:
-                debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
-            except AttributeError:
-                debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
+            # try:
+            while self.penalties_team_cache:
+                # create a goal object first to see if there are any missing data
+                if self.penalties_team_cache[0] == "away":
+                    PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                else:
+                    PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.home_team).render()
+                # Remove the first cached goal
+                self.penalties_team_cache.pop(0)
+            # except IndexError:
+            #     debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
+            # except AttributeError:
+            #     debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
 
         if len(a_penalties) < len(away_data_penalties):
             self.away_penalties = away_data_penalties
             self.penalties_team_cache.append("away")
             #if away_id not in self.data.pref_teams: and pref_team_only:
             #    return
-            # run the goal animation
+            # run the penalty animation
             self._draw_event_animation("penalty", away_id, away_name)
 
         if len(h_penalties) < len(home_data_penalties):
@@ -334,7 +335,7 @@ class MainRenderer:
             self.penalties_team_cache.append("home")
             #if home_id not in self.data.pref_teams: #and pref_team_only:
             #    return
-            # run the goal animation
+            # run the penalty animation
             self._draw_event_animation("penalty", home_id, home_name)
 
     def _draw_event_animation(self, event, id=14, name="test"):
@@ -398,15 +399,21 @@ class MainRenderer:
 
     def draw_end_period_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""
-        color = self.matrix.graphics.Color(0, 255, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        color = 255 # self.matrix.graphics.Color(0, 255, 0)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2), fill=color)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1), fill=color)
+        self.matrix.render()
 
     def draw_end_of_game_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""
-        color = self.matrix.graphics.Color(255, 0, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        color = 255 # self.matrix.graphics.Color(255, 0, 0)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2), fill=color)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1), fill=color)
+        self.matrix.render()
 
     def test_stanley_cup_champion(self, team_id):
         self.data.cup_winner_id = team_id

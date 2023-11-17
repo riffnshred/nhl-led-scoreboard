@@ -4679,6 +4679,10 @@
           "periodDescriptor": {
             "type": "object",
             "properties": {
+              "number": {
+                "type": "integer",
+                "nullable": true
+              },
               "periodType": {
                 "type": "string"
               }
@@ -4700,6 +4704,24 @@
           },
           "gameCenterLink": {
             "type": "string"
+          },
+          "clock": {
+            "type": "object",
+            "properties": {
+              "timeRemaining": {
+                "type": "string"
+              },
+              "secondsRemaining": {
+                "type": "integer"
+              },
+              "running": {
+                "type": "boolean"
+              },
+              "inIntermission": {
+                "type": "boolean"
+              }
+            },
+            "nullable": true
           }
         }
       },
@@ -4905,7 +4927,19 @@
                 "type": "integer"
               },
               "sog": {
-                "type": "integer"
+                "type": "integer",
+                "nullable": true
+              },
+              "onIce":{ 
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "playerId": {
+                      "type": "integer"
+                    }
+                  }
+                }
               }
             }
           },
@@ -4935,6 +4969,17 @@
               },
               "sog": {
                 "type": "integer"
+              },
+              "onIce":{ 
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "playerId": {
+                      "type": "integer"
+                    }
+                  }
+                }
               }
             }
           },
@@ -4942,7 +4987,8 @@
             "type": "object",
             "properties": {
               "number": {
-                "type": "integer"
+                "type": "integer",
+                "nullable": true
               },
               "periodType": {
                 "type": "string"
@@ -4975,7 +5021,8 @@
               "inIntermission": {
                 "type": "boolean"
               }
-            }
+            },
+            "nullable": true
           },
           "situation": {
             "type": "object",
@@ -5080,7 +5127,8 @@
                   "type": "object",
                   "properties": {
                     "number": {
-                      "type": "integer"
+                      "type": "integer",
+                      "nullable": true
                     },
                     "periodType": {
                       "type": "string"
@@ -5686,7 +5734,8 @@
                     "inIntermission": {
                       "type": "boolean"
                     }
-                  }
+                  },
+                  "nullable": true
                 },
                 "neutralSite": {
                   "type": "boolean"
@@ -5701,7 +5750,8 @@
                   "type": "object",
                   "properties": {
                     "number": {
-                      "type": "integer"
+                      "type": "integer",
+                      "nullable": true
                     },
                     "periodType": {
                       "type": "string"
@@ -5731,7 +5781,8 @@
                         "type": "object",
                         "properties": {
                           "number": {
-                            "type": "integer"
+                            "type": "integer",
+                            "nullable": true
                           },
                           "periodType": {
                             "type": "string"

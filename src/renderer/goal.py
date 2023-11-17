@@ -50,7 +50,7 @@ class GoalRenderer:
         self.matrix.draw.rectangle([0,0,64,6], fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b']))
         self.matrix.draw_text(
                 (1, 1), 
-                "GOAL @ {}/{}".format(self.periodTime,self.period), 
+                "GOAL @ {}/{}".format(self.periodTime, self.period), 
                 font=self.font, 
                 fill=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b'])
             )
@@ -118,7 +118,7 @@ class GoalRenderer:
             for i in range(len(self.assists)):
                 assist_name_coord = self.matrix.draw_text(
                     (1, assists_y_pos), 
-                    self.assists[i]["info"].last_name.upper(), 
+                    self.assists[i]["info"].last_name.default.upper(), 
                     font=self.font, 
                     fill=(255, 255, 255)
                 )

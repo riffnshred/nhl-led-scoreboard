@@ -98,6 +98,8 @@ class Scoreboard:
             else:
                 self.away_roster[player.player_id] = player
 
+        home_skaters = 5
+        away_skaters = 5
         if len(overview.plays) > 0:
             plays = overview.plays
             away_scoring_plays, away_penalty_plays, home_scoring_plays, home_penalty_plays = filter_plays(plays,away_team.id,home_team.id)
@@ -129,7 +131,7 @@ class Scoreboard:
             for play in away_penalty_plays:
                 # try:
                 player = get_penalty_players(play.details, self.away_roster)
-                away_penalties.append(Penalty(play,player))
+                away_penalties.append(Penalty(play, player))
                 # except KeyError:
                 #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                 #     away_penalties = []
@@ -143,34 +145,42 @@ class Scoreboard:
                 #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                 #     home_penalties = []
                 #     break
+        home_skaters = len(overview.home_team.on_ice)
+        away_skaters = len(overview.away_team.on_ice)
 
-        home_skaters = 5
         home_pp = False
-        away_skaters = 5
         away_pp = False
-        if overview.situation:
-            home_skaters = overview.situation.home_team.strength
-            away_skaters = overview.situation.away_team.strength
-            if "pp" in overview.situation.home_team.situation_descriptions:
-                home_pp = True
-            if "pp" in overview.situation.away_team.situation_descriptions:
-                away_pp = True
+        home_goalie_pulled = False
+        away_goalie_pulled = False
+        # TODO: I'm not entirely sure what's going on with situation
+        try:
+            if overview.situation:
+                home_skaters = overview.situation.home_team.strength
+                away_skaters = overview.situation.away_team.strength
+                if overview.situation.home_team.situation_descriptions:
+                    if "PP" in overview.situation.home_team.situation_descriptions:
+                        home_pp = True
+                    if "EN" in overview.situation.home_team.situation_descriptions:
+                        home_goalie_pulled = True
+                if overview.situation.away_team.situation_descriptions:
+                    if "PP" in overview.situation.away_team.situation_descriptions:
+                        away_pp = True
+                    if "EN" in overview.situation.away_team.situation_descriptions:
+                        away_goalie_pulled = True
+        except:
+            print(overview)
+            exit()
 
-        # TODO: Figure out what it looks like when the goalie is pulled. Likely something with the situation_descriptions
-        # We also have the time left on the situation (probably when it's a penalty)
-        goalie_pulled = False
-        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, away_penalties, away_pp, away_skaters, goalie_pulled, away_goal_plays)
-        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, home_penalties, home_pp, home_skaters, goalie_pulled, home_goal_plays)
+        away_team_sog = away_team.sog if away_team.sog else 0
+        home_team_sog = home_team.sog if home_team.sog else 0
+        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, away_team_sog, away_penalties, away_pp, away_skaters, away_goalie_pulled, away_goal_plays)
+        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, home_team_sog, home_penalties, home_pp, home_skaters, home_goalie_pulled, home_goal_plays)
 
         self.date = overview.game_date
         self.start_time = convert_time(overview.start_time_utc).strftime(time_format)
         self.status = overview.game_state
         self.periods = Periods(overview)
-        # try:
-        #     self.intermission = linescore.intermissionInfo.inIntermission
-        # except:
-        #     debug.error("Intermission data unavailable")
-        self.intermission = False
+        self.intermission = overview.clock.in_intermission
 
         if overview.game_state == "OFF" or overview.game_state == "FINAL":
             if away_team.score > home_team.score:
@@ -218,15 +228,10 @@ class GameSummaryBoard:
         self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, game_details.home_team.score)
 
         self.date = game_details.game_date
-        print(game_details.start_time_utc)
         self.start_time = convert_time(game_details.start_time_utc).strftime(time_format)
         self.status = game_details.game_state
         self.periods = Periods(game_details)
-        # try:
-        #     self.intermission = linescore.intermissionInfo.inIntermission
-        # except:
-        #     debug.error("Intermission data unavailable")
-        self.intermission = False
+        self.intermission = game_details.clock.in_intermission if game_details.clock else False
 
         if game_details.game_state == "OFF" or game_details.game_state == "FINAL":
             if away_team.score > home_team.score:
@@ -259,9 +264,8 @@ class Goal:
         self.assists = players["assists"]
         self.goalie = players["goalie"]
         self.team = play.details.event_owner_team_id
-        self.period = play.sort_order
+        self.period = play.period_descriptor.number
         self.periodTime = play.time_in_period
-        self.strength = "strength?" #play['result']['strength']['name']
         
 class Penalty:
     def __init__(self, play, player):

@@ -39,9 +39,7 @@ def run():
 
     if commandArgs.terminal_mode and sys.stdin.isatty():
         height, width = os.popen('stty size', 'r').read().split()
-        termMatrix = TermMatrix()
-        termMatrix.width = int(width)
-        termMatrix.height = int(height)
+        termMatrix = TermMatrix(int(width), int(height))
         matrix = Matrix(termMatrix)
     else:
         # Check for led configuration arguments

@@ -285,6 +285,7 @@ class Data:
 
                 # Populate the TeamInfo classes used for the team_summary board
                 for team_id in self.pref_teams:
+                    # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
                     pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
                     team_info.previous_game = pg
@@ -461,6 +462,9 @@ class Data:
         # Put all the team's in a dict with there name as KEY and ID as value.
         for team_id, team in self.teams_info.items():
             name_array = team.details.name.split(" ")
+            # TODO: This doesn't work. We should use the tri code instead.
+            # It will either break on St Louis Blues, or Vegas Golden Knights
+            # Can't have both using the same style of array parsing.
             name = ' '.join(name_array[1:])
             allteams_id[name] = team_id
 
