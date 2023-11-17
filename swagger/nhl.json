@@ -5006,7 +5006,8 @@
                   "strength": { "type": "integer"}
                 }
               }
-            }
+            },
+            "nullable": true
           },
           "situationCode": {"type": "string"},
           "timeRemaining": {"type": "string"},
@@ -5576,7 +5577,8 @@
                   "$ref": "#/components/schemas/LanguageString"
                 },
                 "startTimeUTC": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "date-time"
                 },
                 "easternUTCOffset": {
                   "type": "string"

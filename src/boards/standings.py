@@ -211,7 +211,6 @@ def draw_standing(data, name, records, img_height, width):
         :return the image
     """
 
-    teams_info = data.teams_info
     layout = data.config.layout
 
     # Create a new data image.
@@ -232,7 +231,7 @@ def draw_standing(data, name, records, img_height, width):
 
     for team in records:
         team_id = team['team_id']
-        abbev = teams_info[team_id].abbreviation
+        abbev = data.teams_info[team_id].abbreviation
         points = str(team['points'])
         wins = team['leagueRecord']['wins']
         losses = team['leagueRecord']['losses']

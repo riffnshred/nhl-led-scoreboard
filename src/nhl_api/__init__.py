@@ -1,6 +1,7 @@
 import nhl_api.game
 import nhl_api.info
-import calendar
+from nhl_api_client import Client
+from nhl_api_client.api.game import get_game_play_by_play_by_id
 
 def player(playerId):
     """Return an Info object of a player information"""
@@ -11,6 +12,12 @@ def overview(game_id):
     """Return Overview object that contains game information."""
     return nhl_api.game.overview(game_id)
 
+def play_by_play(game_id):
+    client = Client(base_url="https://api-web.nhle.com")
+    game_details = {}
+    with client as client:
+        game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
+    return game_details
 
 def game_status_info():
     return nhl_api.info.status()

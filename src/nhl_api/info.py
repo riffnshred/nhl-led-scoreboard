@@ -28,8 +28,7 @@ def team_info():
         teams_response: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
     for team in teams_response.standings:
         raw_team_id = team_dict[team.team_abbrev.default]
-        pg, ng = team_previous_game(team.team_abbrev.default, str(datetime.date.today()))
-        team_details = TeamDetails(raw_team_id, team.team_name.default, team.team_abbrev.default, pg, ng)
+        team_details = TeamDetails(raw_team_id, team.team_name.default, team.team_abbrev.default)
         team_info = TeamInfo(team, team_details)
         teams_data[raw_team_id] = team_info
 
@@ -127,10 +126,6 @@ def team_info():
 
 # This one is a little funky for the time. I'll loop through the what and why
 def team_previous_game(team_code, date, pg = None, ng = None):
-    # TODO For ease just doing my preferred team
-    if team_code != "COL":
-        return False, False
-
     # This response returns the next three games, starting from the date given
     client = Client(base_url="https://api-web.nhle.com")
     teams_response = {}
@@ -139,7 +134,7 @@ def team_previous_game(team_code, date, pg = None, ng = None):
 
     pg = teams_response.games[0]
     # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
-    if pg.game_state == "FUT":
+    if pg.game_state == "FUT" or pg.game_state == "PRE":
         ng = pg
         # Then we take the previous_start_date given from the response and run through it again
         pg, ng = team_previous_game(team_code, teams_response.previous_start_date, None, ng)
@@ -402,7 +397,7 @@ class TeamInfo:
         self.details = team_details
 
 class TeamDetails:
-    def __init__(self, id: int, name: str, abbrev: str, previous_game: Game, next_game: Game):
+    def __init__(self, id: int, name: str, abbrev: str, previous_game: Game = None, next_game: Game = None):
         self.id = id
         self.name = name
         self.abbrev = abbrev

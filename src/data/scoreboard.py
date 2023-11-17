@@ -159,7 +159,7 @@ class Scoreboard:
         # TODO: Figure out what it looks like when the goalie is pulled. Likely something with the situation_descriptions
         # We also have the time left on the situation (probably when it's a penalty)
         goalie_pulled = False
-        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, away_penalty_plays, away_pp, away_skaters, goalie_pulled, away_goal_plays)
+        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, overview.away_team.sog, away_penalties, away_pp, away_skaters, goalie_pulled, away_goal_plays)
         self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, overview.home_team.sog, home_penalties, home_pp, home_skaters, goalie_pulled, home_goal_plays)
 
         self.date = overview.game_date
@@ -172,7 +172,7 @@ class Scoreboard:
         #     debug.error("Intermission data unavailable")
         self.intermission = False
 
-        if overview.game_state == "OFF":
+        if overview.game_state == "OFF" or overview.game_state == "FINAL":
             if away_team.score > home_team.score:
                 self.winning_team_id = overview.away_team.id
                 self.winning_score = overview.away_team.score
@@ -183,6 +183,62 @@ class Scoreboard:
                 self.losing_score = overview.away_team.score
                 self.winning_team_id = overview.home_team.id
                 self.winning_score = overview.home_team.score
+
+    
+
+    def __str__(self):
+        output = "<{} {}> {} (G {}, SOG {}) @ {} (G {}, SOG {}); Status: {}; Period : {} {};".format(
+            self.__class__.__name__, hex(id(self)),
+            self.away_team.name, str(self.away_team.goals), str(self.away_team.shot_on_goal),
+            self.home_team.name, str(self.home_team.goals), str(self.home_team.shot_on_goal),
+            self.status,
+            self.periods.ordinal,
+            self.periods.clock
+        )
+        return output
+
+class GameSummaryBoard:
+    def __init__(self, game_details, data):
+        time_format = data.config.time_format
+        # linescore = overview.linescore
+
+        # away = linescore.teams.away
+        away_team = game_details.away_team
+        away_team_id = away_team.id
+        away_team_name = away_team.name
+        away_abbrev = data.teams_info[away_team_id].details.abbrev
+
+        # home = linescore.teams.home
+        home_team = game_details.home_team
+        home_team_id = home_team.id
+        home_team_name = home_team.name
+        home_abbrev = data.teams_info[home_team_id].details.abbrev
+
+        self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, game_details.away_team.score)
+        self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, game_details.home_team.score)
+
+        self.date = game_details.game_date
+        print(game_details.start_time_utc)
+        self.start_time = convert_time(game_details.start_time_utc).strftime(time_format)
+        self.status = game_details.game_state
+        self.periods = Periods(game_details)
+        # try:
+        #     self.intermission = linescore.intermissionInfo.inIntermission
+        # except:
+        #     debug.error("Intermission data unavailable")
+        self.intermission = False
+
+        if game_details.game_state == "OFF" or game_details.game_state == "FINAL":
+            if away_team.score > home_team.score:
+                self.winning_team_id = game_details.away_team.id
+                self.winning_score = game_details.away_team.score
+                self.losing_team_id = game_details.home_team.id
+                self.losing_score = game_details.home_team.score
+            else:
+                self.losing_team_id = game_details.away_team.id
+                self.losing_score = game_details.away_team.score
+                self.winning_team_id = game_details.home_team.id
+                self.winning_score = game_details.home_team.score
 
     
 

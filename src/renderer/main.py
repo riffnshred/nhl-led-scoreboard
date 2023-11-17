@@ -206,7 +206,9 @@ class MainRenderer:
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
-
+            else:
+                print("somethin' really goofy")
+                self.sleepEvent.wait(self.refresh_rate)
             self.data.refresh_data()
             self.data.refresh_overview()
             self.scoreboard = Scoreboard(self.data.overview, self.data)

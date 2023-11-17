@@ -40,7 +40,7 @@ class Status:
         
 
     def is_scheduled(self, status):
-        return status in self.Preview
+        return status == "FUT" or status == "PRE"
 
     def is_live(self, status):
         return status == "LIVE" or status == "CRIT"

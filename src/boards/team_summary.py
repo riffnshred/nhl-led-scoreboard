@@ -4,8 +4,7 @@
 """
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 from rgbmatrix import graphics
-import nhl_api
-from data.scoreboard import Scoreboard
+from data.scoreboard import GameSummaryBoard
 from data.team import Team
 from time import sleep
 from utils import convert_date_format, get_file
@@ -52,7 +51,7 @@ class TeamSummary:
 
             # try:
             if prev_game:
-                prev_game_scoreboard = Scoreboard(nhl_api.game.overview(prev_game.id), self.data)
+                prev_game_scoreboard = GameSummaryBoard(prev_game, self.data)
             else:
                 prev_game_scoreboard = False
 
@@ -66,7 +65,7 @@ class TeamSummary:
 
             # try:
             if next_game:
-                next_game_scoreboard = Scoreboard(nhl_api.game.overview(next_game.id), self.data)
+                next_game_scoreboard = GameSummaryBoard(next_game, self.data)
             else:
                 next_game_scoreboard = False
 

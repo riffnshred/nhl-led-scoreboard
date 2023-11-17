@@ -128,12 +128,11 @@ class ScoreboardRenderer:
         period = self.scoreboard.periods.ordinal
         result = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
-        date = convert_date_format(self.scoreboard.date)
 
         # Draw the info
         self.matrix.draw_text_layout(
             self.layout.center_top, 
-            date
+            str(self.scoreboard.date)
         )
 
         end_text = result
