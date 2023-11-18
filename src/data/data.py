@@ -9,8 +9,9 @@ import debug
 import nhl_api
 from data.playoffs import Series
 from data.status import Status
+from nhl_api_client.models import PlayByPlay
 from utils import get_lat_lng, convert_time
-
+import json
 
 NETWORK_RETRY_SLEEP_TIME = 0.5
 
@@ -412,6 +413,18 @@ class Data:
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
+
+
+    # TODO: Should probably move this into it's own TestClass of sorts
+    def test_goal(self, data, matrix, sleepEvent):
+        from data.scoreboard import Scoreboard
+        from renderer.goal import GoalRenderer
+        # f = open('test_scenarios/goal.json')
+        f = open('test_scenarios/goal_unassisted.json')
+        parsed = json.load(f)
+        overview = PlayByPlay.from_dict(parsed)
+        scoreboard = Scoreboard(overview, data)
+        GoalRenderer(data, matrix, sleepEvent, scoreboard.home_team).render()
 
     """
         TODO: TO DELETE if the new check_game_priority() function works withtout a fuzz
