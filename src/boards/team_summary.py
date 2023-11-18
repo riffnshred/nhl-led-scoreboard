@@ -193,11 +193,10 @@ class TeamSummary:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
         draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-        draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
-                font=self.font)
+        draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=self.font)
 
         if next_game_scoreboard:
-            date = convert_date_format(next_game_scoreboard.date)
+            date = next_game_scoreboard.date
             draw.text((0, 49), "{}".format(date.upper()), fill=(255, 255, 255), font=self.font)
 
             if self.data.status.is_irregular(next_game_scoreboard.status):

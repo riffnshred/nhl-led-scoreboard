@@ -227,7 +227,7 @@ class GameSummaryBoard:
         self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, game_details.away_team.score)
         self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, game_details.home_team.score)
 
-        self.date = game_details.game_date
+        self.date = game_details.game_date.strftime("%b %d")
         self.start_time = convert_time(game_details.start_time_utc).strftime(time_format)
         self.status = game_details.game_state
         self.periods = Periods(game_details)

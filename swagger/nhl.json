@@ -666,7 +666,8 @@
                             "type": "string"
                           },
                           "gameDate": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "date"
                           },
                           "goals": {
                             "type": "integer"
@@ -2434,7 +2435,8 @@
                             "type": "string"
                           },
                           "gameDate": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "date"
                           },
                           "goals": {
                             "type": "integer"
@@ -5619,7 +5621,8 @@
                   "type": "integer"
                 },
                 "gameDate": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "date"
                 },
                 "venue": {
                   "$ref": "#/components/schemas/LanguageString"
