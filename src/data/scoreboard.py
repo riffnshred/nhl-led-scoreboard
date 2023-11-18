@@ -234,7 +234,7 @@ class GameSummaryBoard:
         self.intermission = game_details.clock.in_intermission if game_details.clock else False
 
         if game_details.game_state == "OFF" or game_details.game_state == "FINAL":
-            if away_team.score > home_team.score:
+            if game_details.away_team.score > game_details.home_team.score:
                 self.winning_team_id = game_details.away_team.id
                 self.winning_score = game_details.away_team.score
                 self.losing_team_id = game_details.home_team.id

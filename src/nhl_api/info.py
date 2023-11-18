@@ -136,8 +136,10 @@ def team_previous_game(team_code, date, pg = None, ng = None):
         teams_response: WeekSchedule = get_team_week_schedule_by_date.sync(team_code, date, client=client)
 
     pg = teams_response.games[0]
+
     # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
-    if pg.game_state == "FUT" or pg.game_state == "PRE":
+    # TODO: Get a better situation for a LIVE game when showing a team summary during intermission
+    if pg.game_state == "FUT" or pg.game_state == "PRE" or pg.game_state == "LIVE":
         ng = pg
         # Then we take the previous_start_date given from the response and run through it again
         pg, ng = team_previous_game(team_code, teams_response.previous_start_date, None, ng)
