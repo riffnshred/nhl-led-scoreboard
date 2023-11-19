@@ -1,0 +1,51 @@
+on:
+  push:
+    # branches: [ beta ]
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Tagged Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set current version variable
+        run: |
+          VER=$(cat VERSION)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Bump version                                                                                                                                    
+        run: |                                                                                                                                                
+          echo "${{ steps.get_version.outputs.VERSION }}" > VERSION
+      - name: Push changes                                                                                                                                    
+        uses: ad-m/github-push-action@master                                                                                                                  
+        with:                                                                                                                                                 
+          github_token: ${{ secrets.GITHUB_TOKEN }}                                                                                                           
+          branch: ${{ github.ref }}
+          force: "true"
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@main
+        with:
+          commitMode: "true"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ steps.get_version.outputs.VERSION }}
+          body: ${{ steps.github_release.outputs.changelog }}

@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "NHL API",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "description": "NHL API for the new version. Special thanks to [dword4](https://gitlab.com/dword4/nhlapi) and [openapi-devtools](https://github.com/AndrewWalsh/openapi-devtools)."
   },
   "paths": {
