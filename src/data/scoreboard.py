@@ -55,7 +55,9 @@ def get_goal_players(play_details, roster, opposing_roster):
         assists.append({"info": roster[play_details.assist_1_player_id]})
     if play_details.assist_2_player_id:
         assists.append({"info": roster[play_details.assist_2_player_id]})
-    goalie = opposing_roster[play_details.goalie_in_net_id]
+    # Turns out if it's an empty net goal, there's no goalie in net
+    if play_details.goalie_in_net_id:
+        goalie = opposing_roster[play_details.goalie_in_net_id]
 
     return {"scorer":scorer, "assists":assists, "goalie":goalie}
 
@@ -176,7 +178,7 @@ class Scoreboard:
         self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, overview.away_team.score, away_team_sog, away_penalties, away_pp, away_skaters, away_goalie_pulled, away_goal_plays)
         self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, overview.home_team.score, home_team_sog, home_penalties, home_pp, home_skaters, home_goalie_pulled, home_goal_plays)
 
-        self.date = overview.game_date
+        self.date = overview.game_date.strftime("%b %d")
         self.start_time = convert_time(overview.start_time_utc).strftime(time_format)
         self.status = overview.game_state
         self.periods = Periods(overview)
