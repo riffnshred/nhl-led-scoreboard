@@ -7,6 +7,7 @@ from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.seriesticker import Seriesticker
 from boards.team_summary import TeamSummary
+from boards.standings import Standings
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -32,10 +33,11 @@ class MainRenderer:
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
-                self.data.refresh_overview()
-                self.scoreboard = Scoreboard(self.data.overview, self.data)
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(game, self.data)).render()
-                self.data.test_goal(self.data, self.matrix, self.sleepEvent)
+                # self.data.refresh_overview()
+                # self.scoreboard = Scoreboard(self.data.overview, self.data)
+                # ScoreboardRenderer(self.data, self.matrix, Scoreboard(game, self.data)).render()
+                Standings(self.data, self.matrix, self.sleepEvent).render()
+                # self.data.test_goal(self.data, self.matrix, self.sleepEvent)
                 #self._draw_event_animation("goal", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
                 #PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
                 #TeamSummary(self.data, self.matrix, self.sleepEvent).render()

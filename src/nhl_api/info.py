@@ -210,48 +210,6 @@ def series_record(seriesCode, season):
     parsed = data.json()
     return parsed["data"]
 
-def standings():
-    standing_records = {}
-
-    wildcard_records = {
-        'eastern': [],
-        'western': []
-    }
-    
-    data = nhl_api.data.get_standings().json()
-    divisions = data['records']
-
-    data_wildcard = nhl_api.data.get_standings_wildcard().json()
-    try:
-        wildcard = data_wildcard['records']
-        for division in range(len(divisions)):
-            team_records = divisions[division]['teamRecords']
-            division_full_name = divisions[division]['division']['name'].split()
-            division_name = division_full_name[-1]
-            conference_name = divisions[division]['conference']['name']
-
-            for team in range(len(team_records)):
-                team_id = team_records[team]['team']['id']
-                team_name = team_records[team]['team']['name']
-                team_records[team].pop('team')
-                standing_records[team_id] = {
-                    'division': division_name,
-                    'conference': conference_name,
-                    'team_name': team_name,
-                    'team_id': team_id
-                }
-                for key, value in team_records[team].items():
-                    standing_records[team_id][key] = value
-
-        for record in wildcard:
-            if record['conference']['name'] == 'Eastern':
-                wildcard_records['eastern'].append(record)
-            elif record['conference']['name'] == 'Western':
-                wildcard_records['western'].append(record)
-
-        return standing_records, wildcard_records
-    except KeyError:
-        return False, False
 
 
 class Standings(object):
@@ -262,12 +220,12 @@ class Standings(object):
         different type of Standings.
 
     """
-    def __init__(self, records, wildcard):
+    def __init__(self, records: SeasonStandings, wildcard):
         self.data = records
         self.data_wildcard = wildcard
         self.get_conference()
         self.get_division()
-        self.get_wild_card()
+        # self.get_wild_card()
 
     def get_conference(self):
         eastern, western = self.sort_conference(self.data)
@@ -319,18 +277,18 @@ class Standings(object):
         pass
 
     @staticmethod
-    def sort_conference(data):
+    def sort_conference(data: SeasonStandings):
         eastern = []
         western = []
-        for item in data:
-            if data[item]['conference'] == 'Eastern':
-                eastern.append(data[item])
+        for item in data.standings:
+            if item.conference_name == 'Eastern':
+                eastern.append(item)
 
-            elif data[item]['conference'] == 'Western':
-                western.append(data[item])
+            elif item.conference_name == 'Western':
+                western.append(item)
 
-        eastern = sorted(eastern, key=lambda i: int(i['conferenceRank']))
-        western = sorted(western, key=lambda i: int(i['conferenceRank']))
+        eastern = sorted(eastern, key=lambda i: int(i.points), reverse=True)
+        western = sorted(western, key=lambda i: int(i.points), reverse=True)
         return eastern, western
 
     @staticmethod
@@ -340,23 +298,23 @@ class Standings(object):
         central = []
         pacific = []
 
-        for item in data:
-            if data[item]['division'] == 'Metropolitan':
-                metropolitan.append(data[item])
+        for item in data.standings:
+            if item.division_name == 'Metropolitan':
+                metropolitan.append(item)
 
-            elif data[item]['division'] == 'Atlantic':
-                atlantic.append(data[item])
+            elif item.division_name == 'Atlantic':
+                atlantic.append(item)
 
-            elif data[item]['division'] == 'Central':
-                central.append(data[item])
+            elif item.division_name == 'Central':
+                central.append(item)
 
-            elif data[item]['division'] == 'Pacific':
-                pacific.append(data[item])
+            elif item.division_name == 'Pacific':
+                pacific.append(item)
 
-        metropolitan = sorted(metropolitan, key=lambda i: int(i['conferenceRank']))
-        atlantic = sorted(atlantic, key=lambda i: int(i['conferenceRank']))
-        central = sorted(central, key=lambda i: int(i['conferenceRank']))
-        pacific = sorted(pacific, key=lambda i: int(i['conferenceRank']))
+        metropolitan = sorted(metropolitan, key=lambda i: int(i.points), reverse=True)
+        atlantic = sorted(atlantic, key=lambda i: int(i.points), reverse=True)
+        central = sorted(central, key=lambda i: int(i.points), reverse=True)
+        pacific = sorted(pacific, key=lambda i: int(i.points), reverse=True)
 
         return metropolitan, atlantic, central, pacific
 

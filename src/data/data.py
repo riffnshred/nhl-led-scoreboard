@@ -143,6 +143,10 @@ class Data:
 
         # Get the teams info
         self.teams_info = self.get_teams()
+        # So oddly enough, there are a handful of situations where the API does not include the team_id
+        # it's happening often enough that it's worth keeping a second teams_info that is keyed off of the
+        # abbreviation instead of the the id
+        self.teams_info_by_abbrev = self.get_teams_by_code()
 
         # Save the parsed config
         self.config = config
@@ -257,6 +261,12 @@ class Data:
                 debug.error(error_message)
                 attempts_remaining -= 1
                 sleep(NETWORK_RETRY_SLEEP_TIME)
+
+    def get_teams_by_code(self):
+        teams_data = {}
+        for team in self.teams_info.values():
+            teams_data[team.details.abbrev] = team
+        return teams_data
 
     def refresh_games(self):
         """
@@ -592,6 +602,7 @@ class Data:
     def refresh_daily(self):
         debug.info('refreshing daily data')
         self.teams_info = self.get_teams()
+        self.teams_info_by_abbrev = self.get_teams_by_code()
         
         # Update standings
         self.refresh_standings()

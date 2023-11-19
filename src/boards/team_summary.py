@@ -157,7 +157,7 @@ class TeamSummary:
         if stats:
             draw.text((0, 7), "GP:{} P:{}".format(stats.games_played, stats.points), fill=(255, 255, 255),
                 font=self.font)
-            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ties), fill=(255, 255, 255),
+            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot_losses), fill=(255, 255, 255),
                 font=self.font)
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
