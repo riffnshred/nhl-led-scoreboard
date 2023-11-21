@@ -211,7 +211,6 @@ def draw_standing(data, name, records, img_height, width):
         :return the image
     """
 
-    teams_info = data.teams_info
     layout = data.config.layout
 
     # Create a new data image.
@@ -231,17 +230,17 @@ def draw_standing(data, name, records, img_height, width):
     row_pos += row_height
 
     for team in records:
-        team_id = team['team_id']
-        abbev = teams_info[team_id].abbreviation
-        points = str(team['points'])
-        wins = team['leagueRecord']['wins']
-        losses = team['leagueRecord']['losses']
-        ot = team['leagueRecord']['ot']
+        abbrev = team.team_abbrev.default
+        team_id = data.teams_info_by_abbrev[abbrev].details.id
+        points = str(team.points)
+        wins = team.wins
+        losses = team.losses
+        ot = team.ot_losses
         team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-        draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
+        draw.text((1, row_pos), abbrev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
         if len(points) == 3:
             draw.text((54, row_pos), points, font=layout.font)
         else:
@@ -279,18 +278,18 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
     for division, division_data in wildcard_records["division_leaders"].items():
         draw.text((1, row_pos), division, font=layout.font)
         row_pos += row_height
-        for record in division_data["teamRecords"]:
-            team_id = record["team"]['id']
-            abbev = teams_info[team_id].abbreviation
-            points = str(record['points'])
-            wins = record['leagueRecord']['wins']
-            losses = record['leagueRecord']['losses']
-            ot = record['leagueRecord']['ot']
+        for team in division_data["teamRecords"]:
+            abbrev = team.team_abbrev.default
+            team_id = data.teams_info_by_abbrev[abbrev].details.id
+            points = str(team.points)
+            wins = team.wins
+            losses = team.losses
+            ot = team.ot_losses
             team_colors = data.config.team_colors
             bg_color = team_colors.color("{}.primary".format(team_id))
             txt_color = team_colors.color("{}.text".format(team_id))
             draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-            draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
+            draw.text((1, row_pos), abbrev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
             if len(points) == 3:
                 draw.text((54, row_pos), points, font=layout.font)
             else:
@@ -302,18 +301,18 @@ def draw_wild_card(data, wildcard_records, width, img_height, offset):
 
     draw.text((1, row_pos), "wild card", font=layout.font)
     row_pos += row_height
-    for record in wildcard_records["wild_card"]:
-        team_id = record["team"]['id']
-        abbev = teams_info[team_id].abbreviation
-        points = str(record['points'])
-        wins = record['leagueRecord']['wins']
-        losses = record['leagueRecord']['losses']
-        ot = record['leagueRecord']['ot']
+    for team in wildcard_records["wild_card"]:
+        abbrev = team.team_abbrev.default
+        team_id = data.teams_info_by_abbrev[abbrev].details.id
+        points = str(team.points)
+        wins = team.wins
+        losses = team.losses
+        ot = team.ot_losses
         team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))
         draw.rectangle([0, top + row_pos, 12, row_pos], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-        draw.text((1, row_pos), abbev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
+        draw.text((1, row_pos), abbrev, fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=layout.font)
         if len(points) == 3:
             draw.text((54, row_pos), points, font=layout.font)
         else:

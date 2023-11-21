@@ -4,8 +4,7 @@
 """
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 from rgbmatrix import graphics
-import nhl_api
-from data.scoreboard import Scoreboard
+from data.scoreboard import GameSummaryBoard
 from data.team import Team
 from time import sleep
 from utils import convert_date_format, get_file
@@ -36,63 +35,57 @@ class TeamSummary:
             self.team_id = team_id
 
             team = self.teams_info[team_id]
-            team_data = Team(
-                team.team_id,
-                team.abbreviation,
-                team.name
-            )
-
             team_colors = self.data.config.team_colors
             bg_color = team_colors.color("{}.primary".format(team_id))
             txt_color = team_colors.color("{}.text".format(team_id))
-            prev_game = team.previous_game
-            next_game = team.next_game
+            prev_game = team.details.previous_game
+            next_game = team.details.next_game
 
             logo_renderer = LogoRenderer(
                 self.matrix,
                 self.data.config,
                 self.layout.logo,
-                team_data.abbrev,
+                team.details.abbrev,
                 'team_summary'
             )
 
-            try:
-                if prev_game:
-                    prev_game_id = self.teams_info[team_id].previous_game.dates[0]["games"][0]["gamePk"]
-                    prev_game_scoreboard = Scoreboard(nhl_api.overview(prev_game_id), self.data)
-                else:
-                    prev_game_scoreboard = False
-
-                self.data.network_issues = False
-            except ValueError:
-                prev_game_scoreboard = False
-                self.data.network_issues = True
-            except (TypeError, KeyError):
+            # try:
+            if prev_game:
+                prev_game_scoreboard = GameSummaryBoard(prev_game, self.data)
+            else:
                 prev_game_scoreboard = False
 
-            try:
-                if next_game:
-                    next_game_id = self.teams_info[team_id].next_game.dates[0]["games"][0]["gamePk"]
-                    next_game_scoreboard = Scoreboard(nhl_api.overview(next_game_id), self.data)
-                else:
-                    next_game_scoreboard = False
+            self.data.network_issues = False
+            # except ValueError => e:
+            #     print(e)
+            #     prev_game_scoreboard = False
+            #     self.data.network_issues = True
+            # except (TypeError, KeyError):
+            #     prev_game_scoreboard = False
+
+            # try:
+            if next_game:
+                next_game_scoreboard = GameSummaryBoard(next_game, self.data)
+            else:
+                next_game_scoreboard = False
 
                 self.data.network_issues = False
-            except ValueError:
-                next_game_scoreboard = False
-                self.data.network_issues = True
-            except (TypeError, KeyError):
-                next_game_scoreboard = False
+            # except ValueError:
+            #     next_game_scoreboard = False
+            #     self.data.network_issues = True
+            # except (TypeError, KeyError):
+            #     next_game_scoreboard = False
 
-            stats = team.stats
+            # stats = team.stats
             im_height = 67
-            team_abbrev = team.abbreviation
+            # team_abbrev = team.short_name
 
             i = 0
 
+            # print(prev_game_scoreboard)
             if not self.sleepEvent.is_set():
                 image = self.draw_team_summary(
-                    stats,
+                    team.record,
                     prev_game_scoreboard,
                     next_game_scoreboard,
                     bg_color,
@@ -162,9 +155,9 @@ class TeamSummary:
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if stats:
-            draw.text((0, 7), "GP:{} P:{}".format(stats.gamesPlayed, stats.pts), fill=(255, 255, 255),
+            draw.text((0, 7), "GP:{} P:{}".format(stats.games_played, stats.points), fill=(255, 255, 255),
                 font=self.font)
-            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot), fill=(255, 255, 255),
+            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot_losses), fill=(255, 255, 255),
                 font=self.font)
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
@@ -184,13 +177,13 @@ class TeamSummary:
                 draw.text((0, 34), prev_game_scoreboard.status, fill=(255, 0, 0), font=self.font)
 
             else:
-                if prev_game_scoreboard.winning_team == self.team_id:
+                if prev_game_scoreboard.winning_team_id == self.team_id:
                     draw.text((0, 34), "W", fill=(50, 255, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
                                                         prev_game_scoreboard.home_team.goals),
                             fill=(255, 255, 255), font=self.font)
 
-                if prev_game_scoreboard.loosing_team == self.team_id:
+                if prev_game_scoreboard.losing_team_id == self.team_id:
                     draw.text((0, 34), "L", fill=(255, 50, 50), font=self.font)
                     draw.text((5, 34), "{}-{}".format(prev_game_scoreboard.away_team.goals,
                                                         prev_game_scoreboard.home_team.goals),
@@ -200,11 +193,10 @@ class TeamSummary:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
         draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
-        draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
-                font=self.font)
+        draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=self.font)
 
         if next_game_scoreboard:
-            date = convert_date_format(next_game_scoreboard.date)
+            date = next_game_scoreboard.date
             draw.text((0, 49), "{}".format(date.upper()), fill=(255, 255, 255), font=self.font)
 
             if self.data.status.is_irregular(next_game_scoreboard.status):

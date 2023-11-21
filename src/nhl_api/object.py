@@ -9,10 +9,11 @@ class Object(object):
 
     def convert_json(self, d):
         self.__dict__ = {}
-        for key, value in d.items():
-            if type(value) is dict:
-                value = Object(value)
-            self.__dict__[key] = value
+        if d.items() is not None:
+            for key, value in d.items():
+                if type(value) is dict:
+                    value = Object(value)
+                self.__dict__[key] = value
 
     def __setitem__(self, key, value):
         self.__dict__[key] = value
