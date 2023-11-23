@@ -1,26 +1,10 @@
 import nhl_api.game
 import nhl_api.info
-import calendar
-
-
-def day(year, month, day):
-    """
-        Return a list of games for a certain day.
-    """
-
-    # get the days per month
-    daysinmonth = calendar.monthrange(year, month)[1]
-    # do not even try to get data if day is too high
-    if daysinmonth < day:
-        return []
-    # get data
-    data = nhl_api.game.scoreboard(year, month, day)
-    return [nhl_api.game.GameScoreboard(data[x]) for x in data]
-
-
-def teams():
-    """Return list of Info objects for each team"""
-    return [nhl_api.info.Info(x) for x in nhl_api.info.team_info()]
+from nhl_api_client import Client
+from nhl_api_client.api.game import get_game_play_by_play_by_id
+from nhl_api_client.api.default import get_season_standings_by_date
+from nhl_api_client.models import SeasonStandings
+import datetime
 
 def player(playerId):
     """Return an Info object of a player information"""
@@ -29,8 +13,14 @@ def player(playerId):
 
 def overview(game_id):
     """Return Overview object that contains game information."""
-    return nhl_api.game.Overview(nhl_api.game.overview(game_id))
+    return nhl_api.game.overview(game_id)
 
+def play_by_play(game_id):
+    client = Client(base_url="https://api-web.nhle.com")
+    game_details = {}
+    with client as client:
+        game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
+    return game_details
 
 def game_status_info():
     return nhl_api.info.status()
@@ -43,11 +33,14 @@ def next_season_info():
     return nhl_api.info.next_season()
 
 def standings():
-    try:
-        standings, wildcard = nhl_api.info.standings()
-        return nhl_api.info.Standings(standings, wildcard)
-    except:
-        return False
+    # TODO: Wildcard stuff
+    season_standings = {}
+
+    client = Client(base_url="https://api-web.nhle.com")
+    with client as client:
+        season_standings: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
+
+    return nhl_api.info.Standings(season_standings, {})
 
 
 def playoff(season = ""):

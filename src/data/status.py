@@ -4,10 +4,10 @@ import debug
 
 class Status:
     def __init__(self):
-        game_status = game_status_info()
-        self.season_info = current_season_info()['seasons'][0]
+        game_status = [] # game_status_info()
+        # self.season_info = current_season_info()['seasons'][0]
         #self.next_season_info = next_season_info()['seasons'][0]
-        self.season_id = self.season_info["seasonId"]
+        self.season_id = 20232024 # self.season_info["seasonId"]
         self.Preview = []
         self.Live = []
         self.GameOver = []
@@ -36,20 +36,20 @@ class Status:
         #     # Arbitrarily set the regularSeasonStartDate to Oct 1 of current year
         #     self.next_season_info['regularSeasonStartDate'] = "{0}-10-01".format(date.today().year)
         
-        self.refresh_next_season()
+        # self.refresh_next_season()
         
 
     def is_scheduled(self, status):
-        return status in self.Preview
+        return status == "FUT" or status == "PRE"
 
     def is_live(self, status):
-        return status in self.Live
+        return status == "LIVE" or status == "CRIT"
 
     def is_game_over(self, status):
-        return status in self.GameOver
+        return status == "OFF"
 
     def is_final(self, status):
-        return status in self.Final
+        return status == "FINAL"
 
     def is_irregular(self, status):
         return status in self.Irregular

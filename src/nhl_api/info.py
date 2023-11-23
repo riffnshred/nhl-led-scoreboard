@@ -2,106 +2,161 @@ import nhl_api.data
 from nhl_api.object import Object, MultiLevelObject
 from nameparser import HumanName
 import debug
+import datetime
+import json
 
+from nhl_api_client import Client
+from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
+from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
 
 def team_info():
     """
         Returns a list of team information dictionaries
     """
-    data = nhl_api.data.get_teams()
-    parsed = data.json()
-    teams_data = parsed["teams"]
-    teams = []
+    # data = nhl_api.data.get_teams()
+    # parsed = data.json()
+    # Falling back to this for now until NHL stops screwing up their own API
+    f = open('src/data/backup_teams_data.json')
+    parsed = json.load(f)
+    teams = parsed["data"]
+    team_dict = {}
+    for team in teams:
+        team_dict[team["triCode"]] = team["id"]
 
-    for team in teams_data:
-        try:
-            team_id = team['id']
-            name = team['name']
-            abbreviation = team['abbreviation']
-            team_name = team['teamName']
-            location_name = team['locationName']
-            short_name = team['shortName']
-            division_id = team['division']['id']
-            division_name = team['division']['name']
-            division_abbrev = team['division']['abbreviation']
-            conference_id = team['conference']['id']
-            conference_name = team['conference']['name']
-            official_site_url = team['officialSiteUrl']
-            franchise_id = team['franchiseId']
+
+    client = Client(base_url="https://api-web.nhle.com")
+    teams_data = {}
+    teams_response = {}
+    with client as client:
+        teams_response: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
+    for team in teams_response.standings:
+        raw_team_id = team_dict[team.team_abbrev.default]
+        team_details = TeamDetails(raw_team_id, team.team_name.default, team.team_abbrev.default)
+        team_info = TeamInfo(team, team_details)
+        teams_data[raw_team_id] = team_info
+
+    return teams_data
+    # TODO: I think most of this is now held in the TeamStandings object, but leaving here for reference
+    # for team in teams_data:
+    #     try:
+    #         team_id = team['id']
+    #         name = team['fullName']
+    #         # abbreviation = team['abbreviation']
+    #         # team_name = team['teamName']
+    #         # location_name = team['locationName']
+    #         short_name = team['triCode']
+    #         # division_id = team['division']['id']
+    #         # division_name = team['division']['name']
+    #         # division_abbrev = team['division']['abbreviation']
+    #         # conference_id = team['conference']['id']
+    #         # conference_name = team['conference']['name']
+    #         # official_site_url = team['officialSiteUrl']
+    #         # franchise_id = team['franchiseId']
             
+    #         pg, ng = team_previous_game(short_name, 20232024)
+    #         # print(pg, ng)
+    #         try:
+    #             previous_game = pg
+    #         except:
+    #             debug.log("No next game detected for {}".format(name))
+    #             previous_game = False
 
-            try:
-                previous_game = team['previousGameSchedule']
-                # previous_game = False
-            except:
-                debug.log("No next game detected for {}".format(team_name))
-                previous_game = False
+    #         try:
+    #             next_game = ng
+    #         except:
+    #             debug.log("No next game detected for {}".format(team_name))
+    #             next_game = False
 
-            try:
-                next_game = team['nextGameSchedule']
-            except:
-                debug.log("No next game detected for {}".format(team_name))
-                next_game = False
+    #         # try:
+    #         #     stats = team['teamStats'][0]['splits'][0]['stat']
+    #         # except:
+    #         #     debug.log("No Stats detected for {}".format(team_name))
+    #         #     stats = False
 
-            try:
-                stats = team['teamStats'][0]['splits'][0]['stat']
-            except:
-                debug.log("No Stats detected for {}".format(team_name))
-                stats = False
+    #         # roster = {}
+    #         # for p in team['roster']['roster']:
+    #         #     person = p['person']
+    #         #     person_id = person['id']
+    #         #     name = HumanName(person['fullName'])
+    #         #     first_name = name.first
+    #         #     last_name = name.last
 
-            roster = {}
-            for p in team['roster']['roster']:
-                person = p['person']
-                person_id = person['id']
-                name = HumanName(person['fullName'])
-                first_name = name.first
-                last_name = name.last
+    #         #     position_name = p['position']['name']
+    #         #     position_type = p['position']['abbreviation']
+    #         #     position_abbrev = p['position']['abbreviation']
 
-                position_name = p['position']['name']
-                position_type = p['position']['abbreviation']
-                position_abbrev = p['position']['abbreviation']
-
-                try:
-                    jerseyNumber = p['jerseyNumber']
-                except KeyError:
-                    jerseyNumber = ""
+    #         #     try:
+    #         #         jerseyNumber = p['jerseyNumber']
+    #         #     except KeyError:
+    #         #         jerseyNumber = ""
                 
-                roster[person_id]= {
-                    'firstName': first_name,
-                    'lastName': last_name,
-                    'jerseyNumber': jerseyNumber,
-                    'positionName': position_name,
-                    'positionType': position_type,
-                    'positionAbbrev': position_abbrev
-                    }
+    #         #     roster[person_id]= {
+    #         #         'firstName': first_name,
+    #         #         'lastName': last_name,
+    #         #         'jerseyNumber': jerseyNumber,
+    #         #         'positionName': position_name,
+    #         #         'positionType': position_type,
+    #         #         'positionAbbrev': position_abbrev
+    #         #         }
                 
             
-            output = {
-                'team_id': team_id,
-                'name': name,
-                'abbreviation': abbreviation,
-                'team_name': team_name,
-                'location_name': location_name,
-                'short_name': short_name,
-                'division_id': division_id,
-                'division_name': division_name,
-                'division_abbrev': division_abbrev,
-                'conference_id': conference_id,
-                'conference_name': conference_name,
-                'official_site_url': official_site_url,
-                'franchise_id': franchise_id,
-                'roster': roster,
-                'previous_game': previous_game,
-                'next_game': next_game,
-                'stats': stats
-            }
+    #         output = {
+    #             'team_id': team_id,
+    #             'name': name,
+    #             # 'abbreviation': abbreviation,
+    #             'team_name': name,
+    #             # 'location_name': location_name,
+    #             'short_name': short_name,
+    #             # 'division_id': division_id,
+    #             # 'division_name': division_name,
+    #             # 'division_abbrev': division_abbrev,
+    #             # 'conference_id': conference_id,
+    #             # 'conference_name': conference_name,
+    #             # 'official_site_url': official_site_url,
+    #             # 'franchise_id': franchise_id,
+    #             # 'roster': roster,
+    #             'previous_game': previous_game,
+    #             'next_game': next_game,
+    #             # 'stats': stats
+    #         }
 
-            # put this dictionary into the larger dictionary
-            teams.append(output)
-        except:
-            debug.error("Missing data in current team info")
+    #         # put this dictionary into the larger dictionary
+    #         teams.append(output)
+    #     except:
+    #         print(team)
+    #         debug.error("Missing data in current team info")
 
-    return teams
+
+# This one is a little funky for the time. I'll loop through the what and why
+def team_previous_game(team_code, date, pg = None, ng = None):
+    # This response returns the next three games, starting from the date given
+    client = Client(base_url="https://api-web.nhle.com")
+    teams_response = {}
+    with client as client:
+        teams_response: WeekSchedule = get_team_week_schedule_by_date.sync(team_code, date, client=client)
+
+    pg = teams_response.games[0]
+
+    # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
+    # TODO: Get a better situation for a LIVE game when showing a team summary during intermission
+    if pg.game_state == "FUT" or pg.game_state == "PRE" or pg.game_state == "LIVE":
+        ng = pg
+        # Then we take the previous_start_date given from the response and run through it again
+        pg, ng = team_previous_game(team_code, teams_response.previous_start_date, None, ng)
+    else:
+        # I _think_ that realistically the previous_game will always be the last game in this list, but
+        # I'm going to simply loop through for now.
+        for game in teams_response.games[1:]:
+            if (game.game_state == "FINAL" or game.game_state == "OFF") and game.game_date > pg.game_date:
+                pg = game
+            else:
+                if ng is None or ng.game_date < game.game_date:
+                    ng = game
+
+    # Then return. I'd like to say we could be smart and take a few days off from the initial request,
+    # but I'm already questioning how that'd act with the likes of the all-star break.
+    # I think two requests is fine for now
+    return pg, ng
 
 def player_info(playerId):
     data = nhl_api.data.get_player(playerId)
@@ -155,48 +210,6 @@ def series_record(seriesCode, season):
     parsed = data.json()
     return parsed["data"]
 
-def standings():
-    standing_records = {}
-
-    wildcard_records = {
-        'eastern': [],
-        'western': []
-    }
-    
-    data = nhl_api.data.get_standings().json()
-    divisions = data['records']
-
-    data_wildcard = nhl_api.data.get_standings_wildcard().json()
-    try:
-        wildcard = data_wildcard['records']
-        for division in range(len(divisions)):
-            team_records = divisions[division]['teamRecords']
-            division_full_name = divisions[division]['division']['name'].split()
-            division_name = division_full_name[-1]
-            conference_name = divisions[division]['conference']['name']
-
-            for team in range(len(team_records)):
-                team_id = team_records[team]['team']['id']
-                team_name = team_records[team]['team']['name']
-                team_records[team].pop('team')
-                standing_records[team_id] = {
-                    'division': division_name,
-                    'conference': conference_name,
-                    'team_name': team_name,
-                    'team_id': team_id
-                }
-                for key, value in team_records[team].items():
-                    standing_records[team_id][key] = value
-
-        for record in wildcard:
-            if record['conference']['name'] == 'Eastern':
-                wildcard_records['eastern'].append(record)
-            elif record['conference']['name'] == 'Western':
-                wildcard_records['western'].append(record)
-
-        return standing_records, wildcard_records
-    except KeyError:
-        return False, False
 
 
 class Standings(object):
@@ -207,12 +220,12 @@ class Standings(object):
         different type of Standings.
 
     """
-    def __init__(self, records, wildcard):
+    def __init__(self, records: SeasonStandings, wildcard):
         self.data = records
         self.data_wildcard = wildcard
         self.get_conference()
         self.get_division()
-        self.get_wild_card()
+        # self.get_wild_card()
 
     def get_conference(self):
         eastern, western = self.sort_conference(self.data)
@@ -264,18 +277,18 @@ class Standings(object):
         pass
 
     @staticmethod
-    def sort_conference(data):
+    def sort_conference(data: SeasonStandings):
         eastern = []
         western = []
-        for item in data:
-            if data[item]['conference'] == 'Eastern':
-                eastern.append(data[item])
+        for item in data.standings:
+            if item.conference_name == 'Eastern':
+                eastern.append(item)
 
-            elif data[item]['conference'] == 'Western':
-                western.append(data[item])
+            elif item.conference_name == 'Western':
+                western.append(item)
 
-        eastern = sorted(eastern, key=lambda i: int(i['conferenceRank']))
-        western = sorted(western, key=lambda i: int(i['conferenceRank']))
+        eastern = sorted(eastern, key=lambda i: int(i.points), reverse=True)
+        western = sorted(western, key=lambda i: int(i.points), reverse=True)
         return eastern, western
 
     @staticmethod
@@ -285,23 +298,23 @@ class Standings(object):
         central = []
         pacific = []
 
-        for item in data:
-            if data[item]['division'] == 'Metropolitan':
-                metropolitan.append(data[item])
+        for item in data.standings:
+            if item.division_name == 'Metropolitan':
+                metropolitan.append(item)
 
-            elif data[item]['division'] == 'Atlantic':
-                atlantic.append(data[item])
+            elif item.division_name == 'Atlantic':
+                atlantic.append(item)
 
-            elif data[item]['division'] == 'Central':
-                central.append(data[item])
+            elif item.division_name == 'Central':
+                central.append(item)
 
-            elif data[item]['division'] == 'Pacific':
-                pacific.append(data[item])
+            elif item.division_name == 'Pacific':
+                pacific.append(item)
 
-        metropolitan = sorted(metropolitan, key=lambda i: int(i['conferenceRank']))
-        atlantic = sorted(atlantic, key=lambda i: int(i['conferenceRank']))
-        central = sorted(central, key=lambda i: int(i['conferenceRank']))
-        pacific = sorted(pacific, key=lambda i: int(i['conferenceRank']))
+        metropolitan = sorted(metropolitan, key=lambda i: int(i.points), reverse=True)
+        atlantic = sorted(atlantic, key=lambda i: int(i.points), reverse=True)
+        central = sorted(central, key=lambda i: int(i.points), reverse=True)
+        pacific = sorted(pacific, key=lambda i: int(i.points), reverse=True)
 
         return metropolitan, atlantic, central, pacific
 
@@ -343,6 +356,19 @@ class Playoff():
 
     def __repr__(self):
         return self.__str__()
+
+class TeamInfo:
+    def __init__(self, standings, team_details):
+        self.record = standings
+        self.details = team_details
+
+class TeamDetails:
+    def __init__(self, id: int, name: str, abbrev: str, previous_game: Game = None, next_game: Game = None):
+        self.id = id
+        self.name = name
+        self.abbrev = abbrev
+        self.previous_game = previous_game
+        self.next_game = next_game
 
 class Info(nhl_api.object.Object):
     pass

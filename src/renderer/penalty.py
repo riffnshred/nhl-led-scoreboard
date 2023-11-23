@@ -2,6 +2,7 @@ from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from utils import center_text, convert_date_format
 from renderer.matrix import MatrixPixels
 import debug
+from nhl_api.info import TeamInfo
 
 """
     Show the details of a goal:
@@ -14,10 +15,10 @@ class PenaltyRenderer:
         penalty_details = team.penalties[-1] # Get the last goal of the list of plays
         team_colors = data.config.team_colors
         team_id = penalty_details.team_id
-        self.team = data.teams_info[team_id]
+        self.team: TeamInfo = data.teams_info[team_id]
         self.player = penalty_details.player
         self.periodTime = penalty_details.periodTime
-        self.penaltyTinutes = penalty_details.penaltyMinutes
+        self.penaltyMinutes = penalty_details.penaltyMinutes # TODO: I don't know if we have this
         self.severity = penalty_details.severity
         self.rotation_rate = 10
         self.matrix = matrix
@@ -52,7 +53,7 @@ class PenaltyRenderer:
         
         self.matrix.draw_text_layout(
             self.layout.team_name, 
-            self.team['team_name'], 
+            self.team.details.abbrev,
             fillColor=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b']),
             backgroundColor=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
         )
@@ -61,16 +62,16 @@ class PenaltyRenderer:
 
         self.matrix.draw_text_layout(
             self.layout.jersey_number, 
-            self.player.jerseyNumber
+            str(self.player.sweater_number)
         )
 
         self.matrix.draw_text_layout(
             self.layout.last_name, 
-            self.player.lastName
+            self.player.last_name.default
         )
         self.matrix.draw_text_layout(
             self.layout.minutes, 
-            "{}:00".format(self.penaltyTinutes),
+            "{}:00".format(self.penaltyMinutes),
         )
         self.matrix.draw_text_layout(
             self.layout.severity, 

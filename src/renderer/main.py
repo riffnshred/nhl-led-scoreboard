@@ -7,6 +7,7 @@ from boards.clock import Clock
 from boards.stanley_cup_champions import StanleyCupChampions
 from boards.seriesticker import Seriesticker
 from boards.team_summary import TeamSummary
+from boards.standings import Standings
 from data.scoreboard import Scoreboard
 from renderer.scoreboard import ScoreboardRenderer
 from renderer.goal import GoalRenderer
@@ -34,9 +35,11 @@ class MainRenderer:
             while True:
                 self.data.refresh_overview()
                 self.scoreboard = Scoreboard(self.data.overview, self.data)
-                ScoreboardRenderer(self.data, self.matrix, Scoreboard(self.data.games[0], self.data)).render()
+                # ScoreboardRenderer(self.data, self.matrix, Scoreboard(game, self.data)).render()
+                #Standings(self.data, self.matrix, self.sleepEvent).render()
+                # self.data.test_goal(self.data, self.matrix, self.sleepEvent)
                 #self._draw_event_animation("goal", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
-                #PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
                 #TeamSummary(self.data, self.matrix, self.sleepEvent).render()
                 sleep(1)
                 debug.info("Testing Mode Refresh")
@@ -139,7 +142,7 @@ class MainRenderer:
                 else:
                     self.data.pb_trigger = False
 
-            if self.status.is_live(self.data.overview.status):
+            if self.status.is_live(self.data.overview.game_state):
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
@@ -161,7 +164,7 @@ class MainRenderer:
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
 
-            elif self.status.is_game_over(self.data.overview.status):
+            elif self.status.is_game_over(self.data.overview.game_state):
                 debug.info("Game Over")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
@@ -171,10 +174,11 @@ class MainRenderer:
                         StanleyCupChampions(self.data, self.matrix, self.sleepEvent).render()
 
                 self.__render_postgame(sbrenderer)
-
                 self.sleepEvent.wait(self.refresh_rate)
+                if not self.goal_team_cache:
+                    self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_final(self.data.overview.status):
+            elif self.status.is_final(self.data.overview.game_state):
                 """ Post Game state """
                 debug.info("FINAL")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -189,7 +193,7 @@ class MainRenderer:
                 if not self.goal_team_cache:
                     self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_scheduled(self.data.overview.status):
+            elif self.status.is_scheduled(self.data.overview.game_state):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -198,7 +202,7 @@ class MainRenderer:
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_irregular(self.data.overview.status):
+            elif self.status.is_irregular(self.data.overview.game_state):
                 """ Pre-game state """
                 debug.info("Game is irregular")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -206,7 +210,9 @@ class MainRenderer:
                 #sleep(self.refresh_rate)
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
-
+            else:
+                print("somethin' really goofy")
+                self.sleepEvent.wait(self.refresh_rate)
             self.data.refresh_data()
             self.data.refresh_overview()
             self.scoreboard = Scoreboard(self.data.overview, self.data)
@@ -324,7 +330,7 @@ class MainRenderer:
             self.penalties_team_cache.append("away")
             #if away_id not in self.data.pref_teams: and pref_team_only:
             #    return
-            # run the goal animation
+            # run the penalty animation
             self._draw_event_animation("penalty", away_id, away_name)
 
         if len(h_penalties) < len(home_data_penalties):
@@ -332,7 +338,7 @@ class MainRenderer:
             self.penalties_team_cache.append("home")
             #if home_id not in self.data.pref_teams: #and pref_team_only:
             #    return
-            # run the goal animation
+            # run the penalty animation
             self._draw_event_animation("penalty", home_id, home_name)
 
     def _draw_event_animation(self, event, id=14, name="test"):
@@ -396,15 +402,21 @@ class MainRenderer:
 
     def draw_end_period_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""
-        color = self.matrix.graphics.Color(0, 255, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        color = 255 # self.matrix.graphics.Color(0, 255, 0)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2), fill=color)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1), fill=color)
+        self.matrix.render()
 
     def draw_end_of_game_indicator(self):
         """TODO: change the width depending how much time is left to the intermission"""
-        color = self.matrix.graphics.Color(255, 0, 0)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
-        self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        color = 255 # self.matrix.graphics.Color(255, 0, 0)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 8, self.matrix.height - 2, (self.matrix.width * .5) + 8, self.matrix.height - 2), fill=color)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, (self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1, color)
+        self.matrix.draw.line(((self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1), fill=color)
+        self.matrix.render()
 
     def test_stanley_cup_champion(self, team_id):
         self.data.cup_winner_id = team_id

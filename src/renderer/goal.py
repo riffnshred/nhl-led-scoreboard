@@ -50,7 +50,7 @@ class GoalRenderer:
         self.matrix.draw.rectangle([0,0,64,6], fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b']))
         self.matrix.draw_text(
                 (1, 1), 
-                "GOAL @ {}/{}".format(self.periodTime,self.period), 
+                "GOAL @ {}/{}".format(self.periodTime, self.period), 
                 font=self.font, 
                 fill=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b'])
             )
@@ -58,7 +58,7 @@ class GoalRenderer:
         self.draw_hashtag()
         self.matrix.draw_text(
                 (11, 8), 
-                str(self.scorer["info"].jerseyNumber),
+                str(self.scorer["info"].sweater_number),
                 font=self.font_medium, 
                 fill=(255,255,255)
             )
@@ -72,13 +72,13 @@ class GoalRenderer:
 
         self.matrix.draw_text(
                 (8, 20), 
-                self.scorer["info"].firstName.upper(),
+                self.scorer["info"].first_name.default.upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
         self.matrix.draw_text(
                 (8, 26), 
-                self.scorer["info"].lastName.upper(),
+                self.scorer["info"].last_name.default.upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
@@ -87,21 +87,21 @@ class GoalRenderer:
         self.matrix.draw.rectangle([0,0,64,6], fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b']))
         self.matrix.draw_text(
                 (1, 1), 
-                "GOAL @ {}/{}".format(self.periodTime,self.period), 
+                "GOAL @ {}/{}".format(self.periodTime, self.period), 
                 font=self.font, 
                 fill=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b'])
             )
 
         scorer_name_coord = self.matrix.draw_text(
                 (1, 8), 
-                self.scorer["info"].lastName.upper(), 
+                self.scorer["info"].last_name.default.upper(), 
                 font=self.font, 
                 fill=(255, 255, 255)
             )
         scorer_points_x_coord = scorer_name_coord["position"][0] + scorer_name_coord["size"][0] + 3
         self.matrix.draw_text(
-                (scorer_points_x_coord, 8), 
-                str(self.scorer["points"]), 
+                (scorer_points_x_coord, 8),
+                "", # This was points in the game, but we don't get it. Should we do something else?
                 font=self.font, 
                 fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
             )
@@ -118,14 +118,14 @@ class GoalRenderer:
             for i in range(len(self.assists)):
                 assist_name_coord = self.matrix.draw_text(
                     (1, assists_y_pos), 
-                    self.assists[i]["info"].lastName.upper(), 
+                    self.assists[i]["info"].last_name.default.upper(), 
                     font=self.font, 
                     fill=(255, 255, 255)
                 )
                 assists_points_x_coord = assist_name_coord["position"][0] + assist_name_coord["size"][0] + 3
                 self.matrix.draw_text(
                     (assists_points_x_coord, assists_y_pos), 
-                    str(self.assists[i]["points"]), 
+                    "", # This was points in the game, but we don't get it. Should we do something else?
                     font=self.font, 
                     fill=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
                 )

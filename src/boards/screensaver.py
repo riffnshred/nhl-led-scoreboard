@@ -51,7 +51,7 @@ class screenSaver:
 
                 # Go through the frames
                 x = 0
-                while x is not 10:
+                while x != 10:
                     try:
                         toaster.seek(frame_nub)
                     except EOFError:

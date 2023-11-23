@@ -27,7 +27,7 @@ import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.6.11"
+SCRIPT_VERSION = "1.7.0"
 
 
 def run():
@@ -39,9 +39,7 @@ def run():
 
     if commandArgs.terminal_mode and sys.stdin.isatty():
         height, width = os.popen('stty size', 'r').read().split()
-        termMatrix = TermMatrix()
-        termMatrix.width = int(width)
-        termMatrix.height = int(height)
+        termMatrix = TermMatrix(int(width), int(height))
         matrix = Matrix(termMatrix)
     else:
         # Check for led configuration arguments
@@ -58,6 +56,8 @@ def run():
     # Read scoreboard options from config.json if it exists
     config = ScoreboardConfig("config", commandArgs, (matrix.width, matrix.height))
 
+    # This data will get passed throughout the entirety of this program.
+    # It initializes all sorts of things like current season, teams, helper functions
     data = Data(config)
 
     #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)
@@ -148,6 +148,7 @@ def run():
         pushbuttonThread.daemon = True
         pushbuttonThread.start()
     
+    # Then the main everything runs here.
     MainRenderer(matrix, data, sleepEvent).render()
 
 
