@@ -36,8 +36,8 @@ class Clock:
         r = r"(\d+),\s*(\d+),\s*(\d+)"
 
         if self.data.config.clock_team_colors:
-            self.clockfill = (234,234,78)
-            self.wxdtfill = (78,234,234)
+            self.clockfill = (self.clock_color['r'],self.clock_color['g'],self.clock_color['b'])
+            self.wxdtfill = (self.wxdt_color['r'],self.wxdt_color['g'],self.wxdt_color['b'])
         elif len(self.data.config.clock_clock_rgb) > 0 or len(self.data.config.clock_date_rgb) > 0:
             if len(self.data.config.clock_clock_rgb) > 0:
                 #Test string to make sure it's in rgb format

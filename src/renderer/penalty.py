@@ -18,7 +18,7 @@ class PenaltyRenderer:
         self.team: TeamInfo = data.teams_info[team_id]
         self.player = penalty_details.player
         self.periodTime = penalty_details.periodTime
-        self.penaltyMinutes = "2" # penalty_details.penaltyMinutes # TODO: I don't know if we have this
+        self.penaltyMinutes = penalty_details.penaltyMinutes # TODO: I don't know if we have this
         self.severity = penalty_details.severity
         self.rotation_rate = 10
         self.matrix = matrix
@@ -53,7 +53,7 @@ class PenaltyRenderer:
         
         self.matrix.draw_text_layout(
             self.layout.team_name, 
-            self.team.details.name,
+            self.team.details.abbrev,
             fillColor=(self.team_txt_color['r'], self.team_txt_color['g'], self.team_txt_color['b']),
             backgroundColor=(self.team_bg_color['r'], self.team_bg_color['g'], self.team_bg_color['b'])
         )
