@@ -2,8 +2,8 @@ class Periods:
     PLAYOFF = 'P'
     END = 'End'
     FINAL = 'Final'
-    ORDINAL = ['00:00', '1st', '2nd', '3rd', 'OT', 'SO']
-    ORDINAL_PLAYOFF = ['00:00', '1st', '2nd', '3rd', 'OT', '2OT', '3OT', '4OT', '5OT']
+    ORDINAL = ['FUT', '1st', '2nd', '3rd', 'OT', 'SO']
+    ORDINAL_PLAYOFF = ['FUT', '1st', '2nd', '3rd', 'OT', '2OT', '3OT', '4OT', '5OT']
 
     def __init__(self, overview):
         self.is_intermission = overview.clock.in_intermission if overview.clock else False
