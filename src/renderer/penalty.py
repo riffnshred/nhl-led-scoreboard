@@ -18,7 +18,7 @@ class PenaltyRenderer:
         self.team: TeamInfo = data.teams_info[team_id]
         self.player = penalty_details.player
         self.periodTime = penalty_details.periodTime
-        self.penaltyMinutes = penalty_details.penaltyMinutes # TODO: I don't know if we have this
+        self.penaltyMinutes = penalty_details.penaltyMinutes
         self.severity = penalty_details.severity
         self.rotation_rate = 10
         self.matrix = matrix

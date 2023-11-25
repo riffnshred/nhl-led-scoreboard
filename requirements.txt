@@ -1,4 +1,4 @@
-env-canada==0.0.35
+env-canada==0.2.7
 ephem==3.7.7.0
 fastjsonschema>=2.14.4
 geocoder==1.38.1

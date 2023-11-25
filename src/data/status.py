@@ -46,10 +46,10 @@ class Status:
         return status == "LIVE" or status == "CRIT"
 
     def is_game_over(self, status):
-        return status == "OFF"
+        return status == "OVER"
 
     def is_final(self, status):
-        return status == "FINAL"
+        return status in ["FINAL","OFF"]
 
     def is_irregular(self, status):
         return status in self.Irregular

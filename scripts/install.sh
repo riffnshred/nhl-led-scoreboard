@@ -17,17 +17,13 @@ git config submodule.matrix.ignore all
 
 echo "$(tput setaf 4)Running rgbmatrix installation...$(tput setaf 9)"
 
-# Recompile the cpp files to build library with newest cython.  See https://github.com/hzeller/rpi-rgb-led-matrix/issues/1298
+cd submodules/matrix || exit
 
-cd submodules/matrix/bindings/python/rgbmatrix/ || exit
+make build-python PYTHON="$(which python3)"
+sudo make install-python PYTHON="$(which python3)"
 
-python3 -m pip install --no-cache-dir cython
-python3 -m cython -2 --cplus *.pyx
-
-cd ../../../ || exit
-
-make build-python PYTHON="$(command -v python3)"
-sudo make install-python PYTHON="$(command -v python3)"
+cd bindings || exit 
+sudo pip3 install --force-reinstall -e python/
 
 cd ../../../ || exit
 
