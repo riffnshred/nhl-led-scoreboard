@@ -112,7 +112,6 @@ class MainRenderer:
         self.sleepEvent.clear()
 
         while not self.sleepEvent.is_set():
-            print(self.data.overview.game_state)
             if self.data._is_new_day():
                 debug.log('This is a new day')
                 return
