@@ -9,6 +9,7 @@
 [![Create Release - Image](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml/badge.svg)](https://github.com/falkyre/nhl-led-scoreboard-img/actions/workflows/main.yml)
 [![GitHub release (latest by date)](https://badgen.net/github/release/falkyre/nhl-led-scoreboard-img?label=Version)](https://github.com/falkyre/nhl-led-scoreboard-img/releases/latest)
 
+[![discord button](assets/images/discord_button.png)](https://discord.gg/CWa5CzK)
 # IMPORTANT (PLEASE READ)
 
 ## (2023-11-09)
