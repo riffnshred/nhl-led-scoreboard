@@ -1,4 +1,15 @@
 import sys
+import os
+try:
+    cwd = sys.argv[0]
+    if cwd == 'main.py':
+        os.chdir("../")
+    else:
+        mvwd = cwd.split("src/main.py")[0]
+        os.chdir(mvwd)
+except:
+    pass
+
 import time
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
@@ -23,7 +34,6 @@ from update_checker import UpdateChecker
 from apscheduler.schedulers.background import BackgroundScheduler
 from renderer.loading_screen import Loading
 import debug
-import os
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
