@@ -6,7 +6,7 @@ gpiozero==1.5.1
 nhl-api-client==1.0.4
 noaa-sdk>=0.1.18
 printtools==1.2
-PyInstaller==3.6
+PyInstaller==5.13.1
 pyowm>=3.0.0
 python-tsl2591==0.2.0
 questionary>=1.5.2
