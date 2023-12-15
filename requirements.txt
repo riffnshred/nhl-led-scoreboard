@@ -3,6 +3,7 @@ ephem==3.7.7.0
 fastjsonschema>=2.14.4
 geocoder==1.38.1
 gpiozero==1.5.1
+nhl-api-client==1.0.4
 noaa-sdk>=0.1.18
 printtools==1.2
 PyInstaller==3.6

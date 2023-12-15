@@ -1,10 +1,10 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
 from utils import center_text, convert_date_format, get_file
 from renderer.logos import LogoRenderer
-
+from data.scoreboard import Scoreboard
 
 class ScoreboardRenderer:
-    def __init__(self, data, matrix, scoreboard, shot_on_goal=False):
+    def __init__(self, data, matrix, scoreboard: Scoreboard, shot_on_goal=False):
         self.data = data
         self.status = data.status
         self.layout = self.data.config.config.layout.get_board_layout('scoreboard')
@@ -119,7 +119,7 @@ class ScoreboardRenderer:
         )
 
         self.matrix.render()
-        if (3 <= self.scoreboard.away_team.num_skaters <= 4) or (3 <= self.scoreboard.home_team.num_skaters <= 4):
+        if self.scoreboard.away_team.powerplay or self.scoreboard.home_team.powerplay:
             self.draw_power_play()
 
 
@@ -128,12 +128,11 @@ class ScoreboardRenderer:
         period = self.scoreboard.periods.ordinal
         result = self.scoreboard.periods.clock
         score = '{}-{}'.format(self.scoreboard.away_team.goals, self.scoreboard.home_team.goals)
-        date = convert_date_format(self.scoreboard.date)
 
         # Draw the info
         self.matrix.draw_text_layout(
             self.layout.center_top, 
-            date
+            str(self.scoreboard.date)
         )
 
         end_text = result
@@ -175,24 +174,29 @@ class ScoreboardRenderer:
     def draw_power_play(self):
         away_number_skaters = self.scoreboard.away_team.num_skaters
         home_number_skaters = self.scoreboard.home_team.num_skaters
-        yellow = self.matrix.graphics.Color(255, 255, 0)
-        red = self.matrix.graphics.Color(255, 0, 0)
-        green = self.matrix.graphics.Color(0, 255, 0)
+        # yellow = self.matrix.graphics.Color(255, 255, 0)
+        yellow = (255, 255, 0)
+        # red = self.matrix.graphics.Color(255, 0, 0)
+        red = (255, 0, 0)
+        # green = self.matrix.graphics.Color(0, 255, 0)
+        green = (0, 255, 0)
         colors = {"6": green, "5": green, "4": yellow, "3": red}
 
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 1, 3, self.matrix.height - 1,
-                                      colors[str(away_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 2, 1, self.matrix.height - 2,
-                                      colors[str(away_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 3, 0, self.matrix.height - 3,
-                                      colors[str(away_number_skaters)])
-
-        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 1, self.matrix.width - 4,
-                                      self.matrix.height - 1, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 2, self.matrix.width - 2,
-                                      self.matrix.height - 2, colors[str(home_number_skaters)])
-        self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 3, self.matrix.width - 1,
-                                      self.matrix.height - 3, colors[str(home_number_skaters)])
+        # import pdb; pdb.set_trace()
+        self.matrix.draw.line((0, self.matrix.height - 1, 3, self.matrix.height - 1), fill=colors[str(away_number_skaters)])
+        # self.matrix.draw.line(((self.matrix.width * .5) - 9, self.matrix.height - 1, (self.matrix.width * .5) + 9, self.matrix.height - 1), fill=255)
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 1, 3, self.matrix.height - 1, colors[str(away_number_skaters)])
+        self.matrix.draw.line((0, self.matrix.height - 2, 1, self.matrix.height - 2), fill=colors[str(away_number_skaters)])
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 2, 1, self.matrix.height - 2, colors[str(away_number_skaters)])
+        self.matrix.draw.line((0, self.matrix.height - 3, 0, self.matrix.height - 3), fill=colors[str(away_number_skaters)])
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, 0, self.matrix.height - 3, 0, self.matrix.height - 3, colors[str(away_number_skaters)])
+        self.matrix.draw.line((self.matrix.width - 1, self.matrix.height - 1, self.matrix.width - 4, self.matrix.height - 1), fill=colors[str(home_number_skaters)])
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 1, self.matrix.width - 4, self.matrix.height - 1, colors[str(home_number_skaters)])
+        self.matrix.draw.line((self.matrix.width - 1, self.matrix.height - 2, self.matrix.width - 2, self.matrix.height - 2), fill=colors[str(home_number_skaters)])
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 2, self.matrix.width - 2, self.matrix.height - 2, colors[str(home_number_skaters)])
+        self.matrix.draw.line((self.matrix.width - 1, self.matrix.height - 3, self.matrix.width - 1, self.matrix.height - 3), fill=colors[str(home_number_skaters)])
+        # self.matrix.graphics.DrawLine(self.matrix.matrix, self.matrix.width - 1, self.matrix.height - 3, self.matrix.width - 1, self.matrix.height - 3, colors[str(home_number_skaters)])
+        self.matrix.render()
 
     def draw_SOG(self):
 

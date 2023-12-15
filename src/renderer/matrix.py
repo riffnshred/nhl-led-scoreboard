@@ -10,9 +10,9 @@ DEBUG = False
 
 # A fake class to fill in the __init__ of Matrix
 class TermMatrix:
-    def __init__(self):
-        self.width = 0
-        self.height = 0
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
     def SetImage(self, img):
         show_image(img)
 

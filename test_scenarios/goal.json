@@ -1,0 +1,148 @@
+{
+  "id": 2023020252,
+  "season": 20232024,
+  "gameType": 2,
+  "gameDate": "2023-11-17",
+  "venue": {
+    "default": "Canada Life Centre"
+  },
+  "startTimeUTC": "2023-11-18T01:00:00Z",
+  "easternUTCOffset": "-05:00",
+  "venueUTCOffset": "-06:00",
+  "tvBroadcasts": [{
+    "id": 28,
+    "market": "A",
+    "countryCode": "US",
+    "network": "MSG-B"
+  }, {
+    "id": 292,
+    "market": "H",
+    "countryCode": "CA",
+    "network": "TSN3"
+  }, {
+    "id": 324,
+    "market": "N",
+    "countryCode": "US",
+    "network": "NHLN"
+  }],
+  "gameState": "LIVE",
+  "gameScheduleState": "OK",
+  "period": 1,
+  "periodDescriptor": {
+    "number": 1,
+    "periodType": "REG"
+  },
+  "awayTeam": {
+    "id": 7,
+    "name": {
+      "default": "Sabres"
+    },
+    "abbrev": "BUF",
+    "score": 0,
+    "sog": 28,
+    "logo": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+    "onIce": []
+  },
+  "homeTeam": {
+    "id": 52,
+    "name": {
+      "default": "Jets"
+    },
+    "abbrev": "WPG",
+    "score": 0,
+    "sog": 18,
+    "logo": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg",
+    "onIce": []
+  },
+  "clock": {
+    "timeRemaining": "12:34",
+    "secondsRemaining": 0,
+    "running": false,
+    "inIntermission": false
+  },
+  "rosterSpots": [{
+    "teamId": 52,
+    "playerId": 8482149,
+    "firstName": {
+      "default": "Cole"
+    },
+    "lastName": {
+      "default": "Perfetti"
+    },
+    "sweaterNumber": 91,
+    "positionCode": "C",
+    "headshot": "https://assets.nhle.com/mugs/nhl/20232024/WPG/8482149.png"
+  }, {
+    "teamId": 52,
+    "playerId": 8476480,
+    "firstName": {
+      "default": "Vladislav"
+    },
+    "lastName": {
+      "default": "Namestnikov",
+      "cs": "Naměstnikov"
+    },
+    "sweaterNumber": 7,
+    "positionCode": "C",
+    "headshot": "https://assets.nhle.com/mugs/nhl/20232024/WPG/8476480.png"
+  }, {
+    "teamId": 52,
+    "playerId": 8480145,
+    "firstName": {
+      "default": "Neal"
+    },
+    "lastName": {
+      "default": "Pionk"
+    },
+    "sweaterNumber": 4,
+    "positionCode": "D",
+    "headshot": "https://assets.nhle.com/mugs/nhl/20232024/WPG/8480145.png"
+  }, {
+    "teamId": 7,
+    "playerId": 8477480,
+    "firstName": {
+      "default": "Eric"
+    },
+    "lastName": {
+      "default": "Comrie"
+    },
+    "sweaterNumber": 31,
+    "positionCode": "G",
+    "headshot": "https://assets.nhle.com/mugs/nhl/20232024/BUF/8477480.png"
+  }],
+  "displayPeriod": 1,
+  "gameOutcome": {
+    "lastPeriodType": "REG"
+  },
+  "plays": [{
+    "eventId": 469,
+    "period": 2,
+    "periodDescriptor": {
+      "number": 2,
+      "periodType": "REG"
+    },
+    "timeInPeriod": "02:12",
+    "timeRemaining": "17:48",
+    "situationCode": "1551",
+    "homeTeamDefendingSide": "left",
+    "typeCode": 505,
+    "typeDescKey": "goal",
+    "sortOrder": 278,
+    "details": {
+      "xCoord": 48,
+      "yCoord": 0,
+      "zoneCode": "O",
+      "shotType": "snap",
+      "scoringPlayerId": 8482149,
+      "scoringPlayerTotal": 6,
+      "assist1PlayerId": 8476480,
+      "assist1PlayerTotal": 6,
+      "assist2PlayerId": 8480145,
+      "assist2PlayerTotal": 6,
+      "eventOwnerTeamId": 52,
+      "goalieInNetId": 8477480,
+      "awayScore": 0,
+      "homeScore": 1
+    }
+  }]
+}

@@ -1,51 +1,53 @@
-on:
-  push:
-    # branches: [ beta ]
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+# 
+name: Redocly OpenAPI
 
-name: Create Tagged Release
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
 
 jobs:
   build:
-    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - run: npm i -g @redocly/cli@latest
+      - run: redocly build-docs swagger/nhl.json --output=docs/index.html
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "_site/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v2.0.0
+        with:
+          # Upload entire repository
+          path: 'docs/'
+
+  # Deploy job
+  deploy:
+    # Add a dependency to the build job
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Set current version variable
-        run: |
-          VER=$(cat VERSION)
-          echo "VERSION=$VER" >> $GITHUB_ENV
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Bump version                                                                                                                                    
-        run: |                                                                                                                                                
-          echo "${{ steps.get_version.outputs.VERSION }}" > VERSION
-      - name: Push changes                                                                                                                                    
-        uses: ad-m/github-push-action@master                                                                                                                  
-        with:                                                                                                                                                 
-          github_token: ${{ secrets.GITHUB_TOKEN }}                                                                                                           
-          branch: ${{ github.ref }}
-          force: "true"
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@main
-        with:
-          commitMode: "true"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ steps.get_version.outputs.VERSION }}
-          body: ${{ steps.github_release.outputs.changelog }}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+            

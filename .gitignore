@@ -159,3 +159,5 @@ src/renderer/boarddev
 
 # Custom_logos to overwrite the standard one
 config/custom_logos.json
+
+nhl-api-client/

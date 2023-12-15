@@ -258,8 +258,7 @@ def deep_update(source, overrides):
 
 
 def convert_time(utc_dt):
-    local_dt = datetime.strptime(utc_dt, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc).astimezone(tz=None)
-    return local_dt
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 
 def is_empty_list(list):
@@ -286,8 +285,7 @@ def center_obj(screen_w, lenght):
     return int((screen_w - lenght)/2)
 
 def convert_date_format(date):
-    d = datetime.strptime(date, '%Y-%m-%d')
-    return d.strftime('%b %d')
+    return date.strftime('%b %d')
 
 def round_normal(n, decimals=0):
     multiplier = 10 ** decimals
