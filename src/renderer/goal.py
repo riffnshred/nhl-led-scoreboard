@@ -58,7 +58,7 @@ class GoalRenderer:
         self.draw_hashtag()
         self.matrix.draw_text(
                 (11, 8), 
-                str(self.scorer["info"].sweater_number),
+                str(self.scorer["info"]["sweaterNumber"]),
                 font=self.font_medium, 
                 fill=(255,255,255)
             )
@@ -72,13 +72,13 @@ class GoalRenderer:
 
         self.matrix.draw_text(
                 (8, 20), 
-                self.scorer["info"].first_name.default.upper(),
+                self.scorer["info"]["firstName"]["default"].upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
         self.matrix.draw_text(
                 (8, 26), 
-                self.scorer["info"].last_name.default.upper(),
+                self.scorer["info"]["lastName"]["default"].upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
@@ -94,7 +94,7 @@ class GoalRenderer:
 
         scorer_name_coord = self.matrix.draw_text(
                 (1, 8), 
-                self.scorer["info"].last_name.default.upper(), 
+                self.scorer["info"]["lastName"]["default"].upper(), 
                 font=self.font, 
                 fill=(255, 255, 255)
             )
@@ -118,7 +118,7 @@ class GoalRenderer:
             for i in range(len(self.assists)):
                 assist_name_coord = self.matrix.draw_text(
                     (1, assists_y_pos), 
-                    self.assists[i]["info"].last_name.default.upper(), 
+                    self.assists[i]["info"]["lastName"]["default"].upper(), 
                     font=self.font, 
                     fill=(255, 255, 255)
                 )

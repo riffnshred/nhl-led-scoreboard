@@ -19,6 +19,7 @@ from boards.screensaver import screenSaver
 from boards.stanley_cup_champions import StanleyCupChampions
 from time import sleep
 
+import traceback
 
 class Boards:
     def __init__(self):

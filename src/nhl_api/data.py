@@ -26,14 +26,17 @@ REQUEST_TIMEOUT = 5
 
 TIMEOUT_TESTING = 0.001  # TO DELETE
 
-from nhl_api_client import Client
-from nhl_api_client.api.default import get_score_details_by_date
-from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
+from nhlpy import NHLClient
+from nhlpy.api.game_center import GameCenter
+from nhlpy.api.standings import Standings
+from nhlpy.api.schedule import Schedule
+#from nhl_api_client.api.default import get_score_details_by_date
+#from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
 
 def get_score_details(date):
-    client = Client(base_url="https://api-web.nhle.com")
+    client = NHLClient(verbose=True)
     with client as client:
-        score_details = get_score_details_by_date.sync(date, client=client)
+        score_details = client.game_center.score_now()
         return score_details
 
 def get_team_schedule(team_code, season_code):

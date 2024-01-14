@@ -9,7 +9,8 @@ import debug
 import nhl_api
 from data.playoffs import Series
 from data.status import Status
-from nhl_api_client.models import PlayByPlay
+#from nhl_api_client.models import PlayByPlay
+from nhlpy.api.game_center import GameCenter
 from utils import get_lat_lng, convert_time
 import json
 
@@ -25,11 +26,16 @@ def filter_list_of_games(games, teams):
     # print(games)
     # print(game['awayTeam']['id'], game['homeTeam']['id'])
     pref_games = []
+    index = []
+    prev_index = 0
     for game in games:
-        if game.home_team.id in teams:
+        if game["homeTeam"]["id"] in teams:
+            index.append(teams.index(game["homeTeam"]["id"]))
             pref_games.append(game)
-        if game.away_team.id in teams:
+        elif game["awayTeam"]["id"] in teams:
             pref_games.append(game)
+            index.append(teams.index(game["awayTeam"]["id"]))
+    pref_games = [x for _,x in sorted(zip(index,pref_games))]
     # return list(game for game in games if {game['awayTeam']['id'], game['homeTeam']['id']}.intersection(set(30)))
     return pref_games
 
@@ -236,7 +242,7 @@ class Data:
             
             #Don't think this is needed to be called a second time
            #self.refresh_daily()           
-            self.status.refresh_next_season()
+            #self.status.refresh_next_season()
            
             return True
         else:
@@ -282,6 +288,7 @@ class Data:
             TODO:
                 Add the option to start the earliest game in the preferred game list but change to the top one as soon as it start.
         """
+
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -291,9 +298,8 @@ class Data:
                     self.pref_games = []
                     return data
 
-                self.games = data.games
+                self.games = data["games"]
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
-
                 # Populate the TeamInfo classes used for the team_summary board
                 for team_id in self.pref_teams:
                     # import pdb; pdb.set_trace()
@@ -306,7 +312,7 @@ class Data:
                     self.games = self.pref_games
 
                 if not self.is_pref_team_offday() and self.config.live_mode:
-                #     # self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
+                    #self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
                     # TODO: This shouldn't be needed to get the fact that your preferred team has a game today
                     self.check_game_priority()
@@ -347,27 +353,30 @@ class Data:
 
         if len(self.pref_games) == 0:
             return
-        self.current_game_id = self.pref_games[0].id
-        earliest_start_time = self.pref_games[0].start_time_utc
+        self.current_game_id = self.pref_games[0]["id"]
+        earliest_start_time = datetime.strptime(self.pref_games[0]["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
+        #for g in self.pref_games:
+        #    if earliest_start_time > datetime.strptime(g["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ'):
+        #        earliest_start_time = datetime.strptime(g["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
-            if not self.status.is_final(g.game_state):
+            if not self.status.is_final(g["gameState"]):
                 # If the game started.
-                if g.start_time_utc <= convert_time(datetime.utcnow()):
-                    debug.info('Showing highest priority live game. {} vs {}'.format(g.away_team.name.default, g.home_team.name.default))
-                    self.current_game_id = g.id
+                if datetime.strptime(g["startTimeUTC"],'%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
+                    debug.info('Showing highest priority live game. {} vs {}'.format(g["awayTeam"]["name"]["default"], g["homeTeam"]["name"]["default"]))
+                    self.current_game_id = g["id"]
                     return
                 # If the game has not started but is ealier then the previous set game
-                if g.start_time_utc < earliest_start_time:
-                    earliest_start_time = datetime.strptime(g.start_time_utc, '%Y-%m-%dT%H:%M:%SZ')
-                    self.current_game_id = g.id
-                    debug.info('Showing earliest game. {} vs {}'.format(g.away_team.name.default, g.home_team.name.default))
+                if datetime.strptime(g["startTimeUTC"], "%Y-%m-%dT%H:%M:%SZ") < earliest_start_time:
+                    earliest_start_time = datetime.strptime(g["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
+                    self.current_game_id = g["id"]
+                    debug.info('Showing earliest game. {} vs {}'.format(g["awayTeam"]["name"]["default"], g["homeTeam"]["name"]["default"]))
 
     def other_games(self):
         if not self.is_pref_team_offday() and self.config.live_mode:
             game_list = []
             for g in self.games:
-                if g.id != self.current_game_id:
+                if g["id"] != self.current_game_id:
                     game_list.append(g)
 
             return game_list
@@ -375,7 +384,7 @@ class Data:
 
     def check_all_pref_games_final(self):
         for game in self.pref_games:
-            if game.game_state != "OFF" or game.game_state != "FINAL":
+            if game["gameState"] != "OFF" or game["gameState"] != "FINAL":
                 return
 
         self.all_pref_games_final = True
@@ -410,8 +419,8 @@ class Data:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
                 # TODO: Not sure what was going on here
-                if self.time_stamp != self.overview.clock.time_remaining:
-                    self.time_stamp = self.overview.clock.time_remaining
+                if self.time_stamp != self.overview["clock"]["timeRemaining"]:
+                    self.time_stamp = self.overview["clock"]["timeRemaining"]
                     self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False

@@ -230,12 +230,12 @@ def draw_standing(data, name, records, img_height, width):
     row_pos += row_height
 
     for team in records:
-        abbrev = team.team_abbrev.default
+        abbrev = team["teamAbbrev"]["default"]
         team_id = data.teams_info_by_abbrev[abbrev].details.id
-        points = str(team.points)
-        wins = team.wins
-        losses = team.losses
-        ot = team.ot_losses
+        points = str(team["points"])
+        wins = team["wins"]
+        losses = team["losses"]
+        ot = team["otLosses"]
         team_colors = data.config.team_colors
         bg_color = team_colors.color("{}.primary".format(team_id))
         txt_color = team_colors.color("{}.text".format(team_id))

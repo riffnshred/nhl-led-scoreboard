@@ -62,12 +62,12 @@ class PenaltyRenderer:
 
         self.matrix.draw_text_layout(
             self.layout.jersey_number, 
-            str(self.player.sweater_number)
+            str(self.player["sweaterNumber"])
         )
 
         self.matrix.draw_text_layout(
             self.layout.last_name, 
-            self.player.last_name.default
+            self.player["lastName"]["default"]
         )
         self.matrix.draw_text_layout(
             self.layout.minutes, 

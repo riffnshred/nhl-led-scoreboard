@@ -1,10 +1,16 @@
 import nhl_api.game
 import nhl_api.info
-from nhl_api_client import Client
-from nhl_api_client.api.game import get_game_play_by_play_by_id
-from nhl_api_client.api.default import get_season_standings_by_date
-from nhl_api_client.models import SeasonStandings
+#from nhl_api_client import Client
+#from nhl_api_client.api.game import get_game_play_by_play_by_id
+#from nhl_api_client.api.default import get_season_standings_by_date
+#from nhl_api_client.models import SeasonStandings
 import datetime
+
+from nhlpy import NHLClient
+from nhlpy.api.standings import Standings
+from nhlpy.api.schedule import Schedule
+from nhlpy.api.game_center import GameCenter
+
 
 def player(playerId):
     """Return an Info object of a player information"""
@@ -36,9 +42,9 @@ def standings():
     # TODO: Wildcard stuff
     season_standings = {}
 
-    client = Client(base_url="https://api-web.nhle.com")
+    client = NHLClient(verbose=True)
     with client as client:
-        season_standings: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
+        season_standings = client.standings.get_standings(date = str(datetime.date.today()))
 
     return nhl_api.info.Standings(season_standings, {})
 
