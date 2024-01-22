@@ -79,7 +79,6 @@ class Matrix:
                 backgroundColor=None, backgroundOffset=[1, 1, 1, 1]):
         width = 0
         height = 0
-
         text_chars = text.split("\n")
         offsets = []
 
@@ -116,11 +115,11 @@ class Matrix:
             (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
             backgroundColor
         )
-
+        
+        
         for index, chars in enumerate(text_chars):
             offset = offsets[index]
             chars_position = (x - offset[0], y - offset[1])
-
             self.draw.text(
                 chars_position,
                 chars,

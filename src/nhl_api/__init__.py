@@ -42,7 +42,7 @@ def standings():
     # TODO: Wildcard stuff
     season_standings = {}
 
-    client = NHLClient(verbose=True)
+    client = NHLClient(verbose=False)
     with client as client:
         season_standings = client.standings.get_standings(date = str(datetime.date.today()))
 

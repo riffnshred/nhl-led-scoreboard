@@ -29,7 +29,7 @@ def team_info():
         team_dict[team["triCode"]] = team["id"]
 
 
-    client = NHLClient(verbose=True)
+    client = NHLClient(verbose=False)
     teams_data = {}
     teams_response = {}
     with client as client:
@@ -135,7 +135,7 @@ def team_info():
 # This one is a little funky for the time. I'll loop through the what and why
 def team_previous_game(team_code, date, pg = None, ng = None):
     # This response returns the next three games, starting from the date given
-    client = NHLClient(verbose=True)
+    client = NHLClient(verbose=False)
     teams_response = {}
     with client as client:
         teams_response = client.schedule.get_schedule_by_team_by_week(team_code, date)
