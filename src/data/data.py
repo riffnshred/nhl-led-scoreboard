@@ -302,7 +302,6 @@ class Data:
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 # Populate the TeamInfo classes used for the team_summary board
                 for team_id in self.pref_teams:
-                    # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
                     pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
                     team_info.previous_game = pg
@@ -360,7 +359,7 @@ class Data:
         #        earliest_start_time = datetime.strptime(g["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
-            if not self.status.is_final(g["gameState"]):
+            if not self.status.is_final(g["gameState"]) and not g["gameState"]=="OFF":
                 # If the game started.
                 if datetime.strptime(g["startTimeUTC"],'%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
                     debug.info('Showing highest priority live game. {} vs {}'.format(g["awayTeam"]["name"]["default"], g["homeTeam"]["name"]["default"]))
