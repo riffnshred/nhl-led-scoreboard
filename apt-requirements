@@ -5,6 +5,8 @@ update
 
 # install some packages
 package "build-essential"
+package "libdbus-glib-1-dev"
+package "libgirepository1.0-dev"
 package "git"
 package "python3-setuptools"
 package "python3-pip"
