@@ -222,13 +222,19 @@ class GameSummaryBoard:
         # away = linescore.teams.away
         away_team = game_details["awayTeam"]
         away_team_id = away_team["id"]
-        away_team_name = away_team["name"]["default"]
+        if away_team.get("name"):
+            away_team_name = away_team["name"]["default"]
+        elif away_team.get("placeName"):
+            away_team_name = away_team["placeName"]["default"]
         away_abbrev = data.teams_info[away_team_id].details.abbrev
 
         # home = linescore.teams.home
         home_team = game_details["homeTeam"]
         home_team_id = home_team["id"]
-        home_team_name = home_team["name"]["default"]
+        if home_team.get("name"):
+            home_team_name = home_team["name"]["default"]
+        elif home_team.get("placeName"):
+            home_team_name = home_team["placeName"]["default"]
         home_abbrev = data.teams_info[home_team_id].details.abbrev
 
         if game_details["awayTeam"].get("score"):

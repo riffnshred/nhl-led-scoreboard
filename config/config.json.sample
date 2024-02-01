@@ -8,7 +8,7 @@
 		"location": "",
 		"live_game_refresh_rate": 10,
 		"teams": [
-			"Canadiens"
+			"Maple Leafs", "Predators", "Stars","Canucks"
 		],
 		"sog_display_frequency": 4,
 		"goal_animations": {
@@ -18,21 +18,25 @@
 
 	"states":{
 		"off_day": [
+			"standings",
 			"team_summary",
 			"clock"
 		],
 		"scheduled": [
 			"team_summary",
 			"scoreticker",
+			"standings",
 			"clock"
 		],
 		"intermission": [
 			"scoreticker",
+			"standings",
 			"team_summary"
 		],
 		"post_game": [
 			"team_summary",
 			"scoreticker",
+			"standings",
 			"clock"
 		]
 	},

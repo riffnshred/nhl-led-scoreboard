@@ -148,21 +148,21 @@ class TeamSummary:
 
 
 
-        draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, -1, 26, 6], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
 
         
         
         draw.text((1, 0), "RECORD:".format(), fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if stats:
-            draw.text((0, 7), "GP:{} P:{}".format(stats.games_played, stats.points), fill=(255, 255, 255),
+            draw.text((0, 7), "GP:{} P:{}".format(stats["gamesPlayed"], stats["points"]), fill=(255, 255, 255),
                 font=self.font)
-            draw.text((0, 13), "{}-{}-{}".format(stats.wins, stats.losses, stats.ot_losses), fill=(255, 255, 255),
+            draw.text((0, 13), "{}-{}-{}".format(stats["wins"], stats["losses"], stats["otLosses"]), fill=(255, 255, 255),
                 font=self.font)
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 21, 36, 27], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 21), "LAST GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if prev_game_scoreboard:
@@ -192,7 +192,7 @@ class TeamSummary:
         else:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 42, 36, 48], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=self.font)
 
         if next_game_scoreboard:
