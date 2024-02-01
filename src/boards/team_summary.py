@@ -162,7 +162,7 @@ class TeamSummary:
         else:
             draw.text((1, 7), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 27, 36, 21], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 21, 36, 27], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 21), "LAST GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']),
                 font=self.font)
         if prev_game_scoreboard:
@@ -192,7 +192,7 @@ class TeamSummary:
         else:
             draw.text((1, 27), "--------", fill=(200, 200, 200), font=self.font)
 
-        draw.rectangle([0, 48, 36, 42], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, 42, 36, 48], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
         draw.text((1, 42), "NEXT GAME:", fill=(txt_color['r'], txt_color['g'], txt_color['b']), font=self.font)
 
         if next_game_scoreboard:
