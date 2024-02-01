@@ -148,7 +148,7 @@ class TeamSummary:
 
 
 
-        draw.rectangle([0, 6, 26, -1], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
+        draw.rectangle([0, -1, 26, 6], fill=(bg_color['r'], bg_color['g'], bg_color['b']))
 
         
         
