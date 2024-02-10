@@ -1,15 +1,8 @@
 import nhl_api.game
 import nhl_api.info
-#from nhl_api_client import Client
-#from nhl_api_client.api.game import get_game_play_by_play_by_id
-#from nhl_api_client.api.default import get_season_standings_by_date
-#from nhl_api_client.models import SeasonStandings
 import datetime
 
 from nhlpy import NHLClient
-from nhlpy.api.standings import Standings
-from nhlpy.api.schedule import Schedule
-from nhlpy.api.game_center import GameCenter
 
 
 def player(playerId):
@@ -24,8 +17,8 @@ def overview(game_id):
 def play_by_play(game_id):
     client = Client(base_url="https://api-web.nhle.com")
     game_details = {}
-    with client as client:
-        game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
+    #with client as client:
+    game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
     return game_details
 
 def game_status_info():
@@ -43,8 +36,8 @@ def standings():
     season_standings = {}
 
     client = NHLClient(verbose=False)
-    with client as client:
-        season_standings = client.standings.get_standings(date = str(datetime.date.today()))
+    #with client as client:
+    season_standings = client.standings.get_standings(date = str(datetime.date.today()))
 
     return nhl_api.info.Standings(season_standings, {})
 

@@ -8,7 +8,6 @@ import nhl_api.object
 
 from nhlpy import NHLClient
 # from nhl_api_client.api.play_by_play import get_schedule_by_date
-from nhlpy.api.game_center import GameCenter
 #from nhlpy.api.game_center import boxscore
 
 class GameScoreboard(object):
@@ -35,7 +34,7 @@ class GameScoreboard(object):
 def overview(game_id):
     client = NHLClient(verbose=False)
     game_details = {}
-    with client as client:
-        game_details = client.game_center.play_by_play(game_id)
+    #with client as client:
+    game_details = client.game_center.play_by_play(game_id)
 
     return game_details

@@ -9,8 +9,6 @@ import debug
 import nhl_api
 from data.playoffs import Series
 from data.status import Status
-#from nhl_api_client.models import PlayByPlay
-from nhlpy.api.game_center import GameCenter
 from utils import get_lat_lng, convert_time
 import json
 
@@ -352,6 +350,7 @@ class Data:
 
         if len(self.pref_games) == 0:
             return
+        
         self.current_game_id = self.pref_games[0]["id"]
         earliest_start_time = datetime.strptime(self.pref_games[0]["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
         #for g in self.pref_games:
@@ -594,7 +593,7 @@ class Data:
 
     def refresh_data(self):
 
-        debug.log("refresing data")
+        debug.info("refreshing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 
