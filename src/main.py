@@ -31,10 +31,6 @@ SCRIPT_VERSION = "1.7.0"
 
 
 def run():
-
-    #from rich.traceback import install
-    #install(show_locals=True)
-
     # Kill the splash screen if active
     stop_splash_service()
 
