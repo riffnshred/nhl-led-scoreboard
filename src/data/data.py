@@ -300,6 +300,7 @@ class Data:
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
                 # Populate the TeamInfo classes used for the team_summary board
                 for team_id in self.pref_teams:
+                    # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
                     pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
                     team_info.previous_game = pg
