@@ -133,22 +133,22 @@ class Scoreboard:
                 #     break
 
             for play in away_penalty_plays:
-                # try:
-                player = get_penalty_players(play["details"], self.away_roster)
-                away_penalties.append(Penalty(play, player))
-                # except KeyError:
-                #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                #     away_penalties = []
-                #     break
+                try:
+                    player = get_penalty_players(play["details"], self.away_roster)
+                    away_penalties.append(Penalty(play, player))
+                except KeyError:
+                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                     away_penalties = []
+                     break
 
             for play in home_penalty_plays:
-                # try:
-                player = get_penalty_players(play["details"], self.home_roster)
-                home_penalties.append(Penalty(play,player))
-                # except KeyError:
-                #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                #     home_penalties = []
-                #     break
+                try:
+                    player = get_penalty_players(play["details"], self.home_roster)
+                    home_penalties.append(Penalty(play,player))
+                except KeyError:
+                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                     home_penalties = []
+                     break
         home_skaters = len(overview["homeTeam"]["onIce"])
         away_skaters = len(overview["awayTeam"]["onIce"])
 
