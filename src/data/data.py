@@ -9,8 +9,6 @@ import debug
 import nhl_api
 from data.playoffs import Series
 from data.status import Status
-#from nhl_api_client.models import PlayByPlay
-from nhlpy.api.game_center import GameCenter
 from utils import get_lat_lng, convert_time
 import json
 
@@ -292,7 +290,7 @@ class Data:
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
-                data = nhl_api.data.get_score_details("{}-{}-{}".format(self.year, self.month, self.day))
+                data = nhl_api.data.get_score_details("{}-{}-{}".format(str(self.year), str(self.month).zfill(2), str(self.day).zfill(2)))
                 if not data:
                     self.games = []
                     self.pref_games = []
@@ -353,6 +351,7 @@ class Data:
 
         if len(self.pref_games) == 0:
             return
+        
         self.current_game_id = self.pref_games[0]["id"]
         earliest_start_time = datetime.strptime(self.pref_games[0]["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
         #for g in self.pref_games:
@@ -360,7 +359,7 @@ class Data:
         #        earliest_start_time = datetime.strptime(g["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')
         debug.info('checking highest priority game')
         for g in self.pref_games:
-            if not self.status.is_final(g["gameState"]):
+            if not self.status.is_final(g["gameState"]) and not g["gameState"]=="OFF":
                 # If the game started.
                 if datetime.strptime(g["startTimeUTC"],'%Y-%m-%dT%H:%M:%SZ') <= datetime.utcnow():
                     debug.info('Showing highest priority live game. {} vs {}'.format(g["awayTeam"]["name"]["default"], g["homeTeam"]["name"]["default"]))
@@ -595,7 +594,7 @@ class Data:
 
     def refresh_data(self):
 
-        debug.log("refresing data")
+        debug.info("refreshing data")
         # Flag to determine when to refresh data
         self.needs_refresh = True
 

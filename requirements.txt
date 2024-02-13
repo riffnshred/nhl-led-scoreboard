@@ -4,6 +4,7 @@ fastjsonschema>=2.14.4
 geocoder==1.38.1
 gpiozero==1.6.2
 httpx==0.20.0
+nhl-api-py
 noaa-sdk>=0.1.18
 printtools==1.2
 PyInstaller==3.6

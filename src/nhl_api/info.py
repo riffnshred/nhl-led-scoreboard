@@ -5,13 +5,7 @@ import debug
 import datetime
 import json
 
-#from nhl_api_client import Client
-#from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
-#from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
-
 from nhlpy import NHLClient
-from nhlpy.api.standings import Standings
-from nhlpy.api.schedule import Schedule
 
 
 def team_info():
@@ -32,8 +26,8 @@ def team_info():
     client = NHLClient(verbose=False)
     teams_data = {}
     teams_response = {}
-    with client as client:
-        teams_responses = client.standings.get_standings(str(datetime.date.today()))
+    #with client as client:
+    teams_responses = client.standings.get_standings(str(datetime.date.today()))
     for team in teams_responses["standings"]:
         raw_team_id = team_dict[team["teamAbbrev"]["default"]]
         team_details = TeamDetails(raw_team_id, team["teamName"]["default"], team["teamAbbrev"]["default"])
@@ -137,24 +131,25 @@ def team_previous_game(team_code, date, pg = None, ng = None):
     # This response returns the next three games, starting from the date given
     client = NHLClient(verbose=False)
     teams_response = {}
-    with client as client:
-        teams_response = client.schedule.get_schedule_by_team_by_week(team_code, date)
+    #with client as client:
+    teams_response = client.schedule.get_schedule_by_team_by_week(team_code, date)
 
-    if teams_response.get("games"):
-        pg = teams_response["games"][0]
+    if teams_response:
+        pg = teams_response[0]
     else:
         if ng == None:
-            pg, ng = team_previous_game(team_code, teams_response["nextStartDate"], None, None) 
+            pg, ng = team_previous_game(team_code, teams_response[0]["gametDate"], None, None) 
     # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
     # TODO: Get a better situation for a LIVE game when showing a team summary during intermission
     if pg["gameState"] == "FUT" or pg["gameState"] == "PRE" or pg["gameState"] == "LIVE":
         ng = pg
         # Then we take the previous_start_date given from the response and run through it again
-        pg, ng = team_previous_game(team_code, teams_response["previousStartDate"], None, ng)
+        previousStartDate = datetime.date.today() - datetime.timedelta(days=7)
+        pg, ng = team_previous_game(team_code, previousStartDate, None, ng)
     else:
         # I _think_ that realistically the previous_game will always be the last game in this list, but
         # I'm going to simply loop through for now.
-        for game in teams_response["games"][1:]:
+        for game in teams_response[1:]:
             if (game["gameState"] == "FINAL" or game["gameState"] == "OFF") and game["gameDate"] > pg["gameDate"]:
                 pg = game
             else:

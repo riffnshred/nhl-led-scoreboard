@@ -112,43 +112,43 @@ class Scoreboard:
             # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info
             for play in away_scoring_plays:
-                # try:
+                try:
                 # print(play)
-                players = get_goal_players(play["details"], self.away_roster, self.home_roster)
-                away_goal_plays.append(Goal(play, players))
-                # except KeyError:
-                    # debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                    # away_goal_plays = []
-                    # break
+                    players = get_goal_players(play["details"], self.away_roster, self.home_roster)
+                    away_goal_plays.append(Goal(play, players))
+                except KeyError:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    away_goal_plays = []
+                    break
             # Get the Home Goal details
             # If the request to the API fails or is missing who scorer and the assists are, return an empty list of goal plays
             # This method is there to prevent the goal board to display the wrong info
             for play in home_scoring_plays:
-                # try:
-                players = get_goal_players(play["details"], self.home_roster, self.away_roster)
-                home_goal_plays.append(Goal(play,players))
-                # except KeyError:
-                #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                #     home_goal_plays = []
-                #     break
+                try:
+                    players = get_goal_players(play["details"], self.home_roster, self.away_roster)
+                    home_goal_plays.append(Goal(play,players))
+                except KeyError:
+                    debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                    home_goal_plays = []
+                    break
 
             for play in away_penalty_plays:
-                # try:
-                player = get_penalty_players(play["details"], self.away_roster)
-                away_penalties.append(Penalty(play, player))
-                # except KeyError:
-                #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                #     away_penalties = []
-                #     break
+                try:
+                    player = get_penalty_players(play["details"], self.away_roster)
+                    away_penalties.append(Penalty(play, player))
+                except KeyError:
+                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                     away_penalties = []
+                     break
 
             for play in home_penalty_plays:
-                # try:
-                player = get_penalty_players(play["details"], self.home_roster)
-                home_penalties.append(Penalty(play,player))
-                # except KeyError:
-                #     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
-                #     home_penalties = []
-                #     break
+                try:
+                    player = get_penalty_players(play["details"], self.home_roster)
+                    home_penalties.append(Penalty(play,player))
+                except KeyError:
+                     debug.error("Failed to get Goal details for current live game. will retry on data refresh")
+                     home_penalties = []
+                     break
         home_skaters = len(overview["homeTeam"]["onIce"])
         away_skaters = len(overview["awayTeam"]["onIce"])
 
