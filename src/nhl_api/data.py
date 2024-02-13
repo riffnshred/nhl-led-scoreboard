@@ -29,9 +29,10 @@ TIMEOUT_TESTING = 0.001  # TO DELETE
 from nhlpy import NHLClient
 
 def get_score_details(date):
-    client = NHLClient(verbose=False)
+    client = NHLClient(verbose=True)
+    print(date)
     #with client as client:
-    score_details = client.game_center.score_now()
+    score_details = client.game_center.score_now(date)
     return score_details
 
 def get_team_schedule(team_code, season_code):
