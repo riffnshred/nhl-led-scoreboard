@@ -6,10 +6,9 @@ such as the scoreboard and the box score.
 from nhl_api.utils import convert_time
 import nhl_api.object
 
-from nhl_api_client import Client
+from nhlpy import NHLClient
 # from nhl_api_client.api.play_by_play import get_schedule_by_date
-from nhl_api_client.api.game import get_game_play_by_play_by_id
-from nhl_api_client.api.default import get_score_details_by_date
+#from nhlpy.api.game_center import boxscore
 
 class GameScoreboard(object):
     def __init__(self, data):
@@ -33,9 +32,9 @@ class GameScoreboard(object):
 
 
 def overview(game_id):
-    client = Client(base_url="https://api-web.nhle.com")
+    client = NHLClient(verbose=False)
     game_details = {}
-    with client as client:
-        game_details = get_game_play_by_play_by_id.sync(game_id, client=client)
+    #with client as client:
+    game_details = client.game_center.play_by_play(game_id)
 
     return game_details

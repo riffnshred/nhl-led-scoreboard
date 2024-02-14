@@ -30,6 +30,7 @@ class MainRenderer:
         self.alternate_data_counter = 1
 
     def render(self):
+
         if self.data.config.testing_mode:
             debug.info("Rendering in Testing Mode")
             while True:
@@ -142,7 +143,7 @@ class MainRenderer:
                 else:
                     self.data.pb_trigger = False
 
-            if self.status.is_live(self.data.overview.game_state):
+            if self.status.is_live(self.data.overview["gameState"]):
                 """ Live Game state """
                 #blocks the screensaver from running if game is live
                 self.data.screensaver_livegame = True
@@ -164,7 +165,7 @@ class MainRenderer:
                 else:
                     self.sleepEvent.wait(self.refresh_rate)
 
-            elif self.status.is_game_over(self.data.overview.game_state):
+            elif self.status.is_game_over(self.data.overview["gameState"]):
                 debug.info("Game Over")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
                 self.check_new_goals()
@@ -178,7 +179,7 @@ class MainRenderer:
                 if not self.goal_team_cache:
                     self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_final(self.data.overview.game_state):
+            elif self.status.is_final(self.data.overview["gameState"]):
                 """ Post Game state """
                 debug.info("FINAL")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -193,7 +194,7 @@ class MainRenderer:
                 if not self.goal_team_cache:
                     self.boards._post_game(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_scheduled(self.data.overview.game_state):
+            elif self.status.is_scheduled(self.data.overview["gameState"]):
                 """ Pre-game state """
                 debug.info("Game is Scheduled")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -202,7 +203,7 @@ class MainRenderer:
                 self.sleepEvent.wait(self.refresh_rate)
                 self.boards._scheduled(self.data, self.matrix,self.sleepEvent)
 
-            elif self.status.is_irregular(self.data.overview.game_state):
+            elif self.status.is_irregular(self.data.overview["gameState"]):
                 """ Pre-game state """
                 debug.info("Game is irregular")
                 sbrenderer = ScoreboardRenderer(self.data, self.matrix, self.scoreboard)
@@ -320,10 +321,12 @@ class MainRenderer:
                         PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.home_team).render()
                     # Remove the first cached goal
                     self.penalties_team_cache.pop(0)
-            except IndexError:
+            except IndexError as error:
                 debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
-            except AttributeError:
+                print(error)
+            except AttributeError as error:
                 debug.error("The Penalty object failed to get the Penalty details, trying on the next data refresh")
+                print(error)
 
         if len(a_penalties) < len(away_data_penalties):
             self.away_penalties = away_data_penalties

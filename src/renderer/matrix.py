@@ -79,16 +79,21 @@ class Matrix:
                 backgroundColor=None, backgroundOffset=[1, 1, 1, 1]):
         width = 0
         height = 0
-
         text_chars = text.split("\n")
         offsets = []
 
         for index, chars in enumerate(text_chars):
             spacing = 0 if index == 0 else 1
 
-            offset = font.getoffset(chars)
-            offset_x = offset[0]
-            offset_y = offset[1] - height - spacing
+            # deprecated in pillow==9.5.0
+            #offset = font.getoffset(chars)
+            #offset_x = offset[0]
+            #offset_y = offset[1] - height - spacing
+
+            # for pillow>=10.0.0
+            left, top, right, bottom = font.getbbox(chars)
+            offset_x = left
+            offset_y = top - height - spacing
 
             offsets.append((offset_x, offset_y))
 
@@ -116,11 +121,11 @@ class Matrix:
             (width + backgroundOffset[0] + backgroundOffset[2], height + backgroundOffset[1] + backgroundOffset[3]),
             backgroundColor
         )
-
+        
+        
         for index, chars in enumerate(text_chars):
             offset = offsets[index]
             chars_position = (x - offset[0], y - offset[1])
-
             self.draw.text(
                 chars_position,
                 chars,

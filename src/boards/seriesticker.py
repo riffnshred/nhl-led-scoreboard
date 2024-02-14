@@ -7,7 +7,7 @@ from data.playoffs import Series
 from data.scoreboard import Scoreboard
 from renderer.matrix import MatrixPixels
 import debug
-import nhl_api
+import nhlpy
 
 class Seriesticker:
     def __init__(self, data, matrix, sleepEvent):

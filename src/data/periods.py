@@ -6,17 +6,24 @@ class Periods:
     ORDINAL_PLAYOFF = ['Scheduled', '1st', '2nd', '3rd', 'OT', '2OT', '3OT', '4OT', '5OT']
 
     def __init__(self, overview):
-        self.is_intermission = overview.clock.in_intermission if overview.clock else False
-        self.gameType = overview.game_type
+        if overview.get("clock"):
+            self.is_intermission = overview["clock"]["inIntermission"] if overview["clock"] else False
+        else:
+            self.is_intermission = False
+        self.gameType = overview["gameType"]
         self.number = 0
         # Possible states. FUT, PRE, OFF, LIVE, CRIT, FINAL
-        if overview.game_state == "LIVE" or overview.game_state == "CRIT":
+        if overview["gameState"] == "LIVE" or overview["gameState"] == "CRIT":
             # Apparently the number can be nil? I am struggling figure out why this is failing
-            self.number = overview.period_descriptor.number if overview.period_descriptor.number else 0
-
+            self.number = overview["periodDescriptor"]["number"] if overview["periodDescriptor"]["number"] else 0
+        elif overview["gameState"] == "OFF" or overview["gameState"] == "FINAL":
+            self.number = overview["periodDescriptor"]["number"] if overview["periodDescriptor"]["number"] else 0
+        
         try:
-            self.clock = overview.clock.time_remaining
+            self.clock = overview["clock"]["timeRemaining"]
         except AttributeError:
+            self.clock = '00:00'
+        except KeyError:
             self.clock = '00:00'
         self.get_ordinal()
 

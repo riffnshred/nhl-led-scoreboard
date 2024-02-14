@@ -5,9 +5,8 @@ import debug
 import datetime
 import json
 
-from nhl_api_client import Client
-from nhl_api_client.api.default import get_season_standings_by_date, get_team_week_schedule_by_date
-from nhl_api_client.models import SeasonStandings, WeekSchedule, Game
+from nhlpy import NHLClient
+
 
 def team_info():
     """
@@ -24,14 +23,14 @@ def team_info():
         team_dict[team["triCode"]] = team["id"]
 
 
-    client = Client(base_url="https://api-web.nhle.com")
+    client = NHLClient(verbose=False)
     teams_data = {}
     teams_response = {}
-    with client as client:
-        teams_response: SeasonStandings = get_season_standings_by_date.sync(str(datetime.date.today()), client=client)
-    for team in teams_response.standings:
-        raw_team_id = team_dict[team.team_abbrev.default]
-        team_details = TeamDetails(raw_team_id, team.team_name.default, team.team_abbrev.default)
+    #with client as client:
+    teams_responses = client.standings.get_standings(str(datetime.date.today()))
+    for team in teams_responses["standings"]:
+        raw_team_id = team_dict[team["teamAbbrev"]["default"]]
+        team_details = TeamDetails(raw_team_id, team["teamName"]["default"], team["teamAbbrev"]["default"])
         team_info = TeamInfo(team, team_details)
         teams_data[raw_team_id] = team_info
 
@@ -130,27 +129,31 @@ def team_info():
 # This one is a little funky for the time. I'll loop through the what and why
 def team_previous_game(team_code, date, pg = None, ng = None):
     # This response returns the next three games, starting from the date given
-    client = Client(base_url="https://api-web.nhle.com")
+    client = NHLClient(verbose=False)
     teams_response = {}
-    with client as client:
-        teams_response: WeekSchedule = get_team_week_schedule_by_date.sync(team_code, date, client=client)
+    #with client as client:
+    teams_response = client.schedule.get_schedule_by_team_by_week(team_code, date)
 
-    pg = teams_response.games[0]
-
+    if teams_response:
+        pg = teams_response[0]
+    else:
+        if ng == None:
+            pg, ng = team_previous_game(team_code, teams_response[0]["gametDate"], None, None) 
     # If the first game in the list is a future game, the that's the next game. I think this will always be the case...
     # TODO: Get a better situation for a LIVE game when showing a team summary during intermission
-    if pg.game_state == "FUT" or pg.game_state == "PRE" or pg.game_state == "LIVE":
+    if pg["gameState"] == "FUT" or pg["gameState"] == "PRE" or pg["gameState"] == "LIVE":
         ng = pg
         # Then we take the previous_start_date given from the response and run through it again
-        pg, ng = team_previous_game(team_code, teams_response.previous_start_date, None, ng)
+        previousStartDate = datetime.date.today() - datetime.timedelta(days=7)
+        pg, ng = team_previous_game(team_code, previousStartDate, None, ng)
     else:
         # I _think_ that realistically the previous_game will always be the last game in this list, but
         # I'm going to simply loop through for now.
-        for game in teams_response.games[1:]:
-            if (game.game_state == "FINAL" or game.game_state == "OFF") and game.game_date > pg.game_date:
+        for game in teams_response[1:]:
+            if (game["gameState"] == "FINAL" or game["gameState"] == "OFF") and game["gameDate"] > pg["gameDate"]:
                 pg = game
             else:
-                if ng is None or ng.game_date < game.game_date:
+                if ng is None or ng["gameDate"] < game["gameDate"]:
                     ng = game
 
     # Then return. I'd like to say we could be smart and take a few days off from the initial request,
@@ -212,7 +215,7 @@ def series_record(seriesCode, season):
 
 
 
-class Standings(object):
+class Standings:
     """
         Object containing all the standings data per team.
 
@@ -220,7 +223,7 @@ class Standings(object):
         different type of Standings.
 
     """
-    def __init__(self, records: SeasonStandings, wildcard):
+    def __init__(self, records, wildcard):
         self.data = records
         self.data_wildcard = wildcard
         self.get_conference()
@@ -277,18 +280,19 @@ class Standings(object):
         pass
 
     @staticmethod
-    def sort_conference(data: SeasonStandings):
+    def sort_conference(data):
         eastern = []
         western = []
-        for item in data.standings:
-            if item.conference_name == 'Eastern':
+
+        for item in data["standings"]:
+            if item["conferenceName"] == 'Eastern':
                 eastern.append(item)
 
-            elif item.conference_name == 'Western':
+            elif item["conferenceName"] == 'Western':
                 western.append(item)
 
-        eastern = sorted(eastern, key=lambda i: int(i.points), reverse=True)
-        western = sorted(western, key=lambda i: int(i.points), reverse=True)
+        eastern = sorted(eastern, key=lambda i: int(i["points"]), reverse=True)
+        western = sorted(western, key=lambda i: int(i["points"]), reverse=True)
         return eastern, western
 
     @staticmethod
@@ -298,23 +302,23 @@ class Standings(object):
         central = []
         pacific = []
 
-        for item in data.standings:
-            if item.division_name == 'Metropolitan':
+        for item in data["standings"]:
+            if item["divisionName"] == 'Metropolitan':
                 metropolitan.append(item)
 
-            elif item.division_name == 'Atlantic':
+            elif item["divisionName"] == 'Atlantic':
                 atlantic.append(item)
 
-            elif item.division_name == 'Central':
+            elif item["divisionName"] == 'Central':
                 central.append(item)
 
-            elif item.division_name == 'Pacific':
+            elif item["divisionName"] == 'Pacific':
                 pacific.append(item)
 
-        metropolitan = sorted(metropolitan, key=lambda i: int(i.points), reverse=True)
-        atlantic = sorted(atlantic, key=lambda i: int(i.points), reverse=True)
-        central = sorted(central, key=lambda i: int(i.points), reverse=True)
-        pacific = sorted(pacific, key=lambda i: int(i.points), reverse=True)
+        metropolitan = sorted(metropolitan, key=lambda i: int(i["points"]), reverse=True)
+        atlantic = sorted(atlantic, key=lambda i: int(i["points"]), reverse=True)
+        central = sorted(central, key=lambda i: int(i["points"]), reverse=True)
+        pacific = sorted(pacific, key=lambda i: int(i["points"]), reverse=True)
 
         return metropolitan, atlantic, central, pacific
 
@@ -363,7 +367,7 @@ class TeamInfo:
         self.details = team_details
 
 class TeamDetails:
-    def __init__(self, id: int, name: str, abbrev: str, previous_game: Game = None, next_game: Game = None):
+    def __init__(self, id: int, name: str, abbrev: str, previous_game = None, next_game = None):
         self.id = id
         self.name = name
         self.abbrev = abbrev
@@ -372,3 +376,4 @@ class TeamDetails:
 
 class Info(nhl_api.object.Object):
     pass
+
