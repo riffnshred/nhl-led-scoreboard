@@ -23,7 +23,9 @@ def stop_splash_service():
     except Exception as ex:
         nosvc = ex
 
-
+def scheduler_event_listener(event):
+    debug.error(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
+    
 def get_lat_lng(location):
 
     #Check to see if a location.json is in the config folder

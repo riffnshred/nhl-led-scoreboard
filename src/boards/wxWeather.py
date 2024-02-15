@@ -65,7 +65,7 @@ class wxWeather:
                 display_wx += display_sleep
         else:
             if self.data.config.weather_enabled:
-                debug.error("Weather feed has not updated yet....")
+                debug.error("Weather feed (current conditions) has not updated yet....")
             else:
                 debug.error("Weather board not enabled in config.json.  Is enabled set to True?")
         

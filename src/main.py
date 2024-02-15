@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service
+from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
 from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
@@ -17,17 +17,23 @@ from api.weather.owmWeather import owmWxWorker
 from api.weather.ecAlerts import ecWxAlerts
 from api.weather.nwsAlerts import nwsWxAlerts
 from api.weather.wxForecast import wxForecast
-from env_canada import ECData
+import asyncio
+from env_canada import ECWeather
 from renderer.matrix import Matrix
 from update_checker import UpdateChecker
+import tzlocal
+from apscheduler.events import EVENT_ALL, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 from apscheduler.schedulers.background import BackgroundScheduler
 from renderer.loading_screen import Loading
 import debug
 import os
+# If you want real fancy stack trace dumps, uncomment these two lines
+#from rich.traceback import install
+#install(show_locals=True) 
 
 SCRIPT_NAME = "NHL-LED-SCOREBOARD"
 
-SCRIPT_VERSION = "1.7.0"
+SCRIPT_VERSION = "1.8.0"
 
 
 def run():
@@ -85,7 +91,8 @@ def run():
 
 
     # Start task scheduler, used for UpdateChecker and screensaver, forecast, dimmer and weather
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler(timezone=str(tzlocal.get_localzone()), job_defaults={'misfire_grace_time': None})
+    scheduler.add_listener(scheduler_event_listener, EVENT_JOB_MISSED | EVENT_JOB_ERROR)
     scheduler.start()
 
     # Any tasks that are scheduled go below this line
@@ -96,11 +103,12 @@ def run():
     #Create EC data feed handler
     if data.config.weather_enabled or data.config.wxalert_show_alerts:
         if data.config.weather_data_feed.lower() == "ec" or data.config.wxalert_alert_feed.lower() == "ec":
+            data.ecData = ECWeather(coordinates=(tuple(data.latlng)))
+            
             try:
-                data.ecData = ECData(coordinates=(data.latlng))
+                asyncio.run(data.ecData.update())
             except Exception as e:
-                debug.error("Unable to connect to EC, try running again in a few minutes")
-                sys.exit(0)
+                debug.error("Unable to connect to EC .. will try on next refresh : {}".format(e))
 
     if data.config.weather_enabled:
         if data.config.weather_data_feed.lower() == "ec":
