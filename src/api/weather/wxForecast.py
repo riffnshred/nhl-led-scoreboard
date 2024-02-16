@@ -137,7 +137,9 @@ class wxForecast(object):
             #lon = self.data.latlng[1]
             one_call = None
             try:
-                one_call = self.owm_manager.one_call(lat=self.data.latlng[0],lon=self.data.latlng[1],exclude='current,minutely,hourly,alerts')
+                # The following line currently breaks getting the forecasts.
+                #one_call = self.owm_manager.one_call(lat=self.data.latlng[0],lon=self.data.latlng[1],exclude='current,minutely,hourly,alerts')
+                one_call = self.owm_manager.one_call(lat=self.data.latlng[0],lon=self.data.latlng[1])
             except Exception as e:
                 debug.error("Unable to get OWM data error:{0}".format(e))
                 self.data.forecast_updated = False

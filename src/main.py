@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener
+from utils import args, led_matrix_options, stop_splash_service, scheduler_event_listener, sb_cache
 from data.data import Data
 import threading
 from sbio.dimmer import Dimmer
@@ -166,4 +166,5 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("Exiting NHL-LED-SCOREBOARD\n")
+        sb_cache.close()
         sys.exit(0)

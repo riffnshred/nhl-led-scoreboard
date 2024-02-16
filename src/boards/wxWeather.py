@@ -16,6 +16,11 @@ class wxWeather:
         self.wxfont = data.config.layout.wxfont
 
         self.view = data.config.weather_view
+        
+        # Default to full if invalid values set in config
+        if self.view.lower() not in ("full", "summary"):
+            debug.info("Valid value for view not found, setting to full")
+            self.view = "full"
 
         self.matrix = matrix
 

@@ -37,13 +37,11 @@ class ecWxWorker(object):
                 
             curr_cond = self.data.ecData.conditions
             
-
             if len(curr_cond) == 0:
-                debug.error("Unable to get EC current observations")
+                debug.error("Unable to get EC current observations. Check https://dd.weather.gc.ca/citypage_weather/xml/ to see if current conditions are populated.")
                 self.data.wx_updated = False
             else:
-                self.data.wx_updated = True
-                                
+                self.data.wx_updated = True                                
             
             #if self.data.wx_updated:
                 #Set up units [temp, wind speed,precip, storm distance]
@@ -54,7 +52,6 @@ class ecWxWorker(object):
                 self.data.wx_units = ["F","mph","in","miles","MB","us"]
 
                 
-
             #Uncomment next line if you want to see what is being returned back from EC
             #debug.info(curr_cond)                            
 

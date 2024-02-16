@@ -18,3 +18,4 @@ iso6709
 cairosvg
 tzlocal
 rich
+diskcache

@@ -14,7 +14,7 @@ tput bold; echo "$(tput setaf 2)Creating python virtual environment...$(tput set
 #Install all apt requirements using aptfile
 #sudo scripts/aptfile apt-requirements
 
-# Update pip3 to latest version
+# Update system pip3 to latest version
 python3 -m pip install --upgrade pip --break-system-packages
 
 # Install virtual enviroment, required for upcoming bookworm release

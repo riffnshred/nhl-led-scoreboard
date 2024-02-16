@@ -34,6 +34,7 @@ The name of the board that can be added to the different states is : **weather**
 | scroll\_alert | Bool | true,false | Scroll the text of the alert on the initial alert page. If you select false, a static page will be displayed that is the same as the 4th page on the weather board |
 | alert\_duration | INT | 5 | How long to show alert board (in seconds). This is for the non-scrolling alert board. |
 | show\_on\_clock | Bool | true,false | Add the last observed temperature and humidity to the bottom of the clock board |
+| view | String | full, summary | Weather board full (3 page) or summary view (1 page) |
 
 > ***NOTE*** When you register for an OWM API key, it can take up to a day before it is activated. Select the Current Weather Data one as that's what the pyowm library uses.  Also, you are limited on the number of API calls you can make, so choose your update time accordingly.  5 minutes makes the most sense as the lowest amonunt of time you can do API calls.
 
