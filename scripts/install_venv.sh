@@ -29,7 +29,7 @@ echo "source ~/nhlsb-venv/bin/activate" >> .envrc
 direnv allow .
 
 # Update bashrc
-tee ~/.bashrc << TEXT0
+tee -a  ~/.bashrc << 'TEXT0'
 show_virtual_env() {
   if [[ -n "$VIRTUAL_ENV" && -n "$DIRENV_DIR" ]]; then
     echo "($(basename $VIRTUAL_ENV)) "
