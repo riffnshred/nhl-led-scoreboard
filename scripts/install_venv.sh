@@ -103,8 +103,10 @@ git pull
 
 tput bold; echo "$(tput setaf 6)If you didn't see any errors above, everything should be installed!"; tput sgr0
 echo "$(tput bold)$(tput smso)$(tput setaf 2)Installation complete!$(tput sgr0) Play around with the examples in nhl-led-scoreboard/submodules/matrix/bindings/python/samples to make sure your matrix is working."
+tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
 tput bold; echo "$(tput setaf 4)TAKE NOTE OF NEXT LINES...$(tput setaf 9)" ; tput sgr0
 tput bold; echo "$(tput setaf 4)WITh A VENV, Your python is now located differently...$(tput setaf 9)" ; tput sgr0
 tput bold; echo "$(tput setaf 4)TO RUN WITH SUDO, YOU MUST USE THE VENV LOCATION...$(tput setaf 9)" ; tput sgr0
-tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 4).................PYTHON LOOKS LIKE.....................$(tput setaf 9)" ; tput sgr0
 tput bold; echo "$(tput setaf 1)sudo $HOME/nhlsb-venv/bin/python3 $(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
