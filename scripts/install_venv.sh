@@ -62,9 +62,33 @@ make install-python PYTHON="$(command -v python3)"
 
 cd ../../ || exit
 
+# Blacklist the snd_bcm2835 sounds module
+sudo tee /etc/modprobe.d/blacklist-rgbmatrix.conf <<TEXT1
+## Make sure the sound module does not load as it causes issues with the timing for the rgb matrix library
+blacklist snd_bcm2835
+
+# The next time the loading of the module is attempted, the /bin/false
+# will be executed instead. This will prevent the module from being
+# loaded on-demand.
+
+install snd_bcm_2835 /bin/false
+
+TEXT1
+
+# Unload the sound module
+sudo modprobe -r snd_bcm2835
+
+# Rebuild module dependacy
+sudo depmod -a
+
 git reset --hard
 git fetch origin --prune
 git pull
 
 tput bold; echo "$(tput setaf 6)If you didn't see any errors above, everything should be installed!"; tput sgr0
 echo "$(tput bold)$(tput smso)$(tput setaf 2)Installation complete!$(tput sgr0) Play around with the examples in nhl-led-scoreboard/submodules/matrix/bindings/python/samples to make sure your matrix is working."
+tput bold; echo "$(tput setaf 4)TAKE NOTE OF NEXT LINES...$(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 4)WITh A VENV, Your python is now located differently...$(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 4)TO RUN WITH SUDO, YOU MUST USE THE VENV LOCATION...$(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
+tput bold; echo "$(tput setaf 1)sudo $HOME/nhlsb-venv/bin/python3 $(tput setaf 9)" ; tput sgr0
