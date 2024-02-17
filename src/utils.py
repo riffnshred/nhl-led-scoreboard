@@ -2,6 +2,7 @@ from rgbmatrix import RGBMatrixOptions, graphics
 import collections
 import argparse
 import os
+import diskcache as dc
 import debug
 from datetime import datetime, timezone, time
 import regex
@@ -14,6 +15,9 @@ from iso6709 import Location
 uid = int(os.stat("./VERSION").st_uid)
 gid = int(os.stat("./VERSION").st_uid)
 
+# For caching weather and location data
+sb_cache = dc.Cache("/tmp/sb_cache")
+
 def stop_splash_service():
     sysbus = dbus.SystemBus()
     systemd1 = sysbus.get_object('org.freedesktop.systemd1',     '/org/freedesktop/systemd1')
@@ -23,7 +27,9 @@ def stop_splash_service():
     except Exception as ex:
         nosvc = ex
 
-
+def scheduler_event_listener(event):
+    debug.error(f'Job {event.job_id} raised {event.exception.__class__.__name__}')
+    
 def get_lat_lng(location):
 
     #Check to see if a location.json is in the config folder
@@ -33,35 +39,26 @@ def get_lat_lng(location):
     latlng = []
 
     j = {}
-    path = get_file("config/location.json")
-    if os.path.isfile(path):
-        try:
-            j = json.load(open(path))
-            msg = "json loaded OK"
-            #Get the city, country and latlng from the loaded json
-            latlng = [j["lat"],j["lng"]]
-            #Check the age of the file, if it's older than 7 days, reload it.
-            t = os.stat(path)[8]
-            filetime = datetime.fromtimestamp(t) - today
-            if filetime.days <= -7:
-                reload = True
-            
-            if reload:
-                message = "location loaded from cache has expired, reloading...."
-            else:
-                if len(location) > 0:
-                    message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + location + " " + str(latlng)
-                else:
-                    message = "location loaded from cache (saved {} days ago): ".format(filetime.days) + j["city"] + ", "+ j["country"] + " " + str(latlng)
-
-        except json.decoder.JSONDecodeError as e:
-            msg = "Unable to load json: {0}".format(e)
-            j = {}
-            reload = True
+    
+    j_cache, expiration_time = sb_cache.get("location",expire_time=True)
+    if j_cache is not None:
+        j = json.loads(j_cache)
+        # Get the time that the cache was created
+        current_time = datetime.now().timestamp()
+        # Calculate the remaining time in seconds
+        remaining_time_seconds = max(0, current_time - int(expiration_time))
+        remaining_days =  int(remaining_time_seconds/86400)
+        
+        latlng = [j["lat"],j["lng"]]
+        if len(location) > 0:
+            message = "location loaded from cache (saved {} days ago): ".format(remaining_days) + location + " " + str(latlng)
+        else:                
+            message = "location loaded from cache (saved {} days ago): ".format(remaining_days) + j["city"] + ", "+ j["country"] + " " + str(latlng)     
     else:
-        msg="Unable to open file {}".format(path)
+        # Cache has expired
         reload = True
-
+        message = "location loaded from cache has expired, reloading...."
+        
     if reload:
         if len(location) > 0:
 
@@ -101,17 +98,9 @@ def get_lat_lng(location):
         if g.ok:
             #Dump the location to a file
             savefile = json.dumps(g.json, sort_keys=False, indent=4)
-            try:
-                with open(path,'w') as f:
-                    try:
-                        f.write(savefile)
-                        #Change the ownership of the location.json file
-                        os.chown(path, uid, gid)
-                    except Exception as e:
-                        debug.error("Could not write {0}. Error Message: {1}".format(path,e))
-            except Exception as e:
-                debug.error("Could not open {0} unable to save location.json. Error Message: {1}".format(path,e))
-
+            # Store in cache and expire after 7 days
+            sb_cache.set("location",savefile,expire=604800)
+            
 
     return latlng,message
     

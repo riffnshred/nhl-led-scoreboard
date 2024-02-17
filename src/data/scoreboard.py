@@ -237,7 +237,7 @@ class GameSummaryBoard:
             home_team_name = home_team["placeName"]["default"]
         home_abbrev = data.teams_info[home_team_id].details.abbrev
 
-        if game_details["awayTeam"].get("score"):
+        if game_details["homeTeam"].get("score") or game_details["awayTeam"].get("score"):
             self.away_team = TeamScore(away_team_id, away_abbrev, away_team_name, game_details["awayTeam"]["score"])
             self.home_team = TeamScore(home_team_id, home_abbrev, home_team_name, game_details["homeTeam"]["score"])
         else:

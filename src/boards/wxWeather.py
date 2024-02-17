@@ -16,6 +16,11 @@ class wxWeather:
         self.wxfont = data.config.layout.wxfont
 
         self.view = data.config.weather_view
+        
+        # Default to full if invalid values set in config
+        if self.view.lower() not in ("full", "summary"):
+            debug.info("Valid value for view not found, setting to full")
+            self.view = "full"
 
         self.matrix = matrix
 
@@ -65,7 +70,7 @@ class wxWeather:
                 display_wx += display_sleep
         else:
             if self.data.config.weather_enabled:
-                debug.error("Weather feed has not updated yet....")
+                debug.error("Weather feed (current conditions) has not updated yet....")
             else:
                 debug.error("Weather board not enabled in config.json.  Is enabled set to True?")
         

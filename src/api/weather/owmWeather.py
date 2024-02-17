@@ -1,8 +1,10 @@
 from pyowm.owm import OWM
 import debug
 import geocoder
-import datetime
+import json
+from datetime import datetime, time
 from time import sleep
+from utils import sb_cache
 from api.weather.wx_utils import wind_chill, get_csv, degrees_to_direction, dew_point, wind_kmph, usaheatindex, temp_f
 
 class owmWxWorker(object):
@@ -21,7 +23,10 @@ class owmWxWorker(object):
         scheduler.add_job(self.getWeather, 'interval', minutes=self.weather_frequency,jitter=60,id='owmWeather')
         #Check every 5 mins for testing only
         #scheduler.add_job(self.CheckForUpdate, 'cron', minute='*/5')
-
+        if self.data.config.weather_units.lower() not in ("metric", "imperial"):
+            debug.info("Weather units not set correctly, defaulting to imperial")
+            self.data.config.weather_units ="imperial"
+            
         #Get initial obs
         self.getWeather()
 
@@ -40,11 +45,31 @@ class owmWxWorker(object):
         #lat = 32.653
         #lon = -83.7596
         try:
-            debug.info("Refreshing OWM current observations weather")
-
-            obs = self.owm_manager.weather_at_coords(lat,lon)
-            self.network_issues = False
-            self.data.wx_updated = True
+            # Check cache first
+            wx_cache,expiration_time = sb_cache.get("weather",expire_time=True)
+            if wx_cache is None:
+                debug.info("Refreshing OWM current observations weather")
+                #obs = self.owm_manager.weather_at_coords(lat,lon)
+                obs = self.owm_manager.one_call(lat=lat,lon=lon,exclude='daily,minutely,hourly,alerts',units=self.data.config.weather_units)
+                self.network_issues = False
+                self.data.wx_updated = True
+                
+                #wx = obs.weather.to_dict()
+                wx = obs.current.to_dict()
+                
+                # Store in cache and expire after weather_frequency minutes less 1 second
+                expiretime=(self.weather_frequency*60)-1
+                sb_cache.set("weather",json.dumps(wx,indent=4),expire=expiretime)
+            else:
+                 # Get the time that the cache was created
+                current_time = datetime.now().timestamp()
+                # Calculate the remaining time in seconds
+                remaining_time_seconds = int(max(0, int(expiration_time) - current_time))
+            
+                debug.info("Loading weather from cache...cache expires in {} seconds".format(remaining_time_seconds))
+                wx = json.loads(wx_cache)
+                self.network_issues = False
+                self.data.wx_updated = True
 
         #except PyOWMError as e:
         #    #raise ValueError(e)
@@ -59,12 +84,11 @@ class owmWxWorker(object):
             pass
 
         if not self.network_issues:
-            wx = obs.weather.to_dict()
             
             if self.time_format == "%H:%M":
-                wx_timestamp = datetime.datetime.now().strftime("%m/%d %H:%M")
+                wx_timestamp = datetime.now().strftime("%m/%d %H:%M")
             else:
-                wx_timestamp = datetime.datetime.now().strftime("%m/%d %I:%M %p")
+                wx_timestamp = datetime.now().strftime("%m/%d %I:%M %p")
 
             owm_wxcode = int(wx.get("weather_code"))
 
@@ -80,6 +104,9 @@ class owmWxWorker(object):
             elif owm_wxcode in range(600,699):
                 # Rain Class
                 owm_icon = 600
+            elif owm_wxcode in range(700,799):
+                # Rain Class
+                owm_icon = 741
             elif owm_wxcode in range(800,805):
                 # Rain Class
                 owm_icon = 801
@@ -99,10 +126,12 @@ class owmWxWorker(object):
             wx_summary = wx.get("detailed_status")
 
             # Get wind information.  
-            if self.data.config.weather_units != "metric":
-                wx_wind = obs.weather.wind(unit='miles_hour')
-            else:
-                wx_wind = obs.weather.wind()
+            # if self.data.config.weather_units != "metric":
+            #     wx_wind = obs.weather.wind(unit='miles_hour')
+            # else:
+            #     wx_wind = obs.weather.wind()
+            
+            wx_wind = wx.get("wind")
 
             owm_windspeed = wx_wind['speed']
             if 'gust' in wx_wind:
@@ -124,13 +153,17 @@ class owmWxWorker(object):
             wx_windspeed = str(round(owm_windspeed,1)) + self.data.wx_units[1]
 
             # Get temperature and apparent temperature based on weather units
+            
+            owm_temp = wx.get("temperature")['temp']
+            owm_app_temp = wx.get("temperature")['feels_like']
+            
             if self.data.config.weather_units == "metric":
-                owm_temp = obs.weather.temperature('celsius')['temp']
-                owm_app_temp = obs.weather.temperature('celsius')['feels_like']
+                #owm_temp = obs.weather.temperature('celsius')['temp']
+                #owm_app_temp = obs.weather.temperature('celsius')['feels_like']
                 check_windchill = 10.0
             else:
-                owm_temp = obs.weather.temperature('fahrenheit')['temp']
-                owm_app_temp = obs.weather.temperature('fahrenheit')['feels_like']
+                #owm_temp = obs.weather.temperature('fahrenheit')['temp']
+                #owm_app_temp = obs.weather.temperature('fahrenheit')['feels_like']
                 check_windchill = 50.0
             
             if owm_app_temp == None:

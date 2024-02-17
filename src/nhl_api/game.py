@@ -32,6 +32,7 @@ class GameScoreboard(object):
 
 
 def overview(game_id):
+    
     client = NHLClient(verbose=False)
     game_details = {}
     #with client as client:

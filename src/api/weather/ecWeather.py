@@ -1,6 +1,7 @@
-from env_canada import ECData
+from env_canada import ECWeather
 import debug
 import datetime
+import asyncio
 from time import sleep
 from api.weather.wx_utils import cadhumidex, wind_chill, get_csv, degrees_to_direction, temp_f, wind_mph
 
@@ -18,6 +19,11 @@ class ecWxWorker(object):
         #scheduler.add_job(self.CheckForUpdate, 'cron', minute='*/5')
 
         #Get initial obs
+        # Make sure the weather units have a default if user makes a mistake in the config
+        if self.data.config.weather_units.lower() not in ("metric", "imperial"):
+            debug.info("Weather units not set correctly, defaulting to imperial")
+            self.data.config.weather_units="imperial"
+            
         self.getWeather()
         
 
@@ -25,17 +31,17 @@ class ecWxWorker(object):
 
         #while True:
             try:
-                self.data.ecData.update()
+                asyncio.run(self.data.ecData.update())
             except Exception as e:
                 debug.error("Unable to get EC current observations. Error {}".format(e))
                 
             curr_cond = self.data.ecData.conditions
+            
             if len(curr_cond) == 0:
-                debug.error("Unable to get EC current observations")
+                debug.error("Unable to get EC current observations. Check https://dd.weather.gc.ca/citypage_weather/xml/ to see if current conditions are populated.")
                 self.data.wx_updated = False
             else:
-                self.data.wx_updated = True
-                                
+                self.data.wx_updated = True                                
             
             #if self.data.wx_updated:
                 #Set up units [temp, wind speed,precip, storm distance]
@@ -46,7 +52,6 @@ class ecWxWorker(object):
                 self.data.wx_units = ["F","mph","in","miles","MB","us"]
 
                 
-
             #Uncomment next line if you want to see what is being returned back from EC
             #debug.info(curr_cond)                            
 
@@ -64,7 +69,7 @@ class ecWxWorker(object):
                 self.data.wx_updated = False
 
             try:    
-                curr_humidity = curr_cond.get("humidity").get("value",{})
+                curr_humidity = str(curr_cond.get("humidity").get("value",{}))
             except:
                 curr_humidity = None
                 self.data.wx_updated = False
@@ -73,30 +78,8 @@ class ecWxWorker(object):
                 curr_humidity = "0"
                 wx_humidity = "N/A"
             else:
-                wx_humidity = curr_humidity + "%"
+                wx_humidity = curr_humidity + "%"   
 
-                
-
-            if curr_temp != None:
-                curr_temp = float(curr_cond["temperature"]["value"])
-                check_windchill = 10.0
-                if self.data.config.weather_units == "imperial":
-                    curr_temp = temp_f(curr_temp)
-                    check_windchill = 50.0
-
-
-                if curr_temp < check_windchill:
-                    windchill = round(wind_chill(float(curr_cond["temperature"]["value"]),float(curr_cond["wind_speed"]["value"]),self.data.wx_units[1]),1)
-                    wx_app_temp = str(windchill) + self.data.wx_units[0]
-                else:
-                    humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
-                    wx_app_temp = str(humidex) + self.data.wx_units[0]
-                wx_temp = str(round(curr_temp,1)) + self.data.wx_units[0]
-
-            else:
-                wx_temp = "N/A"
-                wx_app_temp = "N/A"
-            
             try:
                 icon_code = curr_cond.get("icon_code").get("value","90")
             except:
@@ -138,8 +121,6 @@ class ecWxWorker(object):
                 wx_dewpoint = "N/A"
             else:
                 wx_dewpoint = str(curr_dewpoint) + self.data.wx_units[0]
-
-            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
 
             try:
                 wind_bearing = curr_cond.get("wind_bearing").get("value","0")
@@ -185,6 +166,28 @@ class ecWxWorker(object):
             except:
                 wx_pressure = "N/A"
 
+            if curr_temp != None:
+                curr_temp = float(curr_cond["temperature"]["value"])
+                check_windchill = 10.0
+                if self.data.config.weather_units == "imperial":
+                    curr_temp = temp_f(curr_temp)
+                    check_windchill = 50.0
+
+
+                if curr_temp < check_windchill:
+                    windchill = round(wind_chill(curr_temp,curr_windspeed,self.data.wx_units[1]),1)
+                    wx_app_temp = str(windchill) + self.data.wx_units[0]
+                else:
+                    humidex = round(cadhumidex(curr_temp,int(curr_humidity)),1)
+                    wx_app_temp = str(humidex) + self.data.wx_units[0]
+                wx_temp = str(round(curr_temp,1)) + self.data.wx_units[0]
+
+            else:
+                wx_temp = "N/A"
+                wx_app_temp = "N/A"
+
+            self.data.wx_current = [wx_timestamp,wx_icon,wx_summary,wx_temp ,wx_app_temp ,wx_humidity,wx_dewpoint]
+            
             try:
                 for row in range(len(self.icons)):
                     if self.icons[row]["Description"].lower() == curr_cond.get("tendency").get("value","N/A"):
