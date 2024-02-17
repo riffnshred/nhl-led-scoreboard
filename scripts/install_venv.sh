@@ -25,8 +25,22 @@ python3 -m venv $HOME/nhlsb-venv --system-site-packages
 tput bold; echo "$(tput setaf 2)Activating direnv for python venv...$(tput setaf 9)" ; tput sgr0
 
 echo "export VIRTUAL_ENV=~/nhlsb-venv" >> .envrc
-echo "layout python" >> .envrc
+echo "source ~/nhlsb-venv/bin/activate" >> .envrc
 direnv allow .
+
+# Update bashrc
+tee ~/.bashrc << TEXT0
+show_virtual_env() {
+  if [[ -n "$VIRTUAL_ENV" && -n "$DIRENV_DIR" ]]; then
+    echo "($(basename $VIRTUAL_ENV)) "
+  fi
+}
+export -f show_virtual_env
+PS1='$(show_virtual_env)'$PS1
+
+eval "$(direnv hook bash)"
+
+TEXT0
 
 echo "$(tput setaf 6)Activating python virtual environment...$(tput setaf 9)"
 
