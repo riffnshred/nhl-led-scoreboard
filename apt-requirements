@@ -29,7 +29,7 @@ package "zsh"
 package "dbus"
 package "libdbus-glib-1-dev"
 package "libgirepository1.0-dev"
-pacakge "libdbus-1-dev"
+package "libdbus-1-dev"
 
 # you can also execute arbitrary bash
 echo "🚨  ALL GOOD TO GO"
