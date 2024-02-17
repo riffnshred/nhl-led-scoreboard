@@ -5,21 +5,20 @@ update
 
 # install some packages
 package "build-essential"
-package "libdbus-glib-1-dev"
-package "libgirepository1.0-dev"
 package "git"
 package "python3-setuptools"
 package "python3-pip"
 package "python3-dev"
+package "python3-virtualenv"
 package "python3-pillow"
 package "python3-numpy"
 package "python3-gpiozero"
 package "python3-cairosvg"
 package "python3-lxml"
 package "libopenblas0"
-package "libatlas3-base"
 package "libatlas-base-dev"
 package "libraqm-dev"
+package "direnv"
 #For the issueUpload.sh
 package "jq"
 package "pastebinit"
@@ -28,6 +27,9 @@ package "neofetch"
 package "zsh"
 #For dietpi users without dbus
 package "dbus"
+package "libdbus-glib-1-dev"
+package "libgirepository1.0-dev"
+pacakge "libdbus-1-dev"
 
 # you can also execute arbitrary bash
 echo "🚨  ALL GOOD TO GO"
