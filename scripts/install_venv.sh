@@ -81,6 +81,8 @@ sudo modprobe -r snd_bcm2835
 # Rebuild module dependacy
 sudo depmod -a
 
+sudo sed -i 's/$/ isolcpus=3/' /boot/cmdline.txt
+
 git reset --hard
 git fetch origin --prune
 git pull
