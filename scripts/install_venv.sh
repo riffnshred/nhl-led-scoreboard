@@ -38,6 +38,7 @@ show_virtual_env() {
 export -f show_virtual_env
 PS1='$(show_virtual_env)'$PS1
 
+export DIRENV_LOG_FORMAT=
 eval "$(direnv hook bash)"
 
 TEXT0
