@@ -59,11 +59,11 @@ calc_wt_size() {
 }
 
 do_install() {
-	scripts/sb-init
+	scripts/sbtools/sb-init
 }
 
 do_upgrade() {
-  scripts/sb-upgrade
+  scripts/sbtools/sb-upgrade
 }
 
 do_help() {
