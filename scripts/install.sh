@@ -94,7 +94,7 @@ while true; do
           case "$FUN" in
             1\ *) do_install ;;
             2\ *) do_upgrade ;;
-            3\ *) do_about ;;
+            3\ *) do_help ;;
             *) whiptail --msgbox "Programmer error: unrecognized option" 20 60 1 ;;
           esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
         else
