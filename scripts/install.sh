@@ -60,10 +60,12 @@ calc_wt_size() {
 
 do_install() {
 	scripts/sbtools/sb-init
+  exit 0
 }
 
 do_upgrade() {
   scripts/sbtools/sb-upgrade
+  exit 0
 }
 
 do_help() {
