@@ -8,15 +8,7 @@ py_ver () {
 
 # Make script work regardless of where it is run from
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-cd "${DIR}/.." || exit
-
-#if (whiptail --title "New install?" --yesno "Is this a new install?" 8 78); then
-#    tput bold; echo "$(tput setaf 2)Installing required OS dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)" ; tput sgr0
-#else
-#    whiptail --msgbox  "To upgrade, run scripts/sbtools/sb-upgrade instead..." 25 80
-#    tput bold; echo "$(tput setaf 2)To upgrade, run scripts/sbtools/sb-upgrade instead...$(tput setaf 9)" ; tput sgr0
-#    exit
-#fi
+cd "${DIR}/../.."
 
 # Don't run as root
 if [ $(id -u) -eq 0 ]; then
@@ -27,15 +19,15 @@ fi
 tput bold; echo "$(tput setaf 2)Installing required OS dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)" ; tput sgr0
 
 #Install all apt requirements using aptfile
-sudo scripts/aptfile apt-requirements
+sudo $DIR/aptfile apt-requirements
+
+# Update system pip3 to latest version
+sudo python3 -m pip install --upgrade pip --break-system-packages
 
 # Check python version, if it's greater than 3.9, we will create a venv, if not, we will follow normal install but really should push 
 # users to using a venv
 if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then
   tput bold; echo "$(tput setaf 2)Creating python virtual environment...$(tput setaf 9)" ; tput sgr0
-
-  # Update system pip3 to latest version
-  python3 -m pip install --upgrade pip --break-system-packages
 
   # Install virtual enviroment, required for upcoming bookworm release
   # Use already installed site-packages that were installed as part o fthe apt OS dependencies
@@ -50,16 +42,16 @@ if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then
 
   # Update bashrc
   tee -a  ~/.bashrc << 'TEXT0'
-  show_virtual_env() {
-    if [[ -n "$VIRTUAL_ENV" && -n "$DIRENV_DIR" ]]; then
+show_virtual_env() {
+  if [[ -n "$VIRTUAL_ENV" && -n "$DIRENV_DIR" ]]; then
       echo "($(basename $VIRTUAL_ENV)) "
     fi
-  }
-  export -f show_virtual_env
-  PS1='$(show_virtual_env)'$PS1
+}
+export -f show_virtual_env
+PS1='$(show_virtual_env)'$PS1
 
-  export DIRENV_LOG_FORMAT=
-  eval "$(direnv hook bash)"
+export DIRENV_LOG_FORMAT=
+eval "$(direnv hook bash)"
 TEXT0
 
   echo "$(tput setaf 6)Activating python virtual environment...$(tput setaf 9)"
