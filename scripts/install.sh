@@ -1,41 +1,85 @@
-#!/bin/bash
+#! /bin/bash
 
 # Make script work regardless of where it is run from
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.." || exit
 
-echo "$(tput setaf 6)Installing required dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)"
-#Install all apt requirements using aptfile
-sudo scripts/aptfile apt-requirements
+deb_ver () {
+  ver=$(cut -d . -f 1 < /etc/debian_version)
+  echo $ver
+}
 
-#Install all pip3 requirements using the requirements.txt filer
-sudo pip3 install -r requirements.txt
+deb_name () {
+    . /etc/os-release; echo "$PRETTY_NAME"
+}	
 
-# Pull submodule and ignore changes from script
-git submodule update --init --recursive
-git config submodule.matrix.ignore all
+py_ver () {
+  pyver="$(command -p python3 -V | sed 's/Python //g')"
+  echo $pyver
+}
 
-echo "$(tput setaf 4)Running rgbmatrix installation...$(tput setaf 9)"
+show_virtual_env() {
+  if [ -n "$VIRTUAL_ENV" ]; then
+    echo "VENV name: $(basename $VIRTUAL_ENV)"
+  else
+    echo "No VENV installed"
+  fi
+}
 
-# Recompile the cpp files to build library with newest cython.  See https://github.com/hzeller/rpi-rgb-led-matrix/issues/1298
+py_loc () {
+  pyloc="$(command -v python3)"
+  echo $pyloc
+}
 
-cd submodules/matrix/bindings/python/rgbmatrix/ || exit
+get_model() {
+	pimodel=$(tr -d '\0' </proc/device-tree/model)
+	echo $pimodel
+}
 
-# The following lines are no longer necessary
-# python3 -m pip install --no-cache-dir cython
-# python3 -m cython -2 --cplus *.pyx
+calc_wt_size() {
+  # NOTE: it's tempting to redirect stderr to /dev/null, so supress error
+  # output from tput. However in this case, tput detects neither stdout or
+  # stderr is a tty and so only gives default 80, 24 values
+  WT_HEIGHT=18
+  WT_WIDTH=$(tput cols)
 
-cd ../../../ || exit
+  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
+    WT_WIDTH=80
+  fi
+  if [ "$WT_WIDTH" -gt 178 ]; then
+    WT_WIDTH=120
+  fi
+  WT_MENU_HEIGHT=$((WT_HEIGHT - 7))
+}
 
-make build-python PYTHON="$(command -v python3)"
-sudo make install-python PYTHON="$(command -v python3)"
+do_install() {
+	if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then echo true; else echo false; fi
+}
 
-cd ../../../ || exit
+calc_wt_size
 
-git reset --hard
-git fetch origin --prune
-git pull
+backtitle="$(get_model) [$(deb_name)] [Python: $(py_loc) V$(py_ver) $(show_virtual_env)]"
 
-make
-echo "If you didn't see any errors above, everything should be installed!"
-echo "$(tput bold)$(tput smso)$(tput setaf 2)Installation complete!$(tput sgr0) Play around with the examples in nhl-led-scoreboard/submodules/matrix/bindings/python/samples to make sure your matrix is working."
+while true; do
+
+        FUN=$(whiptail --title "NHL LED Scoreboard Install/Upgrade Tool" --backtitle "$backtitle" --menu "Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT --cancel-button Finish --ok-button Select \
+        "1 New Install" "Use this if this is your first time installing" \
+        "2 Upgrade" "Use this if you are upgrading" \
+        "3 Help" "Show help for this tool" \
+        3>&1 1>&2 2>&3)
+
+	RET=$?
+
+	if [ $RET -eq 1 ]; then
+           exit 0
+        elif [ $RET -eq 0 ]; then
+          case "$FUN" in
+            1\ *) do_install ;;
+            2\ *) do_upgrade ;;
+            3\ *) do_about ;;
+            *) whiptail --msgbox "Programmer error: unrecognized option" 20 60 1 ;;
+          esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
+        else
+      exit 1
+    fi
+done

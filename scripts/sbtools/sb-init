@@ -1,8 +1,28 @@
 #!/bin/bash
 
+# Functions
+py_ver () {
+  pyver="$(command -p python3 -V | sed 's/Python //g')"
+  echo $pyver
+}
+
 # Make script work regardless of where it is run from
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.." || exit
+
+#if (whiptail --title "New install?" --yesno "Is this a new install?" 8 78); then
+#    tput bold; echo "$(tput setaf 2)Installing required OS dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)" ; tput sgr0
+#else
+#    whiptail --msgbox  "To upgrade, run scripts/sbtools/sb-upgrade instead..." 25 80
+#    tput bold; echo "$(tput setaf 2)To upgrade, run scripts/sbtools/sb-upgrade instead...$(tput setaf 9)" ; tput sgr0
+#    exit
+#fi
+
+# Everything else needs to be run as root
+if [ $(id -u) -eq 0 ]; then
+  tput bold; echo "$(tput setaf 9)You do not need to run this script using sudo, it will handle sudo as required$(tput setaf 9)" ; tput sgr0
+  exit 1
+fi
 
 tput bold; echo "$(tput setaf 2)Installing required OS dependencies. This may take some time (10-20 minutes-ish)...$(tput setaf 9)" ; tput sgr0
 
@@ -11,8 +31,6 @@ sudo scripts/aptfile apt-requirements
 
 tput bold; echo "$(tput setaf 2)Creating python virtual environment...$(tput setaf 9)" ; tput sgr0
 
-#Install all apt requirements using aptfile
-#sudo scripts/aptfile apt-requirements
 
 # Update system pip3 to latest version
 python3 -m pip install --upgrade pip --break-system-packages
