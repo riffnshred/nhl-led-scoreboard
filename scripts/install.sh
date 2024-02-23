@@ -9,7 +9,7 @@ echo "$(tput setaf 6)Installing required dependencies. This may take some time (
 sudo scripts/aptfile apt-requirements
 
 #Install all pip3 requirements using the requirements.txt filer
-sudo pip3 install -r requirements.txt
+sudo pip3 install -U -r requirements.txt
 
 # Pull submodule and ignore changes from script
 git submodule update --init --recursive
@@ -31,6 +31,27 @@ make build-python PYTHON="$(command -v python3)"
 sudo make install-python PYTHON="$(command -v python3)"
 
 cd ../../../ || exit
+
+# Blacklist the snd_bcm2835 sounds module
+sudo tee /etc/modprobe.d/blacklist-rgbmatrix.conf <<TEXT1
+## Make sure the sound module does not load as it causes issues with the timing for the rgb matrix library
+blacklist snd_bcm2835
+
+# The next time the loading of the module is attempted, the /bin/false
+# will be executed instead. This will prevent the module from being
+# loaded on-demand.
+
+install snd_bcm_2835 /bin/false
+
+TEXT1
+
+# Unload the sound module
+sudo modprobe -r snd_bcm2835
+
+# Rebuild module dependacy
+sudo depmod -a
+
+sudo sed -i 's/$/ isolcpus=3/' /boot/cmdline.txt
 
 git reset --hard
 git fetch origin --prune
