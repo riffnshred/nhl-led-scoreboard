@@ -7,6 +7,12 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}"
 
+# Don't run as root
+if [ $(id -u) -eq 0 ]; then
+  tput bold; echo "$(tput setaf 9)You do not need to run this script using sudo, it will handle sudo as required$(tput setaf 9)" ; tput sgr0
+  exit 1
+fi
+
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
 
@@ -87,10 +93,10 @@ if git pull --rebase --stat origin master; then
        #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
        if ! git diff -s --exit-code HEAD "$last_commit" requirements.txt; then
           printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
-	  if [ -n "$VIRTUAL_ENV" ] ;
-            sudo pip3 install -U -r requirements.txt
-	  else
-            pip3 install -U -r requirements.txt
+          if [ -n "$VIRTUAL_ENV" ]; then
+                pip3 install -U -r requirements.txt
+          else
+                sudo pip3 install -U -r requirements.txt
           fi
        else
           printf "${YELLOW}%s${RESET}\n" "No new python libraries required to be installed."

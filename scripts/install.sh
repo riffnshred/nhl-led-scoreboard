@@ -4,6 +4,12 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "${DIR}/.." || exit
 
+# Don't run as root user
+if [ $(id -u) -eq 0 ]; then
+  tput bold; echo "$(tput setaf 9)You do not need to run this script using sudo, it will handle sudo as required$(tput setaf 9)" ; tput sgr0
+  exit 1
+fi
+
 deb_ver () {
   ver=$(cut -d . -f 1 < /etc/debian_version)
   echo $ver
@@ -53,7 +59,19 @@ calc_wt_size() {
 }
 
 do_install() {
-	if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then echo true; else echo false; fi
+	scripts/sb-init
+}
+
+do_upgrade() {
+  scripts/sb-upgrade
+}
+
+do_help() {
+ whiptail --msgbox "\
+This tool provides a straightforward way of doing initial
+install of the NHL LED Scoreboard or an Upgrade of an existing installation\
+" 20 70 1
+  return 0
 }
 
 calc_wt_size
