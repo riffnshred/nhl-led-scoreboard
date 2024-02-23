@@ -66,13 +66,6 @@ TEXT0
 
   tput bold; echo "$(tput setaf 2)Installing scoreboard python requirements in virtual environment...$(tput setaf 9)" ; tput sgr0
   pip3 install -r requirements.txt
-
-  whiptail --msgbox "\
-  WITH A VENV, Your python is now located differently...\
-  TO RUN WITH SUDO, YOU MUST USE THE VENV LOCATION...\
-  .................PYTHON LOOKS LIKE.....................\
-  sudo $HOME/nhlsb-venv/bin/python3\
-  ..................................................."
   
   tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
   tput bold; echo "$(tput setaf 4)TAKE NOTE OF NEXT LINES...$(tput setaf 9)" ; tput sgr0  
