@@ -39,7 +39,7 @@ if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then
   echo "export VIRTUAL_ENV=~/nhlsb-venv" >> .envrc
   echo "source ~/nhlsb-venv/bin/activate" >> .envrc
   direnv allow .
-  if grep -q sb-init ~/.bashrc; then
+  if ! grep -q sb-init ~/.bashrc; then
   # Update bashrc
   tee -a  ~/.bashrc << 'TEXT0'
 # ADDED BY sb-init script for nhl-led-scoreboard
