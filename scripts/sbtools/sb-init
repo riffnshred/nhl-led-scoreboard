@@ -24,9 +24,9 @@ sudo $DIR/aptfile apt-requirements
 # Update system pip3 to latest version
 sudo python3 -m pip install --upgrade pip --break-system-packages
 
-# Check python version, if it's greater than 3.9, we will create a venv, if not, we will follow normal install but really should push 
+# Check python version, if it's greater than 3.9 (bullseye version), we will create a venv, if not, we will follow normal install but really should push 
 # users to using a venv
-if $(dpkg --compare-versions $(py_ver) "gt" "3.9.0"); then
+if $(dpkg --compare-versions $(py_ver) "gt" "3.10.0"); then
   tput bold; echo "$(tput setaf 2)Creating python virtual environment...$(tput setaf 9)" ; tput sgr0
 
   # Install virtual enviroment, required for upcoming bookworm release
