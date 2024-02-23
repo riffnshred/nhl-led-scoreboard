@@ -67,7 +67,7 @@ git config rebase.autoStash true
 local ret=0
 
 # Update nhl-led-scoreboard
-printf "${BLUE}%s${RESET}\n" "Updating NHL LED Scoreboard"
+printf "${GREEN}%s${RESET}\n" "Updating NHL LED Scoreboard"
 last_commit=$(git rev-parse HEAD)
 if git pull --rebase --stat origin master; then
   # Check if it was really updated or not
