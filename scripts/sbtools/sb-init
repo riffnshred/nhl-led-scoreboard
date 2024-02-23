@@ -130,7 +130,10 @@ sudo modprobe -r snd_bcm2835
 # Rebuild module dependacy
 sudo depmod -a
 
-sudo sed -i 's/$/ isolcpus=3/' /boot/cmdline.txt
+if ! grep -q isolcpus /boot/cmdline.txt; then
+ tput bold; echo "$(tput setaf 4)Optimizing pi for python (isolating cpus)...$(tput setaf 9)" ; tput sgr0
+ sudo sed -i 's/$/ isolcpus=3/' /boot/cmdline.txt
+fi
 
 git reset --hard
 git fetch origin --prune
