@@ -22,7 +22,11 @@ tput bold; echo "$(tput setaf 2)Installing required OS dependencies. This may ta
 sudo $DIR/aptfile apt-requirements
 
 # Update system pip3 to latest version
-sudo python3 -m pip install --upgrade pip --break-system-packages
+if $(dpkg --compare-versions $(py_ver) "gt" "3.10.0"); then
+  sudo python3 -m pip install --upgrade pip --break-system-packages
+else
+  sudo python3 -m pip install --upgrade pip
+fi
 
 # Check python version, if it's greater than 3.9 (bullseye version), we will create a venv, if not, we will follow normal install but really should push 
 # users to using a venv
