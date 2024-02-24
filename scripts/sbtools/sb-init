@@ -71,7 +71,7 @@ TEXT0
   #This will install into the virtual environment
 
   tput bold; echo "$(tput setaf 2)Installing scoreboard python requirements in virtual environment...$(tput setaf 9)" ; tput sgr0
-  pip3 install -r requirements.txt
+  pip3 install -U -r requirements.txt
   
   tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
   tput bold; echo "$(tput setaf 4)TAKE NOTE OF NEXT LINES...$(tput setaf 9)" ; tput sgr0  
@@ -81,7 +81,7 @@ TEXT0
   tput bold; echo "$(tput setaf 1)sudo $HOME/nhlsb-venv/bin/python3 $(tput setaf 9)" ; tput sgr0
   tput bold; echo "$(tput setaf 4)...................................................$(tput setaf 9)" ; tput sgr0
 else
-  sudo pip3 install -r requirements.txt
+  sudo pip3 install -U -r requirements.txt
 fi
 # Pull submodule and ignore changes from script
 git submodule update --init --recursive
