@@ -135,6 +135,9 @@ if ! grep -q isolcpus /boot/cmdline.txt; then
  sudo sed -i 's/$/ isolcpus=3/' /boot/cmdline.txt
 fi
 
+git config --global user.email "first@example.com"
+git config --global user.name "User Name"
+
 git reset --hard
 git fetch origin --prune
 git pull
