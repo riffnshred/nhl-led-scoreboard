@@ -137,6 +137,7 @@ fi
 
 git config --global user.email "first@example.com"
 git config --global user.name "User Name"
+git config pull.rebase false
 
 git reset --hard
 git fetch origin --prune
