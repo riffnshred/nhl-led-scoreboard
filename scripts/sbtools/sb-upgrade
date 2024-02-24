@@ -123,7 +123,7 @@ if git pull --rebase --stat origin master; then
   # Update the status of the download so image user is not asked to upgrade on login again
   # comment the line below if running from the repo
   #/home/pi/sbtools/checkUpdate.sh > /home/pi/.nhlledportal/status
-  printf "${BLUE}%s${RESET}\n" "$message"
+  printf "${YELLOW}%s${RESET}\n" "$message"
 else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
