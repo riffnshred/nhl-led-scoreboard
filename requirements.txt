@@ -1,9 +1,8 @@
 ephem
 fastjsonschema>=2.14.4
 geocoder>=1.38.1
-geocoder>=1.38.1
 gpiozero==1.6.2
-nhl-api-py>=2.4.0
+nhl-api-py
 noaa-sdk>=0.1.18
 pyowm>=3.0.0
 python-tsl2591==0.2.0
