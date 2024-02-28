@@ -2,10 +2,16 @@
 # Borrowed from oh-my-zsh
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/upgrade.sh
 
-cd /home/pi/nhl-led-scoreboard
+#cd /home/pi/nhl-led-scoreboard
 #Uncomment for running out of the repository scripts/sbtools directory
-#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-#cd "${DIR}"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "${DIR}"
+
+# Don't run as root
+if [ $(id -u) -eq 0 ]; then
+  tput bold; echo "$(tput setaf 9)You do not need to run this script using sudo, it will handle sudo as required$(tput setaf 9)" ; tput sgr0
+  exit 1
+fi
 
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
@@ -61,7 +67,7 @@ git config rebase.autoStash true
 local ret=0
 
 # Update nhl-led-scoreboard
-printf "${BLUE}%s${RESET}\n" "Updating NHL LED Scoreboard"
+printf "${GREEN}%s${RESET}\n" "Seeing if we can update the NHL LED Scoreboard"
 last_commit=$(git rev-parse HEAD)
 if git pull --rebase --stat origin master; then
   # Check if it was really updated or not
@@ -87,7 +93,11 @@ if git pull --rebase --stat origin master; then
        #Check to see if the requirements.txt has changed, if so, run the pip3 install -r requirements.txt again
        if ! git diff -s --exit-code HEAD "$last_commit" requirements.txt; then
           printf "${GREEN}%s${RESET}\n" "New python library requirements for this version, installing now"
-          sudo pip3 install -r requirements.txt
+          if [ -n "$VIRTUAL_ENV" ]; then
+                pip3 install -U -r requirements.txt
+          else
+                sudo pip3 install -U -r requirements.txt
+          fi
        else
           printf "${YELLOW}%s${RESET}\n" "No new python libraries required to be installed."
        fi
@@ -113,7 +123,7 @@ if git pull --rebase --stat origin master; then
   # Update the status of the download so image user is not asked to upgrade on login again
   # comment the line below if running from the repo
   #/home/pi/sbtools/checkUpdate.sh > /home/pi/.nhlledportal/status
-  printf "${BLUE}%s${RESET}\n" "$message"
+  printf "${YELLOW}%s${RESET}\n" "$message"
 else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
