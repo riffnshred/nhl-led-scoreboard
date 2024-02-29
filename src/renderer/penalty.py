@@ -1,5 +1,5 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
-from utils import center_text, convert_date_format
+from utils import center_text, convert_date_format, strip_accents
 from renderer.matrix import MatrixPixels
 import debug
 from nhl_api.info import TeamInfo
@@ -67,7 +67,7 @@ class PenaltyRenderer:
 
         self.matrix.draw_text_layout(
             self.layout.last_name, 
-            self.player["lastName"]["default"]
+            strip_accents(self.player["lastName"]["default"])
         )
         self.matrix.draw_text_layout(
             self.layout.minutes, 

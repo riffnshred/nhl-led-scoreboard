@@ -280,3 +280,6 @@ def round_normal(n, decimals=0):
     multiplier = 10 ** decimals
     value = math.floor(n * multiplier + 0.5) / multiplier
     return int(value) if decimals == 0 else value
+
+def strip_accents(str):
+    return "".join(c for c in unicodedata.normalize("NFD", str) if not unicodedata.combining(c))
