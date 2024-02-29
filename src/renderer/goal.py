@@ -1,8 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
-from utils import center_text, convert_date_format,strip_accents
+from utils import center_text, convert_date_format
 from renderer.matrix import MatrixPixels
 import debug
-
 
 """
     Show the details of a goal:
@@ -73,13 +72,13 @@ class GoalRenderer:
 
         self.matrix.draw_text(
                 (8, 20), 
-                strip_accents(self.scorer["info"]["firstName"]["default"].upper()),
+                self.scorer["info"]["firstName"]["default"].upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
         self.matrix.draw_text(
                 (8, 26), 
-                strip_accents(self.scorer["info"]["lastName"]["default"].upper()),
+                self.scorer["info"]["lastName"]["default"].upper(),
                 font=self.font, 
                 fill=(255,255,255)
             )
@@ -95,7 +94,7 @@ class GoalRenderer:
 
         scorer_name_coord = self.matrix.draw_text(
                 (1, 8), 
-                strip_accents(self.scorer["info"]["lastName"]["default"].upper()), 
+                self.scorer["info"]["lastName"]["default"].upper(), 
                 font=self.font, 
                 fill=(255, 255, 255)
             )
@@ -119,7 +118,7 @@ class GoalRenderer:
             for i in range(len(self.assists)):
                 assist_name_coord = self.matrix.draw_text(
                     (1, assists_y_pos), 
-                    strip_accents(self.assists[i]["info"]["lastName"]["default"].upper()), 
+                    self.assists[i]["info"]["lastName"]["default"].upper(), 
                     font=self.font, 
                     fill=(255, 255, 255)
                 )
