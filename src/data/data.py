@@ -204,8 +204,8 @@ class Data:
         today = datetime.today()
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
                                                         day=today.day)
-        end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
-                                                                                day=today.day)
+        #end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,day=today.day)
+        end_of_day = datetime.strptime("03:00", "%H:%M").replace(year=today.year, month=today.month,day=today.day)
         if noon < end_of_day < datetime.now() and datetime.now() > noon:
             today += timedelta(days=1)
         elif end_of_day > datetime.now():
@@ -492,20 +492,14 @@ class Data:
         pref_teams_id = []
         # Put all the team's in a dict with there name as KEY and ID as value.
         for team_id, team in self.teams_info.items():
-            name_array = team.details.name.split(" ")
-            # TODO: This doesn't work. We should use the tri code instead.
-            # It will either break on St Louis Blues, or Vegas Golden Knights
-            # Can't have both using the same style of array parsing.
-            name = ' '.join(name_array[1:])
-            allteams_id[name] = team_id
+            allteams_id[team.details.name] = team_id
 
         # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
         if pref_teams:
             for team in pref_teams:
-                if team in allteams_id:
-                    pref_teams_id.append(allteams_id[team])
-                else:
-                    debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
+                #Search for the team in the key
+                res = {key: val for key, val in allteams_id.items() if team in key}
+                pref_teams_id.append(list(res.values())[0])
 
             return pref_teams_id
         else:
