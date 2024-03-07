@@ -149,8 +149,6 @@ class Scoreboard:
                      debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                      home_penalties = []
                      break
-        home_skaters = len(overview["homeTeam"]["onIce"])
-        away_skaters = len(overview["awayTeam"]["onIce"])
 
         home_pp = False
         away_pp = False
@@ -254,7 +252,7 @@ class GameSummaryBoard:
         except KeyError:
             self.intermission = False
 
-        if game_details["gameState"] == "OFF" or game_details["gameState"] == "FINAL":
+        if game_details["gameState"] == "OFF" or game_details["gameState"] == "FINAL" or game_details["gameState"] == "OVER":
             if game_details["awayTeam"]["score"] > game_details["homeTeam"]["score"]:
                 self.winning_team_id = game_details["awayTeam"]["id"]
                 self.winning_score = game_details["awayTeam"]["score"]
