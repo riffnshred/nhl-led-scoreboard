@@ -5,7 +5,7 @@ A Board is simply a display object with specific parameters made to be shown on 
 """
 import debug
 from boards.scoreticker import Scoreticker
-from boards.seriesticker import Seriesticker
+# from boards.seriesticker import Seriesticker
 from boards.standings import Standings
 from boards.team_summary import TeamSummary
 from boards.clock import Clock
@@ -222,17 +222,25 @@ class Boards:
     def scoreticker(self, data, matrix, sleepEvent):
         Scoreticker(data, matrix, sleepEvent).render()
 
+    # Since 2024, the playoff features are removed as we have not colected the new API endpoint for them. 
     def seriesticker(self, data, matrix, sleepEvent):
+        debug.info("seriesticker is disabled. This feature is not available right now")
+        pass
         '''
             forcing it to show since the playoff start and regular season end are in conflict for 2021
         '''
-        Seriesticker(data, matrix, sleepEvent).render()
+        
+        #Seriesticker(data, matrix, sleepEvent).render()
+        
         '''if data.status.is_playoff(data.today, data.playoffs):
             Seriesticker(data, matrix, sleepEvent).render()
         '''    
     
+    # Since 2024, the playoff features are removed as we have not colected the new API endpoint for them. 
     def stanley_cup_champions(self, data, matrix, sleepEvent):
-        StanleyCupChampions(data, matrix, sleepEvent).render()
+        debug.info("stanley_cup_champions is disabled. This feature is not available right now")
+        pass
+        #StanleyCupChampions(data, matrix, sleepEvent).render()
 
     def standings(self, data, matrix, sleepEvent):
         #Try making standings a thread

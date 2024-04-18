@@ -64,6 +64,7 @@ def run():
 
     # This data will get passed throughout the entirety of this program.
     # It initializes all sorts of things like current season, teams, helper functions
+    print("init Data")
     data = Data(config)
 
     #If we pass the logging arguments on command line, override what's in the config.json, else use what's in config.json (color will always be false in config.json)

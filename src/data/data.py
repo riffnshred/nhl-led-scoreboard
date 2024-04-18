@@ -146,6 +146,7 @@ class Data:
         self.network_issues = False
 
         # Get the teams info
+        print("update Teams info")
         self.teams_info = self.get_teams()
         # So oddly enough, there are a handful of situations where the API does not include the team_id
         # it's happening often enough that it's worth keeping a second teams_info that is keyed off of the
@@ -163,6 +164,7 @@ class Data:
         self.new_data = True
 
         # Get the status from the API
+        print("Get status from api")
         self.get_status()
 
         # Get favorite team's id
@@ -175,6 +177,7 @@ class Data:
         #self.current_game_index = 0
 
         # Fetch the games for today
+        print("refresh games")
         self.refresh_games()
 
         # Flag to indicate if all preferred games are Final
@@ -184,6 +187,7 @@ class Data:
         self.today = self.date()
 
         # Get refresh standings
+        print("refresh standings")
         self.refresh_standings()
 
         # Playoff Flag
@@ -295,26 +299,30 @@ class Data:
                     self.games = []
                     self.pref_games = []
                     return data
-
+                
                 self.games = data["games"]
                 self.pref_games = filter_list_of_games(self.games, self.pref_teams)
+                
                 # Populate the TeamInfo classes used for the team_summary board
                 for team_id in self.pref_teams:
                     # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
-                    pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
-                    team_info.previous_game = pg
-                    team_info.next_game = ng
-
+                    try:
+                        pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
+                        team_info.previous_game = pg
+                        team_info.next_game = ng
+                    except:
+                        pass
+                print("probe 2")
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
-
+                print("probe 3")
                 if not self.is_pref_team_offday() and self.config.live_mode:
                     #self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
                     # TODO: This shouldn't be needed to get the fact that your preferred team has a game today
                     self.check_game_priority()
-
+                print("probe 4")
                 self.network_issues = False
                 break
 
@@ -326,6 +334,7 @@ class Data:
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
             except IndexError as error_message:
+                print("probe 5")
                 debug.error(error_message)
                 debug.info("All preferred games are Final, showing the top preferred game")
                 #self.current_game_index = 0
