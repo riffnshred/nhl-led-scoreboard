@@ -290,7 +290,6 @@ class Data:
             TODO:
                 Add the option to start the earliest game in the preferred game list but change to the top one as soon as it start.
         """
-
         attempts_remaining = 5
         while attempts_remaining > 0:
             try:
@@ -313,16 +312,15 @@ class Data:
                         team_info.next_game = ng
                     except:
                         pass
-                print("probe 2")
+                
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
-                print("probe 3")
+                
                 if not self.is_pref_team_offday() and self.config.live_mode:
                     #self.pref_games = prioritize_pref_games(self.pref_games, self.pref_teams)
                     self.check_all_pref_games_final()
                     # TODO: This shouldn't be needed to get the fact that your preferred team has a game today
                     self.check_game_priority()
-                print("probe 4")
                 self.network_issues = False
                 break
 
@@ -334,7 +332,6 @@ class Data:
                 sleep(NETWORK_RETRY_SLEEP_TIME)
 
             except IndexError as error_message:
-                print("probe 5")
                 debug.error(error_message)
                 debug.info("All preferred games are Final, showing the top preferred game")
                 #self.current_game_index = 0
