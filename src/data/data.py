@@ -156,13 +156,6 @@ class Data:
         # Save the parsed config
         self.config = config
 
-        # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
-        # It shows the last time (UTC) the data was updated. EX 20200114_041103
-        self.time_stamp = "00000000_000000"
-
-        # Flag for when the data live feed of a game has updated
-        self.new_data = True
-
         # Get the status from the API
         print("Get status from api")
         self.get_status()
@@ -423,10 +416,6 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
-                # TODO: Not sure what was going on here
-                if self.time_stamp != self.overview["clock"]["timeRemaining"]:
-                    self.time_stamp = self.overview["clock"]["timeRemaining"]
-                    self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False
                 break
