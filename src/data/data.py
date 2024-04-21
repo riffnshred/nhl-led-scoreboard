@@ -302,9 +302,12 @@ class Data:
                 for team_id in self.pref_teams:
                     # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
-                    pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
-                    team_info.previous_game = pg
-                    team_info.next_game = ng
+                    try:
+                        pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
+                        team_info.previous_game = pg
+                        team_info.next_game = ng
+                    except: 
+                        pass
 
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
