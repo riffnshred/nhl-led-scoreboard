@@ -185,7 +185,11 @@ class Scoreboard:
         self.start_time = convert_time(datetime.strptime(overview["startTimeUTC"],'%Y-%m-%dT%H:%M:%SZ')).strftime(time_format)
         self.status = overview["gameState"]
         self.periods = Periods(overview)
-        self.intermission = overview["clock"]["inIntermission"]
+        
+        try:
+            self.intermission = overview["clock"]["inIntermission"]
+        except:
+            self.intermission = False
 
         if overview["gameState"] == "OFF" or overview["gameState"] == "FINAL":
             if away_team["score"] > home_team["score"]:
