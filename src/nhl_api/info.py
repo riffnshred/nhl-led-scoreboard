@@ -183,15 +183,16 @@ def next_season():
 
 
 def playoff_info(season):
-    data = nhl_api.data.get_playoff_data(season)
-    parsed = data.json()
-    season = parsed["season"]
+    client = NHLClient(verbose = False)
+    data = client.playoffs.carousel(season)
+    parsed = data
+    season = parsed["seasonId"]
     output = {'season': season}
     try:
         playoff_rounds = parsed["rounds"]
         rounds = {}
         for r in range(len(playoff_rounds)):
-            rounds[str(playoff_rounds[r]["number"])] = MultiLevelObject(playoff_rounds[r])
+            rounds[str(playoff_rounds[r]["roundNumber"])] = playoff_rounds[r]
         
         output['rounds'] = rounds
     except KeyError:
@@ -199,12 +200,12 @@ def playoff_info(season):
         output['rounds'] = False
 
     try:
-        default_round = parsed["defaultRound"]
-        output['default_round'] = default_round
+        currentRound = parsed["currentRound"]
+        output['currentRound'] = currentRound
     except KeyError:
         debug.error("No default round for {} Playoff.".format(season))
         default_round = 1
-        output['default_round'] = default_round
+        output['currentRound'] = currentRound
 
     return output
 
@@ -352,7 +353,7 @@ class Wildcard:
 class Playoff():
     def __init__(self, data):
         self.season = data['season']
-        self.default_round = data['default_round']
+        self.default_round = data['currentRound']
         self.rounds = data['rounds']
 
     def __str__(self):
