@@ -230,6 +230,8 @@ class Data:
 
             # Reset flag
             self.all_pref_games_final = False
+
+            self.refresh_playff()
             
             #Don't think this is needed to be called a second time
            #self.refresh_daily()           

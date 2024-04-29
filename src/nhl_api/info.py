@@ -210,7 +210,7 @@ def playoff_info(season):
     return output
 
 def series_record(seriesCode, season):
-    data = data = nhl_api.data.get_series_record(seriesCode, season)
+    data = nhl_api.data.get_series_record(seriesCode, season)
     parsed = data.json()
     return parsed["data"]
 

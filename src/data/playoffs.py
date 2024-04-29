@@ -41,6 +41,7 @@ class Series:
         bottom = series_info["bottomSeedTeam"]
         top_team_abbrev = top["abbrev"]
         bottom_team_abbrev = bottom["abbrev"]
+        to_win = series_info["neededToWin"] 
         try:
             self.conference = top["conference"]["name"]
         except:
@@ -50,13 +51,21 @@ class Series:
         #self.matchup_short_name = series.names.matchupShortName
         self.top_team = SeriesTeam(top, top_team_abbrev)
         self.bottom_team = SeriesTeam(bottom, bottom_team_abbrev)
-        self.current_game = series_info["games"][sum(map(int,top["record"].split("-")))]
-        self.current_game_id = self.current_game["id"]
-        #self.short_status = series.currentGame.seriesSummary.seriesStatusShort
-        self.current_game_date = datetime.strptime(self.current_game["startTimeUTC"].split("T")[0], "%Y-%m-%d").strftime("%b %d")
-        self.current_game_start_time = convert_time(datetime.strptime(self.current_game["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')).strftime(data.config.time_format)
         self.games = series_info["games"]
         self.game_overviews = {}
+
+        if int(top["record"].split("-")[0]) == to_win or int(bottom["record"].split("-")[0]) == to_win:
+            self.final=True
+            debug.info("Series is Finished")
+        else:
+            #self.series_code = series.seriesCode #To use with the nhl records API
+            #self.matchup_short_name = series.names.matchupShortName
+            self.current_game = series_info["games"][sum(map(int,top["record"].split("-")))]
+            self.current_game_id = self.current_game["id"]
+            #self.short_status = series.currentGame.seriesSummary.seriesStatusShort
+            self.current_game_date = datetime.strptime(self.current_game["startTimeUTC"].split("T")[0], "%Y-%m-%d").strftime("%b %d")
+            self.current_game_start_time = convert_time(datetime.strptime(self.current_game["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')).strftime(data.config.time_format)
+
 
     def get_game_overview(self, gameid):
         # Request the game overview
