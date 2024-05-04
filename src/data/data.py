@@ -532,7 +532,12 @@ class Data:
 
                         # Grab the series of the current round of playoff.
                         self.series_list = self.current_round["series"]     
-                        
+
+                        self.series_list = []
+                        for i in self.playoffs.rounds:
+                            for j in self.playoffs.rounds[i]["series"]:
+                                self.series_list.append(j)
+
                         # Check if prefered team are part of the current round of playoff
                         #self.pref_series = prioritize_pref_series(filter_list_of_series(self.series_list, self.pref_teams), self.pref_teams)
                         self.pref_series = self.series_list
@@ -542,8 +547,29 @@ class Data:
                             self.series_list = self.pref_series
                         for s in self.series_list:
                             self.series.append(Series(s,self))
+
+                        highest_round = self.series[-1].round_number
+                        teams = []
+                        for s in self.series[::-1]:
+                            if s.round_number == highest_round:
+                                teams.append(s.top_team.abbrev)
+                                teams.append(s.bottom_team.abbrev)
+
+                            if int(s.round_number) < int(highest_round):
+                                team1 = s.top_team.abbrev
+                                team2 = s.bottom_team.abbrev
+
+                                if((team1 in teams) or (team2 in teams)):
+                                    s.show = False
+
+
                         
+                    
+
+
+
                         self.isPlayoff = True
+
                     except AttributeError as error:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
                         self.isPlayoff = False

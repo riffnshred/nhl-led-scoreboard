@@ -47,12 +47,14 @@ class Series:
         except:
             self.conference = ""
         self.series_letter = series["seriesLetter"]
+        self.round_number = series["roundNumber"]
         #self.series_code = series.seriesCode #To use with the nhl records API
         #self.matchup_short_name = series.names.matchupShortName
         self.top_team = SeriesTeam(top, top_team_abbrev)
         self.bottom_team = SeriesTeam(bottom, bottom_team_abbrev)
         self.games = series_info["games"]
         self.game_overviews = {}
+        self.show = True
 
         if int(top["record"].split("-")[0]) == to_win or int(bottom["record"].split("-")[0]) == to_win:
             self.final=True

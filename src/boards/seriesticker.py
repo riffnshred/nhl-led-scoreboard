@@ -28,10 +28,16 @@ class Seriesticker:
             return
         self.allseries = self.data.series
         self.index = 0
-        self.num_series = len(self.allseries)
-
+        self.num_series = 0;
+        for s in self.allseries:
+            if s.show:
+                self.num_series +=1
+        
 
         for series in self.allseries:
+            if (not series.show):
+                continue
+
             self.matrix.clear()
             banner_text = "Stanley Cup"
             color_banner_bg = (200,200,200)
@@ -46,7 +52,10 @@ class Seriesticker:
                     color_conf = self.team_colors.color("{}.primary".format("Western"))
                     banner_text = "Western"
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
-                round_name = self.data.current_round_name
+                if series.round_number == 1:
+                    round_name = "1st-round"
+                elif series.round_number ==2:
+                    round_name = "2nd-round"
                 self.show_indicator(self.index, self.num_series)
             
             self.matrix.draw_text(
