@@ -56,17 +56,22 @@ class Series:
         self.game_overviews = {}
         self.show = True
 
-        if int(top["record"].split("-")[0]) == to_win or int(bottom["record"].split("-")[0]) == to_win:
+        if int(top["seriesWins"]) == to_win or int(bottom["seriesWins"]) == to_win: 
             self.final=True
             debug.info("Series is Finished")
         else:
             #self.series_code = series.seriesCode #To use with the nhl records API
             #self.matchup_short_name = series.names.matchupShortName
-            self.current_game = series_info["games"][sum(map(int,top["record"].split("-")))]
-            self.current_game_id = self.current_game["id"]
-            #self.short_status = series.currentGame.seriesSummary.seriesStatusShort
-            self.current_game_date = datetime.strptime(self.current_game["startTimeUTC"].split("T")[0], "%Y-%m-%d").strftime("%b %d")
-            self.current_game_start_time = convert_time(datetime.strptime(self.current_game["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')).strftime(data.config.time_format)
+            try:
+                self.current_game = series_info["games"][int(top["seriesWins"]) + int(bottom["seriesWins"])]
+                self.current_game_id = self.current_game["id"]
+                #self.short_status = series.currentGame.seriesSummary.seriesStatusShort
+                self.current_game_date = datetime.strptime(self.current_game["startTimeUTC"].split("T")[0], "%Y-%m-%d").strftime("%b %d")
+                self.current_game_start_time = convert_time(datetime.strptime(self.current_game["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')).strftime(data.config.time_format)
+            except error as e:
+                debug.info("Unknown error:")
+                print(e)
+
 
 
     def get_game_overview(self, gameid):
