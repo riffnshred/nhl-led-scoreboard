@@ -38,7 +38,7 @@ SCRIPT_VERSION = "1.8.4"
 
 def run():
     # Kill the splash screen if active
-    stop_splash_service()
+    stop_splash_service() # Comment out if running via docker
 
     # Get supplied command line arguments
     commandArgs = args()

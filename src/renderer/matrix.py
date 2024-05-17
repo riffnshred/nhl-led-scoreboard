@@ -329,7 +329,7 @@ def show_image(img):
     w = img.width
 
     # Get image
-    img = img.resize((w,h), Image.ANTIALIAS)
+    img = img.resize((w,h), Image.LANCZOS)
     # Set to array
     img_arr = np.asarray(img)
     # Get the shape so we know x,y coords

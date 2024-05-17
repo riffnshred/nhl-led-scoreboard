@@ -1,0 +1,8 @@
+services:
+  nhlledscoreboard:
+    image: nhlledscoreboard
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
