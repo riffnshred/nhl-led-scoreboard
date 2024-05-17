@@ -21,8 +21,6 @@ def filter_list_of_games(games, teams):
     """
     Filter the list 'games' and keep only the games which the teams in the list 'teams' are part of.
     """
-    # print(games)
-    # print(game['awayTeam']['id'], game['homeTeam']['id'])
     pref_games = []
     index = []
     prev_index = 0

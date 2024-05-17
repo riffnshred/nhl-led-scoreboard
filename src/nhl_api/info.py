@@ -25,14 +25,17 @@ def team_info():
 
     client = NHLClient(verbose=False)
     teams_data = {}
-    teams_response = {}
-    #with client as client:
-    teams_responses = client.standings.get_standings(str(datetime.date.today()))
-    for team in teams_responses["standings"]:
-        raw_team_id = team_dict[team["teamAbbrev"]["default"]]
-        team_details = TeamDetails(raw_team_id, team["teamName"]["default"], team["teamAbbrev"]["default"])
-        team_info = TeamInfo(team, team_details)
-        teams_data[raw_team_id] = team_info
+    teams_response = client.teams.teams_info()
+    # Looks like during the playoffs the daily standings are blanked out, but the season standings are from a previous date. 
+    standings = client.standings.get_standings(season="20232024")
+    for team in teams_response:
+        team_details = TeamDetails(team["id"], team["name"], team["abbreviation"])
+        team_stats = None
+        for stats in standings["standings"]:
+            if stats["teamAbbrev"]["default"] == team["abbreviation"]:
+                team_stats = stats
+        team_info = TeamInfo(team_stats, team_details)
+        teams_data[int(team["id"])] = team_info
 
     return teams_data
     # TODO: I think most of this is now held in the TeamStandings object, but leaving here for reference
