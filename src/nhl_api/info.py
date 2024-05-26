@@ -27,7 +27,7 @@ def team_info():
     teams_data = {}
     teams_response = {}
     #with client as client:
-    teams_responses = client.standings.get_standings(str(datetime.date.today()))
+    teams_responses = client.standings.get_standings()
     for team in teams_responses["standings"]:
         raw_team_id = team_dict[team["teamAbbrev"]["default"]]
         team_details = TeamDetails(raw_team_id, team["teamName"]["default"], team["teamAbbrev"]["default"])

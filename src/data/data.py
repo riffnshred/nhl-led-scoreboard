@@ -487,7 +487,6 @@ class Data:
         # Put all the team's in a dict with there name as KEY and ID as value.
         for team_id, team in self.teams_info.items():
             allteams_id[team.details.name] = team_id
-
         # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
         if pref_teams:
             for team in pref_teams:
