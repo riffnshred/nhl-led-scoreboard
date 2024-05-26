@@ -5,8 +5,8 @@
 
 from datetime import datetime, date, timedelta
 from time import sleep
-import debug
 import nhl_api
+import debug
 from data.playoffs import Series
 from data.status import Status
 from utils import get_lat_lng, convert_time
@@ -155,13 +155,6 @@ class Data:
         # Save the parsed config
         self.config = config
 
-        # Initialize the time stamp. The time stamp is found only in the live feed endpoint of a game in the API
-        # It shows the last time (UTC) the data was updated. EX 20200114_041103
-        self.time_stamp = "00000000_000000"
-
-        # Flag for when the data live feed of a game has updated
-        self.new_data = True
-
         # Get the status from the API
         self.get_status()
 
@@ -193,7 +186,7 @@ class Data:
         self.stanleycup_round = False
 
         # Fetch the playoff data
-        # self.refresh_playoff()
+        self.refresh_playoff()
 
         # Stanley cup champions
         # self.cup_winner_id = self.check_stanley_cup_champion()
@@ -204,15 +197,15 @@ class Data:
         today = datetime.today()
         noon = datetime.strptime("12:00", "%H:%M").replace(year=today.year, month=today.month,
                                                         day=today.day)
-        end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,
-                                                                                day=today.day)
+        #end_of_day = datetime.strptime(self.config.end_of_day, "%H:%M").replace(year=today.year, month=today.month,day=today.day)
+        end_of_day = datetime.strptime("03:00", "%H:%M").replace(year=today.year, month=today.month,day=today.day)
         if noon < end_of_day < datetime.now() and datetime.now() > noon:
             today += timedelta(days=1)
         elif end_of_day > datetime.now():
             today -= timedelta(days=1)
 
         return today.year, today.month, today.day
-        #return 2021, 1, 26
+        #return 2024, 3, 4
 
     def date(self):
         return datetime(self.year, self.month, self.day).date()
@@ -237,6 +230,8 @@ class Data:
 
             # Reset flag
             self.all_pref_games_final = False
+
+            self.refresh_playoff()
             
             #Don't think this is needed to be called a second time
            #self.refresh_daily()           
@@ -302,9 +297,12 @@ class Data:
                 for team_id in self.pref_teams:
                     # import pdb; pdb.set_trace()
                     team_info = self.teams_info[team_id].details
-                    pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
-                    team_info.previous_game = pg
-                    team_info.next_game = ng
+                    try:
+                        pg, ng = nhl_api.info.team_previous_game(team_info.abbrev, str(date.today()))
+                        team_info.previous_game = pg
+                        team_info.next_game = ng
+                    except: 
+                        pass
 
                 if self.config.preferred_teams_only and self.pref_teams:
                     self.games = self.pref_games
@@ -417,10 +415,6 @@ class Data:
         while attempts_remaining > 0:
             try:
                 self.overview = nhl_api.overview(self.current_game_id)
-                # TODO: Not sure what was going on here
-                if self.time_stamp != self.overview["clock"]["timeRemaining"]:
-                    self.time_stamp = self.overview["clock"]["timeRemaining"]
-                    self.new_data = True
                 self.needs_refresh = False
                 self.network_issues = False
                 break
@@ -492,20 +486,13 @@ class Data:
         pref_teams_id = []
         # Put all the team's in a dict with there name as KEY and ID as value.
         for team_id, team in self.teams_info.items():
-            name_array = team.details.name.split(" ")
-            # TODO: This doesn't work. We should use the tri code instead.
-            # It will either break on St Louis Blues, or Vegas Golden Knights
-            # Can't have both using the same style of array parsing.
-            name = ' '.join(name_array[1:])
-            allteams_id[name] = team_id
-
+            allteams_id[team.details.name] = team_id
         # Go through the list of preferred teams name. If the team's name exist, put the ID in a new list.
         if pref_teams:
             for team in pref_teams:
-                if team in allteams_id:
-                    pref_teams_id.append(allteams_id[team])
-                else:
-                    debug.warning(team + " is not a team of the NHL. Make sure you typed team's name properly")
+                #Search for the team in the key
+                res = {key: val for key, val in allteams_id.items() if team in key}
+                pref_teams_id.append(list(res.values())[0])
 
             return pref_teams_id
         else:
@@ -531,34 +518,59 @@ class Data:
                 # Check if there is any rounds avaialable and grab the most recent one available.
                 if self.playoffs.rounds:
                     self.current_round = self.playoffs.rounds[str(self.playoffs.default_round)]
-                    self.current_round_name = self.current_round.names.name
+                    self.current_round_name = self.current_round["roundLabel"]
                     if self.current_round_name == "Stanley Cup Qualifier":
                         self.current_round_name = "Qualifier"
                     if self.playoffs.default_round == 4:
                         self.stanleycup_round = True
 
                     debug.info("defaultround number is : {}".format(self.playoffs.default_round))
-                    8478996
+                    #8478996
                     try:
                         self.series = []
 
                         # Grab the series of the current round of playoff.
-                        self.series_list = self.current_round.series
+                        self.series_list = self.current_round["series"]     
+
+                        self.series_list = []
+                        for i in self.playoffs.rounds:
+                            for j in self.playoffs.rounds[i]["series"]:
+                                self.series_list.append(j)
 
                         # Check if prefered team are part of the current round of playoff
-                        self.pref_series = prioritize_pref_series(filter_list_of_series(self.series_list, self.pref_teams), self.pref_teams)
-
+                        #self.pref_series = prioritize_pref_series(filter_list_of_series(self.series_list, self.pref_teams), self.pref_teams)
+                        self.pref_series = self.series_list
+                        
                         # If the user as set to show his favorite teams in the seriesticker
                         if self.config.seriesticker_preferred_teams_only and self.pref_series:
                             self.series_list = self.pref_series
-                        
                         for s in self.series_list:
                             self.series.append(Series(s,self))
+
+                        highest_round = self.series[-1].round_number
+                        teams = []
+                        for s in self.series[::-1]:
+                            if s.round_number == highest_round:
+                                teams.append(s.top_team.abbrev)
+                                teams.append(s.bottom_team.abbrev)
+
+                            if int(s.round_number) < int(highest_round):
+                                team1 = s.top_team.abbrev
+                                team2 = s.bottom_team.abbrev
+
+                                if((team1 in teams) or (team2 in teams)):
+                                    s.show = False
+
+
                         
+                    
+
+
+
                         self.isPlayoff = True
-                    except AttributeError:
+
+                    except AttributeError as error:
                         debug.error("The {} Season playoff has not started yet or is unavailable".format(self.playoffs.season))
-                        
                         self.isPlayoff = False
                         break
                 break

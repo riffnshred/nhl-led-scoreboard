@@ -40,7 +40,7 @@ class MainRenderer:
                 #Standings(self.data, self.matrix, self.sleepEvent).render()
                 # self.data.test_goal(self.data, self.matrix, self.sleepEvent)
                 #self._draw_event_animation("goal", self.scoreboard.home_team.id, self.scoreboard.home_team.name)
-                PenaltyRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
+                GoalRenderer(self.data, self.matrix, self.sleepEvent, self.scoreboard.away_team).render()
                 #TeamSummary(self.data, self.matrix, self.sleepEvent).render()
                 sleep(1)
                 debug.info("Testing Mode Refresh")

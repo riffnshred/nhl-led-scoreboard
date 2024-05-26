@@ -28,16 +28,23 @@ class Seriesticker:
             return
         self.allseries = self.data.series
         self.index = 0
-        self.num_series = len(self.allseries)
+        self.num_series = 0;
+        for s in self.allseries:
+            if s.show:
+                self.num_series +=1
+        
 
         for series in self.allseries:
+            if (not series.show):
+                continue
+
             self.matrix.clear()
             banner_text = "Stanley Cup"
             color_banner_bg = (200,200,200)
             color_banner_text = (0,0,0)
             round_name = "Final" 
 
-            if not self.data.current_round.number == 4:
+            if not self.data.current_round == 4:
                 try:
                     color_conf = self.team_colors.color("{}.primary".format(series.conference))
                     banner_text = series.conference
@@ -45,7 +52,10 @@ class Seriesticker:
                     color_conf = self.team_colors.color("{}.primary".format("Western"))
                     banner_text = "Western"
                 color_banner_bg = (color_conf['r'], color_conf['g'], color_conf['b'])
-                round_name = self.data.current_round_name
+                if series.round_number == 1:
+                    round_name = "1st-round"
+                elif series.round_number ==2:
+                    round_name = "2nd-round"
                 self.show_indicator(self.index, self.num_series)
             
             self.matrix.draw_text(
@@ -116,20 +126,21 @@ class Seriesticker:
             attempts_remaining = 5
             while attempts_remaining > 0:
                 try:
-                    if game["gameId"] in series.game_overviews:
+                    if game["id"] in series.game_overviews:
                         # Look if the game data is already stored in the game overviews from the series
-                        overview = series.game_overviews[game["gameId"]]
+                        overview = series.game_overviews[game["id"]]
                     else:
                         # Request and store the game overview in the series instance
-                        overview = series.get_game_overview(game["gameId"])
+                        overview = series.get_game_overview(game["id"])
                     
                     # get the scoreboard
                     try:
                         scoreboard = Scoreboard(overview, self.data)
                     except:
                         break
-                    if self.data.status.is_final(overview.status) and hasattr(scoreboard, "winning_team"):
-                        if scoreboard.winning_team == series.top_team.id:
+
+                    if (self.data.status.is_final(overview["gameState"]) or self.data.status.is_game_over(overview["gameState"])) and hasattr(scoreboard, "winning_team_id"):
+                        if scoreboard.winning_team_id == series.top_team.id:
                             winning_row = top_row
                             loosing_row = bottom_row
                             winning_team_color = color_top_team
@@ -143,10 +154,9 @@ class Seriesticker:
                         # Look loosing score text needs an offset
                         if len(str(scoreboard.winning_score)) == 2 and len(str(scoreboard.winning_score)) == 1:
                             offset_correction = 1
-                        
                         self.matrix.draw_text(
                             ((rec_width + 15 + offset_correction), loosing_row), 
-                            str(scoreboard.loosing_score), 
+                            str(scoreboard.losing_score), 
                             font=self.font, 
                             fill=loosing_color,
                             backgroundColor=None, 

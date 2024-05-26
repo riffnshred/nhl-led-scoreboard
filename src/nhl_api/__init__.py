@@ -37,7 +37,7 @@ def standings():
 
     client = NHLClient(verbose=False)
     #with client as client:
-    season_standings = client.standings.get_standings(date = str(datetime.date.today()))
+    season_standings = client.standings.get_standings()
 
     return nhl_api.info.Standings(season_standings, {})
 

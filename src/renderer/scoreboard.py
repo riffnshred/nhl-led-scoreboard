@@ -135,7 +135,7 @@ class ScoreboardRenderer:
             str(self.scoreboard.date)
         )
 
-        end_text = result
+        end_text = "FINAL"
         if self.scoreboard.periods.number > 3:
             end_text = "F/{}".format(period)
 

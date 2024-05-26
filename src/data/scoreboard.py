@@ -149,8 +149,6 @@ class Scoreboard:
                      debug.error("Failed to get Goal details for current live game. will retry on data refresh")
                      home_penalties = []
                      break
-        home_skaters = len(overview["homeTeam"]["onIce"])
-        away_skaters = len(overview["awayTeam"]["onIce"])
 
         home_pp = False
         away_pp = False
@@ -172,8 +170,6 @@ class Scoreboard:
                         away_pp = True
                     if "EN" in overview["situation"]["awayTeam"]["situationDescriptions"]:
                         away_goalie_pulled = True
-            else:
-                debug.info("No situation data")
         except:
             debug.info("Situation Load Error")
             exit()
@@ -187,7 +183,11 @@ class Scoreboard:
         self.start_time = convert_time(datetime.strptime(overview["startTimeUTC"],'%Y-%m-%dT%H:%M:%SZ')).strftime(time_format)
         self.status = overview["gameState"]
         self.periods = Periods(overview)
-        self.intermission = overview["clock"]["inIntermission"]
+        
+        try:
+            self.intermission = overview["clock"]["inIntermission"]
+        except:
+            self.intermission = False
 
         if overview["gameState"] == "OFF" or overview["gameState"] == "FINAL":
             if away_team["score"] > home_team["score"]:
@@ -254,7 +254,7 @@ class GameSummaryBoard:
         except KeyError:
             self.intermission = False
 
-        if game_details["gameState"] == "OFF" or game_details["gameState"] == "FINAL":
+        if game_details["gameState"] == "OFF" or game_details["gameState"] == "FINAL" or game_details["gameState"] == "OVER":
             if game_details["awayTeam"]["score"] > game_details["homeTeam"]["score"]:
                 self.winning_team_id = game_details["awayTeam"]["id"]
                 self.winning_score = game_details["awayTeam"]["score"]

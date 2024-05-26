@@ -1,8 +1,9 @@
 from data.team import SeriesTeam
 from data.scoreboard import Scoreboard
 from utils import convert_time
-import nhlpy
+from nhlpy import NHLClient
 import debug
+from datetime import datetime
 
 def get_team_position(teams_info):
     """
@@ -33,35 +34,52 @@ class Series:
 
             This is off from the nhl record api. Not sure if it will update as soon as the day is over. 
         """
-        
-        matchupTeams = series.matchupTeams
-        top, bottom = get_team_position(matchupTeams)
-        top_team_abbrev = data.teams_info[top.team.id].abbreviation
-        bottom_team_abbrev = data.teams_info[bottom.team.id].abbreviation
+        client = NHLClient(verbose=False)
+        series_info = client.playoffs.schedule(data.status.season_id, series["seriesLetter"])
+
+        top = series_info["topSeedTeam"]
+        bottom = series_info["bottomSeedTeam"]
+        top_team_abbrev = top["abbrev"]
+        bottom_team_abbrev = bottom["abbrev"]
+        to_win = series_info["neededToWin"] 
         try:
-            self.conference = series.conference.name
+            self.conference = top["conference"]["name"]
         except:
             self.conference = ""
-        self.series_number = series.seriesNumber
-        self.series_code = series.seriesCode #To use with the nhl records API
-        
-        self.matchup_short_name = series.names.matchupShortName
+        self.series_letter = series["seriesLetter"]
+        self.round_number = series["roundNumber"]
+        #self.series_code = series.seriesCode #To use with the nhl records API
+        #self.matchup_short_name = series.names.matchupShortName
         self.top_team = SeriesTeam(top, top_team_abbrev)
         self.bottom_team = SeriesTeam(bottom, bottom_team_abbrev)
-        self.current_game = series.currentGame.seriesSummary
-        self.current_game_id = series.currentGame.seriesSummary.gamePk
-        self.short_status = series.currentGame.seriesSummary.seriesStatusShort
-
-        self.current_game_date = convert_time(self.current_game.gameTime).strftime("%Y-%m-%d")
-        self.current_game_start_time = convert_time(self.current_game.gameTime).strftime(data.config.time_format)
-        self.games = nhlpy.series_game_record(self.series_code, data.playoffs.season)
+        self.games = series_info["games"]
         self.game_overviews = {}
+        self.show = True
+
+        if int(top["seriesWins"]) == to_win or int(bottom["seriesWins"]) == to_win: 
+            self.final=True
+            debug.info("Series is Finished")
+        else:
+            #self.series_code = series.seriesCode #To use with the nhl records API
+            #self.matchup_short_name = series.names.matchupShortName
+            try:
+                self.current_game = series_info["games"][int(top["seriesWins"]) + int(bottom["seriesWins"])]
+                self.current_game_id = self.current_game["id"]
+                #self.short_status = series.currentGame.seriesSummary.seriesStatusShort
+                self.current_game_date = datetime.strptime(self.current_game["startTimeUTC"].split("T")[0], "%Y-%m-%d").strftime("%b %d")
+                self.current_game_start_time = convert_time(datetime.strptime(self.current_game["startTimeUTC"], '%Y-%m-%dT%H:%M:%SZ')).strftime(data.config.time_format)
+            except error as e:
+                debug.info("Unknown error:")
+                print(e)
+
+
 
     def get_game_overview(self, gameid):
         # Request the game overview
         overview = ""
         try:
-            overview = nhlpy.play_by_play
+            client = NHLClient(verbose=False)
+            overview = client.game_center.play_by_play(gameid)
         except:
             debug.error("failed overview refresh for series game id {}".format(gameid))
         self.game_overviews[gameid] = overview
